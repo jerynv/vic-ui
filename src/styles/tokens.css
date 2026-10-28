@@ -125,6 +125,14 @@
   /* What is typed into a field: the reading size, and 16px where a touch keyboard opens,
      because iOS zooms the page into any field set smaller than that. */
   --field-text: var(--text-read);
+  /* What lies under a thing the pointer is on, has chosen or is pressing, in four steps: a
+     faint ground (a foot, a row's hover), the hover, the chosen and the press. A mid grey at an
+     alpha, the same in both modes, because it reads as a shade on either canvas. Nothing writes
+     a grey fill of its own (`scripts/check-fills.mjs`). */
+  --fill-faint: oklch(0.5965 0 0 / 0.07);
+  --fill-hover: oklch(0.5965 0 0 / 0.12);
+  --fill-chosen: oklch(0.5965 0 0 / 0.14);
+  --fill-press: oklch(0.5965 0 0 / 0.2);
   /* A rule between rows of a list: a line, a step quieter than `--line`. */
   --line-soft: light-dark(oklch(0 0 0 / 0.07), oklch(1 0 0 / 0.065));
   /* Placeholders: a shade of the ground, and the light that passes over it. */
@@ -184,9 +192,9 @@
 }
 
 /*
- * Naming a tone on an element: `pill tone-danger` is an outlined state, `pill pill-ink
- * tone-danger` a solid one, `notice tone-caution` a notice. Each sets three slots the part
- * reads; the part clears them on itself first, so a pill inside a toned notice is not
+ * Naming a tone on an element: `Badge tone="danger"` is an outlined state, `Badge
+ * tone="danger" solid` a solid one, `Notice tone="caution"` a notice. Each sets three slots the
+ * part reads; the part clears them on itself first, so a badge inside a toned notice is not
  * toned by accident. Unlayered, so the class on the element outranks that clearing.
  */
 .tone-danger {

@@ -1,5 +1,5 @@
-import { autoUpdate, computePosition, flip, offset, shift, size } from "@floating-ui/dom";
-import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useAnchored } from "./Popover";
+import { Fragment, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { CheckIcon, ChevronDownIcon } from "../icons/icons";
 import { textOf, toOptions, type Items } from "./items";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
@@ -60,39 +60,8 @@ export function Select(props: {
     close();
   };
 
-  // Into the top layer and onto the field, kept there while the page scrolls or resizes.
-  useLayoutEffect(() => {
-    const box = trigger.current?.parentElement;
-    const floating = pop.current;
-    if (!open || !box || !floating) return;
-    floating.showPopover();
-    const place = () =>
-      void computePosition(box, floating, {
-        strategy: "fixed",
-        placement: "bottom-start",
-        middleware: [
-          offset(6),
-          flip({ padding: 8 }),
-          shift({ padding: 8 }),
-          size({
-            padding: 8,
-            apply({ rects, availableHeight }) {
-              floating.style.minWidth = `${rects.reference.width}px`;
-              floating.style.maxHeight = `${Math.min(320, Math.max(120, availableHeight))}px`;
-            },
-          }),
-        ],
-      }).then(({ x, y, placement }) => {
-        floating.style.left = `${x}px`;
-        floating.style.top = `${y}px`;
-        floating.dataset.side = placement.split("-")[0];
-      });
-    const stop = autoUpdate(box, floating, place);
-    return () => {
-      stop();
-      if (floating.matches(":popover-open")) floating.hidePopover();
-    };
-  }, [open]);
+  // Into the top layer and onto the field, kept there while the page scrolls or resizes, as every list is.
+  useAnchored(open, () => trigger.current?.parentElement ?? null, pop, { matchWidth: true });
 
   // The active choice is kept in view as the arrows move through a long list.
   useEffect(() => {

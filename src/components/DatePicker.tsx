@@ -112,32 +112,7 @@ export function DatePicker(props: {
   }, [open, focus]);
 
   const keyed = (event: KeyboardEvent<HTMLDivElement>) => {
-    const move = (to: Day) => {
-      event.preventDefault();
-      setFocus(clamp(to));
-    };
     switch (event.key) {
-      case "ArrowLeft":
-        return move(addDays(focus, -1));
-      case "ArrowRight":
-        return move(addDays(focus, 1));
-      case "ArrowUp":
-        return move(addDays(focus, -7));
-      case "ArrowDown":
-        return move(addDays(focus, 7));
-      case "PageUp":
-        return move(addMonths(focus, event.shiftKey ? -12 : -1));
-      case "PageDown":
-        return move(addMonths(focus, event.shiftKey ? 12 : 1));
-      case "Home":
-        return move(addDays(focus, -weekday(focus)));
-      case "End":
-        return move(addDays(focus, 6 - weekday(focus)));
-      case "Enter":
-      case " ":
-        if (!(event.target as HTMLElement).dataset.day) return;
-        event.preventDefault();
-        return choose(focus);
       case "Escape":
         event.preventDefault();
         event.stopPropagation();
@@ -147,16 +122,7 @@ export function DatePicker(props: {
     }
   };
 
-  // Six weeks from the Monday on or before the first of the month, so the grid keeps one height.
-  const first = monthStart(focus);
-  const start = addDays(first, -weekday(first));
-  const weeks = Array.from({ length: 6 }, (_, w) => Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d)));
-  const [year, month] = parts(first);
-  const before = addMonths(first, -1);
-  const after = addMonths(first, 1);
-  const lastOfBefore = addDays(first, -1);
-  const mayBefore = !props.min || lastOfBefore >= props.min;
-  const mayAfter = !props.max || after <= props.max;
+  const [year, month] = parts(monthStart(focus));
 
   const classes = ["ui-field", props.size === "sm" ? "ui-field-sm" : "", props.className ?? ""].filter(Boolean).join(" ");
   return (
@@ -190,60 +156,126 @@ export function DatePicker(props: {
       </div>
       {open ? (
         <div ref={pop} id={grid} role="dialog" popover="manual" aria-modal="false" aria-label={`Choose a date, ${MONTHS[month - 1]} ${year}`} className="ui-menu ui-date-pop" onKeyDown={keyed}>
-          <div className="ui-date-head">
-            <button type="button" className="ui-date-step" aria-label="The month before" disabled={!mayBefore} onClick={() => setFocus(clamp(before))}>
-              <ChevronRightIcon size={15} className="ui-date-back" aria-hidden="true" />
-            </button>
-            <span className="ui-date-month" aria-live="polite">
-              {MONTHS[month - 1]} {year}
-            </span>
-            <button type="button" className="ui-date-step" aria-label="The month after" disabled={!mayAfter} onClick={() => setFocus(clamp(after))}>
-              <ChevronRightIcon size={15} aria-hidden="true" />
-            </button>
-          </div>
-          <table role="grid" className="ui-date-grid" aria-label={`${MONTHS[month - 1]} ${year}`}>
-            <thead>
-              <tr>
-                {WEEKDAYS.map((name) => (
-                  <th key={name} scope="col" abbr={name} className="ui-date-weekday">
-                    {name.slice(0, 2)}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {weeks.map((week) => (
-                <tr key={week[0]}>
-                  {week.map((day) => {
-                    const inMonth = day.slice(0, 7) === first.slice(0, 7);
-                    const may = allowed(day);
-                    return (
-                      <td key={day} role="gridcell" aria-selected={day === value}>
-                        <button
-                          type="button"
-                          className="ui-date-day"
-                          data-day={day}
-                          data-outside={inMonth ? undefined : ""}
-                          data-today={day === now ? "" : undefined}
-                          data-chosen={day === value ? "" : undefined}
-                          tabIndex={day === focus ? 0 : -1}
-                          aria-label={words(day)}
-                          aria-current={day === now ? "date" : undefined}
-                          aria-disabled={may ? undefined : true}
-                          onClick={() => (may ? choose(day) : setFocus(day))}
-                        >
-                          {parts(day)[2]}
-                        </button>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <MonthGrid focus={focus} onFocusChange={setFocus} value={value} onChoose={choose} min={props.min} max={props.max} today={now} />
         </div>
       ) : null}
       <FieldHint field={field} hint={props.hint} />
+    </div>
+  );
+}
+
+/**
+ * A month of days to choose one from: the month in words between its arrows, then six weeks
+ * from the Monday on or before its first, so it keeps one height. The month shown is the one
+ * `focus` is in. The keys move as a grid's do: the arrows a day or a week, Page Up and Page
+ * Down a month (with Shift a year), Home and End the start and end of the week, Enter or Space
+ * chooses. Today is ringed and the chosen day filled; days outside `min` and `max` are drawn
+ * and passed over. DatePicker opens one, and the calendar keeps one in its side column.
+ */
+export function MonthGrid(props: { focus: Day; onFocusChange: (day: Day) => void; value: Day | null; onChoose: (day: Day) => void; min?: Day | undefined; max?: Day | undefined; today: Day; className?: string }) {
+  const { focus } = props;
+  const box = useRef<HTMLDivElement>(null);
+  const allowed = (day: Day) => (!props.min || day >= props.min) && (!props.max || day <= props.max);
+  const clamp = (day: Day) => (props.min && day < props.min ? props.min : props.max && day > props.max ? props.max : day);
+
+  // While the keys are in the grid, the focus follows the focused day.
+  useEffect(() => {
+    const el = box.current;
+    if (el?.contains(document.activeElement) && (document.activeElement as HTMLElement).dataset.day) el.querySelector<HTMLElement>(`[data-day="${focus}"]`)?.focus();
+  }, [focus]);
+
+  const keyed = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!(event.target as HTMLElement).dataset.day) return;
+    const move = (to: Day) => {
+      event.preventDefault();
+      props.onFocusChange(clamp(to));
+    };
+    switch (event.key) {
+      case "ArrowLeft":
+        return move(addDays(focus, -1));
+      case "ArrowRight":
+        return move(addDays(focus, 1));
+      case "ArrowUp":
+        return move(addDays(focus, -7));
+      case "ArrowDown":
+        return move(addDays(focus, 7));
+      case "PageUp":
+        return move(addMonths(focus, event.shiftKey ? -12 : -1));
+      case "PageDown":
+        return move(addMonths(focus, event.shiftKey ? 12 : 1));
+      case "Home":
+        return move(addDays(focus, -weekday(focus)));
+      case "End":
+        return move(addDays(focus, 6 - weekday(focus)));
+      case "Enter":
+      case " ":
+        event.preventDefault();
+        if (allowed(focus)) props.onChoose(focus);
+        return;
+    }
+  };
+
+  const first = monthStart(focus);
+  const start = addDays(first, -weekday(first));
+  const weeks = Array.from({ length: 6 }, (_, w) => Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d)));
+  const [year, month] = parts(first);
+  const after = addMonths(first, 1);
+  const mayBefore = !props.min || addDays(first, -1) >= props.min;
+  const mayAfter = !props.max || after <= props.max;
+
+  return (
+    <div ref={box} className={props.className ? `ui-date-month-grid ${props.className}` : "ui-date-month-grid"} onKeyDown={keyed}>
+      <div className="ui-date-head">
+        <button type="button" className="ui-date-step" aria-label="The month before" disabled={!mayBefore} onClick={() => props.onFocusChange(clamp(addMonths(first, -1)))}>
+          <ChevronRightIcon size={15} className="ui-date-back" aria-hidden="true" />
+        </button>
+        <span className="ui-date-month" aria-live="polite">
+          {MONTHS[month - 1]} {year}
+        </span>
+        <button type="button" className="ui-date-step" aria-label="The month after" disabled={!mayAfter} onClick={() => props.onFocusChange(clamp(after))}>
+          <ChevronRightIcon size={15} aria-hidden="true" />
+        </button>
+      </div>
+      <table role="grid" className="ui-date-grid" aria-label={`${MONTHS[month - 1]} ${year}`}>
+        <thead>
+          <tr>
+            {WEEKDAYS.map((name) => (
+              <th key={name} scope="col" abbr={name} className="ui-date-weekday">
+                {name.slice(0, 2)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {weeks.map((week) => (
+            <tr key={week[0]}>
+              {week.map((day) => {
+                const inMonth = day.slice(0, 7) === first.slice(0, 7);
+                const may = allowed(day);
+                return (
+                  <td key={day} role="gridcell" aria-selected={day === props.value}>
+                    <button
+                      type="button"
+                      className="ui-date-day"
+                      data-day={day}
+                      data-outside={inMonth ? undefined : ""}
+                      data-today={day === props.today ? "" : undefined}
+                      data-chosen={day === props.value ? "" : undefined}
+                      tabIndex={day === focus ? 0 : -1}
+                      aria-label={words(day)}
+                      aria-current={day === props.today ? "date" : undefined}
+                      aria-disabled={may ? undefined : true}
+                      onClick={() => (may ? props.onChoose(day) : props.onFocusChange(day))}
+                    >
+                      {parts(day)[2]}
+                    </button>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -42,7 +42,7 @@
     "dev:site": "vite --config site/vite.config.ts",
     "preview:site": "vite preview --config site/vite.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "check:design": "node scripts/check-radius.mjs && node scripts/check-shadows.mjs",
+    "check:design": "node scripts/check-radius.mjs && node scripts/check-shadows.mjs && node scripts/check-fills.mjs",
     "check:dashes": "node scripts/check-dashes.mjs",
     "icons": "node scripts/gen-icons.mjs",
     "prepublishOnly": "npm run typecheck && npm run check:design && npm run check:dashes && npm run build",

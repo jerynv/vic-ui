@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Select, Table, TableToolbar, TextField, type TableColumn, type TableSort } from "vic-ui";
+import { SearchField, Select, Table, type TableColumn, type TableSort } from "vic-ui";
 
 export const title = "Sorted, filtered, with a current row";
 export const note = "One dense table, its head pinned while the body scrolls inside height. A press on a row makes it current.";
@@ -46,10 +46,13 @@ export default function Example() {
   }, [sort, space, find]);
   return (
     <div className="demo-wide">
-      <TableToolbar end={<span className="demo-words">{rows.length} of {PEOPLE.length}</span>}>
-        <TextField aria-label="Find a person" size="sm" placeholder="Find a person" value={find} onChange={(event) => setFind(event.target.value)} />
+      <div className="demo-row">
+        <SearchField aria-label="Find a person" size="sm" placeholder="Find a person" value={find} onValueChange={setFind} />
         <Select size="sm" aria-label="Space" items={{ every: "Every space", Partners: "Partners", Operations: "Operations", Clients: "Clients" }} value={space} onValueChange={setSpace} />
-      </TableToolbar>
+        <span className="demo-words">
+          {rows.length} of {PEOPLE.length}
+        </span>
+      </div>
       <Table
         aria-label="People"
         columns={COLUMNS}

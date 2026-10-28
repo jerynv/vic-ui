@@ -247,28 +247,215 @@
     background: var(--field-fill-hover);
   }
 
+  /* A line under a row, read as part of it: no rule between them, and only its own padding below. */
+  .ui-table tbody tr:has(+ .ui-table-after) td {
+    border-bottom-color: transparent;
+  }
+
+  .ui-table tbody .ui-table-after td {
+    padding-top: 0;
+  }
+
   .ui-table-empty td {
     padding-block: 2rem;
     text-align: center;
     color: var(--fg-subtle);
   }
 
-  .ui-table-toolbar {
+  /* ---- a group of rows (`List.tsx`) ----------------------------------------------- */
+
+  /* A short heading over rows of one line: a mark in the group's hue, the heading, its count,
+     and where the rest is at its end. Head and rows hang half their inset past the column, so
+     the words line up with what is above them and a row's light reaches past them. */
+  .ui-list-head {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
     gap: 0.5rem;
-    padding-bottom: 0.625rem;
+    height: 2rem;
+    margin-inline: -0.5rem;
+    padding: 0 0.5rem;
+    font-size: var(--text-ui);
   }
 
-  .ui-table-toolbar-start,
-  .ui-table-toolbar-end {
+  .ui-list-mark {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.5rem;
+    color: var(--hue-ink, var(--fg-subtle));
+  }
+
+  .ui-list-mark-room {
+    display: block;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .ui-list-title {
+    margin: 0;
+    font-size: inherit;
+    font-weight: 600;
+    color: var(--fg-strong);
+  }
+
+  .ui-list-count {
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  .ui-list-more {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .ui-list-more-link {
+    border-radius: var(--radius-row);
+    color: var(--fg-subtle);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .ui-list-more-link:hover {
+    color: var(--fg-strong);
+  }
+
+  .ui-list-more-link:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-list-rows {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* One line at one height, whatever its end holds: the words take what is left and are cut
+     short, and the link over the words covers the whole row, which lights only then. */
+  .ui-list-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 2.5rem;
+    margin-inline: -0.5rem;
+    padding: 0 0.5rem;
+    border-radius: var(--radius-row);
+    font-size: var(--text-ui);
+    transition: background-color 150ms ease;
+  }
+
+  .ui-list-row:has(.ui-list-row-link):hover {
+    background: var(--field-fill);
+  }
+
+  .ui-list-row:has(.ui-list-row-link):active {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-list-row:has(.ui-list-row-link:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-list-row-mark {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.5rem;
+    color: var(--fg-subtle);
+  }
+
+  .ui-list-face {
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: var(--radius-round);
+  }
+
+  .ui-list-row-words {
+    flex: 1 1 0;
     min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--fg-strong);
+    text-decoration: none;
+  }
+
+  .ui-list-row[data-quiet] .ui-list-row-words {
+    color: var(--fg-subtle);
+  }
+
+  .ui-list-row-link {
+    outline: none;
+  }
+
+  .ui-list-row-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .ui-list-row-place {
+    flex: 0 1 auto;
+    max-width: 16rem;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--fg-subtle);
+  }
+
+  .ui-list-row-place-link {
+    position: relative;
+    z-index: 1;
+    color: inherit;
+    transition: color 150ms ease;
+  }
+
+  .ui-list-row-place-link:hover {
+    color: var(--fg-strong);
+  }
+
+  .ui-list-row-when {
+    flex: none;
+    min-width: 4.5rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--fg-subtle);
+  }
+
+  /* The row's one action sits above its link, so it is pressed on its own. */
+  .ui-list-row-end {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    min-width: 3.75rem;
+  }
+
+  /* On a phone the words keep the width: where a row is goes, unless it is the row's link,
+     and when goes from a row that has an action. */
+  @media (width < 640px) {
+    .ui-list-row-place:not(:has(a)) {
+      display: none;
+    }
+
+    .ui-list-row-when {
+      min-width: 0;
+    }
+
+    .ui-list-row:has(.ui-list-row-end) .ui-list-row-when {
+      display: none;
+    }
   }
 
   /* ---- pages (`Pagination.tsx`) --------------------------------------------------- */

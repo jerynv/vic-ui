@@ -350,7 +350,8 @@
     display: none;
   }
 
-  /* A count at a row's end is a quiet number, not a pill, gone while folded. */
+  /* A count at a row's end, gone while folded: unread is the filled `Count` set in it, as a
+     conversation's row draws it, and anything else (steps done) a quiet number. */
   .ui-sidebar-badge {
     display: inline-flex;
     flex: none;

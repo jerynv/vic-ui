@@ -10,6 +10,8 @@ export interface MenuAction {
   icon?: ReactNode;
   /** A line under the words, quieter. */
   hint?: ReactNode;
+  /** A quiet word at the row's end, as "Done". */
+  end?: ReactNode;
   onSelect: () => void;
   /** It removes, ends or destroys: drawn in the danger ink. */
   danger?: boolean;
@@ -18,8 +20,18 @@ export interface MenuAction {
   disabledReason?: string | undefined;
 }
 
-/** A menu's rows: actions, a rule between them, and a heading that starts a group. */
-export type MenuItem = MenuAction | { separator: true } | { group: ReactNode };
+/** A row holding a control of its own at its end (a switcher): the keys reach it as they reach an action, and the focus goes into the control. */
+export interface MenuControl {
+  label: ReactNode;
+  text?: string;
+  icon?: ReactNode;
+  control: ReactNode;
+}
+
+/** A menu's rows: actions, rows holding a control, a rule between them, a heading that starts a group, and what stands over them all (`head`), which the keys pass over. */
+export type MenuItem = MenuAction | MenuControl | { separator: true } | { group: ReactNode } | { head: ReactNode };
+
+type MenuRow = MenuAction | MenuControl;
 
 /** What a menu's trigger is given to spread on itself. */
 export interface MenuTriggerProps {
@@ -34,8 +46,9 @@ export interface MenuTriggerProps {
 type Opened = { trigger: (props: MenuTriggerProps) => ReactElement; at?: never; open?: boolean; onOpenChange?: (open: boolean) => void };
 type AtPoint = { at: { x: number; y: number }; open: boolean; onOpenChange: (open: boolean) => void; trigger?: never };
 
-const isAction = (item: MenuItem): item is MenuAction => "onSelect" in item;
-const wordsOf = (item: MenuAction) => (item.text ?? (typeof item.label === "string" ? item.label : "")).toLowerCase();
+const isRow = (item: MenuItem): item is MenuRow => "onSelect" in item || "control" in item;
+const isControl = (item: MenuRow): item is MenuControl => "control" in item;
+const wordsOf = (item: MenuRow) => (item.text ?? (typeof item.label === "string" ? item.label : "")).toLowerCase();
 
 /**
  * A list of actions opened from a trigger, or at a point (`at`, for the right button), on the
@@ -59,10 +72,10 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
   const before = useRef<HTMLElement | null>(null);
   const typed = useRef({ text: "", at: 0 });
 
-  const actions = props.items.filter(isAction);
+  const actions = props.items.filter(isRow);
   const reachable = (at: number) => {
     const one = actions[at];
-    return !!one && (!one.disabled || !!one.disabledReason);
+    return !!one && (isControl(one) || !one.disabled || !!one.disabledReason);
   };
   const step = (from: number, by: 1 | -1) => {
     for (let n = 1; n <= actions.length; n++) {
@@ -89,14 +102,17 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
     else setActive(-1);
   }, [open]);
 
-  // The focus follows the active action, or rests on the menu while none is.
+  // The focus follows the active action, into a row's control, or rests on the menu while none is.
   useEffect(() => {
     if (!open) return;
-    (active >= 0 ? rows.current[active] : menu.current)?.focus({ preventScroll: active < 0 });
+    const row = active >= 0 ? rows.current[active] : null;
+    const held = row?.hasAttribute("data-control") ? row.querySelector<HTMLElement>("[aria-checked='true'], [aria-selected='true'], button, input, [tabindex]:not([tabindex='-1'])") : null;
+    (held ?? row ?? menu.current)?.focus({ preventScroll: active < 0 });
   }, [open, active]);
 
   // An action that says why it cannot be chosen says so while it is the active one.
-  const reasonAt = active >= 0 ? actions[active]?.disabledReason : undefined;
+  const activeRow = active >= 0 ? actions[active] : undefined;
+  const reasonAt = activeRow && !isControl(activeRow) ? activeRow.disabledReason : undefined;
   const tip = useTip(reasonAt, { placement: "right" });
   useEffect(() => {
     tip.hide();
@@ -108,7 +124,7 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
 
   const pick = (at: number) => {
     const one = actions[at];
-    if (!one || one.disabled || one.disabledReason) return;
+    if (!one || isControl(one) || one.disabled || one.disabledReason) return;
     close(true);
     one.onSelect();
   };
@@ -123,6 +139,9 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
   };
 
   const keyed = (event: KeyboardEvent<HTMLDivElement>) => {
+    // Inside a row's control its own keys work it: only the arrows up and down, Escape and Tab leave it.
+    const inControl = activeRow !== undefined && isControl(activeRow) && event.target !== rows.current[active];
+    if (inControl && !["ArrowDown", "ArrowUp", "Escape", "Tab"].includes(event.key)) return;
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
@@ -158,15 +177,42 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
   };
 
   // The rows in sections, each group heading starting one, so a group is labelled by its heading.
-  const sections: Array<{ heading?: ReactNode; rows: Array<{ action: MenuAction; at: number } | "rule"> }> = [{ rows: [] }];
+  const sections: Array<{ heading?: ReactNode; rows: Array<{ action: MenuRow; at: number } | "rule"> }> = [{ rows: [] }];
+  const heads: ReactNode[] = [];
   let count = 0;
   for (const item of props.items) {
-    if ("group" in item) sections.push({ heading: item.group, rows: [] });
+    if ("head" in item) heads.push(item.head);
+    else if ("group" in item) sections.push({ heading: item.group, rows: [] });
     else if ("separator" in item) sections[sections.length - 1]!.rows.push("rule");
     else sections[sections.length - 1]!.rows.push({ action: item, at: count++ });
   }
 
-  const row = ({ action, at }: { action: MenuAction; at: number }) => (
+  const controlRow = (action: MenuControl, at: number) => (
+    <div
+      key={at}
+      ref={(el) => {
+        rows.current[at] = el;
+      }}
+      role="none"
+      className="ui-menu-item"
+      data-control=""
+      data-active={at === active ? "" : undefined}
+      onPointerMove={() => {
+        if (at !== active) setActive(at);
+      }}
+    >
+      {action.icon ? (
+        <span className="ui-menu-icon" aria-hidden="true">
+          {action.icon}
+        </span>
+      ) : null}
+      <span className="ui-menu-words">{action.label}</span>
+      <span className="ui-menu-control">{action.control}</span>
+    </div>
+  );
+
+  const row = ({ action, at }: { action: MenuRow; at: number }) =>
+    isControl(action) ? controlRow(action, at) : (
     <div
       key={at}
       ref={(el) => {
@@ -195,6 +241,7 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
         {action.label}
         {action.hint ? <small className="ui-menu-hint">{action.hint}</small> : null}
       </span>
+      {action.end ? <span className="ui-menu-end">{action.end}</span> : null}
     </div>
   );
 
@@ -229,6 +276,11 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
           onKeyDown={keyed}
           onContextMenu={(event) => event.preventDefault()}
         >
+          {heads.map((head, h) => (
+            <div key={`head-${h}`} className="ui-menu-head">
+              {head}
+            </div>
+          ))}
           {sections.map((section, s) => {
             const body = section.rows.map((one, r) => (one === "rule" ? <div key={`rule-${r}`} role="separator" className="ui-menu-rule" /> : row(one)));
             if (section.heading === undefined) return <Fragment key={s}>{body}</Fragment>;

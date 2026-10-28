@@ -149,12 +149,12 @@
   }
 
   .ui-search-clear:hover {
-    background: oklch(0.5965 0 0 / 0.14);
+    background: var(--fill-chosen);
     color: var(--fg-strong);
   }
 
   .ui-search-clear:active {
-    background: oklch(0.5965 0 0 / 0.22);
+    background: var(--fill-press);
   }
 
   .ui-search-clear:focus-visible {
@@ -166,6 +166,13 @@
     width: 1.375rem;
     height: 1.375rem;
     margin-right: 0.3rem;
+  }
+
+  /* A search that is one part of a box drawn around it: no fill or edge of its own. */
+  .ui-search-bare .ui-search-box,
+  .ui-search-bare .ui-search-box:hover:not(:focus-within, :has(:disabled)) {
+    background: transparent;
+    box-shadow: none;
   }
 
   /* ---- a number ------------------------------------------------------------------- */
@@ -213,7 +220,11 @@
     height: calc(var(--control-h-sm) - 0.375rem);
   }
 
+  /* A chip's tone is cleared on itself first, so only a tone named on the chip (an address
+     the server refused) colours it. */
   .ui-combo-chip {
+    --tone-ink: initial;
+    --tone-edge: initial;
     display: inline-flex;
     align-items: center;
     gap: 0.125rem;
@@ -222,9 +233,17 @@
     padding: 0 0.125rem 0 0.5rem;
     border-radius: var(--radius-row);
     background: var(--surface-lifted);
-    box-shadow: 0 0 0 1px light-dark(oklch(0 0 0 / 0.06), oklch(1 0 0 / 0.08));
+    box-shadow: 0 0 0 1px var(--tone-edge, var(--line-soft));
     font-size: var(--text-ui);
-    color: var(--fg-strong);
+    color: var(--tone-ink, var(--fg-strong));
+  }
+
+  /* A word at a chip's end saying how it stands: sending, sent, not sent. */
+  .ui-combo-chip-state {
+    flex: none;
+    padding-inline: 0.375rem 0.25rem;
+    font-size: var(--text-meta);
+    color: var(--tone-ink, var(--fg-subtle));
   }
 
   .ui-field-sm .ui-combo-chip {
@@ -257,12 +276,12 @@
   }
 
   .ui-combo-chip-x:hover {
-    background: oklch(0.5965 0 0 / 0.14);
+    background: var(--fill-chosen);
     color: var(--fg-strong);
   }
 
   .ui-combo-chip-x:active {
-    background: oklch(0.5965 0 0 / 0.22);
+    background: var(--fill-press);
   }
 
   /* The list's own parts: a group's heading, the sentence when nothing matches, its foot. */
@@ -295,7 +314,7 @@
   }
 
   .ui-combo-menu .ui-menu-item:active:not([aria-disabled]) {
-    background: oklch(0.5965 0 0 / 0.2);
+    background: var(--fill-press);
   }
 }
 

@@ -1,7 +1,6 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { DownloadSimpleIcon } from "../icons/icons";
-import { ButtonLink } from "./Button";
-import { Tooltip } from "./Tooltip";
+import { IconButtonLink } from "./IconButton";
 
 /**
  * What somebody sent beside their words: pictures and films in a grid, a file as a card, and
@@ -153,9 +152,7 @@ export function FileCard(props: {
         <span className="ui-file-open">{body}</span>
       )}
       {props.download && props.onOpen && !props.pending ? (
-        <Tooltip content="Download">
-          <ButtonLink look="quiet" square className="ui-file-download" href={props.download} download={props.name} aria-label={`Download ${props.name}`} icon={<DownloadSimpleIcon size={16} />} />
-        </Tooltip>
+        <IconButtonLink className="ui-file-download" href={props.download} download={props.name} label={`Download ${props.name}`} tip="Download" icon={<DownloadSimpleIcon size={16} />} />
       ) : null}
     </div>
   );
@@ -226,9 +223,7 @@ export function FileTile(props: {
         <span className="ui-tile-open">{body}</span>
       )}
       {both && props.download !== undefined ? (
-        <Tooltip content="Download">
-          <ButtonLink look="quiet" square className="ui-tile-download" href={props.download} download={props.name} aria-label={`Download ${props.name}`} icon={<DownloadSimpleIcon size={15} />} />
-        </Tooltip>
+        <IconButtonLink className="ui-tile-download" href={props.download} download={props.name} label={`Download ${props.name}`} tip="Download" icon={<DownloadSimpleIcon size={15} />} />
       ) : null}
     </div>
   );

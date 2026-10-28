@@ -70,6 +70,16 @@ export function Empty(
   );
 }
 
+/**
+ * A list, a section of one or a part of a dialog with nothing in it, said in one quiet line
+ * where its rows would start, at a row's height and with no box: "Nothing pinned", "Nobody
+ * else is on it". A place that holds nothing at all is an `Empty`.
+ */
+export function EmptyLine(props: HTMLAttributes<HTMLParagraphElement>) {
+  const { className, ...rest } = props;
+  return <p className={className ? `ui-list-empty ${className}` : "ui-list-empty"} {...rest} />;
+}
+
 /* The widths of each item's words, varied so the rows read as text rather than a grid. */
 const WIDE = [62, 48, 70, 54];
 const NARROW = [34, 26, 40, 30];

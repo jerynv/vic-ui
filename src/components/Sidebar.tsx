@@ -416,7 +416,7 @@ export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>
   );
 });
 
-/** A quiet count at a row's end, hidden while the rail is folded. */
+/** A count at a row's end, hidden while the rail is folded: a quiet number, or the filled `Count` set in it for unread. */
 export const SidebarMenuBadge = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function SidebarMenuBadge({ className, ...rest }, ref) {
   return <span ref={ref} data-sidebar="menu-badge" className={join("ui-sidebar-badge", className)} {...rest} />;
 });

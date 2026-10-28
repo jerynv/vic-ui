@@ -70,6 +70,17 @@
     opacity: 0.55;
   }
 
+  /* A file chosen with a button (`FileButton`): the input is the label's and hidden, so the
+     button carries the ring when the keyboard reaches it. */
+  .ui-file-button {
+    position: relative;
+  }
+
+  .ui-file-button:has(input:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
   .ui-button-lg {
     height: var(--control-h);
     font-size: var(--text-read);
@@ -154,6 +165,38 @@
     text-underline-offset: 3px;
   }
 
+  /* Words that act inside a sentence (`link`): the sentence's own size and weight, in the
+     strong ink and underlined in the quiet one, as a link in a page's words is, the underline
+     taking the ink under the pointer; it wraps with the words around it. */
+  .ui-button-link {
+    height: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    white-space: normal;
+    text-align: inherit;
+    color: var(--fg-strong);
+    text-decoration: underline;
+    text-decoration-color: var(--fg-subtle);
+    text-underline-offset: 0.2em;
+    transition:
+      text-decoration-color 160ms ease-in-out,
+      opacity 120ms;
+  }
+
+  .ui-button-link .ui-button-face {
+    justify-content: flex-start;
+    padding: 0;
+    background: none;
+  }
+
+  .ui-button-link:hover:not(:disabled, [aria-disabled="true"]) {
+    text-decoration-color: currentColor;
+  }
+
   /* An icon alone that acts (`IconButton`): no rim, the field's fill under the pointer and
      while it is pressed in, at the button's own height. */
   .ui-button-quiet.ui-button-square {
@@ -207,6 +250,13 @@
     font-weight: 600;
     line-height: 1.45;
     color: var(--fg-strong);
+  }
+
+  /* A typed confirmation's label keeps two lines, its longest, so the field under it never
+     moves when what is to be typed wraps (`TypedConfirm`). */
+  .ui-confirm-label {
+    display: block;
+    min-height: 2lh;
   }
 
   /* The label and the short error share one cell (`FieldHead`): the error slides down over
@@ -491,7 +541,7 @@
   }
 
   .ui-menu-item[data-active] {
-    background: oklch(0.5965 0 0 / 0.12);
+    background: var(--fill-hover);
   }
 
   .ui-menu-words {
@@ -517,6 +567,33 @@
 
   .ui-menu-tick {
     flex: none;
+    color: var(--fg-strong);
+  }
+
+  /* A quiet word at a row's end, a row holding a control of its own, and what stands over the rows. */
+  .ui-menu-end {
+    flex: none;
+    font-size: var(--text-meta);
+    color: var(--fg-subtle);
+  }
+
+  .ui-menu-item[data-control] {
+    cursor: default;
+  }
+
+  .ui-menu-control {
+    flex: none;
+    margin-block: -0.25rem;
+  }
+
+  .ui-menu-head {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+    padding: 0.4rem 0.65rem 0.5rem;
+    margin-bottom: 0.3rem;
+    border-bottom: 1px solid var(--line);
     color: var(--fg-strong);
   }
 
@@ -714,6 +791,94 @@
     }
   }
 
+  /* ---- one of a few, as cards (`ChoiceCards.tsx`) ---------------------------------- */
+
+  /* A choice that is a card: a provider to connect, a size, how long to keep. One press each, a radio inside. */
+
+  .ui-choice-cards {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ui-choice-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: var(--radius-control);
+    box-shadow: inset 0 0 0 1px var(--line);
+    font-size: var(--text-read);
+    line-height: var(--text-read--line-height);
+    color: var(--fg-strong);
+    cursor: pointer;
+    transition: box-shadow 150ms ease, background-color 150ms ease;
+  }
+
+  .ui-choice-card:hover {
+    background: var(--field-fill);
+  }
+
+  .ui-choice-card:has(input:checked) {
+    box-shadow: inset 0 0 0 1px var(--fg-strong);
+  }
+
+  .ui-choice-card:has(input:focus-visible) {
+    outline: 2px solid var(--fg-strong);
+    outline-offset: 2px;
+  }
+
+  .ui-choice-card[data-off] {
+    cursor: not-allowed;
+    color: var(--fg-subtle);
+  }
+
+  .ui-choice-card[data-off]:hover {
+    background: transparent;
+  }
+
+  .ui-choice-card-words {
+    display: grid;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .ui-choice-card-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+  }
+
+  .ui-choice-card-hint {
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+    color: var(--fg-subtle);
+  }
+
+  .ui-choice-card-end {
+    flex: none;
+    font-size: var(--text-ui);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .ui-choice-card-dot {
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+    border-radius: var(--radius-round);
+    box-shadow: inset 0 0 0 1px var(--fg-subtle);
+  }
+
+  .ui-choice-card:has(input:checked) .ui-choice-card-dot {
+    box-shadow: inset 0 0 0 1px var(--fg-strong), inset 0 0 0 4px var(--bg-canvas), inset 0 0 0 8px var(--fg-strong);
+  }
+
   /* ---- on or off ------------------------------------------------------------------ */
 
   .ui-switch {
@@ -906,4 +1071,3 @@
     border-radius: var(--radius-round);
   }
 }
-

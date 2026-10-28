@@ -4,7 +4,8 @@
   /* ---- a badge -------------------------------------------------------------------- */
 
   /* A state in a word or two: hairline in its tone (`tone-*` sets the slots, cleared here
-     first so a badge inside a toned notice is not toned by accident), and ink with none. */
+     first so a badge inside a toned notice is not toned by accident), and ink with none.
+     Round, as a face is, and one fixed height, so words that change never move its row. */
   .ui-badge {
     --tone-ink: initial;
     --tone-edge: initial;
@@ -14,14 +15,29 @@
     align-items: center;
     gap: 0.3125rem;
     height: 1.25rem;
+    max-width: 100%;
     padding: 0 0.4375rem;
-    border-radius: var(--radius-row);
+    border-radius: var(--radius-round);
     font-size: var(--text-tag);
     font-weight: 600;
     line-height: 1;
     white-space: nowrap;
     color: var(--tone-ink, var(--fg-strong));
     box-shadow: inset 0 0 0 1px var(--tone-edge, var(--line));
+  }
+
+  /* Its words, cut with an ellipsis where its row gives it less room than they need. Written
+     from lower-case data ("owner", "you lead it"), the first letter is raised and the rest reads
+     as a phrase; a flex container has no first letter, so the words are an item of their own. */
+  .ui-badge-words {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+  }
+
+  .ui-badge-words::first-letter {
+    text-transform: uppercase;
   }
 
   /* Asks for a hand now: filled in its tone's ink, or in ink where it has none. */
@@ -70,6 +86,22 @@
     line-height: 1;
     color: var(--tone-fill-on, var(--ink-words));
     background: var(--tone-ink, var(--ink-face-bottom));
+  }
+
+  /* How many a heading holds: a quiet number after its words, in the heading's weight. */
+  .ui-head-count {
+    font-size: var(--text-tag);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  /* ---- a problem ------------------------------------------------------------------ */
+
+  /* A refusal in a line of its own: the danger ink at the working size, no box. */
+  .ui-problem {
+    margin: 0;
+    font-size: var(--text-ui);
+    color: var(--tone-danger-ink);
   }
 
   /* ---- a notice ------------------------------------------------------------------- */
@@ -196,6 +228,16 @@
     background: var(--field-fill);
   }
 
+  /* A danger zone: the same card, its hairline in the danger edge. */
+  .ui-card[data-tone="danger"] {
+    box-shadow: 0 0 0 1px var(--tone-danger-edge);
+  }
+
+  /* A card that lays out its own children, padded as a body is. */
+  .ui-card-plain {
+    padding: 0.75rem 0.875rem;
+  }
+
   .ui-card-head {
     display: flex;
     align-items: flex-start;
@@ -232,6 +274,11 @@
 
   .ui-card-body {
     padding: 0.75rem 0.875rem;
+  }
+
+  /* Rows that run to the card's edges bring their own inset. */
+  .ui-card-body.ui-card-flush {
+    padding: 0;
   }
 
   /* A head with nothing under it is padded the same above and below, so its title sits in
@@ -369,6 +416,23 @@
   .ui-avatar-stack-face {
     display: block;
     flex: none;
+    width: var(--stack-size);
+    height: var(--stack-size);
+  }
+
+  /* Each face after the first overlaps the one before it and is cut by its outline, grown by
+     the gap; the outline is the image the page hands in, laid where the face before sits. */
+  .ui-avatar-stack-face + .ui-avatar-stack-face {
+    --stack-cut: calc(var(--stack-size) + 2 * var(--stack-gap));
+    margin-left: calc(-1 * var(--stack-overlap));
+    mask-position: calc(var(--stack-overlap) - var(--stack-size) - var(--stack-gap)) calc(-1 * var(--stack-gap)), 0 0;
+    mask-size: var(--stack-cut) var(--stack-cut), 100% 100%;
+    mask-repeat: no-repeat;
+    mask-composite: exclude;
+    -webkit-mask-position: calc(var(--stack-overlap) - var(--stack-size) - var(--stack-gap)) calc(-1 * var(--stack-gap)), 0 0;
+    -webkit-mask-size: var(--stack-cut) var(--stack-cut), 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-composite: xor;
   }
 
   /* The face boxes inside fill the slot whatever size class they were drawn with. */
@@ -495,6 +559,15 @@
   /* Centred in the area it stands for: a page's room under its header, a pane, or a card. With
      a preview, a faint drawing of what will fill the place stands over the words; without one,
      a small mark on a tile, as a refusal or a failure has. */
+  /* A list with nothing in it, said in one quiet line at a row's height where its rows start. */
+  .ui-list-empty {
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: var(--text-ui);
+    line-height: 1.25rem;
+    color: var(--fg-subtle);
+  }
+
   /* One width whatever its words, so it is not drawn narrow and then widened when they arrive. */
   .ui-empty {
     display: grid;
@@ -1054,45 +1127,94 @@
     content: none;
   }
 
-  /* ---- a trail of pages (`Breadcrumbs.tsx`) --------------------------------------- */
+  /* ---- where a page sits (`Trail.tsx`) --------------------------------------------- */
 
-  .ui-crumbs {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+  /* The steps above the page in quiet ink, each a link back, then the page's own name. It
+     takes its size from where it is set. A step is cut short before the name is, and on a
+     page the name wraps rather than being cut. */
+  .ui-trail {
     min-width: 0;
-    font-size: var(--text-ui);
-    line-height: 1.25rem;
   }
 
-  .ui-crumb {
+  .ui-trail > ol {
+    display: flex;
+    align-items: baseline;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ui-trail-step {
+    display: flex;
+    align-items: baseline;
+    flex: 0 0 auto;
+    min-width: 0;
+    /* Of the window, never of the trail: a share of a box sized by its own words is
+       worked out after the words are laid, and cut every step to a stub. */
+    max-width: min(16em, 40vw);
+    white-space: nowrap;
+  }
+
+  .ui-trail-step > * {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    color: var(--fg-strong);
-  }
-
-  .ui-crumb-link {
-    flex-shrink: 1;
-    border-radius: var(--radius-row);
     color: var(--fg-subtle);
     text-decoration: none;
-    transition: color 150ms ease-out;
   }
 
-  .ui-crumb-link:hover {
+  .ui-trail-step > a:hover {
     color: var(--fg-strong);
   }
 
-  .ui-crumb-link:focus-visible {
-    outline: 2px solid var(--focus);
-    outline-offset: 2px;
+  .ui-trail-step::after {
+    content: "/";
+    content: "/" / "";
+    flex: none;
+    margin-inline: 0.4em;
+    color: var(--fg-inactive);
   }
 
-  .ui-crumbs-sep {
-    flex: none;
-    color: var(--fg-subtle);
+  .ui-trail-here {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .ui-trail-here > * {
+    display: block;
+    margin: 0;
+    font-size: inherit;
+    font-weight: 600;
+    color: var(--fg-strong);
+    overflow-wrap: anywhere;
+  }
+
+  /* One line, for a bar, where the one step is a section's name: a word cut to its first
+     letter says nothing, so it stays whole and the name gives way. */
+  .ui-trail-line .ui-trail-step {
+    max-width: none;
+  }
+
+  .ui-trail-line .ui-trail-here > * {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* On a phone the nearest step stays and the ones before it fold into one link back. */
+  .ui-trail-more {
+    display: none;
+  }
+
+  @media (width < 40rem) {
+    .ui-trail-far {
+      display: none;
+    }
+
+    .ui-trail-more {
+      display: flex;
+    }
   }
 }
 

@@ -7,28 +7,20 @@ import { Children, isValidElement, type CSSProperties, type ReactNode } from "re
  * before it, grown by `gap`, so clear space shows on whatever is behind without naming its
  * colour. `shapes` gives each face's outline as an image whose opaque part is the face; a
  * face without one is round, as every face is (`--radius-round`). Ported from Kibo UI's Avatar Stack (MIT).
+ *
+ * The sizes are custom properties on the stack (`--stack-size`, `--stack-overlap`,
+ * `--stack-gap`), set from the props, and the cut is worked out from them in the stylesheet,
+ * so a page that draws its stack smaller on a phone sets them on its faces there and the cut
+ * follows.
  */
 
 /** A face's outline: a circle. */
 const ROUND = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Ccircle cx='5' cy='5' r='5'/%3E%3C/svg%3E`;
 
-function cutBy(shape: string, size: number, overlap: number, gap: number): CSSProperties {
-  const grown = size + 2 * gap;
+/** The face before this one's outline, cut out of this one; where and how large is the stylesheet's. */
+function cutBy(shape: string): CSSProperties {
   const image = `url("${shape}"), linear-gradient(oklch(0 0 0) 0 0)`;
-  const at = `${-(size - overlap) - gap}px ${-gap}px, 0 0`;
-  const sized = `${grown}px ${grown}px, 100% 100%`;
-  return {
-    maskImage: image,
-    maskPosition: at,
-    maskSize: sized,
-    maskRepeat: "no-repeat",
-    maskComposite: "exclude",
-    WebkitMaskImage: image,
-    WebkitMaskPosition: at,
-    WebkitMaskSize: sized,
-    WebkitMaskRepeat: "no-repeat",
-    WebkitMaskComposite: "xor",
-  };
+  return { maskImage: image, WebkitMaskImage: image };
 }
 
 export function AvatarStack(props: { children: ReactNode; size?: number; overlap?: number; gap?: number; most?: number; total?: number; shapes?: Array<string | undefined>; label?: string; className?: string }) {
@@ -38,9 +30,10 @@ export function AvatarStack(props: { children: ReactNode; size?: number; overlap
   const faces = Children.toArray(props.children).filter(isValidElement);
   const shown = faces.slice(0, props.most ?? 10);
   const more = Math.max(0, (props.total ?? faces.length) - shown.length);
-  const box = (index: number): CSSProperties => ({ width: size, height: size, ...(index ? { marginLeft: -overlap, ...cutBy(props.shapes?.[index - 1] ?? ROUND, size, overlap, gap) } : {}) });
+  const box = (index: number): CSSProperties => (index ? cutBy(props.shapes?.[index - 1] ?? ROUND) : {});
+  const sizes = { "--stack-size": `${size}px`, "--stack-overlap": `${overlap}px`, "--stack-gap": `${gap}px` } as CSSProperties;
   return (
-    <span className={props.className ? `ui-avatar-stack ${props.className}` : "ui-avatar-stack"} role={props.label ? "group" : undefined} aria-label={props.label}>
+    <span className={props.className ? `ui-avatar-stack ${props.className}` : "ui-avatar-stack"} style={sizes} role={props.label ? "group" : undefined} aria-label={props.label}>
       {shown.map((face, index) => (
         <span key={face.key ?? index} className="ui-avatar-stack-face" style={box(index)}>
           {face}

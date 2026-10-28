@@ -1,4 +1,4 @@
-import type { HTMLAttributes, KeyboardEvent, ReactNode, Ref, TableHTMLAttributes } from "react";
+import { Fragment, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref, type TableHTMLAttributes } from "react";
 import { ArrowDownIcon } from "../icons/icons";
 
 /** One column: its key, the words at its head, and how it sits. */
@@ -26,11 +26,13 @@ export interface TableSort {
  * by `rowKey`), and `cell` draws a row's value for a column, its key read off the row where
  * no `cell` is given. A column with `sort` has a head that sorts: pressing it asks for that
  * column ascending, and again for descending, through `onSortChange`; the sorting is the
- * caller's. With `onRowPress` each row is pressable by pointer and by Enter or Space. `empty`
+ * caller's. With `onRowPress` each row is pressable by pointer and by Enter or Space, and only
+ * those `rowPressable` says, where some rows open nothing; a row that is not lights nothing. `empty`
  * fills the body when there are no rows. `height` caps the scroller so the head stays pinned
  * inside it; without it the head pins to the page's own scroller. `rowProps` and `tableProps`
  * add to a row and to the table what a page that works its rows itself needs (choosing,
- * dragging, a grid's keys), spread after the table's own.
+ * dragging, a grid's keys), spread after the table's own. `after` draws a line of its own
+ * under a row across every column, for what is wrong with it or still to do, read as part of it.
  */
 export function Table<Row>(props: {
   columns: ReadonlyArray<TableColumn>;
@@ -40,6 +42,10 @@ export function Table<Row>(props: {
   sort?: TableSort | null;
   onSortChange?: (sort: TableSort) => void;
   onRowPress?: (row: Row) => void;
+  /** Which rows `onRowPress` opens, where not every row goes somewhere; every row where it is not given. */
+  rowPressable?: (row: Row) => boolean;
+  /** A line under a row, across every column, where there is something more to say of it. */
+  after?: (row: Row) => ReactNode;
   /** The row drawn as the one open beside the table. */
   currentKey?: string | null;
   empty?: ReactNode;
@@ -51,7 +57,7 @@ export function Table<Row>(props: {
   tableRef?: Ref<HTMLTableElement>;
 }) {
   const draw = props.cell ?? ((row: Row, column: TableColumn) => (row as Record<string, ReactNode>)[column.key]);
-  const pressable = props.onRowPress !== undefined;
+  const pressableAt = (row: Row) => props.onRowPress !== undefined && (props.rowPressable?.(row) ?? true);
   const sortBy = (column: TableColumn) => {
     const now = props.sort?.key === column.key ? props.sort.direction : null;
     props.onSortChange?.({ key: column.key, direction: now === "asc" ? "desc" : "asc" });
@@ -97,37 +103,35 @@ export function Table<Row>(props: {
           ) : (
             props.rows.map((row) => {
               const key = props.rowKey(row);
+              const pressable = pressableAt(row);
+              const more = props.after?.(row);
               return (
-                <tr
-                  key={key}
-                  data-pressable={pressable ? "" : undefined}
-                  aria-current={props.currentKey === key ? true : undefined}
-                  tabIndex={pressable ? 0 : undefined}
-                  onClick={pressable ? () => props.onRowPress?.(row) : undefined}
-                  onKeyDown={pressable ? (event) => keyed(event, row) : undefined}
-                  {...props.rowProps?.(row)}
-                >
-                  {props.columns.map((column) => (
-                    <td key={column.key} className={column.className} data-align={column.align ?? "start"}>
-                      {draw(row, column)}
-                    </td>
-                  ))}
-                </tr>
+                <Fragment key={key}>
+                  <tr
+                    data-pressable={pressable ? "" : undefined}
+                    aria-current={props.currentKey === key ? true : undefined}
+                    tabIndex={pressable ? 0 : undefined}
+                    onClick={pressable ? () => props.onRowPress?.(row) : undefined}
+                    onKeyDown={pressable ? (event) => keyed(event, row) : undefined}
+                    {...props.rowProps?.(row)}
+                  >
+                    {props.columns.map((column) => (
+                      <td key={column.key} className={column.className} data-align={column.align ?? "start"}>
+                        {draw(row, column)}
+                      </td>
+                    ))}
+                  </tr>
+                  {more ? (
+                    <tr className="ui-table-after">
+                      <td colSpan={props.columns.length}>{more}</td>
+                    </tr>
+                  ) : null}
+                </Fragment>
               );
             })
           )}
         </tbody>
       </table>
-    </div>
-  );
-}
-
-/** The row of filters above a table: its fields and choices first, `end` at the far side. */
-export function TableToolbar(props: { children: ReactNode; end?: ReactNode; "aria-label"?: string; className?: string }) {
-  return (
-    <div role="group" aria-label={props["aria-label"] ?? "Filters"} className={props.className ? `ui-table-toolbar ${props.className}` : "ui-table-toolbar"}>
-      <div className="ui-table-toolbar-start">{props.children}</div>
-      {props.end ? <div className="ui-table-toolbar-end">{props.end}</div> : null}
     </div>
   );
 }

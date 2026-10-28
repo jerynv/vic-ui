@@ -99,7 +99,7 @@
     margin-top: auto;
     padding: 0.75rem 1.25rem;
     border-top: 1px solid var(--line);
-    background: oklch(0.5965 0 0 / 0.045);
+    background: var(--fill-faint);
   }
 
   /* A refusal the form came back with, at the foot's start beside the buttons it answers. */
@@ -260,7 +260,7 @@
   }
 
   .ui-palette-item:active:not([aria-disabled]) {
-    background: oklch(0.5965 0 0 / 0.2);
+    background: var(--fill-press);
   }
 
   .ui-palette-foot {
@@ -272,7 +272,7 @@
     border-top: 1px solid var(--line);
     font-size: var(--text-meta);
     color: var(--fg-subtle);
-    background: oklch(0.5965 0 0 / 0.045);
+    background: var(--fill-faint);
   }
 
   .ui-palette-foot > span {
@@ -305,7 +305,7 @@
   }
 
   .ui-menu-actions .ui-menu-item:active:not([aria-disabled]) {
-    background: oklch(0.5965 0 0 / 0.2);
+    background: var(--fill-press);
   }
 
   .ui-menu-icon {
@@ -338,7 +338,7 @@
 
   /* One that says why it cannot be chosen is still reached, so it is still lit when it is. */
   .ui-menu-item[data-reason][data-active] {
-    background: oklch(0.5965 0 0 / 0.08);
+    background: var(--fill-faint);
   }
 
   .ui-menu-rule {

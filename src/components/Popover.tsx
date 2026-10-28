@@ -1,6 +1,10 @@
 import { autoUpdate, computePosition, flip, offset, shift, size, type Placement, type VirtualElement } from "@floating-ui/dom";
 import { useEffect, useId, useLayoutEffect, useRef, type ReactElement, type ReactNode, type RefObject } from "react";
 
+/** The tallest any floating list stands, and the shortest it is squeezed to before it flips. */
+export const LIST_MOST = 320;
+export const LIST_LEAST = 120;
+
 /** What a floating thing hangs from: an element, or a point on the screen (`atPoint`). */
 export type Anchor = Element | VirtualElement;
 
@@ -46,7 +50,7 @@ export function useAnchored(
                   padding: 8,
                   apply({ rects, availableHeight }) {
                     if (matchWidth) el.style.minWidth = `${rects.reference.width}px`;
-                    if (fit) el.style.maxHeight = `${Math.min(360, Math.max(120, availableHeight))}px`;
+                    if (fit) el.style.maxHeight = `${Math.min(LIST_MOST, Math.max(LIST_LEAST, availableHeight))}px`;
                   },
                 }),
               ]

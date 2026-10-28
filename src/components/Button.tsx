@@ -1,11 +1,12 @@
-import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode, type Ref } from "react";
 import { Link } from "./Link";
 import { useBlocked } from "./reason";
 
 /**
  * The library's button. `ink` is a page's one filled action, `line` an outlined one beside
- * it, and `quiet` words that act; `lg` is the height of a form's commit. A native button, so
- * a form submits with it, the keyboard reaches it and a screen reader names it by its words.
+ * it, `quiet` words that act on their own, and `link` words that act inside a sentence; `lg`
+ * is the height of a form's commit. A native button, so a form submits with it, the keyboard
+ * reaches it and a screen reader names it by its words.
  *
  * Built as Cult UI's Texture Button is (MIT, nolly-studio/cult-ui, `texture-button.tsx`): the
  * button is a rim, a hairline border round a gradient one pixel deep, and its words sit on a
@@ -16,9 +17,10 @@ import { useBlocked } from "./reason";
  * `disabledReason` keeps a button that cannot be pressed yet in reach and says why on hover and
  * focus (`useBlocked` in `reason.ts`), rather than leaving a greyed shape nobody can ask about.
  * `square` draws an icon alone as wide as the button is tall; its words are its `aria-label`.
- * `round` makes it a circle, as a message box's Send is.
+ * `round` makes it a circle, as a message box's Send is. `link` is words that act inside a
+ * sentence: the sentence's own size and weight, in the strong ink and underlined, wrapping with it.
  */
-export type ButtonLook = "ink" | "line" | "quiet";
+export type ButtonLook = "ink" | "line" | "quiet" | "link";
 
 function classes(look: ButtonLook, size: "md" | "lg", full?: boolean, extra?: string, square?: boolean, round?: boolean): string {
   return ["ui-button", `ui-button-${look}`, size === "lg" ? "ui-button-lg" : "", full ? "ui-button-full" : "", square ? "ui-button-square" : "", round ? "ui-button-round" : "", extra ?? ""].filter(Boolean).join(" ");
@@ -45,14 +47,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLBut
 /**
  * The same looks on a link: to a page of this app by `to` (with `state` handed to it), or
  * anywhere else by `href`. Every
- * other attribute of a link passes through (`aria-label`, `tabIndex`); `icon` comes before the
- * words, and `square` draws the icon alone, its words in `aria-label`.
+ * other attribute of a link passes through (`aria-label`, `tabIndex`, a `ref`); `icon` comes
+ * before the words, `square` draws the icon alone, its words in `aria-label`, and `round` makes
+ * it a circle.
  */
 export function ButtonLink(
-  props: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & { to?: string; state?: unknown; href?: string; look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; icon?: ReactNode; newTab?: boolean; children?: ReactNode },
+  props: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & { to?: string; state?: unknown; href?: string; look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; newTab?: boolean; children?: ReactNode; ref?: Ref<HTMLAnchorElement> },
 ) {
-  const { to, state, href, look, size, full, square, icon, newTab, className: extra, children, ...rest } = props;
-  const className = classes(look ?? "ink", size ?? "md", full, extra, square);
+  const { to, state, href, look, size, full, square, round, icon, newTab, className: extra, children, ...rest } = props;
+  const className = classes(look ?? "ink", size ?? "md", full, extra, square, round);
   const face = (
     <span className="ui-button-face">
       {icon}

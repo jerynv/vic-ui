@@ -1,8 +1,10 @@
 import { autoUpdate, computePosition, flip, offset, shift, size } from "@floating-ui/dom";
+import { LIST_LEAST, LIST_MOST } from "./Popover";
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { CheckIcon, XIcon } from "../icons/icons";
 import { textOf, toOptions, type Items, type Option } from "./items";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
+import { toneClass, type Tone } from "./Badge";
 import { useFieldReason } from "./reason";
 
 interface Shared {
@@ -54,14 +56,16 @@ interface Many extends Shared {
   chip?: (value: string, option: Option | undefined) => ReactNode;
   /** What the x on a chip says to a screen reader. */
   chipLabel?: (value: string, option: Option | undefined) => string;
+  /** A word at a chip's end saying how it stands (Sending, Sent, Not sent). */
+  chipEnd?: (value: string) => ReactNode;
+  /** A chip's tone, for a chip whose state is not fine (an address the server refused). */
+  chipTone?: (value: string) => Tone | undefined;
+  /** A chip that cannot be taken off yet (one still being sent): no x, and Backspace passes it by. */
+  chipFixed?: (value: string) => boolean;
   value?: undefined;
 }
 
 export type ComboboxProps = One | Many;
-
-/** The open list's tallest and shortest, in pixels. */
-const LIST_MOST = 320;
-const LIST_LEAST = 120;
 
 const matches = (option: Option, query: string) => textOf(option).toLocaleLowerCase().includes(query.trim().toLocaleLowerCase());
 
@@ -150,7 +154,7 @@ export function Combobox(props: ComboboxProps) {
     close();
   };
   const drop = (value: string) => {
-    if (props.values === undefined || off) return;
+    if (props.values === undefined || off || props.chipFixed?.(value)) return;
     props.onValuesChange?.(props.values.filter((one) => one !== value));
   };
 
@@ -271,10 +275,15 @@ export function Combobox(props: ComboboxProps) {
               const option = optionOf(value);
               const words = option ? textOf(option) : value;
               return (
-                <span key={value} className="ui-combo-chip">
+                <span key={value} className={["ui-combo-chip", toneClass(props.chipTone?.(value))].filter(Boolean).join(" ")}>
                   {!props.chip && option?.start ? <span className="ui-start">{option.start}</span> : null}
                   <span className="ui-combo-chip-words">{props.chip ? props.chip(value, option) : (option?.label ?? value)}</span>
-                  {off ? null : (
+                  {props.chipEnd ? (
+                    <span className="ui-combo-chip-state" role="status">
+                      {props.chipEnd(value)}
+                    </span>
+                  ) : null}
+                  {off || props.chipFixed?.(value) ? null : (
                     <button
                       type="button"
                       tabIndex={-1}

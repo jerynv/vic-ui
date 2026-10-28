@@ -7,7 +7,8 @@ import { useFieldReason } from "./reason";
  * A search: the field's box with a glass at its start and, once it has words, a clear button
  * at its end, which empties it and puts the focus back. Escape empties it too, and only while
  * it has words, so the key otherwise goes on to the dialog or page around it. `value` and
- * `onValueChange` hold the words; `size="sm"` is the dense one a page header carries.
+ * `onValueChange` hold the words; `size="sm"` is the dense one a page header carries. `bare`
+ * draws no box of its own, for a search that is one part of a box a page draws around it.
  */
 export const SearchField = forwardRef<
   HTMLInputElement,
@@ -21,9 +22,10 @@ export const SearchField = forwardRef<
     /** What the clear button says to a screen reader. */
     clearLabel?: string;
     size?: "sm";
+    bare?: boolean;
     disabledReason?: string | undefined;
   }
->(function SearchField({ value, onValueChange, label, hint, error, clearLabel = "Clear the search", size, className, id, disabled, disabledReason, onKeyDown, onFocus, onBlur, ...rest }, ref) {
+>(function SearchField({ value, onValueChange, label, hint, error, clearLabel = "Clear the search", size, bare, className, id, disabled, disabledReason, onKeyDown, onFocus, onBlur, ...rest }, ref) {
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
@@ -43,9 +45,9 @@ export const SearchField = forwardRef<
     own.current?.focus();
   };
 
-  const classes = ["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ");
+  const classes = ["ui-field", size === "sm" ? "ui-field-sm" : "", bare ? "ui-search-bare" : "", className ?? ""].filter(Boolean).join(" ");
   return (
-    <div className={classes} role="search">
+    <div className={classes} role={bare ? undefined : "search"}>
       <FieldHead field={field} label={label} error={error} />
       <div ref={why.anchor} className="ui-field-box ui-search-box" data-invalid={error ? "" : undefined} data-disabled={disabled || held ? "" : undefined} {...why.box}>
         <MagnifyingGlassIcon size={size === "sm" ? 14 : 16} className="ui-search-glass" aria-hidden="true" />
