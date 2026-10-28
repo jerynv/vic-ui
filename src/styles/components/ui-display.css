@@ -459,6 +459,9 @@
 
   /* ---- a key ---------------------------------------------------------------------- */
 
+  /* Flat: no bevel, no shadow, no heavier foot. Its fill is its own colour at a low strength,
+     so it reads on whatever ground it sits on, and a surface that wants another sets
+     `--kbd-fill` rather than restyling the key. */
   .ui-kbd {
     display: inline-grid;
     place-items: center;
@@ -471,8 +474,7 @@
     font-weight: 500;
     line-height: 1;
     color: var(--fg-subtle);
-    background: var(--field-fill);
-    box-shadow: inset 0 -1px 0 var(--line);
+    background: var(--kbd-fill, color-mix(in oklab, currentColor 12%, transparent));
   }
 
   .ui-kbd + .ui-kbd {

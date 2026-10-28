@@ -1,6 +1,7 @@
 import { Kbd } from "vic-ui";
 
 export const title = "Keys, and keys together";
+export const note = "Flat, with no raised look: the key's fill is its own colour at a low strength.";
 
 export default function Example() {
   return (

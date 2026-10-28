@@ -28,6 +28,12 @@
     font-size: var(--text-ui);
   }
 
+  /* A dense select keeps the room its caret stands in, which the dense padding above would
+     otherwise take back, laying the caret over the end of its words. */
+  .ui-field-sm .ui-select {
+    padding-right: 2.25rem;
+  }
+
   .ui-field-prefix {
     flex: none;
     padding-left: 0.75rem;
@@ -194,6 +200,11 @@
 
   .ui-combo-box[data-open] {
     background: var(--field-fill-hover);
+  }
+
+  /* A chosen name longer than its field ends in an ellipsis rather than a cut letter. */
+  .ui-combo-input {
+    text-overflow: ellipsis;
   }
 
   /* Several chosen: the chips and the words wrap inside a box that grows a row at a time. */

@@ -2,7 +2,7 @@
 
 vic-ui is a React component library and the design system it draws with: about fifty pieces (buttons, fields, lists, rows, overlays, tables, feedback, a sidebar, timeline pieces), one token file, one stylesheet per kind of piece, and the rules the pieces are held to.
 
-It was extracted from the v-client application, where it lived in `web/src/ui` (components), `web/src/styles/tokens.css` and `web/src/styles/components/ui*.css` (styles), and `web/src/components/icons.tsx` (icons). This map was read from the checkout at `/Users/jeryn/Documents/GitHub/.v-client-work/design-system`, branch `design/system`, commit `e7221f50`, and brought up to date with v-client's library at commit `8d7c0b2c` (the `ds/dedupe` work). Every value below is copied from that source.
+It was extracted from the v-client application, where it lived in `web/src/ui` (components), `web/src/styles/tokens.css` and `web/src/styles/components/ui*.css` (styles), and `web/src/components/icons.tsx` (icons). This map was read from the checkout at `/Users/jeryn/Documents/GitHub/.v-client-work/design-system`, branch `design/system`, commit `e7221f50`, brought up to date with v-client's library at commit `8d7c0b2c` (the `ds/dedupe` work), and again at commit `0f17780a`. Every value below is copied from that source.
 
 These things change in vic-ui:
 
@@ -57,6 +57,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 | `square` | `boolean` | `false` | An icon alone, as wide as the button is tall; its words go in `aria-label`. |
 | `round` | `boolean` | `false` | A circle (`--radius-round`), as a message box's Send is. |
 | `icon` | `ReactNode` | none | Drawn before the words inside the face. |
+| `busy` | `boolean` | `false` | Held and `aria-busy` while it lasts; a spinner stands where its icon was, or over its words where it has none, the words kept in place unseen, so its width does not change. |
 | `disabledReason` | `string \| undefined` | none | With `disabled`, keeps it focusable and says why on hover and focus. |
 | `type` | button type | `"button"` | Native type. |
 | `ref` | `Ref<HTMLButtonElement>` | none | Forwarded. |
@@ -72,14 +73,17 @@ States, as `ui.css` implements them:
 - Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over 300ms `ease-in-out`.
 - Focus: `:focus-visible` outline 2px `--focus`, offset 2px (keyboard only).
 - Disabled (`:disabled` or `aria-disabled="true"`): opacity 0.55, `cursor: not-allowed`, no hover or press.
+- Busy (`aria-busy`): held as disabled is. With no icon, the face is `position: relative`, the words (`ui-button-busy-words`) are `opacity: 0` and the spinner (`ui-button-busy-mark`) is laid over them (`position: absolute; inset: 0; margin: auto`).
+- Full (`full`, not `link`): `height: auto`, `min-height: --control-h-sm` (`lg`: `--control-h`), `white-space: normal`; its face has `padding-block: 0.25rem`, line height 1.25 and centred words, so words longer than the column wrap inside the button and one line keeps its height.
+- The rim's gradient is painted from the outer edge (`background-origin: border-box`), so it does not repeat under the border as a sliver along the top of a tall button.
 - Type: `--text-ui` (13px), weight 500, line height 1, no wrap; `lg` uses `--text-read` (14px).
 - Face padding `0 0.875rem` (`lg`: `0 1rem`, `square`: 0), gap 0.5rem, radius `calc(var(--radius-button) - 2px)`.
 
 Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
 
-CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`. The four `@property` rules sit outside the layer at the end of the buttons block.
+CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`, `ui-button-busy-words`, `ui-button-busy-mark`. The four `@property` rules sit outside the layer at the end of the buttons block.
 
-Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`.
+Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`; `Spinner`.
 
 ### ButtonLink
 
@@ -303,22 +307,27 @@ type Items = Record<string, string> | ReadonlyArray<readonly [string, string]> |
 
 ### OrgMark
 
-An organisation drawn as itself: its first letter on a tile in its own hue (`hueFor(slug)`), the letter in the hue's ink.
+An organisation drawn as itself: its first letter on a tile in its own hue (`hueFor(slug)`), the letter in the hue's ink, or its logo (`src`) in exactly the letter's box.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `name` | `string` | required | Its first letter, trimmed and upper-cased, is drawn. |
 | `slug` | `string` | required | Seeds the hue. |
+| `src` | `string \| null \| undefined` | none | A logo's address. It fills the tile contained once it has loaded; the letter stands until then and stays if it fails. |
 | `size` | `"sm" \| "lg"` | `"sm"` | `sm` is 2rem, `lg` 3.5rem. |
 | `className` | `string` | none | Placement. |
 
-States: none; it is `aria-hidden`. Small: 2rem square, radius `--radius-row`, `--font-display` weight 700 at 0.9375rem, words `--hue-ink` on `--hue`. Large: 3.5rem, radius `--radius-control`, 1.5rem, words `--bg-base` on `--hue-ink` (inverted).
+States: none; it is `aria-hidden`. Small: 2rem square, radius `--radius-row`, `--font-display` weight 700 at 0.9375rem, words `--hue-ink` on `--hue`. Large: 3.5rem, radius `--radius-control`, 1.5rem, words `--bg-base` on `--hue-ink` (inverted). The tile is `position: relative` and clips; its logo (`ui-org-logo`) is absolute over the whole tile, `object-fit: contain`, hidden until loaded; once loaded the tile carries `data-logo`, which makes the letter and the tile's colour transparent.
 
 Tokens: `--hue`, `--hue-ink`, `--radius-row`, `--radius-control`, `--font-display`, `--bg-base`.
 
-CSS: `ui.css`. Classes `ui-org-mark`, `ui-org-mark-lg`. Needs the `[data-hue]` rules.
+CSS: `ui.css`. Classes `ui-org-mark`, `ui-org-mark-lg`, `ui-org-logo`. Needs the `[data-hue]` rules.
 
-Dependencies: `hueFor`.
+Dependencies: `hueFor`, `useLogo`.
+
+### useLogo
+
+`useLogo(src)` returns `{ shown, image }`: `image` is the `<img class="ui-org-logo">` to put inside a letter tile and `shown` is whether it has loaded, for the tile's `data-logo`. A logo this page has already loaded is shown at once where it is drawn again. Exported from `OrgMark.tsx`, for a tile of your own drawn the same way.
 
 ### RadioGroup
 
@@ -329,7 +338,7 @@ One of a few, all in view: native radios under a legend, each inside its label, 
 | `legend` | `ReactNode` | required | The group's name, drawn as a field label. |
 | `value` | `string` | required | The chosen value. |
 | `onValueChange` | `(value: string) => void` | required | Handed the new value. |
-| `items` | `Items` | required | An option's `hint` is a quieter line; `disabled` with `reason` sets the label's `title`. |
+| `items` | `Items` | required | An option's `hint` is a quieter line; `disabled` with `reason` keeps it focusable and says why on hover and focus. |
 | `across` | `boolean` | `false` | Lays them in a wrapping row (gap `0.5rem 1.25rem`). |
 | `look` | `"card"` | none | Each a filled card (min 12rem columns, gap 0.75rem), the chosen one ringed in ink. |
 | `name` | `string` | `useId()` | The radios' shared name. |
@@ -341,7 +350,7 @@ States:
 - Dot hover (unchecked): `--field-fill-hover`.
 - Checked: fill `--ink-words`, inset ring `0.3125rem` of `--ink-face-bottom`, eased (box-shadow 180ms `cubic-bezier(0.2, 0.8, 0.2, 1)`).
 - Focus: outline 2px `--focus`, offset 2px.
-- Disabled: dot opacity 0.55; label `not-allowed`, words `--fg-subtle`. A disabled option says its `reason` through the native `title`, not the library's tooltip.
+- Disabled: dot opacity 0.55, `not-allowed`; label `not-allowed`, words `--fg-subtle`. Without a `reason` the radio is natively disabled. With one (`useFieldReason`) it is `aria-disabled`, stays in the arrows' reach, choosing it does nothing, and the reason hangs from its row on pointer rest and when the keys reach it.
 - Card look: padding 0.75rem, radius `--radius-field`, `--field-fill`; hover `--field-fill-hover`; chosen ring `inset 0 0 0 1.5px var(--ink-face-bottom)`; transitions 150ms `--ease-track`, none under reduced motion.
 - Words: `--text-read`, `--fg-strong`; hint `--text-ui`, `--fg-subtle`.
 
@@ -379,6 +388,7 @@ States:
 - Box: as `TextField` (fill `--field-fill`, hover `--field-fill-hover`, error ring `inset 0 0 0 1px var(--tone-danger-ink)`).
 - Empty (`data-empty`): words `--fg-subtle`.
 - Open (`data-open`): box `--field-fill-hover`; the caret (`ChevronDownIcon` 16px, `--fg-subtle`) rotates 180deg over 160ms.
+- Dense (`size="sm"`): the box keeps `padding-right: 2.25rem` (`.ui-field-sm .ui-select`), the room its caret stands in, so a long choice ends before the caret.
 - Disabled (`data-disabled`): box opacity 0.55, hover stays `--field-fill`; trigger `not-allowed`.
 - Focus: the trigger is a button, so the keyboard reaching it draws a ring on the box, `0 0 0 2px var(--focus)` (with the error ring kept inside it); a pointer press draws none. In the source it drew nothing, a defect fixed in vic-ui.
 - List: `ui-menu` surface, placed by `useAnchored` as every list is (`bottom-start`, offset 6, flip and shift with padding 8, at least the box's width, max height `min(LIST_MOST, max(LIST_LEAST, availableHeight))`px, that is 320 and 120), `data-side` set to the side it opened on. The active row (pointer or keys) is `data-active`, fill `--fill-hover`; the chosen row ends in a tick (`CheckIcon` 16px, `--fg-strong`); a disabled row is opacity 0.45 and `not-allowed`. The active row is kept in view.
@@ -439,6 +449,7 @@ A label, a native input, and what is fixed at its start or end (a currency sign,
 | `hint` | `ReactNode` | none | A line under the box. |
 | `error` | `ReactNode` | none | A short error in the label's place; rings the box. |
 | `size` | `"sm"` | none | The dense height. |
+| `disabledReason` | `string \| undefined` | none | With `disabled`, keeps it focusable and says why on hover and focus. |
 | `id` | `string` | `useId()` | The input's id. |
 | `ref` | `Ref<HTMLInputElement>` | none | Forwarded. |
 | native attributes | `InputHTMLAttributes` less `size` and `prefix` | | `type`, `value`, `onChange` and the rest. |
@@ -451,13 +462,13 @@ States:
 - Error (`data-invalid`): `inset 0 0 0 1px var(--tone-danger-ink)`; `aria-invalid`; the error takes the label's place (see `FieldHead`).
 - Disabled (`:has(:disabled)`): box opacity 0.55, `not-allowed`, no hover.
 - Input: padding `0 0.75rem` (`sm`: `0 0.625rem`, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
-- `TextField` takes no `disabledReason`.
+- Disabled for a reason (`disabledReason`, `useFieldReason`): the input is `readOnly` and `aria-disabled` rather than disabled, the box carries `data-disabled`, and the reason hangs from the box on pointer rest and focus.
 
 Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
 
 CSS: `ui.css` (`ui-field`, `ui-field-sm`, `ui-field-head`, `ui-field-label`, `ui-field-error`, `ui-field-box`, `ui-field-input`, `ui-field-suffix`, `ui-field-hint`) and `ui-inputs.css` (`ui-field-prefix`, and the `sm` sizes of the input, prefix and suffix).
 
-Dependencies: `FieldHead`, `FieldHint`, `describedBy`.
+Dependencies: `FieldHead`, `FieldHint`, `describedBy`, `useFieldReason`.
 
 ### TypedConfirm, typedFirst
 
@@ -663,9 +674,9 @@ A key name drawn as a key. Several keys pressed together are several `Kbd`s side
 | `name` | `string` | none | What a screen reader hears where the key is a symbol (`↵` as "Enter"). |
 | `className` | `string` | none | Placement. |
 
-States: none. Min width and height 1.25rem, padding `0 0.3125rem`, radius `--radius-mark`, `--font-sans` `--text-tag` weight 500, `--fg-subtle` on `--field-fill`, a bottom line `inset 0 -1px 0 var(--line)`. A key after a key has 0.1875rem before it.
+States: none. Min width and height 1.25rem, padding `0 0.3125rem`, radius `--radius-mark`, `--font-sans` `--text-tag` weight 500, flat (no bevel, no shadow): `--fg-subtle` on `var(--kbd-fill, color-mix(in oklab, currentColor 12%, transparent))`, its own colour at a low strength so it reads on any ground; a surface that wants another fill sets `--kbd-fill`. A key after a key has 0.1875rem before it.
 
-Tokens: `--radius-mark`, `--font-sans`, `--text-tag`, `--fg-subtle`, `--field-fill`, `--line`.
+Tokens: `--radius-mark`, `--font-sans`, `--text-tag`, `--fg-subtle`; local slot `--kbd-fill`.
 
 CSS: `ui-display.css`. Class `ui-kbd`. Uses `sr-only`.
 
@@ -784,6 +795,7 @@ Keys: ArrowDown and ArrowUp open or move (skipping disabled, no wrap); Enter cho
 States:
 
 - Box: as `TextField`, `cursor: text`; open `--field-fill-hover`; a press on the box beyond the input focuses the input and toggles the list.
+- Input: a chosen name longer than the field ends in an ellipsis (`text-overflow: ellipsis`).
 - Several: the box wraps (gap 0.25rem, padding 0.25rem, min height `--control-h`; `sm` padding 0.1875rem, min `--control-h-sm`); the input is `flex: 1 0 6rem` at `calc(var(--control-h) - 0.5rem)`.
 - Chip: `calc(var(--control-h) - 0.5rem)` tall (`sm`: `calc(var(--control-h-sm) - 0.375rem)`), radius `--radius-row`, `--surface-lifted`, ring `0 0 0 1px var(--tone-edge, var(--line-soft))`, `--text-ui`, words `var(--tone-ink, var(--fg-strong))`; the chip clears `--tone-ink` and `--tone-edge` on itself first, so only a tone named on it colours it. Its end word: `--text-meta`, `var(--tone-ink, var(--fg-subtle))`, padding-inline `0.375rem 0.25rem`. Its x is 1.25rem, radius `calc(var(--radius-row) - 0.25rem)`, `--fg-subtle`; hover `--fill-chosen` and `--fg-strong`, press `--fill-press`. Disabled chips have no x.
 - List: as `Select`'s (`ui-menu`, offset 6, flip, shift, min width of the box, max height `min(LIST_MOST, max(LIST_LEAST, availableHeight))`px, and with `steady` that height fixed). Active row `data-active`; press on a row `--fill-press`; chosen rows end in a tick; group headings `--text-meta` weight 600 `--fg-subtle`; empty and foot `--text-ui` `--fg-subtle`, the foot under `1px solid light-dark(oklch(0 0 0 / 0.06), oklch(1 0 0 / 0.08))`.
@@ -986,7 +998,7 @@ Dependencies: `useAnchored`, `usePressAway`.
 
 ### useAnchored
 
-The hook every floating piece but `Combobox` is placed by. While `open`, it calls `showPopover()` on the floating element, positions it with `computePosition` (`strategy: "fixed"`, middleware `offset(gap)`, `flip({ padding: 8 })`, `shift({ padding: 8 })`, and `size({ padding: 8 })` when `fit` or `matchWidth`), resets to `0,0` before each measure, writes `left`, `top` and `data-side`, and keeps it there with `autoUpdate` (an element anchor) or on window resize (a point). On close it hides the popover.
+The hook every floating piece but `Combobox` is placed by. While `open`, it calls `showPopover()` on the floating element, positions it with `computePosition` (`strategy: "fixed"`, middleware `offset(gap)`, `flip({ padding: 8, fallbackAxisSideDirection: "end" })` (so one set beside its trigger with no room on either side goes above or below rather than off the window), `shift({ padding: 8 })`, and `size({ padding: 8 })` when `fit` or `matchWidth`), resets to `0,0` before each measure, writes `left`, `top` and `data-side`, and keeps it there with `autoUpdate` (an element anchor) or on window resize (a point). On close it hides the popover.
 
 | Argument | Type | Default | Meaning |
 | --- | --- | --- | --- |

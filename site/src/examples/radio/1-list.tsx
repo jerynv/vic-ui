@@ -2,6 +2,7 @@ import { useState } from "react";
 import { RadioGroup } from "vic-ui";
 
 export const title = "A list, and across a row";
+export const note = "A choice that cannot be made with a reason stays in the arrows' reach, choosing it does nothing, and its reason shows on hover and when the keys reach it.";
 
 export default function Example() {
   const [theme, setTheme] = useState("system");

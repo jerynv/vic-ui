@@ -42,7 +42,9 @@ export function useAnchored(
         placement,
         middleware: [
           offset(gap),
-          flip({ padding: 8 }),
+          // Past the other side too (a popover set beside its trigger on a phone), it goes
+          // above or below rather than off the window.
+          flip({ padding: 8, fallbackAxisSideDirection: "end" }),
           shift({ padding: 8 }),
           ...(fit || matchWidth
             ? [

@@ -1,6 +1,7 @@
 import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode, type Ref } from "react";
 import { Link } from "./Link";
 import { useBlocked } from "./reason";
+import { Spinner } from "./Spinner";
 
 /**
  * The library's button. `ink` is a page's one filled action, `line` an outlined one beside
@@ -19,6 +20,9 @@ import { useBlocked } from "./reason";
  * `square` draws an icon alone as wide as the button is tall; its words are its `aria-label`.
  * `round` makes it a circle, as a message box's Send is. `link` is words that act inside a
  * sentence: the sentence's own size and weight, in the strong ink and underlined, wrapping with it.
+ * `busy` is `IconButton`'s: the button is `aria-busy` and held while it lasts, and a spinner
+ * stands where its icon was, or over its words where it has none, the words kept in place but
+ * unseen, so the button keeps its width and nothing beside it moves.
  */
 export type ButtonLook = "ink" | "line" | "quiet" | "link";
 
@@ -26,17 +30,19 @@ function classes(look: ButtonLook, size: "md" | "lg", full?: boolean, extra?: st
   return ["ui-button", `ui-button-${look}`, size === "lg" ? "ui-button-lg" : "", full ? "ui-button-full" : "", square ? "ui-button-square" : "", round ? "ui-button-round" : "", extra ?? ""].filter(Boolean).join(" ");
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; disabledReason?: string | undefined }>(function Button(
-  { look = "ink", size = "md", full, square, round, icon, className, children, type = "button", disabled, disabledReason, ...rest },
+export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; busy?: boolean; disabledReason?: string | undefined }>(function Button(
+  { look = "ink", size = "md", full, square, round, icon, busy, className, children, type = "button", disabled, disabledReason, ...rest },
   ref,
 ) {
-  const held = useBlocked(disabled, disabledReason, ref);
+  const held = useBlocked(disabled || busy, disabledReason, ref);
+  const over = busy && !icon && children !== undefined && children !== null;
   return (
     <>
-      <button type={type} className={classes(look, size, full, className, square, round)} {...rest} {...held.props}>
+      <button type={type} className={classes(look, size, full, className, square, round)} aria-busy={busy || undefined} {...rest} {...held.props}>
         <span className="ui-button-face">
-          {icon}
-          {children}
+          {busy && !over ? <Spinner /> : icon}
+          {over ? <span className="ui-button-busy-words">{children}</span> : children}
+          {over ? <Spinner className="ui-button-busy-mark" /> : null}
         </span>
       </button>
       {held.node}
