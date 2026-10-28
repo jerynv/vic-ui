@@ -10,6 +10,7 @@ const MIN = 5.8;
 const NEUTRALS: Array<{ title: string; line: string; tokens: string[]; words?: boolean }> = [
   { title: "Words", line: "The ink of words, strongest to quietest, and words on the contrast ground.", tokens: ["--fg-strong", "--fg", "--fg-subtle", "--fg-placeholder", "--fg-inactive", "--fg-inverse"], words: true },
   { title: "Grounds", line: "The canvas, the panel on it, and the fills of fields, tints and recesses.", tokens: ["--bg-canvas", "--bg-base", "--surface-lifted", "--bg-elevated", "--bg-tint", "--bg-recessed", "--bg-control", "--bg-contrast", "--field-fill", "--field-fill-hover"] },
+  { title: "Fills", line: "What lies under a thing the pointer is on, has chosen or is pressing: faint, hover, chosen and press, the same grey in both modes.", tokens: ["--fill-faint", "--fill-hover", "--fill-chosen", "--fill-press"] },
   { title: "Lines and focus", line: "The line between things, quieter rules between rows, and the keyboard's focus ring.", tokens: ["--line", "--line-hairline", "--line-soft", "--focus"] },
   { title: "Placeholders and scrollbars", line: "A shade of the ground, the light that passes over it, and the scrollbar's thumb.", tokens: ["--bone", "--bone-glint", "--scroll-thumb", "--scroll-thumb-hover"] },
 ];

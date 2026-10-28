@@ -19,7 +19,7 @@ export function Invite() {
 const ROUTER = `import { Link } from "react-router";
 import { LinkProvider } from "vic-ui";
 
-// Every \`to\` link in the library (ButtonLink, Tabs, Breadcrumbs, Sidebar, Announcement)
+// Every \`to\` link in the library (ButtonLink, Tabs, Trail, Row, Sidebar, Announcement)
 // is drawn with the link you hand in. Without a provider it is a plain <a href>.
 <LinkProvider component={Link}>
   <App />

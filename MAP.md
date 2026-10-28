@@ -1,15 +1,17 @@
 # vic-ui: the map
 
-vic-ui is a React component library and the design system it draws with: about fifty pieces (buttons, fields, lists, overlays, tables, feedback, a sidebar, timeline pieces), one token file, one stylesheet per kind of piece, and the rules the pieces are held to.
+vic-ui is a React component library and the design system it draws with: about fifty pieces (buttons, fields, lists, rows, overlays, tables, feedback, a sidebar, timeline pieces), one token file, one stylesheet per kind of piece, and the rules the pieces are held to.
 
-It was extracted from the v-client application, where it lived in `web/src/ui` (components), `web/src/styles/tokens.css` and `web/src/styles/components/ui*.css` (styles), and `web/src/components/icons.tsx` (icons). This map was read from the checkout at `/Users/jeryn/Documents/GitHub/.v-client-work/design-system`, branch `design/system`, commit `e7221f50`. Every value below is copied from that source.
+It was extracted from the v-client application, where it lived in `web/src/ui` (components), `web/src/styles/tokens.css` and `web/src/styles/components/ui*.css` (styles), and `web/src/components/icons.tsx` (icons). This map was read from the checkout at `/Users/jeryn/Documents/GitHub/.v-client-work/design-system`, branch `design/system`, commit `e7221f50`, and brought up to date with v-client's library at commit `8d7c0b2c` (the `ds/dedupe` work). Every value below is copied from that source.
 
 These things change in vic-ui:
 
-1. **Links come from a provider.** The source imports react-router's `Link` in five places (`ButtonLink`, `Announcement`, `Tabs`, `Breadcrumbs`, `SidebarMenuButton`). vic-ui draws every `to` through the link component supplied by `LinkProvider`, which defaults to a plain `<a href>`. A router passes its own link to the provider.
+1. **Links come from a provider.** The source imports react-router's `Link` in six places (`ButtonLink`, `Announcement`, `Tabs`, `Trail`, `List`'s `Row` and `RowsMore`, `SidebarMenuButton`); `IconButtonLink` and `DangerButtonLink` draw through `ButtonLink`. vic-ui draws every `to` through the link component supplied by `LinkProvider`, which defaults to a plain `<a href>`. A router passes its own link to the provider.
 2. **The icons ship inside the package** at `src/icons`, rather than in the app's `web/src/components/icons.tsx`.
 3. **The styles stand alone.** The `@theme` block of `tokens.css` is plain `:root` custom properties (the working type scale, the faces, the easings; the app's Kumo era and front page sizes are left out, since no piece reads them), `@custom-variant dark` is gone, `--head-h` is declared in `tokens.css`, the `[data-hue]` rules that hand on `--hue` and `--hue-ink` are in `tokens.css`, `sr-only` is in `base.css`, and Tailwind's preflight ships as `preflight.css` in `@layer base` because the pieces were drawn on it. The layer order is declared at the top of `src/index.css`. `data-mode="system"` follows the device, as no attribute does. The app's `.appearance-choice` rule is left out.
-4. **Three defects of the source are fixed.** A menu's labelled section is `.ui-menu-section` (it was `.ui-menu-group`, which `ui-inputs.css` styles as a list's heading, so a grouped menu's rows were inset 0.65rem at weight 600). `Select` draws a heading where an option's `group` changes, as `Combobox` does. The `Select` and `DatePicker` triggers, which are buttons, draw the keyboard's focus ring on their box (`0 0 0 2px var(--focus)`), which they did not.
+4. **Three defects of the source at `e7221f50` are fixed** (and v-client has since fixed them the same way). A menu's labelled section is `.ui-menu-section` (it was `.ui-menu-group`, which `ui-inputs.css` styles as a list's heading, so a grouped menu's rows were inset 0.65rem at weight 600). `Select` draws a heading where an option's `group` changes, as `Combobox` does. The `Select` and `DatePicker` triggers, which are buttons, draw the keyboard's focus ring on their box (`0 0 0 2px var(--focus)`), which they did not.
+
+5. **Every class is the library's.** `Trail`'s classes are `ui-trail-*` (the source's are `trail-*`, in its `type.css`), and `IconButtonLink` drops the app's `no-underline` class, which only the app's console reads.
 
 Classes keep the `ui-` prefix. Product names are not part of the library.
 
@@ -45,11 +47,11 @@ Every export of `web/src/ui/index.ts`, in the index's order, with each piece's s
 
 ### Button
 
-A native button in one of three looks: `ink` (a page's one filled, committing action), `line` (a flat outlined one beside it) and `quiet` (words that act). Built after Cult UI's Texture Button (MIT): the button is a rim (a hairline edge round a gradient one pixel deep) and its words sit on a face inside it.
+A native button in one of four looks: `ink` (a page's one filled, committing action), `line` (a flat outlined one beside it), `quiet` (words that act on their own) and `link` (words that act inside a sentence). Built after Cult UI's Texture Button (MIT): the button is a rim (a hairline edge round a gradient one pixel deep) and its words sit on a face inside it.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `look` | `"ink" \| "line" \| "quiet"` | `"ink"` | Which look. |
+| `look` | `"ink" \| "line" \| "quiet" \| "link"` | `"ink"` | Which look. |
 | `size` | `"md" \| "lg"` | `"md"` | `md` is `--control-h-sm` (2rem); `lg` is `--control-h` (2.25rem), a form's commit. |
 | `full` | `boolean` | `false` | Full width. |
 | `square` | `boolean` | `false` | An icon alone, as wide as the button is tall; its words go in `aria-label`. |
@@ -66,6 +68,7 @@ States, as `ui.css` implements them:
 - Hover: `ink` face moves to `--ink-face-top-hover` / `--ink-face-bottom-hover`; `line` face fills `--field-fill-hover`; `quiet` words go `--fg-strong` and underline (offset 3px).
 - Press (`:active`): `ink` face `--ink-face-top-press` / `--ink-face-bottom-press`; `line` face `--field-fill`. Nothing moves; the face darkens.
 - `line` with `aria-pressed="true"` takes the ink rim and face (a held toggle).
+- `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (160ms).
 - Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over 300ms `ease-in-out`.
 - Focus: `:focus-visible` outline 2px `--focus`, offset 2px (keyboard only).
 - Disabled (`:disabled` or `aria-disabled="true"`): opacity 0.55, `cursor: not-allowed`, no hover or press.
@@ -74,7 +77,7 @@ States, as `ui.css` implements them:
 
 Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
 
-CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`. The four `@property` rules sit outside the layer at the end of the buttons block.
+CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`. The four `@property` rules sit outside the layer at the end of the buttons block.
 
 Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`.
 
@@ -87,19 +90,46 @@ The same looks on a link: to a page of the app by `to`, or anywhere by `href`. I
 | `to` | `string` | none | A page of the app; drawn by the provider's link. |
 | `state` | `unknown` | none | Handed to the link with `to`. |
 | `href` | `string` | none | Any other address; drawn as `<a>`. |
-| `look` | `"ink" \| "line" \| "quiet"` | `"ink"` | As `Button`. |
+| `look` | `"ink" \| "line" \| "quiet" \| "link"` | `"ink"` | As `Button`. |
 | `size` | `"md" \| "lg"` | `"md"` | As `Button`. |
 | `full` | `boolean` | `false` | Full width. |
 | `square` | `boolean` | `false` | Icon alone. |
+| `round` | `boolean` | `false` | A circle. |
+| `ref` | `Ref<HTMLAnchorElement>` | none | The anchor. |
 | `icon` | `ReactNode` | none | Before the words. |
 | `newTab` | `boolean` | `false` | With `href`, adds `target="_blank" rel="noreferrer"`. |
 | native attributes | `AnchorHTMLAttributes` less `href` | | Passed through. |
 
-States: as `Button`'s looks (hover, press, focus-visible). No disabled state and no `round`.
+States: as `Button`'s looks (hover, press, focus-visible). No disabled state.
 
 Tokens and CSS: as `Button`.
 
 Dependencies: the link from `LinkProvider` (the source used react-router's `Link`).
+
+### FileButton
+
+A button that chooses a file: a label drawn as a `Button` (`line` by default), with the file input inside it and hidden, so the keyboard reaches it as the pointer does and its focus rings the button. A file input keeps its own value, so a caller that sends at once gives it a new `key` to empty it.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | required | The button's words. |
+| `label` | `string` | required | The input's accessible name. |
+| `onChange` | `(event: ChangeEvent<HTMLInputElement>) => void` | required | The files chosen. |
+| `accept` | `string` | none | Which files. |
+| `multiple` | `boolean` | `false` | Several at once. |
+| `name` | `string` | none | Posts the files with the form. |
+| `look` | `ButtonLook` | `"line"` | As `Button`. |
+| `size` | `"md" \| "lg"` | `"md"` | As `Button`. |
+| `icon` | `ReactNode` | none | Before the words. |
+| `disabled` | `boolean` | `false` | Without a reason, the input is disabled the native way. |
+| `disabledReason` | `string \| undefined` | none | With `disabled`, stays in reach, says why on hover and focus, and choosing does nothing. |
+| `className` | `string` | none | Placement. |
+
+States: as `Button`'s look. The keyboard reaching the hidden input draws the ring on the button (`:has(input:focus-visible)`, outline 2px `--focus`, offset 2px).
+
+CSS: `ui.css` (`ui-file-button`) plus the button classes; `sr-only` hides the input.
+
+Dependencies: `useTip`.
 
 ### Checkbox
 
@@ -154,6 +184,27 @@ CSS: `ui.css`. Classes `ui-button`, `ui-choice`, `ui-button-face`.
 
 Dependencies: `useBlocked`.
 
+### ChoiceCards
+
+One of a few as cards: a real radio group (a `fieldset` of labelled radios), so the arrow keys move between them and a reader hears every card, the ones that cannot be chosen disabled with their reason on the card itself.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `legend` | `string` | required | The group's name, for a screen reader alone (`sr-only`). |
+| `name` | `string` | required | The radios' name, posted with the form. |
+| `value` | `string \| null` | required | The chosen card. |
+| `onChange` | `(value: string) => void` | required | Handed the new choice. |
+| `onPress` | `(pointer: boolean) => void` | none | Told whether the next choice came from the pointer or the keys. |
+| `items` | `readonly ChoiceCardItem[]` | required | `{ value, label, hint?, mark?, end?, off?, held? }`: `mark` leads the card; `end` stands at its end before its dot (a price); `off` is why it cannot be chosen, said in place of its hint; `held` is one that cannot be chosen whose own words already say why (the one in use). |
+| `className` | `string` | none | Placement. |
+
+States:
+
+- Card: min height 3.25rem, padding `0.625rem 0.875rem`, radius `--radius-control`, inset ring `1px var(--line)`, `--text-read`, `--fg-strong`. Hover `--field-fill`. Chosen: ring `--fg-strong`, the dot filled (a ring, the canvas and a centre in `--fg-strong`). Focus: outline 2px `--fg-strong`, offset 2px. Off (`data-off`): `--fg-subtle`, `not-allowed`, no hover, no dot.
+- Hint `--text-ui` `--fg-subtle`; end `--text-ui`, tabular. Nothing changes weight or size.
+
+CSS: `ui.css`. Classes `ui-choice-cards`, `ui-choice-card`, `ui-choice-card-words`, `ui-choice-card-label`, `ui-choice-card-hint`, `ui-choice-card-end`, `ui-choice-card-dot`.
+
 ### DangerButton
 
 The commit of something that removes or ends, filled in the danger ink, on the library's button. `look="line"` is the way in to such an act; `look="quiet"` is the words alone in the danger ink (a row's Void or Refund).
@@ -177,6 +228,19 @@ Tokens: `--tone-danger-ink`, `--tone-danger-edge`, `--tone-on`, `--ink-rim-edge`
 CSS: `ui.css`. Classes `ui-button-danger`, `ui-button-danger-line`, `ui-button-danger-quiet`.
 
 Dependencies: `Button`.
+
+### DangerButtonLink
+
+The way in to a destructive act on a link: the link to the screen of its own where the act is confirmed. Exported from `DangerButton.tsx`.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `look` | `"ink" \| "line" \| "quiet"` | `"line"` | Outlined in the danger edge by default, or words alone in the danger ink. |
+| every `ButtonLink` prop | | | `to`, `href`, `size`, `icon` and the rest. |
+
+States, tokens and CSS: as `DangerButton`'s looks.
+
+Dependencies: `ButtonLink`.
 
 ### CautionButton
 
@@ -317,13 +381,13 @@ States:
 - Open (`data-open`): box `--field-fill-hover`; the caret (`ChevronDownIcon` 16px, `--fg-subtle`) rotates 180deg over 160ms.
 - Disabled (`data-disabled`): box opacity 0.55, hover stays `--field-fill`; trigger `not-allowed`.
 - Focus: the trigger is a button, so the keyboard reaching it draws a ring on the box, `0 0 0 2px var(--focus)` (with the error ring kept inside it); a pointer press draws none. In the source it drew nothing, a defect fixed in vic-ui.
-- List: `ui-menu` surface; placed `bottom-start`, offset 6, flip and shift (padding 8), at least the box's width, max height `min(320, max(120, availableHeight))`px, `data-side` set to the side it opened on. The active row (pointer or keys) is `data-active`, fill `oklch(0.5965 0 0 / 0.12)`; the chosen row ends in a tick (`CheckIcon` 16px, `--fg-strong`); a disabled row is opacity 0.45 and `not-allowed`. The active row is kept in view.
+- List: `ui-menu` surface, placed by `useAnchored` as every list is (`bottom-start`, offset 6, flip and shift with padding 8, at least the box's width, max height `min(LIST_MOST, max(LIST_LEAST, availableHeight))`px, that is 320 and 120), `data-side` set to the side it opened on. The active row (pointer or keys) is `data-active`, fill `--fill-hover`; the chosen row ends in a tick (`CheckIcon` 16px, `--fg-strong`); a disabled row is opacity 0.45 and `not-allowed`. The active row is kept in view.
 
 Tokens: the field tokens (see `TextField`), the list tokens (see `Menu`), `--fg-subtle`, `--fg-strong`.
 
 CSS: `ui.css` (`ui-select`, `ui-select-box`, `ui-select-words`, `ui-select-caret`, `ui-menu`, `ui-menu-item`, `ui-menu-words`, `ui-menu-hint`, `ui-menu-tick`, `ui-field-sm`) and `ui-inputs.css` (`ui-start`). Plus the field classes.
 
-Dependencies: `@floating-ui/dom` (`computePosition`, `autoUpdate`, `offset`, `flip`, `shift`, `size`, used directly rather than through `useAnchored`), `FieldHead`, `FieldHint`, `describedBy`, `toOptions`, `textOf`, `useBlocked`; icons `ChevronDownIcon`, `CheckIcon`.
+Dependencies: `useAnchored`, `FieldHead`, `FieldHint`, `describedBy`, `toOptions`, `textOf`, `useBlocked`; icons `ChevronDownIcon`, `CheckIcon`.
 
 ### SelectField
 
@@ -394,6 +458,24 @@ Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--fi
 CSS: `ui.css` (`ui-field`, `ui-field-sm`, `ui-field-head`, `ui-field-label`, `ui-field-error`, `ui-field-box`, `ui-field-input`, `ui-field-suffix`, `ui-field-hint`) and `ui-inputs.css` (`ui-field-prefix`, and the `sm` sizes of the input, prefix and suffix).
 
 Dependencies: `FieldHead`, `FieldHint`, `describedBy`.
+
+### TypedConfirm, typedFirst
+
+The field that takes a name, an address or a number typed to confirm something that cannot be taken back. Its label keeps two lines whatever it says (`min-height: 2lh`), so the field stands where it was drawn and never moves when the label wraps. It only collects the words: the commit beside it is held until they match and says why with `typedFirst`, and the server compares them again.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `expect` | `string` | required | What is to be typed; the placeholder too. |
+| `value` | `string` | required | What has been typed. |
+| `onValueChange` | `(value: string) => void` | none | Handed the words. |
+| `label` | `ReactNode` | `Type {expect} to confirm` | The words over the field. |
+| every other `TextField` prop | | | `error`, `name`, `size` and the rest. |
+
+`typedFirst(expect)` returns `Type {expect} first.`, the reason a held commit gives.
+
+CSS: `ui.css` (`ui-confirm-label`) plus the field classes.
+
+Dependencies: `TextField`.
 
 ### Accordion
 
@@ -468,7 +550,7 @@ Dependencies: the provider's link; icon `ArrowRightIcon`.
 
 ### AvatarStack
 
-Faces overlapping in a row, the first `most` of them then `+n`. Each face after the first is cut back by the outline of the one before it, grown by `gap`, with a CSS mask, so clear space shows on whatever is behind. Ported from Kibo UI's Avatar Stack (MIT).
+Faces overlapping in a row, the first `most` of them then `+n`. Each face after the first is cut back by the outline of the one before it, grown by `gap`, with a CSS mask, so clear space shows on whatever is behind. Ported from Kibo UI's Avatar Stack (MIT). The sizes are custom properties on the stack (`--stack-size`, `--stack-overlap`, `--stack-gap`), set from the props, and the cut is worked out from them in the stylesheet, so a page that draws its stack smaller on a phone sets them there and the cut follows.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -486,13 +568,13 @@ States: none. The `+n` face is round (`--radius-round`), weight 600, tabular num
 
 Tokens: `--radius-round`, `--fg-strong`, `--field-fill`, `--text-tag`, `--text-meta`.
 
-CSS: `ui-display.css`. Classes `ui-avatar-stack`, `ui-avatar-stack-face`, `ui-avatar-stack-more`. Uses an `sr-only` class for the words a screen reader hears; in the source that is Tailwind's utility, not a rule of the library's own stylesheets.
+CSS: `ui-display.css`. Classes `ui-avatar-stack`, `ui-avatar-stack-face`, `ui-avatar-stack-more`; each face is `--stack-size` square, and each after the first takes `margin-left: calc(-1 * var(--stack-overlap))` and the mask's position and size from the three properties. Uses an `sr-only` class for the words a screen reader hears; in the source that is Tailwind's utility, not a rule of the library's own stylesheets.
 
 Dependencies: none beyond React.
 
 ### Badge
 
-A state said in a word or two. Hairline in its tone is a standing state; `solid` fills it with the tone's ink, asking for a hand now. It always carries words.
+A state said in a word or two. Hairline in its tone is a standing state; `solid` fills it with the tone's ink, asking for a hand now. It always carries words, and lower-case data reads as a sentence: its first letter is raised.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -504,11 +586,11 @@ A state said in a word or two. Hairline in its tone is a standing state; `solid`
 | `children` | `ReactNode` | required | The words. |
 | native attributes | `HTMLAttributes<HTMLSpanElement>` | | Passed through. |
 
-States: none interactive. Hairline: height 1.25rem, padding `0 0.4375rem`, radius `--radius-row`, `--text-tag` weight 600, words `var(--tone-ink, var(--fg-strong))`, inset ring `1px var(--tone-edge, var(--line))`. Solid: words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`, no ring. The badge clears `--tone-ink`, `--tone-edge` and `--tone-fill-on` on itself first, so a badge inside a toned notice is not toned by accident.
+States: none interactive. Hairline: height 1.25rem, max width 100%, padding `0 0.4375rem`, radius `--radius-round`, `--text-tag` weight 600, words `var(--tone-ink, var(--fg-strong))`, inset ring `1px var(--tone-edge, var(--line))`. Solid: words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`, no ring. The badge clears `--tone-ink`, `--tone-edge` and `--tone-fill-on` on itself first, so a badge inside a toned notice is not toned by accident. The words are an item of their own (`ui-badge-words`, line height 1.35), cut with an ellipsis where the row gives less room, their first letter uppercased by `::first-letter`.
 
 Tokens: `--tone-ink`, `--tone-edge`, `--tone-fill-on` (set by `.tone-*`), `--fg-strong`, `--line`, `--ink-words`, `--ink-face-bottom`, `--radius-row`, `--radius-round`, `--text-tag`.
 
-CSS: `ui-display.css` (`ui-badge`, `ui-badge-solid`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`).
+CSS: `ui-display.css` (`ui-badge`, `ui-badge-words`, `ui-badge-solid`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`).
 
 Dependencies: `toneClass`.
 
@@ -530,29 +612,46 @@ Tokens: `--tone-ink`, `--tone-fill-on`, `--ink-words`, `--ink-face-bottom`, `--r
 
 CSS: `ui-display.css` (`ui-count`), `tokens.css` (`tone-*`). Uses `sr-only`.
 
+### HeadCount
+
+How many a heading holds, as a quiet number after its words ("Comments 4"). It is read with the heading, so it needs no words of its own. A count waiting for somebody is `Count`, and a tab's is the tab's own. Exported from `Badge.tsx`.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `value` | `ReactNode` | required | The number. |
+| `className` | `string` | none | Placement. |
+
+States: none. `--text-tag`, tabular, `--fg-subtle`, in the heading's weight.
+
+CSS: `ui-display.css` (`ui-head-count`).
+
 ### toneClass, Tone
 
 Not components. `Tone` is `"danger" | "caution" | "settled" | "moving" | "neutral"`. `toneClass(tone)` returns `` `tone-${tone}` `` for the four tones and `""` for `neutral` or none; the class hands a part `--tone-ink`, `--tone-tint`, `--tone-edge` and `--tone-fill-on` (`tokens.css`).
 
 ### Card
 
-A surface with parts: `lifted` sits on the page on the lifted surface with an edge and no shadow; `recessed` sinks into it on the field's fill. A head and a foot are drawn only when given.
+The one surface on the page: `lifted` sits on the page on the lifted surface with an edge and no shadow; `recessed` sinks into it on the field's fill; `tone="danger"` draws the edge in the danger edge, for a danger zone. A head and a foot are drawn only when given.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
+| `as` | `"div" \| "section" \| "form"` | `"div"` | The element it is drawn as. |
 | `look` | `"lifted" \| "recessed"` | `"lifted"` | Which surface. |
+| `tone` | `"danger" \| undefined` | none | The edge in `--tone-danger-edge`. |
+| `plain` | `boolean` | `false` | The children in the card itself, padded `0.75rem 0.875rem`, for a card that lays them out; no head, body or foot. |
+| `flush` | `boolean` | `false` | The body has no padding, for rows that run to its edges. |
 | `title` | `ReactNode` | none | The head's title (an `h3`). |
 | `description` | `ReactNode` | none | Under the title. |
 | `actions` | `ReactNode` | none | At the head's end. |
 | `foot` | `ReactNode` | none | A foot under a rule. |
 | `children` | `ReactNode` | none | The body. |
-| native attributes | `HTMLAttributes<HTMLDivElement>` less `title` | | Passed through. |
+| native attributes | `HTMLAttributes<HTMLElement>` less `title` | | Passed through (a form's `onSubmit`). |
 
-States: none interactive. Radius `--radius-panel`, `--text-ui`, `--fg`. Lifted: `--surface-lifted` with `--edge`. Recessed: `--field-fill`, its foot's rule `--bone`. Head padding `0.75rem 0.875rem 0` (with nothing under it, centred and padded 0.75rem below); body `0.75rem 0.875rem`; foot `0.625rem 0.875rem` with a top rule `1px solid var(--line)`. Title `--text-read` weight 600, line height 1.35, `--fg-strong`; description `--fg-subtle`.
+States: none interactive. Radius `--radius-panel`, `--text-ui`, `--fg`. Lifted: `--surface-lifted` with `--edge`. Recessed: `--field-fill`, its foot's rule `--bone`. Danger (`data-tone="danger"`): `box-shadow: 0 0 0 1px var(--tone-danger-edge)`. Head padding `0.75rem 0.875rem 0` (with nothing under it, centred and padded 0.75rem below); body `0.75rem 0.875rem` (`flush` 0); foot `0.625rem 0.875rem` with a top rule `1px solid var(--line)`. Title `--text-read` weight 600, line height 1.35, `--fg-strong`; description `--fg-subtle`.
 
-Tokens: `--radius-panel`, `--text-ui`, `--text-read`, `--fg`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--edge`, `--field-fill`, `--line`, `--bone`.
+Tokens: `--radius-panel`, `--text-ui`, `--text-read`, `--fg`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--edge`, `--field-fill`, `--line`, `--bone`, `--tone-danger-edge`.
 
-CSS: `ui-display.css`. Classes `ui-card`, `ui-card-lifted`, `ui-card-recessed`, `ui-card-head`, `ui-card-heading`, `ui-card-title`, `ui-card-description`, `ui-card-actions`, `ui-card-body`, `ui-card-foot`.
+CSS: `ui-display.css`. Classes `ui-card`, `ui-card-lifted`, `ui-card-recessed`, `ui-card-plain`, `ui-card-head`, `ui-card-heading`, `ui-card-title`, `ui-card-description`, `ui-card-actions`, `ui-card-body`, `ui-card-flush`, `ui-card-foot`.
 
 ### Kbd
 
@@ -598,6 +697,19 @@ Tokens: `--tone-ink`, `--tone-tint` (cleared on itself, then set by `.tone-*`), 
 CSS: `ui-display.css` (`ui-notice`, `ui-notice-danger`, `ui-notice-bar`, `ui-notice-icon`, `ui-notice-body`, `ui-notice-title`, `ui-notice-words`, `ui-notice-action`, `ui-notice-dismiss`) and `tokens.css` (`tone-*`).
 
 Dependencies: `toneClass`; icons `AlertCircleIcon`, `AlertTriangleIcon`, `CheckCircleIcon`, `ClockIcon`, `InfoCircleIcon`, `XIcon`.
+
+### Problem
+
+A refusal or a failure said in a line of its own, beside what met it: the words in the danger ink at the working size, with no box, announced as they arrive (`role="alert"`). It says what to do next. A refusal at a dialog's foot is `FootProblem`; one too long for a line, or one that stands for a whole page, is a danger `Notice`.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `as` | `"p" \| "span" \| "div"` | `"p"` | `span` inside a line of words, `div` for several lines. |
+| native attributes | `HTMLAttributes<HTMLElement>` | | Passed through. |
+
+States: none. No margin, `--text-ui`, `--tone-danger-ink`.
+
+CSS: `ui-display.css` (`ui-problem`).
 
 ### Textarea
 
@@ -663,7 +775,7 @@ Shared props:
 
 One choice (`One`): `value: string | null` (required), `onValueChange?: (value: string) => void`. Emptying what was typed never unchooses it.
 
-Several (`Many`): `values: string[]` (required), `onValuesChange?: (values: string[]) => void`, `chip?: (value, option) => ReactNode` (a chip's words; the label by default), `chipLabel?: (value, option) => string` (the x's name; `` `Take ${words} off` `` by default). Choosing keeps the list open; choosing a chosen one takes it off; Backspace in an empty field takes off the last.
+Several (`Many`): `values: string[]` (required), `onValuesChange?: (values: string[]) => void`, `chip?: (value, option) => ReactNode` (a chip's words; the label by default), `chipLabel?: (value, option) => string` (the x's name; `` `Take ${words} off` `` by default), `chipEnd?: (value) => ReactNode` (a word at a chip's end saying how it stands: Sending, Sent, Not sent; a `status` region), `chipTone?: (value) => Tone | undefined` (a chip whose state is not fine, as an address the server refused) and `chipFixed?: (value) => boolean` (a chip that cannot be taken off yet: no x, and Backspace passes it by). Choosing keeps the list open; choosing a chosen one takes it off; Backspace in an empty field takes off the last.
 
 `ComboboxProps` is `One | Many`.
 
@@ -673,19 +785,19 @@ States:
 
 - Box: as `TextField`, `cursor: text`; open `--field-fill-hover`; a press on the box beyond the input focuses the input and toggles the list.
 - Several: the box wraps (gap 0.25rem, padding 0.25rem, min height `--control-h`; `sm` padding 0.1875rem, min `--control-h-sm`); the input is `flex: 1 0 6rem` at `calc(var(--control-h) - 0.5rem)`.
-- Chip: `calc(var(--control-h) - 0.5rem)` tall (`sm`: `calc(var(--control-h-sm) - 0.375rem)`), radius `--radius-row`, `--surface-lifted`, ring `0 0 0 1px light-dark(oklch(0 0 0 / 0.06), oklch(1 0 0 / 0.08))`, `--text-ui`, `--fg-strong`. Its x is 1.25rem, radius `calc(var(--radius-row) - 0.25rem)`, `--fg-subtle`; hover `oklch(0.5965 0 0 / 0.14)` and `--fg-strong`, press `oklch(0.5965 0 0 / 0.22)`. Disabled chips have no x.
-- List: as `Select`'s (`ui-menu`, offset 6, flip, shift, min width of the box, max height `min(320, max(120, availableHeight))`px, and with `steady` that height fixed). Active row `data-active`; press on a row `oklch(0.5965 0 0 / 0.2)`; chosen rows end in a tick; group headings `--text-meta` weight 600 `--fg-subtle`; empty and foot `--text-ui` `--fg-subtle`, the foot under `1px solid light-dark(oklch(0 0 0 / 0.06), oklch(1 0 0 / 0.08))`.
+- Chip: `calc(var(--control-h) - 0.5rem)` tall (`sm`: `calc(var(--control-h-sm) - 0.375rem)`), radius `--radius-row`, `--surface-lifted`, ring `0 0 0 1px var(--tone-edge, var(--line-soft))`, `--text-ui`, words `var(--tone-ink, var(--fg-strong))`; the chip clears `--tone-ink` and `--tone-edge` on itself first, so only a tone named on it colours it. Its end word: `--text-meta`, `var(--tone-ink, var(--fg-subtle))`, padding-inline `0.375rem 0.25rem`. Its x is 1.25rem, radius `calc(var(--radius-row) - 0.25rem)`, `--fg-subtle`; hover `--fill-chosen` and `--fg-strong`, press `--fill-press`. Disabled chips have no x.
+- List: as `Select`'s (`ui-menu`, offset 6, flip, shift, min width of the box, max height `min(LIST_MOST, max(LIST_LEAST, availableHeight))`px, and with `steady` that height fixed). Active row `data-active`; press on a row `--fill-press`; chosen rows end in a tick; group headings `--text-meta` weight 600 `--fg-subtle`; empty and foot `--text-ui` `--fg-subtle`, the foot under `1px solid light-dark(oklch(0 0 0 / 0.06), oklch(1 0 0 / 0.08))`.
 - Disabled and held: as `Textarea`.
 
 Tokens: the field tokens, the list tokens, `--surface-lifted`, `--radius-row`, `--radius-mark`, `--text-meta`, `--control-h`, `--control-h-sm`.
 
-CSS: `ui-inputs.css` (`ui-combo-box`, `ui-combo-input`, `ui-combo-chip`, `ui-combo-chip-words`, `ui-combo-chip-x`, `ui-combo-start`, `ui-combo-menu`, `ui-menu-group`, `ui-menu-empty`, `ui-menu-foot`, `ui-start`) plus `ui-menu`, `ui-menu-item` and the field classes in `ui.css`.
+CSS: `ui-inputs.css` (`ui-combo-box`, `ui-combo-input`, `ui-combo-chip`, `ui-combo-chip-words`, `ui-combo-chip-state`, `ui-combo-chip-x`, `ui-combo-start`, `ui-combo-menu`, `ui-menu-group`, `ui-menu-empty`, `ui-menu-foot`, `ui-start`) plus `ui-menu`, `ui-menu-item` and the field classes in `ui.css`.
 
-Dependencies: `@floating-ui/dom` (used directly), `FieldHead`, `FieldHint`, `describedBy`, `toOptions`, `textOf`, `useFieldReason`; icons `CheckIcon`, `XIcon`.
+Dependencies: `@floating-ui/dom` (used directly), `LIST_MOST`, `LIST_LEAST`, `toneClass`, `FieldHead`, `FieldHint`, `describedBy`, `toOptions`, `textOf`, `useFieldReason`; icons `CheckIcon`, `XIcon`.
 
 ### SearchField
 
-A search: the field's box with a glass at its start and, once it has words, a clear button at its end. Escape empties it while it has words, and only then, so the key otherwise reaches the dialog around it. The wrapper has `role="search"`.
+A search: the field's box with a glass at its start and, once it has words, a clear button at its end. Escape empties it while it has words, and only then, so the key otherwise reaches the dialog around it. The wrapper has `role="search"`, but for a `bare` one.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -697,6 +809,7 @@ A search: the field's box with a glass at its start and, once it has words, a cl
 | `error` | `ReactNode` | none | A short error in the label's place. |
 | `clearLabel` | `string` | `"Clear the search"` | The clear button's name. |
 | `size` | `"sm"` | none | The dense height a page header carries. |
+| `bare` | `boolean` | `false` | No fill or edge of its own, for a search that is one part of a box a page draws around it; no `search` role. |
 | `disabled` | `boolean` | `false` | Natively disabled. |
 | `disabledReason` | `string \| undefined` | none | Focusable, takes no words, says why. |
 | `ref` | `Ref<HTMLInputElement>` | none | Forwarded. |
@@ -705,13 +818,13 @@ A search: the field's box with a glass at its start and, once it has words, a cl
 States:
 
 - Glass: `MagnifyingGlassIcon` 16px (`sm` 14px), margin-left 0.75rem (`sm` 0.625rem), `--fg-subtle`; `--fg-strong` while the box has focus (160ms).
-- Clear: shown while it has words and is not disabled or held; 1.5rem square (`sm` 1.375rem), radius `--radius-row`, `--fg-subtle`; hover `oklch(0.5965 0 0 / 0.14)` and `--fg-strong`; press `oklch(0.5965 0 0 / 0.22)`; focus outline 2px `--focus`, offset 2px. Icon `XIcon` 14px (`sm` 13px). A press empties it and puts the focus back.
+- Clear: shown while it has words and is not disabled or held; 1.5rem square (`sm` 1.375rem), radius `--radius-row`, `--fg-subtle`; hover `--fill-chosen` and `--fg-strong`; press `--fill-press`; focus outline 2px `--focus`, offset 2px. Icon `XIcon` 14px (`sm` 13px). A press empties it and puts the focus back.
 - The browser's own cancel button and decoration are hidden.
 - Box, error, disabled and held: as `Textarea`.
 
 Tokens: the field tokens, `--radius-row`, `--focus`.
 
-CSS: `ui-inputs.css` (`ui-search-box`, `ui-search-glass`, `ui-search`, `ui-search-clear`) plus the field classes.
+CSS: `ui-inputs.css` (`ui-search-box`, `ui-search-glass`, `ui-search`, `ui-search-clear`, `ui-search-bare`) plus the field classes.
 
 Dependencies: `FieldHead`, `FieldHint`, `describedBy`, `useFieldReason`; icons `MagnifyingGlassIcon`, `XIcon`.
 
@@ -771,7 +884,7 @@ States:
 - Veil: `light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62))` with `blur(3px)`, fading in 200ms.
 - Focus: the dialog itself draws no outline.
 - Head padding `1.25rem 1.25rem 0`; title `--font-display` 700 at 1.25rem, line height 1.15, letter spacing -0.02em, balanced, `--fg-strong`; description `--text-read`, line height 1.5, max 46ch, `--fg-subtle`.
-- Body: grid gap 1rem, padding `1rem 1.25rem 1.25rem`. Foot: flex end, gap 0.5rem, padding `0.75rem 1.25rem`, top rule `1px solid var(--line)`, ground `oklch(0.5965 0 0 / 0.045)`; directly under the head it has 1.25rem above.
+- Body: grid gap 1rem, padding `1rem 1.25rem 1.25rem`. Foot: flex end, gap 0.5rem, padding `0.75rem 1.25rem`, top rule `1px solid var(--line)`, ground `--fill-faint`; directly under the head it has 1.25rem above.
 - Problem: `--text-ui`, line height 1.4, `--tone-danger-ink`, `role="alert"`.
 - Below 640px: full width, max height 88dvh, at the bottom, top corners `--radius-panel`, entering with `ui-sheet-in` (from `translate: 0 100%`, 260ms).
 - Reduced motion: no entrance animation.
@@ -798,7 +911,7 @@ A list of actions opened from a trigger, or at a point (for the right button), o
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `items` | `MenuItem[]` | required | Actions, rules and group headings. |
+| `items` | `MenuItem[]` | required | Actions, rows holding a control, rules, group headings and a head. |
 | `aria-label` | `string` | none | The menu's name. |
 | `placement` | `Placement` | `"bottom-start"` | Where it opens. |
 | `className` | `string` | none | Placement. |
@@ -808,28 +921,34 @@ A list of actions opened from a trigger, or at a point (for the right button), o
 | `onOpenChange` | `(open: boolean) => void` | none | Told of each change. |
 
 ```ts
-interface MenuAction { label: ReactNode; text?: string; icon?: ReactNode; hint?: ReactNode;
+interface MenuAction { label: ReactNode; text?: string; icon?: ReactNode; hint?: ReactNode; end?: ReactNode;
   onSelect: () => void; danger?: boolean; disabled?: boolean; disabledReason?: string | undefined; }
-type MenuItem = MenuAction | { separator: true } | { group: ReactNode };
+interface MenuControl { label: ReactNode; text?: string; icon?: ReactNode; control: ReactNode; }
+type MenuItem = MenuAction | MenuControl | { separator: true } | { group: ReactNode } | { head: ReactNode };
 interface MenuTriggerProps { ref; "aria-haspopup": "menu"; "aria-expanded": boolean; "aria-controls": string;
   onClick: (event: { detail: number }) => void; onKeyDown: (event) => void; }
 ```
+
+`end` is a quiet word at an action's end ("Done", "3 of 5"). A `MenuControl` row holds a control of its own at its end (a switch, a switcher): the arrows reach it as they reach an action, the focus goes into the control (its chosen or checked part, else its first button or input), and while it is there only ArrowDown, ArrowUp, Escape and Tab are the menu's, so the control's own keys work it; it is never chosen. A `head` stands over every row (your name and role) and the keys pass over it.
 
 A click from the keys (Enter or Space, `detail === 0`) opens on the first action; a pointer press opens on none; ArrowDown or ArrowUp on the trigger opens on the first or last.
 
 States:
 
 - Surface: `ui-menu` (see below) plus min width 11rem, max width `min(20rem, calc(100vw - 1rem))`; no outline on the menu or its items.
-- Item: min height 2.125rem, padding `0.4rem 0.65rem`, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `oklch(0.5965 0 0 / 0.12)`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `oklch(0.5965 0 0 / 0.2)`. Background eases 120ms.
+- Item: min height 2.125rem, padding `0.4rem 0.65rem`, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `--fill-hover`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `--fill-press`. Background eases 120ms.
 - Danger: words and icon `--tone-danger-ink`; active ground `--tone-danger-tint`.
 - Disabled with no reason: opacity 0.55, `not-allowed`, passed over by the keys.
-- Disabled with a reason: still reached by the keys; active ground `oklch(0.5965 0 0 / 0.08)`; the reason shows in a tooltip to the right while it is active.
+- Disabled with a reason: still reached by the keys; active ground `--fill-faint`; the reason shows in a tooltip to the right while it is active.
 - Rule: 1px `--line`, margin `0.3rem 0.4rem`. Group label: `--text-meta` weight 600 `--fg-subtle`, padding `0.35rem 0.65rem 0.2rem`.
 - Hint: `--text-meta`, `--fg-subtle`, wraps.
+- End word: `--text-meta`, `--fg-subtle`, not shrinking.
+- Control row (`data-control`): `cursor: default`; the control sits at the end with `margin-block: -0.25rem`, so the row keeps its height.
+- Head: flex, gap 0.625rem, padding `0.4rem 0.65rem 0.5rem`, margin-bottom 0.3rem, a bottom rule `1px solid var(--line)`, `--fg-strong`.
 
 Tokens: `--radius-float`, `--surface-lifted`, `--shadow-float`, `--fg`, `--fg-strong`, `--fg-subtle`, `--text-read`, `--text-meta`, `--tone-danger-ink`, `--tone-danger-tint`, `--line`.
 
-CSS: `ui.css` (`ui-menu`, `ui-menu-item`, `ui-menu-words`, `ui-menu-hint`, keyframes `ui-menu-in`) and `ui-overlays.css` (`ui-menu-actions`, `ui-menu-icon`, `ui-menu-rule`, `ui-menu-section`, `ui-menu-label`). Note that `.ui-menu-group` is also styled in `ui-inputs.css` as a combobox's heading (padding, `--text-meta`, weight 600, `--fg-subtle`), and in the source a menu's group wrapper carried that class too, so a grouped menu's rows were inset 0.65rem and inherited weight 600. That was a defect in the source. In vic-ui a menu's section is `.ui-menu-section`, with the same `margin-top: 0.3rem` after a section or an item, and `.ui-menu-group` stays the list's heading alone.
+CSS: `ui.css` (`ui-menu`, `ui-menu-item`, `ui-menu-words`, `ui-menu-hint`, `ui-menu-end`, `ui-menu-control`, `ui-menu-head`, keyframes `ui-menu-in`) and `ui-overlays.css` (`ui-menu-actions`, `ui-menu-icon`, `ui-menu-rule`, `ui-menu-section`, `ui-menu-label`). Note that `.ui-menu-group` is also styled in `ui-inputs.css` as a combobox's heading (padding, `--text-meta`, weight 600, `--fg-subtle`), and in the source a menu's group wrapper carried that class too, so a grouped menu's rows were inset 0.65rem and inherited weight 600. That was a defect in the source at `e7221f50`, since fixed there too. A menu's section is `.ui-menu-section`, with the same `margin-top: 0.3rem` after a section or an item, and `.ui-menu-group` stays the list's heading alone.
 
 Dependencies: `useAnchored`, `usePressAway`, `atPoint`, `useTip`.
 
@@ -857,13 +976,17 @@ CSS: `ui.css` (`ui-menu`) and `ui-overlays.css` (`ui-popover`).
 
 Dependencies: `useAnchored`, `usePressAway`.
 
+### LIST_MOST, LIST_LEAST
+
+`320` and `120`: the tallest any floating list stands and the shortest it is squeezed to before it flips. `useAnchored`'s `fit`, `Select` and `Combobox` all read them. Exported from `Popover.tsx`.
+
 ### atPoint
 
 `atPoint(x, y)` returns a `VirtualElement` (a zero-size rectangle at the point) for `useAnchored` or `Menu`'s `at`. `Anchor` is `Element | VirtualElement`.
 
 ### useAnchored
 
-The hook every floating piece but `Select` and `Combobox` is placed by. While `open`, it calls `showPopover()` on the floating element, positions it with `computePosition` (`strategy: "fixed"`, middleware `offset(gap)`, `flip({ padding: 8 })`, `shift({ padding: 8 })`, and `size({ padding: 8 })` when `fit` or `matchWidth`), resets to `0,0` before each measure, writes `left`, `top` and `data-side`, and keeps it there with `autoUpdate` (an element anchor) or on window resize (a point). On close it hides the popover.
+The hook every floating piece but `Combobox` is placed by. While `open`, it calls `showPopover()` on the floating element, positions it with `computePosition` (`strategy: "fixed"`, middleware `offset(gap)`, `flip({ padding: 8 })`, `shift({ padding: 8 })`, and `size({ padding: 8 })` when `fit` or `matchWidth`), resets to `0,0` before each measure, writes `left`, `top` and `data-side`, and keeps it there with `autoUpdate` (an element anchor) or on window resize (a point). On close it hides the popover.
 
 | Argument | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -872,7 +995,7 @@ The hook every floating piece but `Select` and `Combobox` is placed by. While `o
 | `floating` | `RefObject<HTMLElement \| null>` | required | The element to place. |
 | `how.placement` | `Placement` | `"bottom-start"` | Side and alignment. |
 | `how.gap` | `number` | `6` | Offset in pixels. |
-| `how.fit` | `boolean` | `true` | Caps max height to `min(360, max(120, availableHeight))`px. |
+| `how.fit` | `boolean` | `true` | Caps max height to `min(LIST_MOST, max(LIST_LEAST, availableHeight))`px (320 and 120). |
 | `how.matchWidth` | `boolean` | `false` | Min width of the anchor. |
 | `how.track` | `unknown` | none | Places it again when this changes. |
 
@@ -958,6 +1081,8 @@ The one table: dense rows, a head pinned to the top of its scroller, every numbe
 | `sort` | `TableSort \| null` | none | The current sort. |
 | `onSortChange` | `(sort: TableSort) => void` | none | A sortable head asks for its column ascending, then descending. |
 | `onRowPress` | `(row: Row) => void` | none | Makes each row pressable by pointer and by Enter or Space. |
+| `rowPressable` | `(row: Row) => boolean` | every row | Which rows `onRowPress` opens, where not every row goes somewhere; a row that is not lights nothing and takes no focus. |
+| `after` | `(row: Row) => ReactNode` | none | A line under a row across every column, for what is wrong with it or still to do, read as part of it. |
 | `currentKey` | `string \| null` | none | The row drawn as the one open beside it (`aria-current`). |
 | `empty` | `ReactNode` | `"Nothing here yet."` | Fills the body with no rows. |
 | `aria-label` | `string` | none | The table's name. |
@@ -976,28 +1101,58 @@ States:
 - Head: sticky at top, padding-block 0.4rem, `--text-ui` weight 600, `--fg-subtle` on `--ui-table-ground`, rule `--line`.
 - Sort button: radius `--radius-row`; hover `--fg-strong` on `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset 2px; sorted `--fg-strong`. Its arrow (`ArrowDownIcon` 12px) always holds its room: opacity 0, 0.4 on hover, 1 when sorted; ascending rotates 180deg.
 - Pressable row: `cursor: pointer`; hover `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset -2px. Current row `--field-fill-hover`. Background eases 160ms.
+- After: a row of its own (`ui-table-after`) with one cell spanning the columns, no top padding, and the row above it loses its rule, so the two read as one.
 - Empty: padding-block 2rem, centred, `--fg-subtle`.
 
 Tokens: `--bg-base`, `--line-soft`, `--line`, `--text-read`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
 
-CSS: `ui-data.css`. Classes `ui-table-scroll`, `ui-table`, `ui-table-sort`, `ui-table-sort-mark`, `ui-table-empty`.
+CSS: `ui-data.css`. Classes `ui-table-scroll`, `ui-table`, `ui-table-sort`, `ui-table-sort-mark`, `ui-table-after`, `ui-table-empty`. There is no toolbar piece: filters above a table are the page's own row of fields.
 
 Dependencies: icon `ArrowDownIcon`.
 
-### TableToolbar
+### RowGroup, Rows, Row, RowsMore
 
-The row of filters above a table: its fields and choices first, `end` at the far side.
+Groups of rows of one line at one height (`List.tsx`): a group's head is a small mark in its hue, a short heading, its count and where the rest is; its rows each carry a mark, the words, where and when, and one action at the end. A row lights under the pointer only where pressing it goes somewhere.
+
+`RowGroup`:
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `children` | `ReactNode` | required | The filters. |
-| `end` | `ReactNode` | none | At the far side. |
-| `aria-label` | `string` | `"Filters"` | The group's name. |
-| `className` | `string` | none | Placement. |
+| `title` | `ReactNode` | required | The heading (an `h2`). |
+| `label` | `string` | the title's words | The section's name where the title is not words. |
+| `icon` | `Icon \| null` | none | The head's mark at 14px; `null` keeps its room empty, for a placeholder. |
+| `hue` | `Hue` | none | The mark's colour (`data-hue`). |
+| `count` | `ReactNode` | none | After the heading, usually a `HeadCount`. |
+| `more` | `ReactNode` | none | At the head's end, usually a `RowsMore`. |
+| `children` | `ReactNode` | none | `Rows`, or an `EmptyLine` in their place. |
+| native attributes | `HTMLAttributes<HTMLElement>` less `title` | | On the section. |
 
-States: none. Flex, wraps, space between, gap 0.5rem, padding-bottom 0.625rem.
+`Rows` is the `ul` (`children`, `className`, `aria-hidden`). `RowsMore` is `{ to, children }`: quiet words drawn through the provider's link. `Row`:
 
-CSS: `ui-data.css`. Classes `ui-table-toolbar`, `ui-table-toolbar-start`, `ui-table-toolbar-end`.
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `mark` | `ReactNode` | required | At the start, 1.5rem wide. |
+| `words` | `ReactNode` | required | The row's words, one line, cut short. |
+| `to` | `string` | none | A link over the whole row (through the provider), which is when it lights. |
+| `state` | `unknown` | none | Handed to the link. |
+| `title` | `string` | none | The words' title, for words cut short. |
+| `place` | `ReactNode` | none | Where it is, quiet, at most 16rem. |
+| `when` | `ReactNode` | none | When, quiet, tabular, right-aligned, at least 4.5rem. |
+| `end` | `ReactNode` | none | The one action, above the row's link so it is pressed on its own. |
+| `after` | `ReactNode` | none | Under the row inside its item, for a refusal that belongs to it. |
+| `quiet` | `boolean` | `false` | Words in `--fg-subtle`, saying something in place of a row. |
+
+States:
+
+- Head: height 2rem, `--text-ui`; mark `var(--hue-ink, var(--fg-subtle))`; title weight 600 `--fg-strong`; count tabular `--fg-subtle`; more `--fg-subtle`, `--fg-strong` on hover, focus outline 2px `--focus`. Head and rows hang 0.5rem past the column, so the words line up with what is above them.
+- Row: height 2.5rem, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
+- Under 640px: a place that is not a link goes, and when goes from a row with an action.
+
+Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--hue-ink`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
+
+CSS: `ui-data.css`. Classes `ui-list`, `ui-list-head`, `ui-list-mark`, `ui-list-mark-room`, `ui-list-title`, `ui-list-count`, `ui-list-more`, `ui-list-more-link`, `ui-list-rows`, `ui-list-row`, `ui-list-row-mark`, `ui-list-row-words`, `ui-list-row-link`, `ui-list-row-place`, `ui-list-row-when`, `ui-list-row-end`, `ui-list-face`.
+
+Dependencies: the provider's link, `Hue`, the `Icon` type.
 
 ### Pagination
 
@@ -1208,6 +1363,18 @@ The faint drawing of what a place fills with, in the page's own shapes, hidden f
 
 Tokens and CSS: as `Empty`'s preview.
 
+### EmptyLine
+
+A list, a section of one or a part of a dialog with nothing in it, said in one quiet line where its rows would start, at a row's height and with no box ("Nothing pinned"). A place that holds nothing at all is an `Empty`. Exported from `Empty.tsx`.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| native attributes | `HTMLAttributes<HTMLParagraphElement>` | | The words and the rest. |
+
+States: none. No margin, padding `0.25rem 0.5rem`, `--text-ui`, line height 1.25rem, `--fg-subtle`.
+
+CSS: `ui-display.css` (`ui-list-empty`).
+
 ### CommandPalette
 
 A search over the page that finds something to open: a field at its head and the options under it in their groups, on the browser's own `<dialog>`, so the focus is held inside it. The focus stays in the field.
@@ -1236,10 +1403,10 @@ States:
 
 - Dialog: `ui-dialog` plus width `min(42rem, calc(100vw - 2rem))`, 10vh from the top, no overflow; below 640px `calc(100vw - 1rem)` at 0.5rem from the top, radius `--radius-float`, entering as a dialog (not a sheet).
 - List: one height from opening, `min(26rem, calc(60dvh - 7.5rem))`, padding `0.375rem 0.625rem 0.5rem`, scrolls; the lit option is kept in view.
-- Row: as `Menu`'s item; lit `oklch(0.5965 0 0 / 0.12)` with the arrow (`ArrowRightIcon` 14px) shown; press `oklch(0.5965 0 0 / 0.2)`. Start slot `--fg-subtle`. Crumb `--fg`, at most 45%; chevron (`ChevronRightIcon` 12px) `--fg-subtle`; title at least 4rem; hint `--text-ui` `--fg-subtle`. A crumb gives way first, then the title.
+- Row: as `Menu`'s item; lit `--fill-hover` with the arrow (`ArrowRightIcon` 14px) shown; press `--fill-press`. Start slot `--fg-subtle`. Crumb `--fg`, at most 45%; chevron (`ChevronRightIcon` 12px) `--fg-subtle`; title at least 4rem; hint `--text-ui` `--fg-subtle`. A crumb gives way first, then the title.
 - Marked words: radius `--radius-mark`, ground `--tone-caution-tint`, words inherited.
 - State (loading, empty): centred, padding `2rem 1rem`, `--text-read`, `--fg-subtle`.
-- Foot: `--text-meta`, `--fg-subtle`, top rule `--line`, ground `oklch(0.5965 0 0 / 0.045)`; the default keys (Up and Down "Move", Enter "Open", Esc "Close") are hidden on a coarse pointer.
+- Foot: `--text-meta`, `--fg-subtle`, top rule `--line`, ground `--fill-faint`; the default keys (Up and Down "Move", Enter "Open", Esc "Close") are hidden on a coarse pointer.
 
 Tokens: the `Dialog` and `Menu` tokens, `--radius-mark`, `--tone-caution-tint`, `--text-meta`.
 
@@ -1265,22 +1432,26 @@ Tokens: `--line`.
 
 CSS: `ui-display.css`. Classes `ui-flow`, `ui-flow-column`, `ui-flow-branch`, `ui-flow-node`, `ui-flow-next`.
 
-### Breadcrumbs
+### Trail
 
-Where a page sits, as the pages above it: each a link but the last, which is the page itself (`aria-current="page"`), with a chevron between. A long step is cut with an ellipsis. In vic-ui each `to` renders through `LinkProvider`.
+Where a page sits: each step above it a link back, then the page's own name. Every name is one the page has already read for its reader. A step gives way before the page's name does: on a page it is cut short and the name wraps, and on a phone every step but the nearest folds into one link back to the first, titled with the steps it folds. A step cut short is named in full on hover. It takes its size from where it is set. In vic-ui each `to` renders through `LinkProvider`.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `trail` | `Crumb[]` | required | `{ to: string; label: ReactNode }`, top first. |
+| `steps` | `readonly TrailStep[]` | required | `{ to: string; label: ReactNode; text?: string; state?: unknown }`, top first; `text` is the words where `label` is not words. |
+| `here` | `ReactNode` | required | The page's own name. |
+| `heading` | `boolean` | `true` | The name is an `h1`; `false` draws it as a span, where the page's heading is somewhere else. |
+| `line` | `boolean` | `false` | Keeps it to one line, for a bar: a step stays whole and the name is cut. |
 | `className` | `string` | none | Placement. |
+| `hereClassName` | `string` | none | On the name. |
 
-States: `--text-ui`, line height 1.25rem. Current `--fg-strong`. A link `--fg-subtle`, radius `--radius-row`; hover `--fg-strong` (150ms); focus outline 2px `--focus`, offset 2px. Separator `ChevronRightIcon` 14px, `--fg-subtle`. The nav is named "Where you are".
+States: a flex row on the baseline. A step is at most `min(16em, 40vw)` (none with `line`), `--fg-subtle`, `--fg-strong` on hover, followed by a `/` in `--fg-inactive` (silent to a screen reader), margin-inline 0.4em. The name is weight 600, `--fg-strong`, wrapping anywhere (with `line`, one line with an ellipsis). Under 40rem the steps before the nearest (`ui-trail-far`) are hidden and the folded link (`ui-trail-more`, an ellipsis) shows. The nav is named "Where you are"; the name is `aria-current="page"`.
 
-Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--radius-row`, `--focus`.
+Tokens: `--fg-subtle`, `--fg-strong`, `--fg-inactive`.
 
-CSS: `ui-display.css`. Classes `ui-crumbs`, `ui-crumb`, `ui-crumb-link`, `ui-crumbs-sep`.
+CSS: `ui-display.css`. Classes `ui-trail`, `ui-trail-line`, `ui-trail-step`, `ui-trail-far`, `ui-trail-more`, `ui-trail-here`.
 
-Dependencies: the provider's link; icon `ChevronRightIcon`.
+Dependencies: the provider's link.
 
 ### DatePicker
 
@@ -1323,6 +1494,24 @@ CSS: `ui-overlays.css` (`ui-date`, `ui-date-mark`, `ui-date-pop`, `ui-date-head`
 
 Dependencies: `useAnchored`, `usePressAway`, `useBlocked`, `FieldHead`, `FieldHint`, `describedBy`; icons `CalendarEventIcon`, `ChevronRightIcon`.
 
+### MonthGrid
+
+The month `DatePicker` opens, standing on its own: a head with the month and its steps, the weekdays and six weeks of days, worked by the keys as a grid is. Exported from `DatePicker.tsx`; `DatePicker` draws it inside its popover.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `focus` | `string` | required | The day the keys are on, `YYYY-MM-DD`; its month is the one shown. |
+| `onFocusChange` | `(day: string) => void` | required | Handed the day the keys or the steps move to. |
+| `value` | `string \| null` | required | The chosen day. |
+| `onChoose` | `(day: string) => void` | required | A day chosen by a press, Enter or Space. |
+| `today` | `string` | required | The day drawn as today. |
+| `min`, `max` | `string \| undefined` | none | The bounds; moves are clamped to them and days past them are held. |
+| `className` | `string` | none | Placement. |
+
+Keys and states: as `DatePicker`'s grid (arrows a day or a week, Page Up and Page Down a month, with Shift a year, Home and End the week's ends, Enter or Space choose).
+
+CSS: as `DatePicker`'s grid (`ui-date-head`, `ui-date-month`, `ui-date-step`, `ui-date-grid`, `ui-date-weekday`, `ui-date-day`).
+
 ### TableOfContents
 
 A list of the places on a page, each a link, grouped under quiet headings over one track. The entry open is marked by one bar that slides along the track to it and by its words taking the strong ink; its weight never changes.
@@ -1358,6 +1547,7 @@ An icon alone that acts: a square `Button` whose words are its accessible name a
 | `tip` | `ReactNode` | `label` | What the tooltip says, where it says more (a shortcut). |
 | `busy` | `boolean` | `false` | Swaps the icon for a `Spinner`, sets `aria-busy` and holds the press. |
 | `placement` | `Placement` | `"top"` | The tooltip's side. |
+| `keepFocus` | `boolean` | `false` | A press keeps the focus where it was (its mouse down is prevented), as an editor's formatting does, so the selection it acts on is not lost. |
 | `look` | `"ink" \| "line" \| "quiet"` | `"quiet"` | `line` where it stands beside fields in a header. |
 | `disabledReason` | `string \| undefined` | none | Says the reason in place of its words. |
 | every other `Button` prop but `square`, `children`, `icon`, `aria-label` | | | `size`, `onClick`, `aria-pressed` and the rest. |
@@ -1369,6 +1559,24 @@ Tokens: `Button`'s, chiefly `--control-h-sm`, `--control-h`, `--radius-button`, 
 CSS: `ui.css` (`ui-button-quiet.ui-button-square` and the rest of the button classes).
 
 Dependencies: `Button`, `Spinner`, `Tooltip`.
+
+### IconButtonLink
+
+The same icon alone on a link: to a page of the app by `to` (with `state`), or anywhere by `href` (a download names its file with `download`). Its words are its accessible name and its tooltip. Exported from `IconButton.tsx`.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `label` | `string` | required | Its `aria-label`, and the tooltip unless `tip` is given. |
+| `icon` | `ReactNode` | required | The icon. |
+| `tip` | `ReactNode` | `label` | What the tooltip says. |
+| `busy` | `boolean` | `false` | A `Spinner` in place of the icon, and `aria-busy`. |
+| `placement` | `Placement` | `"top"` | The tooltip's side. |
+| `look` | `ButtonLook` | `"quiet"` | As `IconButton`. |
+| every other `ButtonLink` prop but `square`, `children`, `icon`, `aria-label` | | | `to`, `href`, `download` and the rest. |
+
+States, tokens and CSS: as `IconButton`'s.
+
+Dependencies: `ButtonLink`, `Spinner`, `Tooltip`.
 
 ### SlidingViews
 
@@ -1799,6 +2007,17 @@ All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are 
 | `--field-fill-hover` | `oklch(0.925 0.002 286)` | `oklch(0.265 0.002 286)` |
 | `--field-text` | `var(--text-read)` (0.875rem) | same; `1rem` under `(pointer: coarse)`, so iOS does not zoom |
 | `--radius-field` | `var(--radius-control)` | same |
+
+### Fills
+
+What lies under a thing the pointer is on, has chosen or is pressing. A mid grey at an alpha, the same in both modes, because it reads as a shade on either canvas. Nothing writes that grey anywhere else (`scripts/check-fills.mjs`, part of `check:design`).
+
+| Token | Both modes | For |
+| --- | --- | --- |
+| `--fill-faint` | `oklch(0.5965 0 0 / 0.07)` | A faint ground: a dialog's foot, a held menu row. |
+| `--fill-hover` | `oklch(0.5965 0 0 / 0.12)` | A list's active row. |
+| `--fill-chosen` | `oklch(0.5965 0 0 / 0.14)` | A small button hovered (a chip's x, a search's clear). |
+| `--fill-press` | `oklch(0.5965 0 0 / 0.2)` | A press. |
 
 ### Buttons: ink (the filled, committing look)
 

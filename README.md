@@ -1,6 +1,6 @@
 # vic-ui
 
-A quiet, dense React 19 component library. 43 pieces (buttons, fields, lists, overlays, a table, feedback, a sidebar and timeline pieces), one oklch palette in light and dark, one corner scale, one elevation scale, and the rule that no state ever changes the size of anything.
+A quiet, dense React 19 component library. 48 pieces (buttons, fields, lists, rows, overlays, a table, feedback, a sidebar and timeline pieces), one oklch palette in light and dark, one corner scale, one elevation scale, and the rule that no state ever changes the size of anything.
 
 The documentation site shows every piece live, in every state it has, with the code that draws it, and every token measured in both modes. Build it with `npm run build:site`.
 
@@ -46,7 +46,7 @@ export function Invite() {
 
 ### Links to your own pages
 
-Every `to` link (`ButtonLink`, `Tabs`, `Breadcrumbs`, `SidebarMenuButton`, `Announcement`) draws through the link component you hand to `LinkProvider`, and is a plain `<a href>` without one.
+Every `to` link (`ButtonLink`, `IconButtonLink`, `DangerButtonLink`, `Tabs`, `Trail`, `Row`, `RowsMore`, `SidebarMenuButton`, `Announcement`) draws through the link component you hand to `LinkProvider`, and is a plain `<a href>` without one.
 
 ```tsx
 import { Link } from "react-router";
@@ -109,6 +109,7 @@ What every piece already does, and what anything built with them is held to:
 - **Nothing under 11px.**
 - **Colour only from the palette**, in oklch. The four tones keep their meanings (danger, caution, settled, moving), and state always carries a word, never only a colour. No tone ink is below 5.8:1 on the canvas, the panel or its own tint, in either mode.
 - **One corner scale** (`--radius-panel`, `-float`, `-control`, `-row`, `-mark`, `-round`) and **one elevation scale**: a surface on the page has an edge and no shadow; only what floats casts one (`--shadow-raise`, `--shadow-float`).
+- **One fill scale** under whatever is hovered, chosen or pressed: `--fill-faint`, `--fill-hover`, `--fill-chosen`, `--fill-press`.
 - **Nothing moves** on load, on choosing or on pressing.
 - **No em or en dashes** as punctuation.
 
@@ -117,7 +118,7 @@ What every piece already does, and what anything built with them is held to:
 ```sh
 npm run build          # dist/: ESM, types, vic-ui.css, tokens.css, fonts.css, fonts
 npm run typecheck
-npm run check:design   # every corner on the radius scale, every shadow on the elevation scale
+npm run check:design   # every corner on the radius scale, every shadow on the elevation scale, every grey fill a token
 npm run check:dashes   # no em or en dash in the source, the site or the docs
 npm run icons          # regenerate src/icons/icons.tsx from the icon sets
 npm run dev:site       # the documentation site, live
