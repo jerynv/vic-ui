@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="vic-ui: a quiet, dense React component library. Tokens, rules and every component in every state." />
+    <title>vic-ui</title>
+    <script>
+      // The appearance chosen on this device, applied before the first paint.
+      try {
+        var mode = localStorage.getItem("vic-ui:mode");
+        if (mode === "light" || mode === "dark" || mode === "system") document.documentElement.setAttribute("data-mode", mode);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>
