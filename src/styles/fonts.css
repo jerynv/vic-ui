@@ -1,0 +1,19 @@
+/* The two faces, self-hosted, each under the SIL Open Font License 1.1 (licenses/). Cal Sans UI
+   is one variable file: `wght` 300 to 700 and a `GEOM` axis 0 to 100, the statements set at
+   GEOM 100 and everything else at the default. Space Mono Bold sets a wordmark and nothing
+   else. Leave this file out to supply your own faces; the stacks fall back to the system's. */
+@font-face {
+  font-family: "Cal Sans UI";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("../fonts/cal-sans-ui-wght-geom.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/space-mono-700-latin.woff2") format("woff2");
+}

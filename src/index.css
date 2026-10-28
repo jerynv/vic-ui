@@ -1,0 +1,8 @@
+/* vic-ui: one stylesheet, in this order. The pieces sit in layers, so anything a consumer writes
+   outside a layer outranks them by where it is written rather than by specificity. */
+@layer base, components;
+@layer components.parts;
+
+@import "./styles/fonts.css";
+@import "./styles/tokens.css";
+@import "./components.css";

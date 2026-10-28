@@ -1,0 +1,591 @@
+/* The library's timeline pieces (`src/components/Timeline.tsx`, `Attachment.tsx`), in the layer the other pieces are in. */
+@layer components.parts {
+
+  /* ---- a rule with words on it -------------------------------------------------- */
+
+  /* A day: a hairline either side of its words. Where new messages start: an ink line
+     running to its word at the end. */
+  .ui-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 1rem 0 0.25rem;
+  }
+
+  .ui-divider::before,
+  .ui-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line-soft);
+  }
+
+  .ui-divider-words {
+    font-size: var(--text-tag);
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    color: var(--fg-subtle);
+  }
+
+  .ui-divider-new {
+    gap: 0.5rem;
+  }
+
+  .ui-divider-new::before {
+    background: var(--fg-strong);
+  }
+
+  .ui-divider-new::after {
+    display: none;
+  }
+
+  .ui-divider-new .ui-divider-words {
+    padding: 0.0625rem 0.4375rem;
+    border-radius: var(--radius-row);
+    color: var(--ink-words);
+    background: var(--ink-face-bottom);
+  }
+
+  /* ---- what was said back ------------------------------------------------------- */
+
+  .ui-reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  /* A pill of a mark and a count; the reader's own is outlined in ink. */
+  .ui-reaction {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 1.375rem;
+    padding: 0 0.4375rem 0 0.375rem;
+    border: 0;
+    border-radius: var(--radius-round);
+    font: inherit;
+    font-size: var(--text-tag);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--fg-subtle);
+    background: var(--field-fill);
+    box-shadow: inset 0 0 0 1px transparent;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .ui-reaction:hover {
+    color: var(--fg);
+    background: var(--field-fill-hover);
+  }
+
+  .ui-reaction:active {
+    box-shadow: inset 0 0 0 1px var(--fg-subtle);
+  }
+
+  .ui-reaction[aria-pressed="true"] {
+    color: var(--fg-strong);
+    background: var(--surface-lifted);
+    box-shadow: inset 0 0 0 1px var(--fg-strong);
+  }
+
+  .ui-reaction:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-reaction-mark {
+    display: inline-flex;
+  }
+
+  .ui-reaction-count {
+    min-width: 0.5rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- a bar of actions over a corner ------------------------------------------- */
+
+  /* A compact pill of dense icon buttons, 1.625rem square, the icons 15px. */
+  .ui-actionbar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0.125rem;
+    border-radius: var(--radius-row);
+    background: var(--surface-lifted);
+    box-shadow: var(--shadow-raise);
+    animation: ui-actionbar-in 120ms ease backwards;
+  }
+
+  .ui-actionbar .ui-button-square,
+  .ui-actionbar .ui-button-quiet.ui-button-square {
+    height: 1.625rem;
+    border-radius: calc(var(--radius-row) - 0.125rem);
+    color: var(--fg-subtle);
+  }
+
+  .ui-actionbar .ui-button-square svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .ui-actionbar .ui-button-quiet.ui-button-square:hover:not(:disabled, [aria-disabled="true"]) {
+    color: var(--fg-strong);
+  }
+
+  .ui-actionbar .ui-button:not(.ui-button-square) {
+    height: 1.625rem;
+    font-size: var(--text-meta);
+  }
+
+  .ui-actionbar-rule {
+    width: 1px;
+    align-self: stretch;
+    margin: 0.3125rem 0.125rem;
+    background: var(--line);
+  }
+
+  /* ---- pictures and films ------------------------------------------------------- */
+
+  .ui-media {
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 0.375rem;
+  }
+
+  /* One tile: its box is set before its bytes arrive, and the picture fills it. */
+  .ui-media-tile {
+    position: relative;
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-row);
+    font: inherit;
+    background: var(--bg-recessed);
+  }
+
+  /* Its edge, over the picture, so a white picture on a white page still has one. */
+  .ui-media-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px var(--line-soft);
+    pointer-events: none;
+  }
+
+  button.ui-media-tile {
+    cursor: zoom-in;
+  }
+
+  button.ui-media-tile:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-media-tile img,
+  .ui-media-tile video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: filter 150ms ease;
+  }
+
+  .ui-media-tile img[data-fit="cover"] {
+    object-fit: cover;
+  }
+
+  .ui-media-tile video {
+    background: oklch(0 0 0);
+  }
+
+  button.ui-media-tile:hover img {
+    filter: brightness(0.94);
+  }
+
+  .ui-media-failed {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding: 0.75rem;
+    font-size: var(--text-meta);
+    text-align: center;
+    color: var(--fg-subtle);
+  }
+
+  .ui-media-more {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: var(--text-lead);
+    font-weight: 600;
+    color: oklch(1 0 0);
+    background: oklch(0 0 0 / 0.45);
+  }
+
+  /* Several: one width, two columns, the tiles cut to the grid. */
+  .ui-media-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+    width: min(100%, 24rem);
+  }
+
+  .ui-media-grid > .ui-media-tile {
+    width: 100%;
+    border-radius: var(--radius-mark);
+    aspect-ratio: 1;
+  }
+
+  .ui-media-grid[data-count="3"] {
+    grid-template-rows: 1fr 1fr;
+    aspect-ratio: 4 / 3;
+  }
+
+  .ui-media-grid[data-count="3"] > .ui-media-tile {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  .ui-media-grid[data-count="3"] > .ui-media-tile:first-child {
+    grid-row: span 2;
+  }
+
+  .ui-media-grid[data-count="4"] > .ui-media-tile {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* The grid's outer corners keep the single picture's radius. */
+  .ui-media-grid > .ui-media-tile:first-child {
+    border-start-start-radius: var(--radius-row);
+  }
+
+  .ui-media-grid > .ui-media-tile:nth-child(2) {
+    border-start-end-radius: var(--radius-row);
+  }
+
+  .ui-media-grid > .ui-media-tile:last-child {
+    border-end-end-radius: var(--radius-row);
+  }
+
+  .ui-media-grid[data-count="2"] > .ui-media-tile:first-child,
+  .ui-media-grid[data-count="3"] > .ui-media-tile:first-child,
+  .ui-media-grid[data-count="4"] > .ui-media-tile:nth-child(3) {
+    border-end-start-radius: var(--radius-row);
+  }
+
+  /* ---- a file as a card ---------------------------------------------------------- */
+
+  .ui-file {
+    position: relative;
+    display: flex;
+    width: min(100%, 20rem);
+    margin-top: 0.375rem;
+    border-radius: var(--radius-row);
+    background: var(--field-fill);
+    transition: background-color 150ms ease;
+  }
+
+  .ui-file:hover {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-file.is-pending {
+    opacity: 0.55;
+  }
+
+  .ui-file-open {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    color: inherit;
+    background: none;
+  }
+
+  button.ui-file-open,
+  a.ui-file-open {
+    cursor: pointer;
+  }
+
+  .ui-file-open:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* The first page, as paper, cut off at the box's foot. The box is the same height
+     whether the page arrives or not. */
+  .ui-file-preview {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 7.5rem;
+    overflow: hidden;
+    padding: 0.75rem 1.5rem 0;
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+    background: var(--bg-recessed);
+  }
+
+  .ui-file-preview canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-mark);
+    background: oklch(1 0 0);
+    box-shadow: 0 0 0 1px var(--line-soft);
+  }
+
+  .ui-file-row {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 3rem;
+    padding: 0.5rem 0.625rem;
+  }
+
+  .ui-file:has(.ui-file-download) .ui-file-row {
+    padding-inline-end: 2.75rem;
+  }
+
+  .ui-file-mark {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-row);
+    color: var(--fg-strong);
+    background: var(--surface-lifted);
+    box-shadow: 0 0 0 1px var(--line-soft);
+  }
+
+  .ui-file-words {
+    display: grid;
+    min-width: 0;
+  }
+
+  .ui-file-name {
+    overflow: hidden;
+    font-size: var(--text-ui);
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--fg-strong);
+  }
+
+  .ui-file-meta {
+    overflow: hidden;
+    font-size: var(--text-meta);
+    line-height: 1.35;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  /* The download sits at the end of the name's row, at the card's foot. */
+  .ui-file-download {
+    position: absolute;
+    right: 0.5rem;
+    bottom: calc((3rem - var(--control-h-sm)) / 2);
+  }
+
+  /* ---- several files as tiles ---------------------------------------------------- */
+
+  .ui-file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: 0.375rem;
+    width: min(100%, 33rem);
+    margin-top: 0.375rem;
+  }
+
+  .ui-tile {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    border-radius: var(--radius-row);
+    background: var(--field-fill);
+    transition: background-color 150ms ease;
+  }
+
+  .ui-tile:hover {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-tile.is-pending {
+    opacity: 0.55;
+  }
+
+  .ui-tile-open {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    color: inherit;
+    background: none;
+  }
+
+  button.ui-tile-open,
+  a.ui-tile-open {
+    cursor: pointer;
+  }
+
+  .ui-tile-open:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* One fixed size for every tile, whatever arrives in it. */
+  .ui-tile-preview {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 6.5rem;
+    overflow: hidden;
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+    background: var(--bg-recessed);
+  }
+
+  .ui-tile-preview::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-start-start-radius: inherit;
+    border-start-end-radius: inherit;
+    box-shadow: inset 0 -1px 0 var(--line-soft);
+    pointer-events: none;
+  }
+
+  .ui-tile-mark {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--fg-subtle);
+  }
+
+  .ui-tile-preview > img,
+  .ui-tile-preview > video {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 150ms ease;
+  }
+
+  button.ui-tile-open:hover .ui-tile-preview > img {
+    filter: brightness(0.94);
+  }
+
+  /* A PDF's first page as paper, its top in view, cut off at the area's foot. */
+  .ui-tile-preview > .ui-tile-paper {
+    position: absolute;
+    inset: 0.625rem 0.875rem auto;
+  }
+
+  .ui-tile-paper canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-mark);
+    background: oklch(1 0 0);
+    box-shadow: 0 0 0 1px var(--line-soft);
+  }
+
+  .ui-tile-badge {
+    position: absolute;
+    left: 0.375rem;
+    bottom: 0.375rem;
+    display: grid;
+    place-items: center;
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: var(--radius-round);
+    color: oklch(1 0 0);
+    background: oklch(0 0 0 / 0.55);
+  }
+
+  .ui-tile-words {
+    box-sizing: border-box;
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    padding: 0.375rem 0.5rem 0.4375rem;
+  }
+
+  .ui-tile[data-download] .ui-tile-words {
+    padding-inline-end: 2rem;
+  }
+
+  .ui-tile-name {
+    overflow: hidden;
+    font-size: var(--text-meta);
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--fg-strong);
+  }
+
+  .ui-tile-meta {
+    overflow: hidden;
+    font-size: var(--text-tag);
+    line-height: 1.35;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  .ui-tile-download.ui-button-quiet.ui-button-square {
+    position: absolute;
+    right: 0.25rem;
+    bottom: 0.3125rem;
+    height: 1.625rem;
+    border-radius: calc(var(--radius-row) - 0.25rem);
+    color: var(--fg-subtle);
+  }
+}
+
+@keyframes ui-actionbar-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-actionbar {
+    animation: none;
+  }
+}

@@ -1,0 +1,15 @@
+/* The base layer and every piece, without the fonts and the tokens: import `tokens.css` (or your
+   own values for the same properties) and your own faces beside it. */
+@layer base, components;
+@layer components.parts;
+
+@import "./styles/preflight.css";
+@import "./styles/base.css";
+@import "./styles/components/ui.css";
+@import "./styles/components/ui-overlays.css";
+@import "./styles/components/ui-inputs.css";
+@import "./styles/components/ui-display.css";
+@import "./styles/components/ui-data.css";
+@import "./styles/components/ui-feedback.css";
+@import "./styles/components/ui-sidebar.css";
+@import "./styles/components/ui-timeline.css";

@@ -1,0 +1,93 @@
+/* What every element starts as: the page's ground and words, the focus ring, the scrollbar and
+   the one utility the pieces use (`sr-only`). */
+
+@layer base {
+  body {
+    background: var(--bg-canvas);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0));
+    color: light-dark(oklch(0.9851 0 0), oklch(0.1448 0 0));
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  /* A box to type into draws nothing when it is chosen: its blinking caret says so (the
+     owner's call, 2026-10-27). Buttons, tabs, checks and switches keep the ring above,
+     which only the keyboard ever shows. */
+  :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), textarea, select, [contenteditable="true"], .ProseMirror):focus,
+  :where(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), textarea, select, [contenteditable="true"], .ProseMirror):focus-visible {
+    outline: none;
+  }
+
+  /*
+   * One scrollbar for everything that scrolls: no track, no arrows, a four pixel
+   * rounded line in a six pixel gutter, filling it under the pointer, so it is thin
+   * and still there to be seen and grabbed.
+   *
+   * Two dialects. Chromium and Safari draw `::-webkit-scrollbar`, which gives the
+   * shape as well as the colour. Firefox has only the standard properties, and
+   * Chromium and WebKit ignore the pseudo-elements on any element that has those set
+   * (`scrollbar-color` is inherited, so setting it anywhere switches them off below),
+   * so the standard ones go to Firefox alone.
+   *
+   * Firefox is recognised by a property only it has. Asking instead whether the
+   * pseudo-element is unsupported looks right and is not: Firefox 153 to 155 answer
+   * that they support it (Mozilla bug 2062782, fixed in 156), and would have been
+   * left with default scrollbars.
+   */
+  @supports (-moz-appearance: none) {
+    :root {
+      --scrollbar: 8px;
+    }
+
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--scroll-thumb) transparent;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    min-height: 2.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-round);
+    background-color: var(--scroll-thumb);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    border-width: 0;
+    background-color: var(--scroll-thumb-hover);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

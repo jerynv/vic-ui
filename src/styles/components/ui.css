@@ -1,0 +1,909 @@
+/*
+ * The library's pieces (`src/components/`). Each class starts `ui-`, so none lands on a class of
+ * the page around it. Colours are the palette's tokens and the hues' `--hue` and `--hue-ink`,
+ * never written here.
+ */
+
+@layer components.parts {
+
+  /* ---- buttons -------------------------------------------------------------------- */
+
+  /*
+   * After Cult UI's Texture Button: the button is the rim, a hairline edge round a gradient one
+   * pixel deep, and its words sit on the face inside it, two pixels less round. Each gradient's
+   * stops are registered properties (below, outside the layers), so a hover or a press eases
+   * from one gradient to the next over 300ms instead of jumping, which a gradient left as an
+   * image cannot do. Nothing moves on a press: the face darkens.
+   */
+  .ui-button {
+    display: inline-flex;
+    flex: none;
+    align-items: stretch;
+    height: var(--control-h-sm);
+    padding: 1px;
+    border: 1px solid var(--rim-edge);
+    border-radius: var(--radius-button);
+    background: linear-gradient(var(--rim-top), var(--rim-bottom));
+    font: inherit;
+    font-size: var(--text-ui);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--words);
+    cursor: pointer;
+    transition:
+      --rim-top 300ms ease-in-out,
+      --rim-bottom 300ms ease-in-out,
+      border-color 300ms ease-in-out,
+      color 300ms ease-in-out,
+      opacity 120ms;
+  }
+
+  .ui-button-face {
+    display: flex;
+    flex: 1;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 0;
+    height: 100%;
+    padding: 0 0.875rem;
+    border-radius: calc(var(--radius-button) - 2px);
+    background: linear-gradient(var(--face-top), var(--face-bottom));
+    transition:
+      --face-top 300ms ease-in-out,
+      --face-bottom 300ms ease-in-out;
+  }
+
+  .ui-button:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* Dimmed but still readable, and the pointer says it cannot be pressed. One that says why
+     (`disabledReason`) keeps its focus ring and its reason (`reason.ts`). */
+  .ui-button:disabled,
+  .ui-button[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-button-lg {
+    height: var(--control-h);
+    font-size: var(--text-read);
+  }
+
+  .ui-button-lg .ui-button-face {
+    padding: 0 1rem;
+  }
+
+  .ui-button-full {
+    width: 100%;
+  }
+
+  /* An icon alone, as wide as the button is tall. */
+  .ui-button-square {
+    aspect-ratio: 1;
+  }
+
+  .ui-button-square .ui-button-face {
+    padding: 0;
+  }
+
+  /* The page's one filled action: Texture's primary. */
+  .ui-button-ink {
+    --rim-edge: var(--ink-rim-edge);
+    --rim-top: var(--ink-rim-top);
+    --rim-bottom: var(--ink-rim-bottom);
+    --face-top: var(--ink-face-top);
+    --face-bottom: var(--ink-face-bottom);
+    --words: var(--ink-words);
+  }
+
+  .ui-button-ink:hover:not(:disabled, [aria-disabled="true"]) {
+    --face-top: var(--ink-face-top-hover);
+    --face-bottom: var(--ink-face-bottom-hover);
+  }
+
+  .ui-button-ink:active:not(:disabled, [aria-disabled="true"]) {
+    --face-top: var(--ink-face-top-press);
+    --face-bottom: var(--ink-face-bottom-press);
+  }
+
+  /* Beside it: flat, a hairline and nothing else, so the bevel stays with the actions that
+     commit (`ink`, danger, caution) and a control that only chooses or opens reads as one. */
+  .ui-button-line {
+    --rim-edge: var(--line);
+    --rim-top: transparent;
+    --rim-bottom: transparent;
+    --face-top: transparent;
+    --face-bottom: transparent;
+    --words: var(--fg-strong);
+  }
+
+  .ui-button-line:hover:not(:disabled, [aria-disabled="true"]) {
+    --face-top: var(--field-fill-hover);
+    --face-bottom: var(--field-fill-hover);
+  }
+
+  .ui-button-line:active:not(:disabled, [aria-disabled="true"]) {
+    --face-top: var(--field-fill);
+    --face-bottom: var(--field-fill);
+  }
+
+  /* Words that act: no rim and no face. */
+  .ui-button-quiet {
+    height: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-weight: 500;
+    color: var(--fg-subtle);
+  }
+
+  .ui-button-quiet .ui-button-face {
+    padding: 0;
+    background: none;
+  }
+
+  .ui-button-quiet:hover:not(:disabled, [aria-disabled="true"]) {
+    color: var(--fg-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* An icon alone that acts (`IconButton`): no rim, the field's fill under the pointer and
+     while it is pressed in, at the button's own height. */
+  .ui-button-quiet.ui-button-square {
+    height: var(--control-h-sm);
+    border-radius: var(--radius-button);
+    color: var(--fg);
+    transition:
+      background-color 160ms ease-in-out,
+      color 160ms ease-in-out,
+      opacity 120ms;
+  }
+
+  .ui-button-quiet.ui-button-square.ui-button-lg {
+    height: var(--control-h);
+  }
+
+  .ui-button-quiet.ui-button-square:hover:not(:disabled, [aria-disabled="true"]) {
+    color: var(--fg-strong);
+    text-decoration: none;
+    background: var(--field-fill-hover);
+  }
+
+  .ui-button-quiet.ui-button-square:active:not(:disabled, [aria-disabled="true"]),
+  .ui-button-quiet.ui-button-square[aria-pressed="true"],
+  .ui-button-quiet.ui-button-square[aria-haspopup][aria-expanded="true"] {
+    color: var(--fg-strong);
+    background: var(--field-fill);
+  }
+
+  /* A line or ink button held down (`aria-pressed`): the ink's face, as a chosen choice. */
+  .ui-button-line[aria-pressed="true"],
+  .ui-button-line[aria-pressed="true"]:hover:not(:disabled, [aria-disabled="true"]) {
+    --rim-edge: var(--ink-rim-edge);
+    --rim-top: var(--ink-rim-top);
+    --rim-bottom: var(--ink-rim-bottom);
+    --face-top: var(--ink-face-top);
+    --face-bottom: var(--ink-face-bottom);
+    --words: var(--ink-words);
+  }
+
+  /* ---- fields --------------------------------------------------------------------- */
+
+  .ui-field {
+    display: grid;
+    gap: 0.375rem;
+    min-width: 0;
+  }
+
+  .ui-field-label {
+    font-size: var(--text-ui);
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--fg-strong);
+  }
+
+  /* The label and the short error share one cell (`FieldHead`): the error slides down over
+     the label in the danger ink, the label slides on out of its way, and the line keeps one
+     height, so nothing under it moves. A press on the error reaches the label beneath. */
+  .ui-field-head {
+    display: grid;
+    min-width: 0;
+  }
+
+  .ui-field-head > * {
+    grid-area: 1 / 1;
+    min-width: 0;
+  }
+
+  .ui-field-head > .ui-field-label {
+    transition:
+      opacity 160ms ease,
+      transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .ui-field-head[data-error] > .ui-field-label {
+    opacity: 0;
+    transform: translateY(45%);
+  }
+
+  .ui-field-head > .ui-field-error {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    animation: ui-field-error-out 180ms ease;
+  }
+
+  .ui-field-head[data-error] > .ui-field-error {
+    opacity: 1;
+    visibility: visible;
+    animation: ui-field-error-in 220ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  }
+
+  /* The words that went, when there were any, leave the way they came. */
+  .ui-field-head > .ui-field-error:empty {
+    animation: none;
+  }
+
+  @keyframes ui-field-error-in {
+    from {
+      opacity: 0;
+      transform: translateY(-45%);
+    }
+  }
+
+  @keyframes ui-field-error-out {
+    from {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-45%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-field-head > .ui-field-label,
+    .ui-field-head > .ui-field-error,
+    .ui-field-head[data-error] > .ui-field-error {
+      transition: none;
+      animation: none;
+      transform: none;
+    }
+  }
+
+  .ui-field-box {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    height: var(--control-h);
+    border-radius: var(--radius-field);
+    background: var(--field-fill);
+    transition:
+      box-shadow 120ms,
+      background-color 120ms;
+  }
+
+  .ui-field-box:has(:disabled) {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .ui-field-box:has(:disabled) .ui-field-input {
+    cursor: not-allowed;
+  }
+
+  .ui-field-box:hover:not(:focus-within, :has(:disabled)) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-field-box[data-invalid] {
+    box-shadow: inset 0 0 0 1px var(--tone-danger-ink);
+  }
+
+
+  .ui-field-input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0 0.75rem;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: var(--field-text);
+    color: var(--fg-strong);
+    outline: none;
+  }
+
+  .ui-field-input::placeholder {
+    color: var(--fg-subtle);
+  }
+
+  .ui-field-suffix {
+    flex: none;
+    padding-right: 0.75rem;
+    font-size: var(--field-text);
+    color: var(--fg-subtle);
+  }
+
+  .ui-field-hint,
+  .ui-field-error {
+    margin: 0;
+    font-size: var(--text-ui);
+    line-height: 1.45;
+    color: var(--fg-subtle);
+  }
+
+  .ui-field-error {
+    color: var(--tone-danger-ink);
+  }
+
+  /* ---- a place's mark -------------------------------------------------------------- */
+
+  .ui-org-mark {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-row);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    line-height: 1;
+    color: var(--hue-ink);
+    background: var(--hue);
+  }
+
+  .ui-org-mark-lg {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--radius-control);
+    font-size: 1.5rem;
+    color: var(--bg-base);
+    background: var(--hue-ink);
+  }
+}
+
+/*
+ * The rest of the pieces: a choice from a list and the list it opens, a box to tick, one of a
+ * few, on or off, one of a row of choices and the danger commit (`Select.tsx`, `Checkbox.tsx`,
+ * `Radio.tsx`, `Switch.tsx`, `Choice.tsx`, `DangerButton.tsx`).
+ */
+@layer components.parts {
+
+  /* ---- a choice from a list ------------------------------------------------------- */
+
+  .ui-select {
+    display: flex;
+    align-items: center;
+    padding-right: 2.25rem;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .ui-select-box {
+    position: relative;
+  }
+
+  .ui-select-words {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Nothing chosen yet reads as a placeholder does. */
+  .ui-select[data-empty] {
+    color: var(--fg-subtle);
+  }
+
+  .ui-select:disabled,
+  .ui-select[aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  .ui-select-box[data-disabled] {
+    opacity: 0.55;
+  }
+
+  .ui-select-box[data-disabled]:hover {
+    background: var(--field-fill);
+  }
+
+  .ui-select-box[data-open] {
+    background: var(--field-fill-hover);
+  }
+
+  /* The trigger is a button, so the keyboard reaching it draws the ring buttons keep, on the box;
+     a pointer press draws none, as a field typed into draws none. */
+  .ui-select-box:has(.ui-select:focus-visible) {
+    box-shadow: 0 0 0 2px var(--focus);
+  }
+
+  .ui-select-box[data-invalid]:has(.ui-select:focus-visible) {
+    box-shadow: inset 0 0 0 1px var(--tone-danger-ink), 0 0 0 2px var(--focus);
+  }
+
+  .ui-select-caret {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    translate: 0 -50%;
+    color: var(--fg-subtle);
+    pointer-events: none;
+    transition: rotate 160ms ease;
+  }
+
+  .ui-select-box[data-open] .ui-select-caret {
+    rotate: 180deg;
+  }
+
+  .ui-field-sm .ui-field-box {
+    height: var(--control-h-sm);
+  }
+
+  /* ---- the list it opens: the floating surface every menu sits on --------------------- */
+
+  .ui-menu {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.3rem;
+    border: 0;
+    border-radius: var(--radius-float);
+    color: var(--fg);
+    background: var(--surface-lifted);
+    box-shadow: var(--shadow-float);
+    animation: ui-menu-in 140ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  }
+
+  .ui-menu[data-side="top"] {
+    transform-origin: bottom;
+  }
+
+  .ui-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.125rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: calc(var(--radius-float) - 0.3rem);
+    font-size: var(--text-read);
+    color: var(--fg-strong);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .ui-menu-item[data-active] {
+    background: oklch(0.5965 0 0 / 0.12);
+  }
+
+  .ui-menu-words {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ui-menu-item[aria-disabled] {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .ui-menu-hint {
+    display: block;
+    margin-top: 0.125rem;
+    font-size: var(--text-meta);
+    color: var(--fg-subtle);
+    white-space: normal;
+  }
+
+  .ui-menu-tick {
+    flex: none;
+    color: var(--fg-strong);
+  }
+
+  /* ---- a box to tick -------------------------------------------------------------- */
+
+  .ui-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+  }
+
+  /* The input fills the square and draws it; the tick is laid over it and passes the pointer. */
+  .ui-check-box {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.1rem;
+  }
+
+  .ui-check-box input {
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    border-radius: var(--radius-mark);
+    background: var(--field-fill);
+    box-shadow: inset 0 0 0 1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14));
+    cursor: pointer;
+    transition:
+      background-color 160ms,
+      box-shadow 160ms;
+  }
+
+  .ui-check-box input:hover:not(:disabled, [aria-disabled="true"]):not(:checked) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-check-box input:checked {
+    background: var(--ink-face-bottom);
+    box-shadow: inset 0 0 0 1px var(--ink-face-bottom);
+  }
+
+  .ui-check-box input:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-check-box input:is(:disabled, [aria-disabled="true"]) {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-check-tick {
+    position: relative;
+    color: var(--ink-words);
+    stroke-width: 3;
+    pointer-events: none;
+    opacity: 0;
+    scale: 0.6;
+    transition:
+      opacity 140ms,
+      scale 160ms cubic-bezier(0.2, 0.8, 0.2, 1.4);
+  }
+
+  .ui-check-box input:checked + .ui-check-tick {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .ui-check-words {
+    min-width: 0;
+    font-size: var(--text-ui);
+    line-height: 1.45;
+    color: var(--fg);
+    cursor: pointer;
+  }
+
+  .ui-check-box:has(input:is(:disabled, [aria-disabled="true"])) + .ui-check-words {
+    cursor: not-allowed;
+    color: var(--fg-subtle);
+  }
+
+  /* ---- one of a few --------------------------------------------------------------- */
+
+  .ui-radios {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ui-radios-list {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .ui-radios-across .ui-radios-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+
+  .ui-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: var(--text-read);
+    color: var(--fg-strong);
+    cursor: pointer;
+  }
+
+  .ui-radio[data-disabled] {
+    cursor: not-allowed;
+    color: var(--fg-subtle);
+  }
+
+  /* A filled circle whose centre is a ring of ink drawn inward, so choosing eases in. */
+  .ui-radio-dot {
+    appearance: none;
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    border-radius: 50%;
+    background: var(--field-fill);
+    box-shadow: inset 0 0 0 1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14));
+    cursor: inherit;
+    transition:
+      box-shadow 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      background-color 160ms;
+  }
+
+  .ui-radio-dot:hover:not(:disabled, [aria-disabled="true"]):not(:checked) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-radio-dot:checked {
+    background: var(--ink-words);
+    box-shadow: inset 0 0 0 0.3125rem var(--ink-face-bottom);
+  }
+
+  .ui-radio-dot:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-radio-dot:disabled {
+    opacity: 0.55;
+  }
+
+  .ui-radio-words {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .ui-radio-hint {
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+  }
+
+  /* Each choice a filled card, the dot at its top, the chosen one ringed in ink. */
+  .ui-radios-cards .ui-radios-list {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .ui-radios-cards .ui-radio {
+    align-items: flex-start;
+    padding: 0.75rem;
+    border-radius: var(--radius-field);
+    background: var(--field-fill);
+    box-shadow: inset 0 0 0 1px transparent;
+    transition:
+      background-color 150ms var(--ease-track),
+      box-shadow 150ms var(--ease-track);
+  }
+
+  .ui-radios-cards .ui-radio:hover:not([data-disabled]) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-radios-cards .ui-radio:has(.ui-radio-dot:checked) {
+    box-shadow: inset 0 0 0 1.5px var(--ink-face-bottom);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-radios-cards .ui-radio {
+      transition: none;
+    }
+  }
+
+  /* ---- on or off ------------------------------------------------------------------ */
+
+  .ui-switch {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    width: 2.25rem;
+    height: 1.375rem;
+    padding: 0.1875rem;
+    border: 0;
+    border-radius: var(--radius-round);
+    background: var(--field-fill);
+    box-shadow: inset 0 0 0 1px light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1));
+    cursor: pointer;
+    transition: background-color 200ms;
+  }
+
+  .ui-switch:hover:not(:disabled, [aria-disabled="true"]):not([aria-checked="true"]) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-switch[aria-checked="true"] {
+    background: var(--ink-face-bottom);
+  }
+
+  .ui-switch[aria-checked="true"]:hover:not(:disabled, [aria-disabled="true"]) {
+    background: var(--ink-face-top);
+  }
+
+  .ui-switch:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-switch:is(:disabled, [aria-disabled="true"]) {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-switch-knob {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--surface-lifted);
+    box-shadow: var(--shadow-raise);
+    transition: translate 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .ui-switch[aria-checked="true"] .ui-switch-knob {
+    translate: 0.875rem 0;
+  }
+
+  /* ---- one of a row of choices ---------------------------------------------------- */
+
+  /* A button whose rim and face are the field's fill until it is chosen, then the filled
+     button's; the stops are the registered ones, so the change eases. */
+  .ui-choice {
+    --rim-edge: transparent;
+    --rim-top: var(--field-fill);
+    --rim-bottom: var(--field-fill);
+    --face-top: var(--field-fill);
+    --face-bottom: var(--field-fill);
+    --words: var(--fg);
+    height: var(--control-h);
+    font-size: var(--text-read);
+    font-weight: 400;
+  }
+
+  .ui-choice .ui-button-face {
+    padding: 0 0.625rem;
+  }
+
+  .ui-choice:hover:not(:disabled, [aria-disabled="true"]):not([aria-pressed="true"]) {
+    --rim-top: var(--field-fill-hover);
+    --rim-bottom: var(--field-fill-hover);
+    --face-top: var(--field-fill-hover);
+    --face-bottom: var(--field-fill-hover);
+  }
+
+  .ui-choice[aria-pressed="true"] {
+    --rim-edge: var(--ink-rim-edge);
+    --rim-top: var(--ink-rim-top);
+    --rim-bottom: var(--ink-rim-bottom);
+    --face-top: var(--ink-face-top);
+    --face-bottom: var(--ink-face-bottom);
+    --words: var(--ink-words);
+  }
+
+  /* ---- the danger commit ---------------------------------------------------------- */
+
+  /* Texture's destructive in the danger ink: a rim lighter at its top, a face a step under it. */
+  .ui-button-danger {
+    --rim-edge: var(--ink-rim-edge);
+    --rim-top: color-mix(in oklab, var(--tone-danger-ink), var(--tone-on) 35%);
+    --rim-bottom: var(--tone-danger-ink);
+    --face-top: color-mix(in oklab, var(--tone-danger-ink), var(--tone-on) 14%);
+    --face-bottom: var(--tone-danger-ink);
+    --words: var(--tone-on);
+  }
+
+  .ui-button-danger:hover:not(:disabled, [aria-disabled="true"]) {
+    --face-top: color-mix(in oklab, var(--tone-danger-ink), var(--tone-on) 22%);
+    --face-bottom: color-mix(in oklab, var(--tone-danger-ink), var(--tone-on) 6%);
+  }
+
+  .ui-button-danger:active:not(:disabled, [aria-disabled="true"]) {
+    --face-top: var(--tone-danger-ink);
+    --face-bottom: var(--tone-danger-ink);
+  }
+
+  /* The way in to a destructive act: the line look with the danger edge and the danger ink. */
+  .ui-button-danger-line {
+    --rim-edge: var(--tone-danger-edge);
+    --words: var(--tone-danger-ink);
+  }
+
+  .ui-button-danger-quiet,
+  .ui-button-danger-quiet:hover:not(:disabled, [aria-disabled="true"]) {
+    color: var(--tone-danger-ink);
+  }
+
+  /* The commit of a change to agreed terms, in the caution ink. */
+  .ui-button-caution {
+    --rim-edge: var(--ink-rim-edge);
+    --rim-top: color-mix(in oklab, var(--tone-caution-ink), var(--tone-on) 35%);
+    --rim-bottom: var(--tone-caution-ink);
+    --face-top: color-mix(in oklab, var(--tone-caution-ink), var(--tone-on) 14%);
+    --face-bottom: var(--tone-caution-ink);
+    --words: var(--tone-on);
+  }
+
+  .ui-button-caution:hover:not(:disabled, [aria-disabled="true"]) {
+    --face-top: color-mix(in oklab, var(--tone-caution-ink), var(--tone-on) 22%);
+    --face-bottom: color-mix(in oklab, var(--tone-caution-ink), var(--tone-on) 6%);
+  }
+
+  .ui-button-caution:active:not(:disabled, [aria-disabled="true"]) {
+    --face-top: var(--tone-caution-ink);
+    --face-bottom: var(--tone-caution-ink);
+  }
+}
+
+/* The stops a button's gradients ease between (`.ui-button`): registered as colours so a
+   transition can interpolate them, which it cannot do to a gradient written as an image. */
+@property --rim-top {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --rim-bottom {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --face-top {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --face-bottom {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@keyframes ui-menu-in {
+  from {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-menu {
+    animation: none;
+  }
+}
+
+@layer components.parts {
+
+  /* ---- a round button (`round`) ------------------------------------------------- */
+
+  /* A circle, as a message box's Send is (`round`). */
+  .ui-button-round,
+  .ui-button-round .ui-button-face {
+    border-radius: var(--radius-round);
+  }
+}
+

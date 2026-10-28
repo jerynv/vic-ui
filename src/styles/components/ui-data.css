@@ -1,0 +1,361 @@
+/* The library's data (`src/components/`), in the layer the other pieces are in. */
+@layer components.parts {
+
+  /* ---- tabs (`Tabs.tsx`) ---------------------------------------------------------- */
+
+  .ui-tabs {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    align-items: stretch;
+    max-width: 100%;
+    height: var(--control-h);
+    padding: 2px;
+    border-radius: var(--radius-field);
+    background: var(--field-fill);
+    overflow-x: auto;
+    scrollbar-width: none;
+    isolation: isolate;
+  }
+
+  .ui-tabs-sm {
+    height: var(--control-h-sm);
+  }
+
+  /* The ink under the chosen tab, measured onto it and eased between tabs. */
+  .ui-tabs-mark {
+    position: absolute;
+    z-index: -1;
+    top: 2px;
+    bottom: 2px;
+    left: 0;
+    border-radius: calc(var(--radius-field) - 2px);
+    background: linear-gradient(var(--ink-face-top), var(--ink-face-bottom));
+    box-shadow: 0 0 0 1px var(--ink-rim-edge);
+    pointer-events: none;
+  }
+
+  .ui-tabs-mark[data-eased] {
+    transition:
+      translate 240ms var(--ease-track),
+      width 240ms var(--ease-track);
+  }
+
+  .ui-tab {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: calc(var(--radius-field) - 2px);
+    background: transparent;
+    font: inherit;
+    font-size: var(--text-ui);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--fg-subtle);
+    cursor: pointer;
+    transition:
+      color 200ms ease,
+      background-color 160ms ease;
+  }
+
+  .ui-tab:hover:not([aria-selected="true"]):not(:disabled):not([aria-disabled="true"]) {
+    color: var(--fg-strong);
+    background: var(--field-fill-hover);
+  }
+
+  .ui-tab:active:not([aria-selected="true"]):not(:disabled):not([aria-disabled="true"]) {
+    background: var(--bone);
+  }
+
+  .ui-tab[aria-selected="true"] {
+    color: var(--ink-words);
+  }
+
+  .ui-tab:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-tab:disabled,
+  .ui-tab[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  /* A hairline between two groups of one row, inset from the track's ends as the tabs are. */
+  .ui-tabs-rule {
+    flex: none;
+    align-self: center;
+    width: 1px;
+    height: 1rem;
+    margin-inline: 0.25rem;
+    background: var(--line);
+  }
+
+  /* Two digits wide in tabular numerals, so a count changing moves nothing beside it. */
+  .ui-tab-count {
+    min-width: 2ch;
+    font-size: var(--text-tag);
+    font-variant-numeric: tabular-nums;
+    text-align: left;
+    opacity: 0.65;
+  }
+
+  /* ---- a table (`Table.tsx`) ------------------------------------------------------ */
+
+  /* With no height of its own the table scrolls with the page, so its head pins to the page's
+     scroller: `clip` cuts a row too wide for the column without making a scroller of its own,
+     which would hold the sticky head inside it. Given a height, it scrolls itself. */
+  .ui-table-scroll {
+    --ui-table-ground: var(--bg-base);
+    position: relative;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .ui-table-scroll[data-height] {
+    overflow: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .ui-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--text-read);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+  }
+
+  .ui-table th,
+  .ui-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .ui-table [data-align="end"] {
+    text-align: right;
+  }
+
+  .ui-table [data-align="center"] {
+    text-align: center;
+  }
+
+  /* The head is pinned to the top of the scroller, on the ground it scrolls over. */
+  .ui-table thead th {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    padding-block: 0.4rem;
+    font-size: var(--text-ui);
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--fg-subtle);
+    background: var(--ui-table-ground);
+    border-bottom-color: var(--line);
+  }
+
+  .ui-table-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin: -0.2rem -0.4rem;
+    padding: 0.2rem 0.4rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition:
+      color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  [data-align="end"] > .ui-table-sort {
+    flex-direction: row-reverse;
+  }
+
+  .ui-table-sort:hover {
+    color: var(--fg-strong);
+    background: var(--field-fill);
+  }
+
+  .ui-table-sort:active {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-table-sort:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-table-sort[data-sorted] {
+    color: var(--fg-strong);
+  }
+
+  /* The arrow always holds its room, so sorting by a column does not widen its head. */
+  .ui-table-sort-mark {
+    flex: none;
+    opacity: 0;
+    transition:
+      opacity 160ms ease,
+      rotate 200ms ease;
+  }
+
+  .ui-table-sort:hover .ui-table-sort-mark {
+    opacity: 0.4;
+  }
+
+  .ui-table-sort[data-sorted] .ui-table-sort-mark {
+    opacity: 1;
+  }
+
+  .ui-table-sort[data-sorted="asc"] .ui-table-sort-mark {
+    rotate: 180deg;
+  }
+
+  .ui-table tbody tr {
+    transition: background-color 160ms ease;
+  }
+
+  .ui-table tbody tr[data-pressable] {
+    cursor: pointer;
+  }
+
+  .ui-table tbody tr[data-pressable]:hover {
+    background: var(--field-fill);
+  }
+
+  .ui-table tbody tr[data-pressable]:active {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-table tbody tr[data-pressable]:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-table tbody tr[aria-current="true"] {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-table-empty td {
+    padding-block: 2rem;
+    text-align: center;
+    color: var(--fg-subtle);
+  }
+
+  .ui-table-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.625rem;
+  }
+
+  .ui-table-toolbar-start,
+  .ui-table-toolbar-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  /* ---- pages (`Pagination.tsx`) --------------------------------------------------- */
+
+  .ui-pages {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    font-size: var(--text-ui);
+  }
+
+  .ui-pages-words {
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  .ui-pages-steps {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+  }
+
+  .ui-page,
+  .ui-page-step {
+    display: inline-grid;
+    place-items: center;
+    min-width: var(--control-h-sm);
+    height: var(--control-h-sm);
+    padding: 0 0.375rem;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    font: inherit;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+    cursor: pointer;
+    transition:
+      color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .ui-page:hover:not([aria-current="page"]),
+  .ui-page-step:hover:not(:disabled):not([aria-disabled="true"]) {
+    color: var(--fg-strong);
+    background: var(--field-fill);
+  }
+
+  .ui-page:active:not([aria-current="page"]),
+  .ui-page-step:active:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-page[aria-current="page"] {
+    color: var(--ink-words);
+    background: var(--ink-face-bottom);
+    cursor: default;
+  }
+
+  .ui-page:focus-visible,
+  .ui-page-step:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-page-step:disabled,
+  .ui-page-step[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-page-back {
+    rotate: 180deg;
+  }
+
+  .ui-page-gap {
+    display: inline-grid;
+    place-items: center;
+    min-width: var(--control-h-sm);
+    color: var(--fg-subtle);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-tabs-mark[data-eased] {
+    transition: none;
+  }
+}

@@ -1,0 +1,633 @@
+/* The library's overlays (`src/components/`), in the layer the other pieces are in: a dialog, a
+   menu of actions, a popover and a tooltip. Menus and popovers stand on `.ui-menu` in ui.css. */
+@layer components.parts {
+
+  /* ---- a dialog ------------------------------------------------------------------- */
+
+  /* The `<dialog>` is the lifted surface; its frame fills it, so a press on the dialog
+     itself is a press on the veil around it. */
+  .ui-dialog {
+    box-sizing: border-box;
+    width: min(30rem, calc(100vw - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-panel);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    color: var(--fg);
+    background: var(--surface-lifted);
+    box-shadow: var(--shadow-float);
+  }
+
+  .ui-dialog[open] {
+    display: flex;
+    flex-direction: column;
+    animation: ui-dialog-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  }
+
+  .ui-dialog::backdrop {
+    background: light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62));
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+  }
+
+  .ui-dialog[open]::backdrop {
+    animation: ui-veil-in 200ms ease-out backwards;
+  }
+
+  .ui-dialog:focus-visible {
+    outline: none;
+  }
+
+  .ui-dialog-sm {
+    width: min(25rem, calc(100vw - 2rem));
+  }
+
+  .ui-dialog-lg {
+    width: min(36rem, calc(100vw - 2rem));
+  }
+
+  .ui-dialog-frame,
+  .ui-dialog-form {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .ui-dialog-head {
+    display: grid;
+    gap: 0.375rem;
+    padding: 1.25rem 1.25rem 0;
+  }
+
+  .ui-dialog-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    color: var(--fg-strong);
+  }
+
+  .ui-dialog-description {
+    margin: 0;
+    max-width: 46ch;
+    font-size: var(--text-read);
+    line-height: 1.5;
+    text-wrap: pretty;
+    color: var(--fg-subtle);
+  }
+
+  .ui-dialog-body {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem 1.25rem 1.25rem;
+  }
+
+  .ui-dialog-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid var(--line);
+    background: oklch(0.5965 0 0 / 0.045);
+  }
+
+  /* A refusal the form came back with, at the foot's start beside the buttons it answers. */
+  .ui-dialog-problem {
+    flex: 1 1 12rem;
+    min-width: 0;
+    margin: 0 auto 0 0;
+    font-size: var(--text-ui);
+    line-height: 1.4;
+    color: var(--tone-danger-ink);
+  }
+
+  /* A question with nothing but its answers puts the answers under it. */
+  .ui-dialog-head + .ui-dialog-foot,
+  .ui-dialog-head + .ui-dialog-form > .ui-dialog-foot:first-child {
+    margin-top: 1.25rem;
+  }
+
+  /* On a phone a dialog rises from the bottom edge, where the thumb already is. */
+  @media (max-width: 639px) {
+    .ui-dialog,
+    .ui-dialog-sm,
+    .ui-dialog-lg {
+      width: 100vw;
+      max-height: 88dvh;
+      margin: auto 0 0;
+      border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+    }
+
+    .ui-dialog[open] {
+      animation-name: ui-sheet-in;
+      animation-duration: 260ms;
+    }
+
+    .ui-dialog-still {
+      height: 88dvh;
+    }
+
+    /* A palette stays at the top, where the keyboard rising from the bottom leaves it. */
+    .ui-palette {
+      width: calc(100vw - 1rem);
+      margin: 0.5rem auto auto;
+      border-radius: var(--radius-float);
+    }
+
+    .ui-palette[open] {
+      animation-name: ui-dialog-in;
+      animation-duration: 200ms;
+    }
+
+    .ui-dialog-still .ui-dialog-body {
+      flex: 1 1 auto;
+      align-content: start;
+      min-height: 0;
+      overflow-y: auto;
+    }
+  }
+
+  /* ---- a command palette ---------------------------------------------------------- */
+
+  /* A dialog standing a tenth of the way down rather than centred, so its field stays put
+     whatever the list holds, and at the top on a phone, above the keyboard. */
+  .ui-palette {
+    width: min(42rem, calc(100vw - 2rem));
+    margin: 10vh auto auto;
+    overflow: hidden;
+  }
+
+  .ui-palette-head {
+    padding: 0.625rem 0.625rem 0;
+  }
+
+  /* One height from opening, so an answer arriving or changing length fills it rather than
+     moving its foot. */
+  .ui-palette-list {
+    box-sizing: border-box;
+    height: min(26rem, calc(60dvh - 7.5rem));
+    padding: 0.375rem 0.625rem 0.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: 0.5rem;
+  }
+
+  .ui-palette-state {
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 2rem 1rem;
+    font-size: var(--text-read);
+    line-height: 1.5;
+    text-align: center;
+    text-wrap: pretty;
+    color: var(--fg-subtle);
+  }
+
+  .ui-palette-item .ui-start {
+    color: var(--fg-subtle);
+  }
+
+  .ui-palette-line {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  /* The place gives way first, then the title, and what is said of it takes what is left. */
+  .ui-palette-crumb,
+  .ui-palette-title {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ui-palette-crumb {
+    max-width: 45%;
+    color: var(--fg);
+  }
+
+  .ui-palette-title {
+    min-width: 4rem;
+  }
+
+  .ui-palette-chevron {
+    flex: none;
+    color: var(--fg-subtle);
+  }
+
+  .ui-palette-hint {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+  }
+
+  .ui-palette-mark {
+    border-radius: var(--radius-mark);
+    color: inherit;
+    background: var(--tone-caution-tint);
+  }
+
+  /* The lit row says Enter opens it. */
+  .ui-palette-go {
+    flex: none;
+    color: var(--fg-subtle);
+    opacity: 0;
+    transition: opacity 120ms;
+  }
+
+  .ui-palette-item[data-active] .ui-palette-go {
+    opacity: 1;
+  }
+
+  .ui-palette-item:active:not([aria-disabled]) {
+    background: oklch(0.5965 0 0 / 0.2);
+  }
+
+  .ui-palette-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--text-meta);
+    color: var(--fg-subtle);
+    background: oklch(0.5965 0 0 / 0.045);
+  }
+
+  .ui-palette-foot > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  /* Keys to press, so not on a screen with no keyboard of its own. */
+  @media (pointer: coarse) {
+    .ui-palette-keys {
+      display: none;
+    }
+  }
+
+  /* ---- a menu of actions ---------------------------------------------------------- */
+
+  .ui-menu-actions {
+    min-width: 11rem;
+    max-width: min(20rem, calc(100vw - 1rem));
+  }
+
+  .ui-menu-actions:focus,
+  .ui-menu-actions .ui-menu-item:focus {
+    outline: none;
+  }
+
+  .ui-menu-actions .ui-menu-item {
+    transition: background-color 120ms;
+  }
+
+  .ui-menu-actions .ui-menu-item:active:not([aria-disabled]) {
+    background: oklch(0.5965 0 0 / 0.2);
+  }
+
+  .ui-menu-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1rem;
+    height: 1rem;
+    color: var(--fg-subtle);
+    transition: color 120ms;
+  }
+
+  .ui-menu-item[data-active] .ui-menu-icon {
+    color: var(--fg-strong);
+  }
+
+  .ui-menu-item[data-danger],
+  .ui-menu-item[data-danger] .ui-menu-icon {
+    color: var(--tone-danger-ink);
+  }
+
+  .ui-menu-item[data-danger][data-active] {
+    background: var(--tone-danger-tint);
+  }
+
+  .ui-menu-actions .ui-menu-item[aria-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  /* One that says why it cannot be chosen is still reached, so it is still lit when it is. */
+  .ui-menu-item[data-reason][data-active] {
+    background: oklch(0.5965 0 0 / 0.08);
+  }
+
+  .ui-menu-rule {
+    height: 1px;
+    margin: 0.3rem 0.4rem;
+    background: var(--line);
+  }
+
+  .ui-menu-group + .ui-menu-group,
+  .ui-menu-item + .ui-menu-group {
+    margin-top: 0.3rem;
+  }
+
+  /* A menu's labelled section is a class of its own: `.ui-menu-group` is the list's heading
+     (`ui-inputs.css`), and a section carrying it took the heading's inset and weight. */
+  .ui-menu-section + .ui-menu-section,
+  .ui-menu-item + .ui-menu-section {
+    margin-top: 0.3rem;
+  }
+
+  .ui-menu-label {
+    padding: 0.35rem 0.65rem 0.2rem;
+    font-size: var(--text-meta);
+    font-weight: 600;
+    color: var(--fg-subtle);
+    user-select: none;
+  }
+
+  /* ---- a popover ------------------------------------------------------------------ */
+
+  .ui-popover {
+    width: max-content;
+    max-width: min(22rem, calc(100vw - 1rem));
+    padding: 0.875rem;
+    font-size: var(--text-ui);
+    line-height: 1.5;
+  }
+
+  .ui-popover:focus-visible {
+    outline: none;
+  }
+
+  /* ---- a tooltip ------------------------------------------------------------------ */
+
+  /* In the top layer, as wide as its words up to 18rem and never wider than the window, so
+     no parent's width or overflow decides where it wraps. */
+  .ui-tooltip {
+    position: fixed;
+    inset: auto;
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: max-content;
+    max-width: min(18rem, calc(100vw - 16px));
+    overflow-wrap: break-word;
+    padding: 0.3rem 0.6rem;
+    border: 0;
+    border-radius: var(--radius-float);
+    font-size: var(--text-meta);
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--fg-inverse);
+    background: var(--bg-contrast);
+    box-shadow: var(--shadow-raise);
+    pointer-events: none;
+    animation: ui-tip-in 120ms ease-out backwards;
+  }
+
+  /* Whatever says why it cannot be used is refused to the pointer in words, not in silence. */
+  [data-reason][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+@keyframes ui-dialog-in {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+@keyframes ui-sheet-in {
+  from {
+    translate: 0 100%;
+  }
+}
+
+@keyframes ui-veil-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes ui-tip-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-dialog[open],
+  .ui-dialog[open]::backdrop,
+  .ui-tooltip {
+    animation: none;
+  }
+}
+
+/* A date chosen from a month (`DatePicker.tsx`): the field is the select's, the grid floats on
+   `.ui-menu`. Today is ringed and the chosen day filled with ink; no state changes the type. */
+@layer components.parts {
+  .ui-date-mark {
+    rotate: none;
+  }
+
+  .ui-select-box[data-open] .ui-date-mark {
+    rotate: none;
+  }
+
+  .ui-date-pop {
+    padding: 0.5rem;
+  }
+
+  .ui-date-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0 0 0.375rem;
+  }
+
+  .ui-date-month {
+    font-size: var(--text-ui);
+    font-weight: 600;
+    color: var(--fg-strong);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-date-step,
+  .ui-date-day {
+    display: inline-grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease,
+      box-shadow 140ms ease;
+  }
+
+  .ui-date-step {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .ui-date-back {
+    rotate: 180deg;
+  }
+
+  .ui-date-step:hover:not(:disabled),
+  .ui-date-day:hover:not([data-chosen]) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-date-step:active:not(:disabled),
+  .ui-date-day:active:not([data-chosen]) {
+    background: var(--field-fill);
+  }
+
+  .ui-date-step:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .ui-date-step:focus-visible,
+  .ui-date-day:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-date-grid {
+    border-collapse: collapse;
+  }
+
+  .ui-date-grid td,
+  .ui-date-grid th {
+    padding: 1px;
+  }
+
+  .ui-date-weekday {
+    height: 1.5rem;
+    font-size: var(--text-tag);
+    font-weight: 400;
+    color: var(--fg-subtle);
+  }
+
+  .ui-date-day {
+    width: 2rem;
+    height: 2rem;
+    font-size: var(--text-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-date-day[data-outside] {
+    color: var(--fg-subtle);
+  }
+
+  .ui-date-day[data-today] {
+    box-shadow: inset 0 0 0 1px var(--fg-subtle);
+  }
+
+  .ui-date-day[data-chosen] {
+    background: var(--ink-face-bottom);
+    color: var(--ink-words);
+  }
+
+  .ui-date-day[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .ui-date-day[aria-disabled="true"]:hover {
+    background: transparent;
+  }
+}
+
+@layer components.parts {
+
+  /* ---- a choice of emoji (`EmojiPicker.tsx`) -------------------------------------- */
+
+  /* One size from opening, whatever the search leaves, so it never jumps as words are typed. */
+  .ui-emoji-picker {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 0.375rem;
+    width: 17.5rem;
+    height: 18rem;
+    padding: 0.5rem;
+  }
+
+  .ui-emoji-scroll {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .ui-emoji-group {
+    margin: 0.375rem 0.25rem 0.125rem;
+    font-size: var(--text-meta);
+    font-weight: 600;
+    color: var(--fg-subtle);
+  }
+
+  .ui-emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  .ui-emoji {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    font-size: 1.125rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms ease;
+  }
+
+  .ui-emoji:hover {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-emoji:active {
+    background: var(--field-fill);
+  }
+
+  .ui-emoji:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-emoji-none {
+    margin: 0.75rem 0.25rem;
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+  }
+}

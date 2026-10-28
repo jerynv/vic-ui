@@ -1,0 +1,76 @@
+{
+  "name": "vic-ui",
+  "version": "0.1.0",
+  "description": "A quiet, dense React 19 component library: an oklch palette in light and dark, one corner scale, one elevation scale, and pieces whose state never changes their size.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "licenses",
+    "MAP.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./icons": {
+      "types": "./dist/icons/icons.d.ts",
+      "import": "./dist/icons.js"
+    },
+    "./styles.css": "./dist/vic-ui.css",
+    "./components.css": "./dist/components.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "npm run build:lib && npm run build:css",
+    "build:lib": "vite build && tsc -p tsconfig.build.json",
+    "build:css": "node scripts/build-css.mjs",
+    "build:site": "vite build --config site/vite.config.ts",
+    "dev:site": "vite --config site/vite.config.ts",
+    "preview:site": "vite preview --config site/vite.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check:design": "node scripts/check-radius.mjs && node scripts/check-shadows.mjs",
+    "check:dashes": "node scripts/check-dashes.mjs",
+    "icons": "node scripts/gen-icons.mjs",
+    "prepublishOnly": "npm run typecheck && npm run check:design && npm run check:dashes && npm run build"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.8.0"
+  },
+  "devDependencies": {
+    "@iconify-json/mingcute": "^1.2.8",
+    "@iconify-json/tabler": "^1.2.38",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "design-system",
+    "oklch",
+    "ui"
+  ]
+}

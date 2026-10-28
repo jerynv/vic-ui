@@ -1,0 +1,280 @@
+/* The library's feedback (`src/components/`), in the layer the other pieces are in. */
+@layer components.parts {
+
+  /* ---- something on its way (`Spinner.tsx`) --------------------------------------- */
+
+  .ui-spinner {
+    flex: none;
+    animation: ui-spin 700ms linear infinite;
+  }
+
+  /* ---- how far (`Progress.tsx`) --------------------------------------------------- */
+
+  .ui-progress {
+    --progress-fill: var(--ink-face-bottom);
+    display: grid;
+    gap: 0.375rem;
+    min-width: 0;
+  }
+
+  .ui-progress[data-tone="danger"] {
+    --progress-fill: var(--tone-danger-ink);
+  }
+
+  .ui-progress[data-tone="caution"] {
+    --progress-fill: var(--tone-caution-ink);
+  }
+
+  .ui-progress[data-tone="settled"] {
+    --progress-fill: var(--tone-settled-ink);
+  }
+
+  .ui-progress[data-tone="moving"] {
+    --progress-fill: var(--tone-moving-ink);
+  }
+
+  .ui-progress-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: var(--text-ui);
+  }
+
+  .ui-progress-label {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    color: var(--fg-strong);
+  }
+
+  .ui-progress-value {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  .ui-progress-track {
+    position: relative;
+    height: 0.375rem;
+    overflow: hidden;
+    border-radius: var(--radius-round);
+    background: var(--field-fill);
+  }
+
+  .ui-progress-sm .ui-progress-track {
+    height: 0.25rem;
+  }
+
+  .ui-progress-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: inherit;
+    background: var(--progress-fill);
+    transition: width 300ms var(--ease-track);
+  }
+
+  /* Under way, how far unknown: a stretch of the bar sweeps across it. */
+  .ui-progress-track[data-unknown] .ui-progress-fill {
+    width: 35%;
+    animation: ui-progress-sweep 1.4s var(--ease-track) infinite;
+  }
+
+  /* ---- toasts (`Toast.tsx`) ------------------------------------------------------- */
+
+  .ui-toaster {
+    position: fixed;
+    inset: auto 1rem 1rem auto;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    width: min(24rem, calc(100vw - 2rem));
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+    background: none;
+    pointer-events: none;
+  }
+
+  /* Only once it is open, so the browser's own rule keeps a closed one out of the page. */
+  .ui-toaster:popover-open {
+    display: flex;
+  }
+
+  .ui-toast {
+    --toast-ground: var(--ink-face-bottom);
+    --toast-words: var(--ink-words);
+    --toast-quiet: color-mix(in oklab, var(--ink-words) 70%, transparent);
+    --toast-press: color-mix(in oklab, var(--ink-words) 14%, transparent);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    width: 100%;
+    padding: 0.625rem 0.5rem 0.625rem 0.875rem;
+    border-radius: var(--radius-float);
+    color: var(--toast-words);
+    background: var(--toast-ground);
+    box-shadow: var(--shadow-float);
+    font-size: var(--text-read);
+    pointer-events: auto;
+    animation: ui-toast-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  }
+
+  /* A tone draws the toast as a notice: the tone's tint behind a rule in its ink. */
+  .ui-toast[data-tone] {
+    --toast-words: var(--fg-strong);
+    --toast-quiet: var(--fg-subtle);
+    --toast-press: color-mix(in oklab, var(--tone-ink) 14%, transparent);
+    background: var(--tone-tint);
+    box-shadow: var(--shadow-float);
+  }
+
+  .ui-toast[data-tone="danger"] {
+    --tone-ink: var(--tone-danger-ink);
+    --tone-tint: var(--tone-danger-tint);
+  }
+
+  .ui-toast[data-tone="caution"] {
+    --tone-ink: var(--tone-caution-ink);
+    --tone-tint: var(--tone-caution-tint);
+  }
+
+  .ui-toast[data-tone="settled"] {
+    --tone-ink: var(--tone-settled-ink);
+    --tone-tint: var(--tone-settled-tint);
+  }
+
+  .ui-toast[data-tone="moving"] {
+    --tone-ink: var(--tone-moving-ink);
+    --tone-tint: var(--tone-moving-tint);
+  }
+
+  .ui-toast[data-leaving] {
+    opacity: 0;
+    translate: 0 4px;
+    transition:
+      opacity 160ms ease,
+      translate 160ms ease;
+  }
+
+  .ui-toast-icon {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--tone-ink);
+  }
+
+  .ui-toast-words {
+    flex: 1;
+    min-width: 0;
+    padding-top: 0.1rem;
+  }
+
+  .ui-toast-message,
+  .ui-toast-description {
+    margin: 0;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-toast-message {
+    font-weight: 500;
+  }
+
+  .ui-toast-description {
+    margin-top: 0.125rem;
+    font-size: var(--text-ui);
+    color: var(--toast-quiet);
+  }
+
+  .ui-toast-action,
+  .ui-toast-close {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    height: 1.75rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    font: inherit;
+    font-size: var(--text-ui);
+    font-weight: 600;
+    color: var(--toast-words);
+    cursor: pointer;
+    transition: background-color 160ms ease;
+  }
+
+  .ui-toast-action {
+    padding: 0 0.625rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ui-toast-close {
+    width: 1.75rem;
+    color: var(--toast-quiet);
+  }
+
+  .ui-toast-action:hover,
+  .ui-toast-close:hover {
+    background: var(--toast-press);
+  }
+
+  .ui-toast-action:active,
+  .ui-toast-close:active {
+    background: color-mix(in oklab, var(--toast-press), var(--toast-words) 10%);
+  }
+
+  .ui-toast-action:focus-visible,
+  .ui-toast-close:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 639px) {
+    .ui-toaster {
+      inset: auto 1rem 1rem 1rem;
+      width: auto;
+      align-items: stretch;
+    }
+  }
+}
+
+@keyframes ui-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes ui-progress-sweep {
+  from {
+    translate: -100% 0;
+  }
+
+  to {
+    translate: 300% 0;
+  }
+}
+
+@keyframes ui-toast-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* Under reduced motion the spinner is a still mark and the unknown bar a still stretch. */
+@media (prefers-reduced-motion: reduce) {
+  .ui-spinner,
+  .ui-progress-track[data-unknown] .ui-progress-fill,
+  .ui-toast {
+    animation: none;
+  }
+
+  .ui-progress-fill,
+  .ui-toast[data-leaving] {
+    transition: none;
+  }
+}

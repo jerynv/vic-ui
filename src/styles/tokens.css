@@ -1,0 +1,321 @@
+/* vic-ui tokens: the type scale, faces, easings, and every colour, corner, height and shadow,
+   light and dark. Every colour is oklch, resolved per element by light-dark() against the
+   element's color-scheme, which the rules at the end of this file declare. */
+
+:root {
+  --font-sans: "Cal Sans UI", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --default-font-family: var(--font-sans);
+  --font-display: "Cal Sans UI", ui-sans-serif, system-ui, sans-serif;
+  --font-wordmark: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-tag: 0.6875rem;
+  --text-tag--line-height: 1.3;
+  --text-meta: 0.75rem;
+  --text-meta--line-height: 1.4;
+  --text-ui: 0.8125rem;
+  --text-ui--line-height: 1.45;
+  --text-read: 0.875rem;
+  --text-read--line-height: 1.55;
+  --text-lead: 1rem;
+  --text-lead--line-height: 1.4;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-track: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Unlayered, and on every [data-mode] element as well as :root, so a painted section set to
+   the other mode reads them in its own. */
+:root,
+[data-mode] {
+  /*
+   * The neutrals: words (`--fg-*`), grounds (`--bg-*`), the line between things and the
+   * focus ring.
+   */
+  --fg-strong: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
+  --fg: light-dark(oklch(0.205 0 0), oklch(0.97 0 0));
+  --fg-subtle: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
+  --fg-inverse: light-dark(oklch(0.97 0 0), oklch(0.205 0 0));
+  --fg-placeholder: light-dark(oklch(0.708 0 0), oklch(0.556 0 0));
+  --fg-inactive: light-dark(oklch(0.87 0 0), oklch(0.439 0 0));
+  --line: light-dark(oklch(0.145 0 0 / 0.1), oklch(0.32 0 0));
+  --line-hairline: light-dark(oklch(0.935 0 0), oklch(0.269 0 0));
+  --bg-base: light-dark(oklch(1 0 0), oklch(0.17 0 0));
+  --bg-canvas: light-dark(oklch(0.9875 0 0), oklch(0.1 0 0));
+  --bg-tint: light-dark(oklch(0.97 0 0), oklch(0.269 0 0));
+  --bg-recessed: light-dark(oklch(0.965 0 0), oklch(0.15 0 0));
+  --bg-contrast: light-dark(oklch(0.12 0 0), oklch(0.985 0 0));
+  --bg-control: light-dark(oklch(1 0 0), oklch(0.205 0 0));
+  --bg-elevated: light-dark(oklch(0.98 0 0), oklch(0.12 0 0));
+  --focus: light-dark(oklch(0.15 0 0), oklch(0.935 0 0));
+  --brand: light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0));
+  --brand-hover: light-dark(oklch(0.2686 0 0), oklch(1 0 0));
+  --fg-brand: light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0));
+  --fg-link: light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0));
+
+  /* overscroll-behavior: none; */
+
+  /*
+   * The surface that lifts.
+   *
+   * `--bg-elevated` is #060606 in the dark theme while `--bg-base` is #0f0f0f, so it sinks
+   * a panel rather than raising it. Anything that has to read as sitting on top of the
+   * page uses this instead.
+   */
+  --surface-lifted: light-dark(oklch(1 0 0), oklch(0.1913 0 0));
+  /* The height of a control in a header row: a tab switcher, a field, a choice, an icon
+     button and a button with words alike, named once so a header never mixes it with the
+     smaller one. */
+  --control-h: 2.25rem;
+  /* A button beside words, a step under the control height. */
+  --control-h-sm: 2rem;
+  /* A page's or a pane's header bar: an empty page stands in the height under it. */
+  --head-h: calc(2.5rem - 1px);
+  /* Corners, one scale: a panel (a card, a dialog, a sheet) is the roundest; what floats over
+     a page (a menu, a popover, a tooltip) and a table's shell a step less; a control (a button,
+     a field, a choice) less again; a row or a tile inside any of those, and a mark, least.
+     A pill and a face are round (`--radius-round`). Nothing sets a corner of its own. */
+  --radius-panel: 1.25rem;
+  --radius-float: 1rem;
+  --radius-control: 0.75rem;
+  --radius-row: 0.5rem;
+  --radius-mark: 0.25rem;
+  --radius-round: 999px;
+  --radius-button: var(--radius-control);
+  /* Elevation, one scale. A surface on the page (a card, a panel, a calendar's event) has an
+     edge and no shadow (`--edge`); only what floats over the page casts one: a small piece
+     raised off what it sits on (a tooltip, an action bar, a knob, `--shadow-raise`), and
+     anything laid over the page (a menu, a popover, a dialog, a toast, a tray, `--shadow-float`).
+     Nothing writes a shadow of its own (`scripts/check-shadows.mjs`). */
+  --edge: 0 0 0 1px var(--line);
+  --edge-float: 0 0 0 1px light-dark(oklch(0 0 0 / 0.08), oklch(1 0 0 / 0.1));
+  --shadow-raise: var(--edge-float), 0 4px 12px -6px oklch(0 0 0 / 0.3);
+  --shadow-float: var(--edge-float), 0 18px 44px -18px oklch(0 0 0 / 0.45);
+  --radius-field: var(--radius-control);
+  /* A box to type into is a filled surface a step off the ground, with no outline until focus. */
+  --field-fill: light-dark(oklch(0.948 0.002 286), oklch(0.235 0.002 286));
+  /*
+   * The buttons, after Cult UI's Texture Button (MIT, `texture-button.tsx`), its Tailwind
+   * colours written as the oklch they are. A button is a rim (`--rim-*`: a hairline edge round
+   * a gradient one pixel deep) and a face inside it (`--face-*`), each falling top to bottom;
+   * hovering and pressing move the face's two stops. `ink` is their primary (black on the light
+   * canvas, white on the dark), `line` their minimal.
+   */
+  --ink-rim-edge: light-dark(oklch(0 0 0 / 0.1), oklch(0 0 0));
+  --ink-rim-top: light-dark(oklch(0 0 0 / 0.7), oklch(1 0 0));
+  --ink-rim-bottom: light-dark(oklch(0 0 0), oklch(1 0 0 / 0.8));
+  --ink-face-top: light-dark(oklch(0.269 0 0), oklch(0.922 0 0));
+  --ink-face-bottom: light-dark(oklch(0 0 0), oklch(0.985 0 0));
+  --ink-face-top-hover: light-dark(oklch(0.268 0.007 34.3), oklch(0.923 0.003 48.7));
+  --ink-face-bottom-hover: light-dark(oklch(0.269 0 0 / 0.7), oklch(0.922 0 0));
+  --ink-face-top-press: light-dark(oklch(0 0 0), oklch(0.869 0.005 56.4));
+  --ink-face-bottom-press: light-dark(oklch(0 0 0), oklch(0.87 0 0));
+  --ink-words: light-dark(oklch(1 0 0 / 0.9), oklch(0 0 0 / 0.8));
+  --line-rim-edge: light-dark(oklch(0 0 0 / 0.2), oklch(0.145 0 0));
+  --line-rim-top: light-dark(oklch(1 0 0 / 0.5), oklch(0.439 0 0 / 0.8));
+  --line-rim-bottom: light-dark(oklch(1 0 0 / 0.5), oklch(0.439 0 0 / 0.8));
+  --line-rim-top-hover: light-dark(oklch(1 0 0 / 0.5), oklch(0.439 0 0 / 0.7));
+  --line-rim-bottom-hover: light-dark(oklch(0.97 0 0), oklch(0.439 0 0 / 0.5));
+  --line-rim-press: light-dark(oklch(0.922 0 0), oklch(0.269 0 0));
+  --line-face-top: light-dark(oklch(1 0 0), oklch(0.269 0 0));
+  --line-face-bottom: light-dark(oklch(0.985 0 0 / 0.5), oklch(0.371 0 0 / 0.5));
+  --line-face-top-hover: light-dark(oklch(0.985 0 0 / 0.5), oklch(0.371 0 0));
+  --line-face-bottom-hover: light-dark(oklch(0.97 0 0 / 0.6), oklch(0.371 0 0 / 0.6));
+  --line-face-top-press: light-dark(oklch(0.97 0 0 / 0.6), oklch(0.269 0 0));
+  --line-face-bottom-press: light-dark(oklch(0.97 0 0 / 0.9), oklch(0.371 0 0));
+  --field-fill-hover: light-dark(oklch(0.925 0.002 286), oklch(0.265 0.002 286));
+  /* What is typed into a field: the reading size, and 16px where a touch keyboard opens,
+     because iOS zooms the page into any field set smaller than that. */
+  --field-text: var(--text-read);
+  /* A rule between rows of a list: a line, a step quieter than `--line`. */
+  --line-soft: light-dark(oklch(0 0 0 / 0.07), oklch(1 0 0 / 0.065));
+  /* Placeholders: a shade of the ground, and the light that passes over it. */
+  --bone: light-dark(oklch(0 0 0 / 0.075), oklch(1 0 0 / 0.085));
+  --bone-glint: light-dark(oklch(1 0 0 / 0.75), oklch(1 0 0 / 0.07));
+
+  /* The scrollbar's thumb: a thin line of ink, a little stronger under the pointer. */
+  --scroll-thumb: light-dark(oklch(0 0 0 / 0.3), oklch(1 0 0 / 0.28));
+  --scroll-thumb-hover: light-dark(oklch(0 0 0 / 0.45), oklch(1 0 0 / 0.45));
+
+  /*
+   * The four tones: the palette's colours for meaning, each for one kind of state, and each
+   * an ink (words and fills), a tint (a notice's ground) and an edge (an outline). The inks
+   * are the hues' inks of clay, butter, sage and sky, so one event is one colour wherever it
+   * is told. `--tone-on` is the words on a solid tone.
+   *
+   * Measured, WCAG 2 relative luminance, against light canvas #fbfbfb and panel #ffffff,
+   * dark canvas #030303 and panel #0f0f0f (the site's Colour page measures them live):
+   *   ink on canvas / panel / its own tint, and --tone-on on the ink
+   *   danger   light 7.46 / 7.72 / 5.95, 7.72   dark 11.43 / 10.62 / 8.87, 10.97
+   *   caution  light 7.06 / 7.31 / 5.93, 7.31   dark 13.51 / 12.56 / 9.91, 12.97
+   *   settled  light 7.64 / 7.90 / 6.38, 7.90   dark 12.77 / 11.87 / 9.56, 12.26
+   *   moving   light 8.66 / 8.96 / 7.16, 8.96   dark 11.95 / 11.10 / 9.06, 11.47
+   * Muted text on a light tint is 3.65:1 and fails, so a tint carries strong words only.
+   * A tint is 1.19 to 1.38:1 from the canvas: a ground, never the thing that says it. The
+   * caution tint leans to amber (hue 80) rather than a greenish yellow.
+   */
+  --tone-on: light-dark(oklch(1 0 0), oklch(0.1448 0 0));
+  --tone-danger-ink: light-dark(oklch(0.4532 0.118 42.5), oklch(0.8173 0.0863 48.74));
+  --tone-danger-tint: light-dark(oklch(0.9146 0.036 53.7), oklch(0.2545 0.0487 41.8));
+  --tone-danger-edge: light-dark(oklch(0.4532 0.118 42.5 / 0.45), oklch(0.8173 0.0863 48.74 / 0.45));
+  --tone-caution-ink: light-dark(oklch(0.4561 0.0894 84.44), oklch(0.8607 0.1055 90.99));
+  --tone-caution-tint: light-dark(oklch(0.93 0.05 80), oklch(0.27 0.035 75));
+  --tone-caution-edge: light-dark(oklch(0.4561 0.0894 84.44 / 0.45), oklch(0.8607 0.1055 90.99 / 0.45));
+  --tone-settled-ink: light-dark(oklch(0.4263 0.0858 152.47), oklch(0.8344 0.077 153.82));
+  --tone-settled-tint: light-dark(oklch(0.9239 0.0301 151.51), oklch(0.2574 0.0384 157.46));
+  --tone-settled-edge: light-dark(oklch(0.4263 0.0858 152.47 / 0.45), oklch(0.8344 0.077 153.82 / 0.45));
+  --tone-moving-ink: light-dark(oklch(0.4076 0.1033 254.88), oklch(0.8225 0.0698 253.93));
+  --tone-moving-tint: light-dark(oklch(0.9237 0.0253 255.56), oklch(0.2582 0.0471 256.62));
+  --tone-moving-edge: light-dark(oklch(0.4076 0.1033 254.88 / 0.45), oklch(0.8225 0.0698 253.93 / 0.45));
+
+  /*
+   * The five hues: the palette's colours for look, used anywhere. Each is a block (pale on
+   * light, deep on dark) and an ink dark enough for words on its own block and on the page.
+   * `[data-hue="x"]` hands one to `--hue` and `--hue-ink` (at the end of this file).
+   */
+  --hue-sky: light-dark(oklch(0.9104 0.0306 254.32), oklch(0.2582 0.0471 256.62));
+  --hue-sky-ink: light-dark(oklch(0.4076 0.1033 254.88), oklch(0.8225 0.0698 253.93));
+  --hue-sage: light-dark(oklch(0.9098 0.0336 150.81), oklch(0.2574 0.0384 157.46));
+  --hue-sage-ink: light-dark(oklch(0.4263 0.0858 152.47), oklch(0.8344 0.077 153.82));
+  --hue-butter: light-dark(oklch(0.9244 0.074 94.04), oklch(0.2717 0.0375 89.83));
+  --hue-butter-ink: light-dark(oklch(0.4561 0.0894 84.44), oklch(0.8607 0.1055 90.99));
+  --hue-lilac: light-dark(oklch(0.8978 0.0415 297.75), oklch(0.2465 0.0576 290.43));
+  --hue-lilac-ink: light-dark(oklch(0.4151 0.1445 287.91), oklch(0.8144 0.0833 295.37));
+  --hue-clay: light-dark(oklch(0.8948 0.0441 52.62), oklch(0.2522 0.0502 41.12));
+  --hue-clay-ink: light-dark(oklch(0.4532 0.118 42.5), oklch(0.8173 0.0863 48.74));
+}
+
+/*
+ * Naming a tone on an element: `pill tone-danger` is an outlined state, `pill pill-ink
+ * tone-danger` a solid one, `notice tone-caution` a notice. Each sets three slots the part
+ * reads; the part clears them on itself first, so a pill inside a toned notice is not
+ * toned by accident. Unlayered, so the class on the element outranks that clearing.
+ */
+.tone-danger {
+  --tone-ink: var(--tone-danger-ink);
+  --tone-tint: var(--tone-danger-tint);
+  --tone-edge: var(--tone-danger-edge);
+  --tone-fill-on: var(--tone-on);
+}
+
+.tone-caution {
+  --tone-ink: var(--tone-caution-ink);
+  --tone-tint: var(--tone-caution-tint);
+  --tone-edge: var(--tone-caution-edge);
+  --tone-fill-on: var(--tone-on);
+}
+
+.tone-settled {
+  --tone-ink: var(--tone-settled-ink);
+  --tone-tint: var(--tone-settled-tint);
+  --tone-edge: var(--tone-settled-edge);
+  --tone-fill-on: var(--tone-on);
+}
+
+.tone-moving {
+  --tone-ink: var(--tone-moving-ink);
+  --tone-tint: var(--tone-moving-tint);
+  --tone-edge: var(--tone-moving-edge);
+  --tone-fill-on: var(--tone-on);
+}
+
+/*
+ * What a scrim is made of, as three numbers rather than a colour, because a scrim is
+ * one colour at a dozen different strengths and `light-dark()` cannot be asked for a
+ * triplet. Every `oklch(var(--scrim) / a)` in the stylesheet reads it.
+ *
+ * The weights either side are NOT the same, which is worth saying because the obvious
+ * argument says they should be: the paintings are exact negatives, so surely a scrim
+ * that carried white text over the dark one carries ink over the light one. That much
+ * is true, and it is only true of the text. It is false of the texture. A bright streak
+ * at 247 pulled down by a black scrim at 0.92 lands at 24 over a ground of 5, and the
+ * eye reads nineteen points at the bottom of the range easily; the same streak inverted
+ * sits at 8 and a white scrim at 0.92 lifts it to 231 against a ground of 250, and
+ * nineteen points at the top of the range is almost nothing. Light scrims are therefore
+ * lighter, and measured for the light paintings rather than inherited: see the scrims
+ * themselves, where the light weights are the base and `@variant dark` carries the
+ * original ones.
+ *
+ * Declared with the same selectors `color-scheme` is, below, so the two never disagree.
+ */
+:root,
+:root[data-mode="light"] {
+  --scrim: 0.9851 0 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode="light"], [data-mode="dark"]) {
+    --scrim: 0.1149 0 0;
+  }
+}
+
+:root[data-mode="dark"] {
+  --scrim: 0.1149 0 0;
+}
+
+/* Following a light device declares light too: the build turns every `light-dark()` into two
+   variables only a `color-scheme` declaration sets, and with none every one of them failed. */
+:root {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode="light"], [data-mode="dark"]) {
+    color-scheme: dark;
+  }
+}
+
+/* Light or dark as chosen, over whatever the device is set to, on the root or on any section
+   set to the other mode. `data-mode="system"` (or no attribute) follows the device. */
+[data-mode="light"] {
+  color-scheme: light;
+}
+
+[data-mode="dark"] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-mode="system"] {
+    color-scheme: dark;
+  }
+}
+
+/* Changing between light and dark: no transitions for the frame it happens in. The one
+   `!important` in the stylesheet, because it has to stop a transition set anywhere,
+   inline styles and more specific rules included, and no layer outranks those. */
+:root[data-switching] *,
+:root[data-switching] *::before,
+:root[data-switching] *::after {
+  transition: none !important;
+}
+
+@media (pointer: coarse) {
+  :root {
+    --field-text: 1rem;
+  }
+}
+
+/* A hue handed to a part of a page: `data-hue="sage"` gives its children `--hue` and `--hue-ink`. */
+[data-hue="sky"] {
+  --hue: var(--hue-sky);
+  --hue-ink: var(--hue-sky-ink);
+}
+
+[data-hue="sage"] {
+  --hue: var(--hue-sage);
+  --hue-ink: var(--hue-sage-ink);
+}
+
+[data-hue="butter"] {
+  --hue: var(--hue-butter);
+  --hue-ink: var(--hue-butter-ink);
+}
+
+[data-hue="lilac"] {
+  --hue: var(--hue-lilac);
+  --hue-ink: var(--hue-lilac-ink);
+}
+
+[data-hue="clay"] {
+  --hue: var(--hue-clay);
+  --hue-ink: var(--hue-clay-ink);
+}

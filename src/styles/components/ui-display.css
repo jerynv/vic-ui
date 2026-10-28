@@ -1,0 +1,1262 @@
+/* The library's display (`src/components/`), in the layer the other pieces are in. */
+@layer components.parts {
+
+  /* ---- a badge -------------------------------------------------------------------- */
+
+  /* A state in a word or two: hairline in its tone (`tone-*` sets the slots, cleared here
+     first so a badge inside a toned notice is not toned by accident), and ink with none. */
+  .ui-badge {
+    --tone-ink: initial;
+    --tone-edge: initial;
+    --tone-fill-on: initial;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.3125rem;
+    height: 1.25rem;
+    padding: 0 0.4375rem;
+    border-radius: var(--radius-row);
+    font-size: var(--text-tag);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--tone-ink, var(--fg-strong));
+    box-shadow: inset 0 0 0 1px var(--tone-edge, var(--line));
+  }
+
+  /* Asks for a hand now: filled in its tone's ink, or in ink where it has none. */
+  .ui-badge-solid {
+    color: var(--tone-fill-on, var(--ink-words));
+    background: var(--tone-ink, var(--ink-face-bottom));
+    box-shadow: none;
+  }
+
+  .ui-badge-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: var(--radius-round);
+    background: currentColor;
+  }
+
+  .ui-badge-icon {
+    display: inline-flex;
+    margin-left: -0.0625rem;
+  }
+
+  .ui-badge-icon svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .ui-badge-count {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+  }
+
+  /* How many are waiting: a number on ink, or on its tone's ink. */
+  .ui-count {
+    --tone-ink: initial;
+    --tone-fill-on: initial;
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    min-width: 1.125rem;
+    height: 1.125rem;
+    padding: 0 0.3125rem;
+    border-radius: var(--radius-round);
+    font-size: var(--text-tag);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--tone-fill-on, var(--ink-words));
+    background: var(--tone-ink, var(--ink-face-bottom));
+  }
+
+  /* ---- a notice ------------------------------------------------------------------- */
+
+  /* The tone's tint behind a rule in its ink; the words stay strong on every tint. */
+  .ui-notice {
+    --tone-ink: initial;
+    --tone-tint: initial;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.625rem 0.75rem 0.625rem 0.5rem;
+    border-radius: var(--radius-field);
+    background: var(--tone-tint, var(--field-fill));
+    font-size: var(--text-ui);
+    line-height: 1.45;
+    color: var(--fg-strong);
+  }
+
+  /* A refusal or a failure: its words in the danger ink too. */
+  .ui-notice-danger {
+    color: var(--tone-danger-ink);
+  }
+
+  /* The tone's bar: a short rounded stroke inside the notice, as tall as what it says. */
+  .ui-notice-bar {
+    flex: none;
+    align-self: stretch;
+    width: 3px;
+    border-radius: var(--radius-round);
+    background: var(--tone-ink, var(--fg-strong));
+  }
+
+  .ui-notice-icon {
+    display: inline-flex;
+    flex: none;
+    height: 1.45em;
+    align-items: center;
+    color: var(--tone-ink, var(--fg-strong));
+  }
+
+  .ui-notice-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .ui-notice-body {
+    display: grid;
+    flex: 1;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  /* Title and words at one size and line, told apart by weight alone. */
+  .ui-notice-title {
+    margin: 0;
+    font-size: inherit;
+    font-weight: 600;
+  }
+
+  .ui-notice-words {
+    font-size: inherit;
+  }
+
+  .ui-notice-words > :where(p) {
+    margin: 0;
+  }
+
+  /* Its action stands under the words, in their column. */
+  .ui-notice-action {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.375rem;
+  }
+
+  /* The close at the end of a notice that can be put away, in the notice's own ink. */
+  .ui-notice-dismiss {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: -0.125rem -0.375rem -0.125rem 0;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 120ms;
+  }
+
+  .ui-notice-dismiss:hover {
+    background: color-mix(in oklab, currentColor 10%, transparent);
+  }
+
+  .ui-notice-dismiss:active {
+    background: color-mix(in oklab, currentColor 16%, transparent);
+  }
+
+  .ui-notice-dismiss:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* ---- a card --------------------------------------------------------------------- */
+
+  .ui-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border-radius: var(--radius-panel);
+    font-size: var(--text-ui);
+    color: var(--fg);
+  }
+
+  .ui-card-lifted {
+    background: var(--surface-lifted);
+    box-shadow: var(--edge);
+  }
+
+  .ui-card-recessed {
+    background: var(--field-fill);
+  }
+
+  .ui-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0.875rem 0;
+  }
+
+  .ui-card-heading {
+    display: grid;
+    flex: 1;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .ui-card-title {
+    margin: 0;
+    font-size: var(--text-read);
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--fg-strong);
+  }
+
+  .ui-card-description {
+    margin: 0;
+    color: var(--fg-subtle);
+  }
+
+  .ui-card-actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .ui-card-body {
+    padding: 0.75rem 0.875rem;
+  }
+
+  /* A head with nothing under it is padded the same above and below, so its title sits in
+     the middle of the card. */
+  .ui-card-head:last-child {
+    align-items: center;
+    padding-bottom: 0.75rem;
+  }
+
+  .ui-card-head + .ui-card-foot {
+    margin-top: 0.75rem;
+  }
+
+  .ui-card-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 0.875rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .ui-card-recessed .ui-card-foot {
+    border-top-color: var(--bone);
+  }
+
+  /* ---- an accordion --------------------------------------------------------------- */
+
+  .ui-accordion {
+    display: grid;
+  }
+
+  .ui-accordion-item + .ui-accordion-item {
+    border-top: 1px solid var(--line);
+  }
+
+  .ui-accordion-head {
+    display: flex;
+    margin: 0;
+    font: inherit;
+  }
+
+  .ui-accordion-trigger {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: var(--control-h-sm);
+    margin: 0.125rem -0.5rem;
+    padding: 0.375rem 0.5rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: none;
+    font: inherit;
+    font-size: var(--text-ui);
+    font-weight: 500;
+    text-align: left;
+    color: var(--fg-strong);
+    cursor: pointer;
+    transition:
+      background-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+
+  .ui-accordion-trigger:hover:not(:disabled, [aria-disabled="true"]) {
+    background: var(--field-fill);
+  }
+
+  .ui-accordion-trigger:active:not(:disabled, [aria-disabled="true"]) {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-accordion-trigger:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-accordion-trigger:disabled,
+  .ui-accordion-trigger[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-accordion-title {
+    min-width: 0;
+  }
+
+  .ui-accordion-chevron {
+    flex: none;
+    color: var(--fg-subtle);
+    transition: transform 220ms var(--ease-out-expo);
+  }
+
+  .ui-accordion-item[data-open] .ui-accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* The panel eases between no rows and its own height, so nothing is measured. */
+  .ui-accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 220ms var(--ease-out-expo);
+  }
+
+  .ui-accordion-item[data-open] .ui-accordion-panel {
+    grid-template-rows: 1fr;
+  }
+
+  .ui-accordion-clip {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .ui-accordion-content {
+    padding: 0.125rem 0 0.75rem;
+    font-size: var(--text-ui);
+    line-height: 1.5;
+    color: var(--fg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-accordion-panel,
+    .ui-accordion-chevron {
+      transition: none;
+    }
+  }
+
+  /* ---- a stack of faces ----------------------------------------------------------- */
+
+  .ui-avatar-stack {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ui-avatar-stack-face {
+    display: block;
+    flex: none;
+  }
+
+  /* The face boxes inside fill the slot whatever size class they were drawn with. */
+  .ui-avatar-stack-face > :where(*) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ui-avatar-stack-more {
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-round);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--fg-strong);
+    background: var(--field-fill);
+  }
+
+  .ui-avatar-stack-more > :where(*) {
+    width: auto;
+    height: auto;
+  }
+
+  /* ---- a key ---------------------------------------------------------------------- */
+
+  .ui-kbd {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 0.3125rem;
+    border-radius: var(--radius-mark);
+    font-family: var(--font-sans);
+    font-size: var(--text-tag);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--fg-subtle);
+    background: var(--field-fill);
+    box-shadow: inset 0 -1px 0 var(--line);
+  }
+
+  .ui-kbd + .ui-kbd {
+    margin-left: 0.1875rem;
+  }
+
+  /* ---- an announcement ------------------------------------------------------------ */
+
+  .ui-announcement {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 100%;
+    height: 1.75rem;
+    padding: 0 0.625rem 0 0.1875rem;
+    border-radius: var(--radius-round);
+    font-size: var(--text-ui);
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    color: var(--fg-strong);
+    background: var(--surface-lifted);
+    box-shadow: var(--edge);
+    transition:
+      box-shadow 200ms ease-out,
+      background-color 200ms ease-out;
+  }
+
+  .ui-announcement:not(:has(.ui-announcement-tag)) {
+    padding-left: 0.625rem;
+  }
+
+  .ui-announcement:hover {
+    box-shadow: var(--edge);
+  }
+
+  .ui-announcement:active {
+    background: var(--field-fill);
+    box-shadow: 0 0 0 1px var(--line);
+  }
+
+  .ui-announcement:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-announcement-tag {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    height: 1.375rem;
+    padding: 0 0.5rem;
+    border-radius: var(--radius-round);
+    font-size: var(--text-tag);
+    font-weight: 600;
+    color: var(--fg-strong);
+    background: var(--field-fill);
+  }
+
+  .ui-announcement-tag[data-hue] {
+    color: var(--hue-ink);
+    background: var(--hue);
+  }
+
+  .ui-announcement-words {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ui-announcement-arrow {
+    flex: none;
+    color: var(--fg-subtle);
+    transition: color 200ms ease-out;
+  }
+
+  .ui-announcement:hover .ui-announcement-arrow {
+    color: var(--fg-strong);
+  }
+
+  /* ---- empty (`Empty.tsx`) ---------------------------------------------------------- */
+
+  /* Centred in the area it stands for: a page's room under its header, a pane, or a card. With
+     a preview, a faint drawing of what will fill the place stands over the words; without one,
+     a small mark on a tile, as a refusal or a failure has. */
+  /* One width whatever its words, so it is not drawn narrow and then widened when they arrive. */
+  .ui-empty {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 0.25rem;
+    width: min(24rem, 100%);
+    margin-inline: auto;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  /* Across a page: the room under the header, its words a little above the middle, as the eye
+     expects. A page's own scroller is the frame's, so the room is the window less the frame. */
+  .ui-empty[data-size="page"] {
+    min-height: calc(100dvh - var(--head-h) - 6rem);
+    padding-block: 2rem 6rem;
+  }
+
+  .ui-empty[data-size="card"] {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .ui-empty-mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--radius-row);
+    color: var(--hue-ink, var(--fg-subtle));
+    background: var(--hue, var(--field-fill));
+    transition: translate 240ms var(--ease-track, ease);
+  }
+
+  .ui-empty-mark > svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .ui-empty-title {
+    margin: 0;
+    font-size: var(--text-read);
+    font-weight: 600;
+    color: var(--fg-strong);
+    text-wrap: balance;
+  }
+
+  /* Two lines kept whatever it says, so a placeholder's sentence and the read one take the
+     same room. */
+  .ui-empty-line {
+    max-width: 24rem;
+    min-height: calc(2 * 1.5 * var(--text-ui));
+    margin: 0;
+    font-size: var(--text-ui);
+    line-height: 1.5;
+    color: var(--fg-subtle);
+    text-wrap: balance;
+  }
+
+  .ui-empty[data-size="card"] .ui-empty-title {
+    font-size: var(--text-ui);
+  }
+
+  .ui-empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  /* ---- the preview: what will fill the place, faint ---- */
+
+  /* The page's own shapes in its hairlines and fills, fading out toward its foot so it reads
+     as a hint behind the words rather than as content. */
+  /* One height whatever it pictures, so swapping one picture for another moves nothing. */
+  .ui-empty-art {
+    display: grid;
+    align-content: start;
+    gap: 0;
+    width: min(100%, 20rem);
+    height: 7.125rem;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+    text-align: start;
+    mask-image: linear-gradient(to bottom, #000 30%, transparent 100%);
+  }
+
+  .ui-empty[data-size="card"] .ui-empty-art {
+    width: min(100%, 14rem);
+    height: 5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .ui-empty-bar {
+    display: block;
+    height: 0.4375rem;
+    border-radius: var(--radius-round);
+    background: var(--line);
+    scale: 0.88 1;
+    transform-origin: left center;
+    transition:
+      scale 600ms var(--ease-out-expo, ease),
+      background-color 300ms ease;
+  }
+
+  .ui-empty-bar-soft {
+    background: var(--line-hairline);
+  }
+
+  .ui-empty-art-mark {
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--radius-row);
+    background: var(--field-fill);
+    transition: background-color 300ms ease;
+  }
+
+  .ui-empty-art-mark[data-mark="face"] {
+    border-radius: var(--radius-round);
+  }
+
+  .ui-empty-art-mark[data-mark="file"] {
+    width: 1.125rem;
+    height: 1.375rem;
+    margin-inline: 0.1875rem;
+    border-radius: var(--radius-mark);
+  }
+
+  .ui-empty-art-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 0.25rem;
+    border-bottom: 1px solid var(--line-hairline);
+  }
+
+  .ui-empty-art-row:last-child {
+    border-bottom: 0;
+  }
+
+  .ui-empty-art-words {
+    display: grid;
+    flex: 1;
+    gap: 0.375rem;
+    min-width: 0;
+  }
+
+  .ui-empty-art-pill {
+    flex: none;
+    width: 2.75rem;
+    height: 1.125rem;
+    border-radius: var(--radius-round);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  /* A table: a head of soft bars, then rows of cells. */
+  .ui-empty-art-head {
+    gap: 1rem;
+    padding-block: 0.375rem;
+  }
+
+  .ui-empty-art-cells {
+    gap: 1rem;
+  }
+
+  /* A board: lanes of cards side by side. */
+  .ui-empty-art[data-shape="board"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .ui-empty-art-card {
+    display: grid;
+    gap: 0.4375rem;
+    align-content: start;
+    padding: 0.625rem;
+    border-radius: var(--radius-row);
+    box-shadow: inset 0 0 0 1px var(--line-hairline);
+  }
+
+  .ui-empty-art-lane {
+    display: grid;
+    gap: 0.4375rem;
+    align-content: start;
+    padding-top: 0.125rem;
+  }
+
+  /* A chart: one seat, a line down, and three under it. */
+  .ui-empty-art[data-shape="tree"] {
+    justify-items: center;
+  }
+
+  .ui-empty-art-node {
+    display: grid;
+    justify-items: center;
+    gap: 0.4375rem;
+    width: 100%;
+    padding: 0.5rem 0.375rem;
+    border-radius: var(--radius-row);
+    box-shadow: inset 0 0 0 1px var(--line-hairline);
+  }
+
+  .ui-empty-art-node .ui-empty-bar {
+    transform-origin: center;
+  }
+
+  .ui-empty-art-root {
+    width: 36%;
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .ui-empty-art-branch {
+    width: 1px;
+    height: 0.75rem;
+    background: var(--line);
+  }
+
+  .ui-empty-art-level {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+    padding-top: 0.75rem;
+  }
+
+  /* The rule joining the three, from the first one's middle to the last one's, and each one's
+     line up to it. */
+  .ui-empty-art-level::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: calc((100% - 1rem) / 6);
+    right: calc((100% - 1rem) / 6);
+    height: 1px;
+    background: var(--line);
+  }
+
+  .ui-empty-art-level .ui-empty-art-node {
+    position: relative;
+  }
+
+  .ui-empty-art-level .ui-empty-art-node::before {
+    content: "";
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    width: 1px;
+    height: 0.75rem;
+    background: var(--line);
+  }
+
+  /* A conversation: turns with a face, the middle one the reader's own, from the other side. */
+  .ui-empty-art-turn {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.4375rem 0.25rem;
+  }
+
+  .ui-empty-art-turn[data-own] {
+    flex-direction: row-reverse;
+  }
+
+  .ui-empty-art-turn[data-own] .ui-empty-art-words {
+    justify-items: end;
+  }
+
+  .ui-empty-art-turn[data-own] .ui-empty-bar {
+    transform-origin: right center;
+  }
+
+  /* Alive under the pointer or the keyboard: the bars draw out to their length, the farther a
+     row the later, and the first item takes the place's hue, where the first thing made lands. */
+  .ui-empty:is(:hover, :focus-within) .ui-empty-bar {
+    scale: 1 1;
+  }
+
+  .ui-empty-art > :nth-child(2) .ui-empty-bar {
+    transition-delay: 60ms;
+  }
+
+  .ui-empty-art > :nth-child(3) .ui-empty-bar {
+    transition-delay: 120ms;
+  }
+
+  .ui-empty-art > :nth-child(n + 4) .ui-empty-bar {
+    transition-delay: 180ms;
+  }
+
+  .ui-empty:is(:hover, :focus-within) .ui-empty-art > :first-child .ui-empty-art-mark,
+  .ui-empty:is(:hover, :focus-within) .ui-empty-art[data-shape="tree"] .ui-empty-art-root .ui-empty-art-mark,
+  .ui-empty:is(:hover, :focus-within) .ui-empty-art[data-shape="board"] .ui-empty-art-lane:first-child .ui-empty-art-card:nth-child(2) {
+    background: var(--hue, var(--field-fill));
+  }
+
+  .ui-empty:is(:hover, :focus-within) .ui-empty-art > :first-child .ui-empty-bar:not(.ui-empty-bar-soft) {
+    background: var(--hue-ink, var(--fg-subtle));
+  }
+
+  .ui-empty:is(:hover, :focus-within) .ui-empty-art[data-shape="tree"] .ui-empty-art-root .ui-empty-bar {
+    background: var(--hue-ink, var(--fg-subtle));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-empty-bar,
+    .ui-empty-art-mark {
+      transition: none;
+    }
+  }
+
+  /* A well that takes files: a dashed edge, and two sheets behind the mark that fan out and
+     lift it while something is held over it. */
+  .ui-empty[data-drop] {
+    padding: 2rem 1rem;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-panel);
+    transition:
+      border-color 200ms ease,
+      background-color 200ms ease;
+  }
+
+  .ui-empty[data-drop] .ui-empty-mark::before,
+  .ui-empty[data-drop] .ui-empty-mark::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: inherit;
+    box-shadow: 0 0 0 1px var(--hue-ink, var(--line));
+    opacity: 0.35;
+    transition: rotate 240ms var(--ease-track, ease), translate 240ms var(--ease-track, ease);
+  }
+
+  .ui-empty[data-drop] .ui-empty-mark {
+    isolation: isolate;
+  }
+
+  .ui-empty[data-drop] .ui-empty-mark::before {
+    rotate: -12deg;
+    translate: -0.5rem 0.125rem;
+  }
+
+  .ui-empty[data-drop] .ui-empty-mark::after {
+    rotate: 12deg;
+    translate: 0.5rem 0.125rem;
+  }
+
+  .ui-empty[data-dropping] {
+    border-color: var(--hue-ink, var(--fg-strong));
+    background: color-mix(in oklab, var(--hue, var(--field-fill)) 40%, transparent);
+  }
+
+  .ui-empty[data-dropping] .ui-empty-mark {
+    translate: 0 -0.25rem;
+  }
+
+  .ui-empty[data-dropping] .ui-empty-mark::before {
+    rotate: -22deg;
+    translate: -0.875rem 0.25rem;
+  }
+
+  .ui-empty[data-dropping] .ui-empty-mark::after {
+    rotate: 22deg;
+    translate: 0.875rem 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-empty-mark,
+    .ui-empty[data-drop] .ui-empty-mark::before,
+    .ui-empty[data-drop] .ui-empty-mark::after {
+      transition: none;
+    }
+  }
+
+  /* ---- a table of contents -------------------------------------------------------- */
+
+  /* Entries over one track, the one open marked by a bar that slides along it. */
+  .ui-toc-track {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    border-left: 2px solid var(--line-soft);
+  }
+
+  .ui-toc-group,
+  .ui-toc-list {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .ui-toc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ui-toc-heading {
+    margin: 0;
+    padding: 0.125rem 0 0.125rem 1rem;
+    font-size: var(--text-ui);
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--fg-subtle);
+  }
+
+  .ui-toc-entry {
+    display: block;
+    overflow: hidden;
+    padding: 0.125rem 0 0.125rem 1rem;
+    border-radius: 0 var(--radius-row) var(--radius-row) 0;
+    font-size: var(--text-ui);
+    font-weight: 400;
+    line-height: 1.25rem;
+    color: var(--fg-subtle);
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 150ms var(--ease-track), background-color 150ms var(--ease-track);
+  }
+
+  .ui-toc-heading + .ui-toc-list .ui-toc-entry {
+    padding-left: 1.75rem;
+  }
+
+  .ui-toc-entry:hover {
+    color: var(--fg);
+    background: var(--field-fill);
+  }
+
+  .ui-toc-entry:active {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-toc-entry[aria-current] {
+    color: var(--fg-strong);
+  }
+
+  .ui-toc-entry:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-toc-bar {
+    position: absolute;
+    left: -2px;
+    width: 2px;
+    border-radius: var(--radius-round);
+    background: var(--brand);
+    pointer-events: none;
+  }
+
+  .ui-toc-bar[data-ready] {
+    transition:
+      top 180ms var(--ease-track),
+      bottom 180ms var(--ease-track);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-toc-entry,
+    .ui-toc-bar[data-ready] {
+      transition: none;
+    }
+  }
+}
+
+@layer components.parts {
+
+  /* ---- a flow (`Flow.tsx`) -------------------------------------------------------- */
+
+  /* Left to right: a box, then a column of what follows it. Each box after another draws its
+     own stub from the spine, and its share of the spine, from its edges; the column draws
+     the stub from the box before it. */
+  .ui-flow {
+    --flow-gap: 1.5rem;
+    --flow-row: 0.75rem;
+    --flow-line: var(--line);
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .ui-flow-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .ui-flow-branch {
+    display: flex;
+    align-items: center;
+  }
+
+  .ui-flow > .ui-flow-column > .ui-flow-branch + .ui-flow-branch {
+    margin-top: var(--flow-row);
+  }
+
+  .ui-flow-node {
+    flex: none;
+  }
+
+  .ui-flow-next {
+    position: relative;
+    padding-left: var(--flow-gap);
+  }
+
+  .ui-flow-next::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: calc(var(--flow-gap) / 2);
+    border-top: 1px solid var(--flow-line);
+  }
+
+  .ui-flow-next > .ui-flow-branch {
+    position: relative;
+    padding-block: calc(var(--flow-row) / 2);
+    padding-left: calc(var(--flow-gap) / 2);
+    margin-left: calc(var(--flow-gap) / -2);
+  }
+
+  .ui-flow-next > .ui-flow-branch::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: calc(var(--flow-gap) / 2);
+    border-top: 1px solid var(--flow-line);
+  }
+
+  .ui-flow-next > .ui-flow-branch::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    border-left: 1px solid var(--flow-line);
+  }
+
+  .ui-flow-next > .ui-flow-branch:first-child::after {
+    top: 50%;
+  }
+
+  .ui-flow-next > .ui-flow-branch:last-child::after {
+    bottom: 50%;
+  }
+
+  .ui-flow-next[data-one] > .ui-flow-branch::after {
+    content: none;
+  }
+
+  /* ---- a trail of pages (`Breadcrumbs.tsx`) --------------------------------------- */
+
+  .ui-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+    font-size: var(--text-ui);
+    line-height: 1.25rem;
+  }
+
+  .ui-crumb {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--fg-strong);
+  }
+
+  .ui-crumb-link {
+    flex-shrink: 1;
+    border-radius: var(--radius-row);
+    color: var(--fg-subtle);
+    text-decoration: none;
+    transition: color 150ms ease-out;
+  }
+
+  .ui-crumb-link:hover {
+    color: var(--fg-strong);
+  }
+
+  .ui-crumb-link:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-crumbs-sep {
+    flex: none;
+    color: var(--fg-subtle);
+  }
+}
+
+@layer components.parts {
+  /* ---- sliding views -------------------------------------------------------------- */
+
+  /* Surfaces sharing one pane (`SlidingViews`): clipped, never scrolled, since they move by
+     transform and a box that could scroll was scrolled sideways by a menu opening in it. */
+  .ui-sliding {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: clip;
+  }
+
+  .ui-sliding-track {
+    display: flex;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 0;
+    transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ui-sliding-view {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .ui-sliding-view[aria-hidden="true"] {
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-sliding-track {
+      transition: none;
+    }
+  }
+}
+
+@layer components.parts {
+
+  /* ---- a file on its way (`FileChip.tsx`) ---------------------------------------- */
+
+  /* One control's height, so it stands in a row of buttons without changing the row. */
+  .ui-file-chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    max-width: 16rem;
+    height: 1.75rem;
+    padding: 0 0.125rem 0 0.1875rem;
+    overflow: hidden;
+    border-radius: var(--radius-row);
+    font-size: var(--text-meta);
+    color: var(--fg);
+    background: var(--surface-lifted);
+    box-shadow: 0 0 0 1px var(--line);
+  }
+
+  .ui-file-chip-thumb {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: calc(var(--radius-row) - 0.1875rem);
+    object-fit: cover;
+    color: var(--fg-subtle);
+    background: var(--field-fill);
+  }
+
+  .ui-file-chip-name {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--fg-strong);
+  }
+
+  .ui-file-chip-size {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  /* Without a remove button the card keeps its end padding. */
+  .ui-file-chip[data-sending],
+  .ui-file-chip:not(:has(.ui-file-chip-x)) {
+    padding-right: 0.5rem;
+  }
+
+  .ui-file-chip .ui-file-chip-x.ui-button-square {
+    height: 1.375rem;
+    border-radius: calc(var(--radius-row) - 0.1875rem);
+  }
+
+  /* The taller card: a picture, its name over what it is, the remove button at its end. */
+  .ui-file-chip[data-look="card"] {
+    display: flex;
+    gap: 0.5rem;
+    max-width: none;
+    height: 2.75rem;
+    padding: 0.25rem 0.25rem 0.25rem 0.25rem;
+    border-radius: var(--radius-row);
+  }
+
+  .ui-file-chip[data-look="card"] .ui-file-chip-thumb {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: calc(var(--radius-row) - 0.25rem);
+  }
+
+  .ui-file-chip-words {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.0625rem;
+    min-width: 0;
+  }
+
+  .ui-file-chip-words > * {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ui-file-chip[data-look="card"] .ui-file-chip-x {
+    flex: none;
+    align-self: flex-start;
+  }
+
+  /* Along the card's foot while it is sending. */
+  .ui-file-chip-bar {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .ui-file-chip-bar > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--ink-face-bottom);
+    transition: width 300ms var(--ease-track);
+  }
+
+  .ui-file-chip-bar[data-unknown] > span {
+    width: 35%;
+    animation: ui-progress-sweep 1.4s var(--ease-track) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-file-chip-bar[data-unknown] > span {
+      width: 100%;
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+}
