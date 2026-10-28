@@ -22,16 +22,14 @@ export function Code(props: { code: string; fold?: boolean; label?: string }) {
       <pre tabIndex={0} aria-label={props.label ?? "Code"}>
         <code>{props.code}</code>
       </pre>
-      <div className="site-code-bar">
-        {long ? (
+      <IconButton className="site-code-copy" icon={copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />} label="Copy the code" onClick={copy} />
+      {long ? (
+        <div className="site-code-bar">
           <Button look="quiet" size="md" onClick={() => setOpen(!open)} aria-expanded={open}>
             {open ? "Fold the code" : "Show all the code"}
           </Button>
-        ) : (
-          <span />
-        )}
-        <IconButton icon={copied ? <CheckIcon size={16} /> : <CopyIcon size={16} />} label="Copy the code" onClick={copy} />
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -9,7 +9,7 @@ The documentation site shows every piece live, in every state it has, with the c
 ## Install
 
 ```sh
-npm install vic-ui
+npm install github:jerynv/vic-ui
 ```
 
 React 19 and React DOM are peer dependencies. `@floating-ui/dom` comes with the package and positions what floats. Tailwind is not needed: the stylesheet is plain CSS.

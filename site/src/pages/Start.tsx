@@ -2,7 +2,7 @@ import { Notice } from "vic-ui";
 import { Code } from "../parts/Code";
 import { GROUPS, PIECES } from "../registry";
 
-const INSTALL = `npm install vic-ui`;
+const INSTALL = `npm install github:jerynv/vic-ui`;
 
 const USE = `import "vic-ui/styles.css";
 import { Button, TextField } from "vic-ui";

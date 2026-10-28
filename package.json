@@ -45,7 +45,8 @@
     "check:design": "node scripts/check-radius.mjs && node scripts/check-shadows.mjs",
     "check:dashes": "node scripts/check-dashes.mjs",
     "icons": "node scripts/gen-icons.mjs",
-    "prepublishOnly": "npm run typecheck && npm run check:design && npm run check:dashes && npm run build"
+    "prepublishOnly": "npm run typecheck && npm run check:design && npm run check:dashes && npm run build",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -72,5 +73,10 @@
     "design-system",
     "oklch",
     "ui"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerynv/vic-ui.git"
+  },
+  "homepage": "https://jerynv.github.io/vic-ui/"
 }
