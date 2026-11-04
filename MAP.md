@@ -3,7 +3,8 @@
 ## Current component API
 
 `vic-ui/ui` exports the shadcn Base UI catalogue from `src/ui/index.ts`.
-`src/ui/registry.json` records the 63 upstream families, source revision, and registry style.
+`src/ui/registry.json` records 63 upstream families and the Data Table, Date Picker, and
+Typography compositions, along with source revision and registry style.
 Their prop contracts come from the component source and emitted declarations. The compiled
 `vic-ui/ui/styles.css` maps shadcn semantic colors, radii, and shadows to the existing vic tokens;
 consumers do not need Tailwind. `ColorModeSwitch` composes the icon button and radio menu;

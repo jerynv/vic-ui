@@ -11,14 +11,14 @@
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/accordion.tsx"
     },
     {
-      "id": "alert-dialog",
-      "name": "Typed confirmation",
-      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/alert-dialog.tsx"
-    },
-    {
       "id": "alert",
       "name": "Problem",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/alert.tsx"
+    },
+    {
+      "id": "alert-dialog",
+      "name": "Typed confirmation",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/alert-dialog.tsx"
     },
     {
       "id": "aspect-ratio",
@@ -51,14 +51,14 @@
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/bubble.tsx"
     },
     {
-      "id": "button-group",
-      "name": "Button Group",
-      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/button-group.tsx"
-    },
-    {
       "id": "button",
       "name": "Icon button",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/button.tsx"
+    },
+    {
+      "id": "button-group",
+      "name": "Button Group",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/button-group.tsx"
     },
     {
       "id": "calendar",
@@ -111,6 +111,18 @@
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/context-menu.tsx"
     },
     {
+      "id": "data-table",
+      "name": "Data Table",
+      "source": "https://ui.shadcn.com/docs/components/base/data-table",
+      "kind": "composition"
+    },
+    {
+      "id": "date-picker",
+      "name": "Date Picker",
+      "source": "https://ui.shadcn.com/docs/components/base/date-picker",
+      "kind": "composition"
+    },
+    {
       "id": "dialog",
       "name": "Dialog",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/dialog.tsx"
@@ -146,6 +158,11 @@
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/hover-card.tsx"
     },
     {
+      "id": "input",
+      "name": "Number field",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input.tsx"
+    },
+    {
       "id": "input-group",
       "name": "Search field",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input-group.tsx"
@@ -154,11 +171,6 @@
       "id": "input-otp",
       "name": "Input OTP",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input-otp.tsx"
-    },
-    {
-      "id": "input",
-      "name": "Number field",
-      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input.tsx"
     },
     {
       "id": "item",
@@ -186,14 +198,14 @@
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/menubar.tsx"
     },
     {
-      "id": "message-scroller",
-      "name": "Message Scroller",
-      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/message-scroller.tsx"
-    },
-    {
       "id": "message",
       "name": "Message",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/message.tsx"
+    },
+    {
+      "id": "message-scroller",
+      "name": "Message Scroller",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/message-scroller.tsx"
     },
     {
       "id": "native-select",
@@ -301,14 +313,14 @@
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/toast.tsx"
     },
     {
-      "id": "toggle-group",
-      "name": "Toggle Group",
-      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/toggle-group.tsx"
-    },
-    {
       "id": "toggle",
       "name": "Toggle",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/toggle.tsx"
+    },
+    {
+      "id": "toggle-group",
+      "name": "Toggle Group",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/toggle-group.tsx"
     },
     {
       "id": "tooltip",
@@ -319,10 +331,19 @@
       "id": "trace",
       "name": "Trace",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/trace.tsx"
+    },
+    {
+      "id": "typography",
+      "name": "Typography",
+      "source": "https://ui.shadcn.com/docs/components/base/typography",
+      "kind": "composition"
     }
   ],
   "compositions": [
     "code-snippet",
-    "color-mode-switch"
+    "color-mode-switch",
+    "data-table",
+    "date-picker",
+    "typography"
   ]
 }

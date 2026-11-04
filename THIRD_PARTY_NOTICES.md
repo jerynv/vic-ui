@@ -37,5 +37,7 @@ The OFL lets the fonts be bundled and redistributed with software, provided each
 
 ## Dependencies
 
+- **TanStack Table**, MIT License, installed from npm. `src/ui/data-table.tsx` follows shadcn's v9 feature-based table recipe; DatePicker and Typography follow the corresponding shadcn composition examples.
+
 - **Floating UI** (`@floating-ui/dom`), by the Floating UI contributors. MIT License, `licenses/MIT-floating-ui.txt`. Installed from npm; it positions what floats.
 - **React** and **React DOM** are peer dependencies, installed by the consumer under their own MIT License.
