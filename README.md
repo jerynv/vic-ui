@@ -1,6 +1,6 @@
 # vic-ui
 
-A React 19 component library built on shadcn/ui and Base UI, with vic's oklch palette, typography, radius scale, and elevation tokens. The new API includes 63 upstream component families and an icon-based color mode switch. Existing root imports remain available for compatibility.
+A React 19 component library built on shadcn/ui and Base UI, with vic's oklch palette, typography, radius scale, and elevation tokens. The new API covers 66 component families plus an icon-based color mode switch and highlighted code snippets. Existing root imports remain available for compatibility.
 
 The documentation site shows every piece live, in every state it has, with the code that draws it, and every token measured in both modes. Build it with `npm run build:site`.
 
@@ -38,6 +38,11 @@ export function Invite() {
 No consumer Tailwind configuration is required. Import `vic-ui/ui/styles.css` once.
 The new API uses `variant`, compound components, and Base UI's `render` composition.
 The existing API below retains `look`, `to`, `busy`, disabled explanations, and its CSS slots.
+
+`DataTable` composes Table with TanStack Table v9 for sorting, filtering, row selection,
+column visibility, and pagination. `DatePicker` composes Calendar and Popover, supports
+controlled or uncontrolled dates, and submits a local calendar date through `name`.
+The `TypographyH1` through `TypographyMuted` primitives provide the typography recipes.
 
 ```tsx
 import "vic-ui/styles.css";
