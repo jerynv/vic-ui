@@ -4,9 +4,8 @@ import { ComponentPreview } from "./component-preview";
 import { lazy } from "react";
 
 const IconCatalogue = lazy(() => import("./icon-catalogue"));
-const LegacyCatalogue = lazy(() => import("./legacy-catalogue"));
 
 export function useMDXComponents(components?: MDXComponents): MDXComponents {
-  return { ...defaultComponents, ComponentPreview, LegacyCatalogue, IconCatalogue, ...components };
+  return { ...defaultComponents, ComponentPreview, IconCatalogue, ...components };
 }
 declare global { type MDXProvidedComponents = ReturnType<typeof useMDXComponents>; }

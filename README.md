@@ -1,6 +1,6 @@
 # vic-ui
 
-A React 19 component library built on shadcn/ui and Base UI, with vic's oklch palette, typography, radius scale, and elevation tokens. The new API covers 66 component families plus an icon-based color mode switch and highlighted code snippets. Existing root imports remain available for compatibility.
+A React 19 component library with textured controls, filled fields, clear states, and its own SVG catalogue. Vic’s existing components are the primary API; additional composable controls build on Base UI and shadcn interaction patterns. Both share vic’s palette, type, radius and elevation scales.
 
 The documentation site shows every piece live, in every state it has, with the code that draws it, and every token measured in both modes. Build it with `npm run build:site`.
 
@@ -16,28 +16,25 @@ React 19 and React DOM are peer dependencies. Base UI supplies the button primit
 
 ## Use
 
-For new interfaces, import the shadcn component API and its compiled stylesheet:
+Import the primary components from `vic-ui` and the shared compiled stylesheet:
 
 ```tsx
 import "vic-ui/ui/styles.css";
-import { Button, Input, Label, TooltipProvider } from "vic-ui/ui";
+import { Button, TextField } from "vic-ui";
 
 export function Invite() {
   return (
-    <TooltipProvider>
-      <form>
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" name="email" type="email" required />
-        <Button type="submit">Send invitation</Button>
-      </form>
-    </TooltipProvider>
+    <form>
+      <TextField label="Email" name="email" type="email" required />
+      <Button type="submit">Send invitation</Button>
+    </form>
   );
 }
 ```
 
 No consumer Tailwind configuration is required. Import `vic-ui/ui/styles.css` once.
-The new API uses `variant`, compound components, and Base UI's `render` composition.
-The existing API below retains `look`, `to`, `busy`, disabled explanations, and its CSS slots.
+The composable API uses `variant`, compound components, and Base UI’s `render` composition.
+The primary API below provides `look`, `to`, `busy`, disabled explanations, and its CSS slots.
 
 `DataTable` composes Table with TanStack Table v9 for sorting, filtering, row selection,
 column visibility, and pagination. `DatePicker` composes Calendar and Popover, supports
@@ -145,7 +142,7 @@ What every piece already does, and what anything built with them is held to:
 
 The library now uses shadcn's Base UI catalogue and Fumadocs documentation. This gives
 the shared design system the full component set and established interaction primitives.
-Existing root exports remain compatibility APIs. The
+Root exports remain the primary API. The
 local consumer audit found `puzzles` and `phaethon`: both use button props, and Phaethon
 also styles the `.ui-button-face` slot. Preserve that markup, native refs, `type`, busy
 states, disabled explanations, and router links while adapting the implementation.
@@ -175,9 +172,9 @@ npm run typecheck:website
 
 ## The documentation site
 
-The [marketing site and documentation](https://jerynv.github.io/vic-ui/) live in `website/`, built with Fumadocs' Base UI edition and React Router. All 66 component families have a live preview, highlighted copyable source, usage, and API links. The original catalogue reuses `site/src/examples` and remains available under Original components. Examples import the actual package exports.
+The [marketing site and documentation](https://jerynv.github.io/vic-ui/) live in `website/`, built with Fumadocs' Base UI edition and React Router. The main catalogue includes every vic component and the added composable primitives, with live previews and highlighted copyable source. Vic examples reuse `site/src/examples`; shared pages lead with vic and include the compound API below. Examples import the actual package exports.
 
-Pages and search are prerendered, with a 404 fallback for static hosts. The build defaults to `/vic-ui/`; set `VIC_UI_BASE=/ npm run build:site` for a custom domain. `.github/workflows/pages.yml` runs package and website browser tests before publishing `website/build/client`. The original shell is available through `npm run build:legacy-site`.
+Pages and search are prerendered, with a 404 fallback for static hosts. The build defaults to `/vic-ui/`; set `VIC_UI_BASE=/ npm run build:site` for a custom domain. `.github/workflows/pages.yml` runs package and website browser tests before publishing `website/build/client`. The original shell is available through `npm run build:reference-site`.
 
 ## Licence
 

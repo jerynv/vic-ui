@@ -7,13 +7,13 @@ the static search index and each document are prerendered. `npm run dev:website`
 `npm run build:website` emits `website/build/client`. The `dev:site` and `build:site`
 commands now target this website. GitHub Pages runs library and browser tests before deployment.
 The shared website theme control and live examples import the actual `vic-ui/ui` API.
-All 66 upstream families have a page, a live example, a source tab, usage, and API links.
+All 47 vic catalogue entries have first-class component pages. The 66 composable families share those pages where applicable, with their examples under Composable API.
 `website/upstream.json` records the imported demos. The original catalogue reuses
 `site/src/examples` with root package exports, including the vic-specific compositions.
 The marketing page composes actual library fields, switches, buttons, avatars, tabs, and
-source blocks around a geometric SVG. The component directory filters all 66 families.
+source blocks around a geometric SVG. The component directory includes every vic component and each added primitive.
 Its workspace form is a local interactive demonstration, with no account or service call.
-`site/` retains the original catalogue source and reusable examples; `build:legacy-site`
+`site/` retains the original catalogue source and reusable examples; `build:reference-site`
 builds that reference shell. Both shells use the exported icon-based ColorModeSwitch.
 
 ## Current component API
@@ -28,7 +28,7 @@ consumers do not need Tailwind. `ColorModeSwitch` composes the icon button and r
 Slider also forwards accessible names to its thumbs and supports scalar or range values.
 Upstream licensing and the local adaptations are recorded in `THIRD_PARTY_NOTICES.md`.
 
-The reference below describes the compatible `vic-ui` root API and `vic-ui/styles.css`.
+The reference below describes the primary `vic-ui` root API and `vic-ui/styles.css`.
 
 vic-ui is a React component library and the design system it draws with: about fifty pieces (buttons, fields, lists, rows, overlays, tables, feedback, a sidebar, timeline pieces), one token file, one stylesheet per kind of piece, and the rules the pieces are held to.
 
