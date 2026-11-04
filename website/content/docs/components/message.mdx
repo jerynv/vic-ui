@@ -1,0 +1,45 @@
+---
+title: "Message"
+description: "Displays a message in a conversation, with optional avatar, header, footer, and alignment."
+---
+
+<ComponentPreview name="message" />
+
+## Usage
+
+```tsx showLineNumbers
+import { Avatar, AvatarFallback, AvatarImage } from "vic-ui/ui"
+import { Bubble, BubbleContent } from "vic-ui/ui"
+import { Message, MessageAvatar, MessageContent } from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<Message>
+  <MessageAvatar>
+    <Avatar>
+      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+      <AvatarFallback>CN</AvatarFallback>
+    </Avatar>
+  </MessageAvatar>
+  <MessageContent>
+    <Bubble>
+      <BubbleContent>How can I help you today?</BubbleContent>
+    </Bubble>
+  </MessageContent>
+</Message>
+```
+
+**Note:** `Message` owns the row layout, avatar, alignment, header, and footer.
+Render the visible message surface inside it with
+[`Bubble`](/docs/components/bubble). For the scroll container around a
+conversation, use [`MessageScroller`](/docs/components/message-scroller).
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://ui.shadcn.com/docs/components/base/message) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/message.mdx), under the MIT license.

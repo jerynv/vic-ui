@@ -1,0 +1,37 @@
+---
+title: "Calendar"
+description: "A calendar component that allows users to select a date or a range of dates."
+---
+
+<ComponentPreview name="calendar" />
+
+## Usage
+
+```tsx showLineNumbers
+import { Calendar } from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+const [date, setDate] = React.useState<Date | undefined>(new Date())
+
+return (
+  <Calendar
+    mode="single"
+    selected={date}
+    onSelect={setDate}
+    className="rounded-lg border"
+  />
+)
+```
+
+See the [React DayPicker](https://react-day-picker.js.org) documentation for more information.
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://react-day-picker.js.org) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/calendar.mdx), under the MIT license.

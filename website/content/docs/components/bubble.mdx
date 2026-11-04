@@ -1,0 +1,33 @@
+---
+title: "Bubble"
+description: "Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content."
+---
+
+<ComponentPreview name="bubble" />
+
+## Usage
+
+```tsx showLineNumbers
+import { Bubble, BubbleContent, BubbleReactions } from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<Bubble>
+  <BubbleContent>
+    I checked the registry output and removed the stale route.
+  </BubbleContent>
+  <BubbleReactions>
+    <span>👍</span>
+  </BubbleReactions>
+</Bubble>
+```
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://ui.shadcn.com/docs/components/base/bubble) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/bubble.mdx), under the MIT license.

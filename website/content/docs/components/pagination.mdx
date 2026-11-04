@@ -1,0 +1,57 @@
+---
+title: "Pagination"
+description: "Pagination with page navigation, next and previous links."
+---
+
+<ComponentPreview name="pagination" />
+
+## Usage
+
+```tsx showLineNumbers
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" isActive>
+        2
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">3</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://ui.shadcn.com/docs/components/base/pagination) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/pagination.mdx), under the MIT license.

@@ -1,0 +1,40 @@
+---
+title: "Alert"
+description: "Displays a callout for user attention."
+---
+
+<ComponentPreview name="alert" />
+
+## Usage
+
+```tsx showLineNumbers
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<Alert>
+  <InfoIcon />
+  <AlertTitle>Heads up!</AlertTitle>
+  <AlertDescription>
+    You can add components and dependencies to your app using the cli.
+  </AlertDescription>
+  <AlertAction>
+    <Button variant="outline">Enable</Button>
+  </AlertAction>
+</Alert>
+```
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://ui.shadcn.com/docs/components/base/alert) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/alert.mdx), under the MIT license.

@@ -1,0 +1,36 @@
+---
+title: "Radio Group"
+description: "A set of checkable buttons, known as radio buttons, where no more than one of the buttons can be checked at a time."
+---
+
+<ComponentPreview name="radio-group" />
+
+## Usage
+
+```tsx showLineNumbers
+import { Label } from "vic-ui/ui"
+import { RadioGroup, RadioGroupItem } from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<RadioGroup defaultValue="option-one">
+  <div className="flex items-center gap-3">
+    <RadioGroupItem value="option-one" id="option-one" />
+    <Label htmlFor="option-one">Option One</Label>
+  </div>
+  <div className="flex items-center gap-3">
+    <RadioGroupItem value="option-two" id="option-two" />
+    <Label htmlFor="option-two">Option Two</Label>
+  </div>
+</RadioGroup>
+```
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://base-ui.com/react/components/radio-group) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/radio-group.mdx), under the MIT license.

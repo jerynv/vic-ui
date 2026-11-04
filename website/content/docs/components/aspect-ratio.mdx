@@ -1,0 +1,28 @@
+---
+title: "Aspect Ratio"
+description: "Displays content within a desired ratio."
+---
+
+<ComponentPreview name="aspect-ratio" />
+
+## Usage
+
+```tsx showLineNumbers
+import { AspectRatio } from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<AspectRatio ratio={16 / 9}>
+  <Image src="..." alt="Image" className="rounded-md object-cover" />
+</AspectRatio>
+```
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://ui.shadcn.com/docs/components/base/aspect-ratio) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/aspect-ratio.mdx), under the MIT license.

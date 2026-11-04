@@ -1,6 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, Link, isRouteErrorResponse } from "react-router";
 import { RootProvider } from "fumadocs-ui/provider/react-router";
-import { Button, TooltipProvider } from "vic-ui/ui";
+import { Button, Toaster, TooltipProvider } from "vic-ui/ui";
 import type { Route } from "./+types/root";
 import SearchDialog from "./components/search";
 import "./app.css";
@@ -9,7 +9,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return <html lang="en" suppressHydrationWarning>
     <head><meta charSet="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><Meta /><Links /></head>
     <body><RootProvider theme={{ storageKey: "vic-ui:mode" }} search={{ SearchDialog }}>
-      <TooltipProvider>{children}</TooltipProvider>
+      <TooltipProvider>{children}<Toaster /></TooltipProvider>
     </RootProvider><ScrollRestoration /><Scripts /></body>
   </html>;
 }

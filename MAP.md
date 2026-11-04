@@ -7,6 +7,9 @@ the static search index and each document are prerendered. `npm run dev:website`
 `npm run build:website` emits `website/build/client`. The existing `site/` remains the
 deployment target until the full catalogue and marketing page have passed browser checks.
 The shared website theme control and live examples import the actual `vic-ui/ui` API.
+All 66 upstream families have a page, a live example, a source tab, usage, and API links.
+`website/upstream.json` records the imported demos. The original catalogue reuses
+`site/src/examples` with root package exports, including the vic-specific compositions.
 
 ## Current component API
 

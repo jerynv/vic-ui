@@ -8,7 +8,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const root = new URL("..", import.meta.url).pathname;
-const SOURCES = [join(root, "src"), join(root, "site", "src")];
+const SOURCES = [join(root, "src"), join(root, "site", "src"), join(root, "website", "app")];
 const SCALE = ["panel", "float", "control", "row", "mark", "round", "button", "field"];
 const TOKEN = new RegExp(`^var\\(--radius-(?:${SCALE.join("|")})\\)$`);
 

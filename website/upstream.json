@@ -1,0 +1,403 @@
+{
+  "repository": "https://github.com/shadcn-ui/ui",
+  "revision": "8a35366",
+  "license": "MIT",
+  "examples": [
+    {
+      "id": "accordion",
+      "title": "Accordion",
+      "example": "apps/v4/examples/base/accordion-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "alert",
+      "title": "Alert",
+      "example": "apps/v4/examples/base/alert-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "alert-dialog",
+      "title": "Alert Dialog",
+      "example": "apps/v4/examples/base/alert-dialog-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "aspect-ratio",
+      "title": "Aspect Ratio",
+      "example": "apps/v4/examples/base/aspect-ratio-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "attachment",
+      "title": "Attachment",
+      "example": "apps/v4/examples/base/attachment-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "avatar",
+      "title": "Avatar",
+      "example": "apps/v4/examples/base/avatar-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "badge",
+      "title": "Badge",
+      "example": "apps/v4/examples/base/badge-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "breadcrumb",
+      "title": "Breadcrumb",
+      "example": "apps/v4/examples/base/breadcrumb-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "bubble",
+      "title": "Bubble",
+      "example": "apps/v4/examples/base/bubble-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "button",
+      "title": "Button",
+      "example": "apps/v4/examples/base/button-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "button-group",
+      "title": "Button Group",
+      "example": "apps/v4/examples/base/button-group-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "calendar",
+      "title": "Calendar",
+      "example": "apps/v4/examples/base/calendar-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "card",
+      "title": "Card",
+      "example": "apps/v4/examples/base/card-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "carousel",
+      "title": "Carousel",
+      "example": "apps/v4/examples/base/carousel-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "chart",
+      "title": "Chart",
+      "example": "apps/v4/examples/base/chart-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "checkbox",
+      "title": "Checkbox",
+      "example": "apps/v4/examples/base/checkbox-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "code-block",
+      "title": "Code Block",
+      "example": "apps/v4/examples/base/code-block-basic.tsx",
+      "adaptation": "vic-ui composition"
+    },
+    {
+      "id": "collapsible",
+      "title": "Collapsible",
+      "example": "apps/v4/examples/base/collapsible-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "combobox",
+      "title": "Combobox",
+      "example": "apps/v4/examples/base/combobox-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "command",
+      "title": "Command",
+      "example": "apps/v4/examples/base/command-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "context-menu",
+      "title": "Context Menu",
+      "example": "apps/v4/examples/base/context-menu-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "data-table",
+      "title": "Data Table",
+      "example": "apps/v4/examples/base/data-table-demo.tsx",
+      "adaptation": "vic-ui composition"
+    },
+    {
+      "id": "date-picker",
+      "title": "Date Picker",
+      "example": "apps/v4/examples/base/date-picker-demo.tsx",
+      "adaptation": "vic-ui composition"
+    },
+    {
+      "id": "dialog",
+      "title": "Dialog",
+      "example": "apps/v4/examples/base/dialog-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "direction",
+      "title": "Direction",
+      "example": "apps/v4/examples/base/card-rtl.tsx",
+      "adaptation": "vic-ui composition"
+    },
+    {
+      "id": "drawer",
+      "title": "Drawer",
+      "example": "apps/v4/examples/base/drawer-swipe-handle.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "dropdown-menu",
+      "title": "Dropdown Menu",
+      "example": "apps/v4/examples/base/dropdown-menu-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "empty",
+      "title": "Empty",
+      "example": "apps/v4/examples/base/empty-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "field",
+      "title": "Field",
+      "example": "apps/v4/examples/base/field-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "hover-card",
+      "title": "Hover Card",
+      "example": "apps/v4/examples/base/hover-card-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "input",
+      "title": "Input",
+      "example": "apps/v4/examples/base/input-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "input-group",
+      "title": "Input Group",
+      "example": "apps/v4/examples/base/input-group-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "input-otp",
+      "title": "Input OTP",
+      "example": "apps/v4/examples/base/input-otp-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "item",
+      "title": "Item",
+      "example": "apps/v4/examples/base/item-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "kbd",
+      "title": "Kbd",
+      "example": "apps/v4/examples/base/kbd-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "label",
+      "title": "Label",
+      "example": "apps/v4/examples/base/label-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "marker",
+      "title": "Marker",
+      "example": "apps/v4/examples/base/marker-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "menubar",
+      "title": "Menubar",
+      "example": "apps/v4/examples/base/menubar-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "message",
+      "title": "Message",
+      "example": "apps/v4/examples/base/message-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "message-scroller",
+      "title": "Message Scroller",
+      "example": "apps/v4/examples/base/message-scroller-state.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "native-select",
+      "title": "Native Select",
+      "example": "apps/v4/examples/base/native-select-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "navigation-menu",
+      "title": "Navigation Menu",
+      "example": "apps/v4/examples/base/navigation-menu-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "pagination",
+      "title": "Pagination",
+      "example": "apps/v4/examples/base/pagination-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "popover",
+      "title": "Popover",
+      "example": "apps/v4/examples/base/popover-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "progress",
+      "title": "Progress",
+      "example": "apps/v4/examples/base/progress-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "questionnaire",
+      "title": "Questionnaire",
+      "example": "apps/v4/examples/base/questionnaire-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "radio-group",
+      "title": "Radio Group",
+      "example": "apps/v4/examples/base/radio-group-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "resizable",
+      "title": "Resizable",
+      "example": "apps/v4/examples/base/resizable-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "scroll-area",
+      "title": "Scroll Area",
+      "example": "apps/v4/examples/base/scroll-area-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "select",
+      "title": "Select",
+      "example": "apps/v4/examples/base/select-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "separator",
+      "title": "Separator",
+      "example": "apps/v4/examples/base/separator-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "sheet",
+      "title": "Sheet",
+      "example": "apps/v4/examples/base/sheet-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "sidebar",
+      "title": "Sidebar",
+      "example": "apps/v4/examples/base/sidebar-controlled.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "skeleton",
+      "title": "Skeleton",
+      "example": "apps/v4/examples/base/skeleton-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "slider",
+      "title": "Slider",
+      "example": "apps/v4/examples/base/slider-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "spinner",
+      "title": "Spinner",
+      "example": "apps/v4/examples/base/spinner-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "switch",
+      "title": "Switch",
+      "example": "apps/v4/examples/base/switch-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "table",
+      "title": "Table",
+      "example": "apps/v4/examples/base/table-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "tabs",
+      "title": "Tabs",
+      "example": "apps/v4/examples/base/tabs-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "textarea",
+      "title": "Textarea",
+      "example": "apps/v4/examples/base/textarea-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "toast",
+      "title": "Toast",
+      "example": "apps/v4/examples/base/toast-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "toggle",
+      "title": "Toggle",
+      "example": "apps/v4/examples/base/toggle-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "toggle-group",
+      "title": "Toggle Group",
+      "example": "apps/v4/examples/base/toggle-group-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "tooltip",
+      "title": "Tooltip",
+      "example": "apps/v4/examples/base/tooltip-demo.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "trace",
+      "title": "Trace",
+      "example": "apps/v4/examples/base/trace-steps.tsx",
+      "adaptation": "imports, tokens, and framework integration"
+    },
+    {
+      "id": "typography",
+      "title": "Typography",
+      "example": "apps/v4/examples/base/typography-demo.tsx",
+      "adaptation": "vic-ui composition"
+    }
+  ]
+}

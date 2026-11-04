@@ -1,0 +1,31 @@
+---
+title: "Marker"
+description: "Displays an inline status, system note, bordered row, or labeled separator in a conversation."
+---
+
+<ComponentPreview name="marker" />
+
+## Usage
+
+```tsx showLineNumbers
+import { Marker, MarkerContent, MarkerIcon } from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<Marker>
+  <MarkerIcon>
+    <CheckIcon />
+  </MarkerIcon>
+  <MarkerContent>Explored 4 files</MarkerContent>
+</Marker>
+```
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://ui.shadcn.com/docs/components/base/marker) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/marker.mdx), under the MIT license.

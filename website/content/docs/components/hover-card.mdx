@@ -1,0 +1,35 @@
+---
+title: "Hover Card"
+description: "For sighted users to preview content available behind a link."
+---
+
+<ComponentPreview name="hover-card" />
+
+## Usage
+
+```tsx showLineNumbers
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "vic-ui/ui"
+```
+
+```tsx showLineNumbers
+<HoverCard>
+  <HoverCardTrigger>Hover</HoverCardTrigger>
+  <HoverCardContent>
+    The React Framework - created and maintained by @vercel.
+  </HoverCardContent>
+</HoverCard>
+```
+
+## Setup
+
+Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
+
+## API reference
+
+See the [full upstream guide](https://base-ui.com/react/components/hover-card) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+
+Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/hover-card.mdx), under the MIT license.
