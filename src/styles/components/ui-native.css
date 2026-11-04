@@ -1,5 +1,5 @@
 @layer components.parts {
-  .ui-native-select {
+  .ui-native-input, .ui-native-select {
     appearance: auto;
     min-block-size: var(--control-h-sm);
     max-inline-size: 100%;
@@ -11,10 +11,12 @@
     color: var(--fg);
     font: inherit;
   }
-  .ui-native-select:hover:not(:disabled) { background: var(--field-fill-hover); }
-  .ui-native-select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-  .ui-native-select:disabled { opacity: 0.55; cursor: not-allowed; }
-  .ui-native-select[aria-invalid="true"] { border-color: var(--tone-danger-ink); }
+  .ui-native-input:hover:not(:disabled), .ui-native-select:hover:not(:disabled) { background: var(--field-fill-hover); }
+  .ui-native-input:focus-visible, .ui-native-select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .ui-native-input:disabled, .ui-native-select:disabled { opacity: 0.55; cursor: not-allowed; }
+  .ui-native-input[aria-invalid="true"], .ui-native-select[aria-invalid="true"] { border-color: var(--tone-danger-ink); }
+  .ui-native-input { width: 100%; height: auto; }
+  .ui-native-input::placeholder { color: var(--fg-placeholder); }
   .ui-check-box input:indeterminate { background: var(--ink-face-bottom); }
   .ui-check-box:has(input:indeterminate)::after {
     content: "";
@@ -34,7 +36,7 @@
   .ui-disclosure-content { padding-block: 0.5rem; }
   .ui-skeleton { border-radius: var(--radius-row); background: var(--bone); }
   @media (forced-colors: active) {
-    .ui-native-select { border-color: ButtonText; }
+    .ui-native-input, .ui-native-select { border-color: ButtonText; }
     .ui-skeleton { border: 1px solid GrayText; }
   }
 }

@@ -1,6 +1,6 @@
 # vic-ui
 
-A quiet, dense React 19 component library. 52 pieces (buttons, fields, lists, rows, overlays, a table, feedback, a sidebar and timeline pieces), one oklch palette in light and dark, one corner scale, one elevation scale, and the rule that no state ever changes the size of anything.
+A quiet, dense React 19 component library. 54 pieces (buttons, fields, lists, rows, overlays, a table, feedback, a sidebar and timeline pieces), one oklch palette in light and dark, one corner scale, one elevation scale, and the rule that no state ever changes the size of anything.
 
 The documentation site shows every piece live, in every state it has, with the code that draws it, and every token measured in both modes. Build it with `npm run build:site`.
 
@@ -138,3 +138,5 @@ MIT for vic-ui's own code (`LICENSE`). The icons, the fonts, the preflight and t
 `NativeSelect` accepts native select attributes, a ref, and option children. Pair it with a label; it preserves the platform picker, keyboard navigation, form submission and required validation. `Disclosure` accepts a `summary` and native details attributes. `Skeleton` is a decorative, static loading placeholder; put the loading announcement on its containing region. These pieces use the existing field, radius and colour tokens and support forced colours.
 
 `Radio` is a single native radio for a custom labelled layout; use `name` to join a group and wrap it in a label. `RadioGroup` remains the complete labelled group. Checkboxes also display the native indeterminate state used for partially selected groups.
+
+`Input` and `TextareaControl` expose the native field itself for caller-owned labels and hints. All native attributes, refs, validation and description IDs pass through. Use `TextField` and `Textarea` when the library should also supply the label and hint layout.
