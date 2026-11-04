@@ -73,3 +73,5 @@ export { NativeSelect } from "./components/NativeSelect";
 export { Disclosure } from "./components/Disclosure";
 export { Skeleton } from "./components/Skeleton";
 export { Input, TextareaControl } from "./components/Input";
+
+export { DialogSurface, DialogHeading, DialogActions, MenuSurface, PopoverSurface, TooltipSurface, ScrollArea } from "./components/Surfaces";

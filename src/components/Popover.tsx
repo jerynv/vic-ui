@@ -1,3 +1,4 @@
+import { PopoverSurface } from "./Surfaces";
 import { autoUpdate, computePosition, flip, offset, shift, size, type Placement, type VirtualElement } from "@floating-ui/dom";
 import { useEffect, useId, useLayoutEffect, useRef, type ReactElement, type ReactNode, type RefObject } from "react";
 
@@ -154,14 +155,14 @@ export function Popover(props: {
         onClick: () => onOpenChange(!open),
       })}
       {open ? (
-        <div
+        <PopoverSurface asChild><div
           ref={pop}
           id={id}
           role="dialog"
           popover="manual"
           tabIndex={-1}
           aria-label={props["aria-label"]}
-          className={["ui-menu ui-popover", props.className ?? ""].filter(Boolean).join(" ")}
+          className={props.className}
           onKeyDown={(event) => {
             if (event.key !== "Escape" || event.defaultPrevented) return;
             event.preventDefault();
@@ -174,7 +175,7 @@ export function Popover(props: {
           }}
         >
           {props.children}
-        </div>
+        </div></PopoverSurface>
       ) : null}
     </>
   );

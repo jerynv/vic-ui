@@ -1,3 +1,4 @@
+import { MenuSurface } from "./Surfaces";
 import type { Placement } from "@floating-ui/dom";
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactElement, type ReactNode } from "react";
 import { atPoint, useAnchored, usePressAway } from "./Popover";
@@ -265,14 +266,14 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
           })
         : null}
       {open ? (
-        <div
+        <MenuSurface asChild><div
           ref={menu}
           id={id}
           role="menu"
           popover="manual"
           tabIndex={-1}
           aria-label={props["aria-label"]}
-          className={["ui-menu ui-menu-actions", props.className ?? ""].filter(Boolean).join(" ")}
+          className={props.className}
           onKeyDown={keyed}
           onContextMenu={(event) => event.preventDefault()}
         >
@@ -294,7 +295,7 @@ export function Menu(props: { items: MenuItem[]; "aria-label"?: string; placemen
             );
           })}
           {tip.node}
-        </div>
+        </div></MenuSurface>
       ) : null}
     </>
   );

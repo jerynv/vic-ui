@@ -1,3 +1,4 @@
+import { TooltipSurface } from "./Surfaces";
 import type { Placement } from "@floating-ui/dom";
 import { cloneElement, useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactElement, type ReactNode, type Ref } from "react";
 import { createPortal } from "react-dom";
@@ -55,9 +56,9 @@ export function useTip(content: ReactNode, how: { placement?: Placement | undefi
             {content}
           </span>
           {open ? (
-            <div ref={tip} popover="manual" role="tooltip" aria-hidden="true" className="ui-tooltip">
+            <TooltipSurface ref={tip} popover="manual" role="tooltip" aria-hidden="true">
               {content}
-            </div>
+            </TooltipSurface>
           ) : null}
         </>,
         document.body,

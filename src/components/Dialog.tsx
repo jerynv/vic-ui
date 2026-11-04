@@ -1,3 +1,4 @@
+import { DialogSurface, DialogHeading, DialogActions } from "./Surfaces";
 import { useId, useLayoutEffect, useRef, type FormEvent, type ReactNode, type Ref } from "react";
 
 /**
@@ -57,16 +58,16 @@ export function Dialog(props: {
     <>
       {props.children ? <div className="ui-dialog-body">{props.children}</div> : null}
       {props.foot ? (
-        <div className="ui-dialog-foot">
+        <DialogActions>
           <FootProblem>{props.problem}</FootProblem>
           {props.foot}
-        </div>
+        </DialogActions>
       ) : null}
     </>
   );
 
   return (
-    <dialog
+    <DialogSurface asChild><dialog
       ref={(el) => {
         box.current = el;
         if (typeof props.ref === "function") props.ref(el);
@@ -92,7 +93,7 @@ export function Dialog(props: {
     >
       {props.open ? (
         <div className="ui-dialog-frame">
-          <header className="ui-dialog-head">
+          <DialogHeading asChild><header>
             <h2 id={`${id}-title`} className="ui-dialog-title">
               {props.title}
             </h2>
@@ -101,7 +102,7 @@ export function Dialog(props: {
                 {props.description}
               </p>
             ) : null}
-          </header>
+          </header></DialogHeading>
           {props.onSubmit ? (
             <form className="ui-dialog-form" onSubmit={props.onSubmit}>
               {inner}
@@ -111,7 +112,7 @@ export function Dialog(props: {
           )}
         </div>
       ) : null}
-    </dialog>
+    </dialog></DialogSurface>
   );
 }
 
