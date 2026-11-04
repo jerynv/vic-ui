@@ -1,4 +1,7 @@
-import { createContext, forwardRef, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref } from "react";
+import { createContext, forwardRef, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref, type RefObject } from "react";
+import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
+import { XIcon } from "../icons/icons";
+import { Button } from "./Button";
 import { Link } from "./Link";
 import { useTip } from "./Tooltip";
 
@@ -32,7 +35,8 @@ export interface SidebarState {
   contained: boolean;
 }
 
-const Context = createContext<SidebarState | null>(null);
+type SidebarContext = SidebarState & { container: RefObject<HTMLDivElement | null> };
+const Context = createContext<SidebarContext | null>(null);
 
 /** The sidebar's state and the presses that change it, from anywhere under `SidebarProvider`. */
 export function useSidebar(): SidebarState {
@@ -86,6 +90,7 @@ export function SidebarProvider(props: {
   children: ReactNode;
 }) {
   const { onOpenChange, onOpenMobileChange } = props;
+  const container = useRef<HTMLDivElement>(null);
   const isMobile = useNarrow(props.mobileBreakpoint ?? 768);
   const [ownOpen, setOwnOpen] = useState(props.defaultOpen ?? true);
   const [ownMobile, setOwnMobile] = useState(false);
@@ -108,8 +113,9 @@ export function SidebarProvider(props: {
   const collapsible = props.collapsible ?? "icon";
   const contained = props.contained ?? false;
   const shown = isMobile ? openMobile : open || collapsible === "none";
-  const value = useMemo<SidebarState>(
+  const value = useMemo<SidebarContext>(
     () => ({
+      container,
       state: shown ? "expanded" : "collapsed",
       open,
       setOpen,
@@ -125,6 +131,7 @@ export function SidebarProvider(props: {
   return (
     <Context.Provider value={value}>
       <div
+        ref={container}
         data-sidebar-wrapper=""
         data-state={value.state}
         className={join("ui-sidebar-wrapper", !contained && "ui-sidebar-window", props.className)}
@@ -136,74 +143,39 @@ export function SidebarProvider(props: {
   );
 }
 
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
 /**
  * The rail itself: an `aside` beside the page, or on a phone a `nav` sheet over it with a
- * backdrop, opened on its first control, closed by Escape or a press on the backdrop, and given
- * back to whatever opened it. A closed sheet is `inert`.
+ * backdrop. Base UI's dialog traps focus, isolates the background, handles Escape and
+ * outside presses, and restores focus to the opener. The portal retains provider tokens.
  */
 export const Sidebar = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(function Sidebar({ className, children, ...rest }, ref) {
   const { state, isMobile, openMobile, setOpenMobile, collapsible } = useSidebar();
-  const sheet = useRef<HTMLElement | null>(null);
-  const opener = useRef<HTMLElement | null>(null);
-  const giveBack = useRef(false);
-
-  useEffect(() => {
-    if (!isMobile || !openMobile) return;
-    const keyed = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      giveBack.current = true;
-      setOpenMobile(false);
-    };
-    document.addEventListener("keydown", keyed);
-    return () => document.removeEventListener("keydown", keyed);
-  }, [isMobile, openMobile, setOpenMobile]);
-
-  useEffect(() => {
-    if (!isMobile) return;
-    if (openMobile) {
-      opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      giveBack.current = false;
-      requestAnimationFrame(() => (sheet.current?.querySelector<HTMLElement>(FOCUSABLE) ?? sheet.current)?.focus());
-    } else if (giveBack.current) {
-      opener.current?.focus();
-      giveBack.current = false;
-      opener.current = null;
-    }
-  }, [isMobile, openMobile]);
+  const container = useContext(Context)!.container;
 
   if (isMobile) {
     return (
-      <>
-        <div
-          data-sidebar-backdrop=""
-          className="ui-sidebar-backdrop"
-          data-open={openMobile ? "" : undefined}
-          aria-hidden="true"
-          onClick={() => {
-            giveBack.current = true;
-            setOpenMobile(false);
-          }}
-        />
-        <nav
-          ref={(el) => {
-            sheet.current = el;
-            setRef(ref, el);
-          }}
-          tabIndex={-1}
-          aria-hidden={!openMobile}
-          inert={!openMobile}
-          data-sidebar="sidebar"
-          data-mobile="true"
-          data-state={state}
-          data-collapsible={collapsible}
-          className={join("ui-sidebar ui-sidebar-sheet", className)}
-          {...rest}
-        >
-          {children}
-        </nav>
-      </>
+      <DialogPrimitive.Root open={openMobile} onOpenChange={setOpenMobile}>
+        <DialogPrimitive.Portal container={container} className="ui-sidebar-portal">
+          <DialogPrimitive.Backdrop
+            data-sidebar-backdrop=""
+            className="ui-sidebar-backdrop"
+          />
+          <DialogPrimitive.Popup
+            render={<nav />}
+            ref={(el) => setRef(ref, el)}
+            data-sidebar="sidebar"
+            data-mobile="true"
+            data-state={state}
+            data-collapsible={collapsible}
+            className={join("ui-sidebar ui-sidebar-sheet", className)}
+            {...rest}
+            aria-label={rest["aria-label"] ?? "Navigation"}
+          >
+            {children}
+            <DialogPrimitive.Close render={<Button aria-label="Close navigation" square look="quiet" icon={<XIcon size={16} />} className="ui-sidebar-close" />} />
+          </DialogPrimitive.Popup>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     );
   }
   return (

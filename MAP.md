@@ -1644,7 +1644,7 @@ Dependencies: `useSyncExternalStore` with `matchMedia`.
 
 ### Sidebar
 
-The rail itself: an `aside` beside the page, or on a phone a `nav` sheet over it with a backdrop, opened on its first control, closed by Escape or a press on the backdrop, and the focus given back to whatever opened it. A closed sheet is `inert`.
+The rail itself: an `aside` beside the page, or on a phone a modal `nav` sheet managed by Base UI Dialog. Focus stays inside while open; the background cannot be interacted with. Escape, the close icon, or a backdrop press closes it and restores focus. The portal stays inside the provider so local theme and width tokens apply. Closed sheets unmount after their exit transition.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -1661,9 +1661,9 @@ States:
 
 Tokens: `--sidebar-width`, `--sidebar-width-icon`, `--sidebar-animation-duration`, `--sidebar-easing`, `--sidebar-bg`, `--bg-base`, `--bg-recessed`, `--fg`.
 
-CSS: `ui-sidebar.css`. Classes `ui-sidebar`, `ui-sidebar-inner`, `ui-sidebar-sheet`, `ui-sidebar-backdrop`.
+CSS: `ui-sidebar.css`. Classes `ui-sidebar`, `ui-sidebar-inner`, `ui-sidebar-sheet`, `ui-sidebar-backdrop`, `ui-sidebar-portal`, `ui-sidebar-close`.
 
-Dependencies: `useSidebar`.
+Dependencies: `useSidebar`, Base UI Dialog, `Button`, `XIcon`.
 
 ### SidebarHeader, SidebarFooter
 
