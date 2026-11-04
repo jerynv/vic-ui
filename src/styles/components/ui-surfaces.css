@@ -1,0 +1,33 @@
+/* Scoped variants follow Radix Themes' soft/surface pattern: https://www.radix-ui.com/themes/docs/components/text-field */
+@layer components.parts {
+  [data-ui-surface="flat"] {
+    --ui-field-fill: var(--field-fill);
+    --ui-field-hover: var(--field-fill-hover);
+    --ui-field-edge: transparent;
+    --ui-card-fill: var(--surface-lifted);
+    --ui-card-edge: transparent;
+  }
+
+  [data-ui-surface="bordered"] {
+    --ui-field-fill: var(--surface-lifted);
+    --ui-field-hover: var(--bg-base);
+    --ui-field-edge: var(--line);
+    --ui-card-fill: var(--surface-lifted);
+    --ui-card-edge: var(--line);
+  }
+
+  .ui-field-box:has(> select:focus-visible) {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  /* The group owns its frame; an input inside it must not draw a second frame. */
+  [data-slot="input-group"] > .ui-field-box {
+    --ui-field-edge: transparent;
+  }
+
+  .ui-field-box[data-disabled],
+  .ui-field-box[data-disabled]:hover {
+    background: var(--ui-field-fill, var(--field-fill));
+  }
+}

@@ -1,3 +1,4 @@
+import type { SurfaceStyle } from "./Surface";
 import { autoUpdate, computePosition, flip, offset, shift, size } from "@floating-ui/dom";
 import { LIST_LEAST, LIST_MOST } from "./Popover";
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
@@ -40,6 +41,7 @@ interface Shared {
   name?: string;
   id?: string;
   size?: "sm";
+  surface?: SurfaceStyle;
   className?: string;
 }
 
@@ -248,7 +250,7 @@ export function Combobox(props: ComboboxProps) {
   const classes = ["ui-field", props.size === "sm" ? "ui-field-sm" : "", props.className ?? ""].filter(Boolean).join(" ");
   const groupOf = (at: number) => visible[at]!.group;
   return (
-    <div className={classes}>
+    <div data-ui-surface={props.surface} className={classes}>
       <FieldHead field={field} label={props.label} labelId={`${field}-label`} error={props.error} />
       <div
         ref={(el) => {

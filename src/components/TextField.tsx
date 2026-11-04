@@ -1,3 +1,4 @@
+import type { SurfaceStyle } from "./Surface";
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
 import { useFieldReason } from "./reason";
@@ -13,14 +14,14 @@ import { useFieldReason } from "./reason";
  */
 export const TextField = forwardRef<
   HTMLInputElement,
-  Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> & { label?: ReactNode; "aria-label"?: string; suffix?: ReactNode; prefix?: ReactNode; hint?: ReactNode; error?: ReactNode; size?: "sm"; disabledReason?: string | undefined }
->(function TextField({ label, suffix, prefix, hint, error, size, className, id, disabled, disabledReason, onFocus, onBlur, onKeyDown, ...rest }, ref) {
+  Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> & { label?: ReactNode; "aria-label"?: string; suffix?: ReactNode; prefix?: ReactNode; hint?: ReactNode; error?: ReactNode; size?: "sm"; surface?: SurfaceStyle; disabledReason?: string | undefined }
+>(function TextField({ label, suffix, prefix, hint, error, size, surface, className, id, disabled, disabledReason, onFocus, onBlur, onKeyDown, ...rest }, ref) {
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
   const held = why.held;
   return (
-    <div className={["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ")}>
+    <div data-ui-surface={surface} className={["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ")}>
       <FieldHead field={field} label={label} error={error} />
       <div ref={why.anchor} className="ui-field-box" data-invalid={error ? "" : undefined} data-disabled={held ? "" : undefined} {...why.box}>
         {prefix ? <span className="ui-field-prefix">{prefix}</span> : null}

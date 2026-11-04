@@ -220,8 +220,8 @@
   }
 
   .ui-card-lifted {
-    background: var(--surface-lifted);
-    box-shadow: var(--edge);
+    background: var(--ui-card-fill, var(--surface-lifted));
+    box-shadow: 0 0 0 1px var(--ui-card-edge, var(--line));
   }
 
   .ui-card-recessed {

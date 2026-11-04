@@ -1,3 +1,4 @@
+import type { SurfaceStyle } from "./Surface";
 import { forwardRef, useCallback, useId, useLayoutEffect, useRef, useState, type ReactNode, type TextareaHTMLAttributes } from "react";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
 import { useFieldReason } from "./reason";
@@ -21,10 +22,10 @@ export const Textarea = forwardRef<
     onValueChange?: (value: string) => void;
     grow?: boolean;
     maxRows?: number;
-    size?: "sm";
+    size?: "sm"; surface?: SurfaceStyle;
     disabledReason?: string | undefined;
   }
->(function Textarea({ label, hint, error, onValueChange, onChange, grow, maxRows = 8, rows = 3, size, className, id, value, defaultValue, maxLength, disabledReason, disabled, onFocus, onBlur, onKeyDown, ...rest }, ref) {
+>(function Textarea({ label, hint, error, onValueChange, onChange, grow, maxRows = 8, rows = 3, size, surface, className, id, value, defaultValue, maxLength, disabledReason, disabled, onFocus, onBlur, onKeyDown, ...rest }, ref) {
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
@@ -61,7 +62,7 @@ export const Textarea = forwardRef<
   const counted = maxLength !== undefined;
   const classes = ["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ");
   return (
-    <div className={classes}>
+    <div data-ui-surface={surface} className={classes}>
       <FieldHead field={field} label={label} error={error} />
       <div ref={why.anchor} className="ui-field-box ui-textarea-box" data-invalid={error ? "" : undefined} data-disabled={disabled || held ? "" : undefined} {...why.box}>
         <textarea

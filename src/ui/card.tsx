@@ -1,15 +1,18 @@
 // Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
+import type { SurfaceProps } from "../components/Surface";
 import * as React from "react"
 import { cn } from "cn"
 
 function Card({
   className,
   size = "default",
+  surface,
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" }) {
+}: React.ComponentProps<"div"> & SurfaceProps & { size?: "default" | "sm" }) {
   return (
     <div
       data-slot="card"
+      data-ui-surface={surface}
       data-size={size}
       className={cn(
         "ui-card ui-card-lifted group/card",

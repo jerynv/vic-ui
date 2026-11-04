@@ -18,6 +18,14 @@ Its workspace form is a local interactive demonstration, with no account or serv
 `site/` retains the original catalogue source and reusable examples; `build:reference-site`
 builds that reference shell. Both shells use the exported icon-based ColorModeSwitch.
 
+## Shared surface styles
+
+`Surface` scopes `surface="flat" | "bordered"` to fields and cards. Native controls and
+their composable counterparts also accept an individual `surface` override. CSS variables
+carry the setting through the DOM; buttons and floating surfaces keep their own appearance.
+Defaults outside a scope remain compatible. The theming guide compares both styles, and
+applicable docs pages have a Preview surface selector.
+
 ## Current component API
 
 `vic-ui/ui` exports the shadcn Base UI catalogue from `src/ui/index.ts`.

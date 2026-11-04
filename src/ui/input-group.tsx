@@ -1,5 +1,6 @@
 // Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
 "use client"
+import type { SurfaceProps } from "../components/Surface";
 
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -9,10 +10,11 @@ import { Button } from "@/ui/button"
 import { Input } from "@/ui/input"
 import { Textarea } from "@/ui/textarea"
 
-function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
+function InputGroup({ className, surface, ...props }: React.ComponentProps<"div"> & SurfaceProps) {
   return (
     <div
       data-slot="input-group"
+      data-ui-surface={surface}
       role="group"
       className={cn(
         "ui-field-box group/input-group relative w-full has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col [&>.ui-field-box]:min-w-0 [&>.ui-field-box]:flex-1 [&>.ui-field-box]:bg-transparent",

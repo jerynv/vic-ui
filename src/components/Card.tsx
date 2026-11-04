@@ -1,3 +1,4 @@
+import type { SurfaceStyle } from "./Surface";
 import type { HTMLAttributes, ReactNode } from "react";
 
 /**
@@ -13,6 +14,7 @@ export function Card(
   props: Omit<HTMLAttributes<HTMLElement>, "title"> & {
     as?: "div" | "section" | "form";
     look?: "lifted" | "recessed";
+    surface?: SurfaceStyle;
     tone?: "danger" | undefined;
     plain?: boolean;
     flush?: boolean;
@@ -23,17 +25,17 @@ export function Card(
     children?: ReactNode;
   },
 ) {
-  const { as: As = "div", look = "lifted", tone, plain, flush, title, description, actions, foot, className, children, ...rest } = props;
+  const { as: As = "div", look = "lifted", tone, surface, plain, flush, title, description, actions, foot, className, children, ...rest } = props;
   const classes = ["ui-card", `ui-card-${look}`, plain ? "ui-card-plain" : "", className ?? ""].filter(Boolean).join(" ");
   if (plain) {
     return (
-      <As className={classes} data-tone={tone} {...rest}>
+      <As data-ui-surface={surface} className={classes} data-tone={tone} {...rest}>
         {children}
       </As>
     );
   }
   return (
-    <As className={classes} data-tone={tone} {...rest}>
+    <As data-ui-surface={surface} className={classes} data-tone={tone} {...rest}>
       {title || description || actions ? (
         <div className="ui-card-head">
           <div className="ui-card-heading">

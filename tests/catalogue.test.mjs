@@ -45,6 +45,28 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
         assert.deepEqual(styles[1], styles[0], `${part} preserves vic's ${mode} appearance`);
       }
     }
+    for (const mode of ["light", "dark"]) {
+      await page.evaluate(mode => { document.documentElement.dataset.mode = mode; }, mode);
+      const styles = await page.locator("#surface-tests").evaluate(root => {
+        const read = e => ({ fill: getComputedStyle(e).backgroundColor, edge: getComputedStyle(e).boxShadow, height: e.getBoundingClientRect().height });
+        return ["flat", "bordered"].map(surface => ({
+          fields: [...root.querySelector(`#${surface}`).querySelectorAll(".ui-field-box")].map(read),
+          card: read(root.querySelector(`#${surface} .ui-card`)),
+        }));
+      });
+      assert.notEqual(styles[0].fields[0].fill, styles[1].fields[0].fill, `${mode} surface fills differ`);
+      assert.notEqual(styles[0].fields[0].edge, styles[1].fields[0].edge, `${mode} surface edges differ`);
+      for (const group of styles) {
+        assert.deepEqual(group.fields[0], group.fields[1], "native and composable inputs agree");
+        assert.equal(group.fields[0].height, group.fields[3].height, "select and input sizing agree");
+        assert.equal(group.fields[6].edge, styles[0].fields[6].edge, "nested input has no second frame");
+      }
+      assert.equal(styles[0].fields[7].fill, styles[1].fields[0].fill, "individual override wins");
+      assert.equal(styles[1].fields[7].fill, styles[0].fields[0].fill, "reverse override wins");
+      assert.equal(styles[0].fields[8].edge, styles[1].fields[8].edge, "validation survives both styles");
+      assert.equal(styles[0].fields[0].height, styles[1].fields[0].height, "styles do not shift layout");
+      assert.notEqual(styles[0].card.edge, styles[1].card.edge, "card edges follow the scope");
+    }
     await page.evaluate(() => { document.documentElement.dataset.mode = "light"; });
     assert.equal(await page.getByRole("link", { name: "Composed link" }).getAttribute("href"), "#destination");
     const tabs = page.getByRole("tablist", { name: "Composed tabs" });

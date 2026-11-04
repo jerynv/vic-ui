@@ -1,3 +1,4 @@
+import type { SurfaceStyle } from "./Surface";
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { CalendarEventIcon, ChevronRightIcon } from "../icons/icons";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
@@ -71,6 +72,7 @@ export function DatePicker(props: {
   name?: string;
   id?: string;
   size?: "sm";
+  surface?: SurfaceStyle;
   className?: string;
 }) {
   const made = useId();
@@ -126,7 +128,7 @@ export function DatePicker(props: {
 
   const classes = ["ui-field", props.size === "sm" ? "ui-field-sm" : "", props.className ?? ""].filter(Boolean).join(" ");
   return (
-    <div className={classes}>
+    <div data-ui-surface={props.surface} className={classes}>
       <FieldHead field={field} label={props.label} labelId={`${field}-label`} error={props.error} />
       <div className="ui-field-box ui-select-box" data-invalid={props.error ? "" : undefined} data-open={open ? "" : undefined} data-disabled={props.disabled ? "" : undefined}>
         <button
