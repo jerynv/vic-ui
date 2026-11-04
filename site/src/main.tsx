@@ -12,12 +12,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarProvider,
-  Tabs,
   Toaster,
   useSidebar,
 } from "vic-ui";
 import { MenuIcon } from "vic-ui/icons";
 import "vic-ui/styles.css";
+import { ColorModeSwitch } from "../../src/ui/color-mode-switch";
+import "../../dist/ui/styles.css";
 import "./site.css";
 import { useMode, type Mode } from "./lib/mode";
 import { GROUPS, PAGES, PIECES } from "./registry";
@@ -115,7 +116,7 @@ function Bar(props: { title: string; mode: Mode; onMode: (mode: Mode) => void })
     <header className="site-bar">
       {isMobile ? <IconButton look="line" size="md" icon={<MenuIcon size={16} />} label="Contents" onClick={() => setOpenMobile(true)} /> : null}
       <span className="site-bar-title">{props.title}</span>
-      <Tabs aria-label="Appearance" size="sm" items={{ system: "System", light: "Light", dark: "Dark" }} value={props.mode} onValueChange={(value) => props.onMode(value as Mode)} />
+      <ColorModeSwitch value={props.mode} onValueChange={props.onMode} />
     </header>
   );
 }

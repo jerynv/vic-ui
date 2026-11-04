@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const here = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 
 /**
- * The documentation site: static files for GitHub Pages under a project path. The path is
+ * The original catalogue shell, retained for reference. The path is
  * `VIC_UI_BASE` (default `/vic-ui/`); pages are routed by the hash, so no server rewrite is
  * needed. The site reads the library from source, so what it shows is what ships.
  */
@@ -15,6 +15,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
+      { find: /^@\//, replacement: here("../src/") },
       { find: /^vic-ui\/icons$/, replacement: here("../src/icons/icons.tsx") },
       { find: /^vic-ui\/styles\.css$/, replacement: here("../src/index.css") },
       { find: /^vic-ui$/, replacement: here("../src/index.ts") },

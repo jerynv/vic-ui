@@ -157,7 +157,7 @@ Fumadocs and the marketing site; then consumer and component-gallery checks.
 ## Scripts
 
 `npm test` builds the package and exercises server rendering, button compatibility,
-keyboard activation, disabled reasons, and tooltip hydration in Chromium. Install the
+keyboard activation, overlay focus, forms, tables, source views, and theme controls in Chromium. Install the
 browser once with `npx playwright install chromium`.
 
 ```sh
@@ -167,12 +167,16 @@ npm run check:design   # every corner on the radius scale, every shadow on the e
 npm run check:dashes   # no em or en dash in the source, the site or the docs
 npm run icons          # regenerate src/icons/icons.tsx from the icon sets
 npm run dev:site       # the documentation site, live
-npm run build:site     # the site as static files in site/dist
+npm run build:site     # the site as static files in website/build/client
+npm run test:website   # production build plus marketing, search, and full catalogue browser tests
+npm run typecheck:website
 ```
 
 ## The documentation site
 
-`site/` is a Vite app that reads the library from source, so what it shows is what ships. Each example in `site/src/examples/<piece>/` is both the live demo and the snippet shown beside it. Pages are routed by the hash, so the static build needs no rewrites. It builds for a project path, `/vic-ui/` by default; set `VIC_UI_BASE` to change it (`VIC_UI_BASE=/ npm run build:site` for a custom domain). `.github/workflows/pages.yml` builds and publishes it to GitHub Pages on a push to `main`.
+The [marketing site and documentation](https://jerynv.github.io/vic-ui/) live in `website/`, built with Fumadocs' Base UI edition and React Router. All 66 component families have a live preview, highlighted copyable source, usage, and API links. The original catalogue reuses `site/src/examples` and remains available under Original components. Examples import the actual package exports.
+
+Pages and search are prerendered, with a 404 fallback for static hosts. The build defaults to `/vic-ui/`; set `VIC_UI_BASE=/ npm run build:site` for a custom domain. `.github/workflows/pages.yml` runs package and website browser tests before publishing `website/build/client`. The original shell is available through `npm run build:legacy-site`.
 
 ## Licence
 

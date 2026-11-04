@@ -43,9 +43,9 @@
     "build": "npm run build:lib && npm run build:css",
     "build:lib": "vite build && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "build:css": "node scripts/build-css.mjs && tailwindcss -i src/ui/styles.css -o dist/ui/styles.css --minify",
-    "build:site": "vite build --config site/vite.config.ts",
-    "dev:site": "vite --config site/vite.config.ts",
-    "preview:site": "vite preview --config site/vite.config.ts",
+    "build:site": "npm run build:website",
+    "dev:site": "npm run dev:website",
+    "preview:site": "cd website && vite preview --outDir build/client",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "check:design": "node scripts/check-radius.mjs && node scripts/check-shadows.mjs && node scripts/check-fills.mjs",
     "check:dashes": "node scripts/check-dashes.mjs",
@@ -56,7 +56,8 @@
     "dev:website": "cd website && react-router dev",
     "build:website": "cd website && react-router build",
     "typecheck:website": "cd website && react-router typegen && tsc --noEmit -p tsconfig.json",
-    "test:website": "npm run build:website && node --test tests/website.test.mjs"
+    "test:website": "npm run build:website && node --test tests/website.test.mjs",
+    "build:legacy-site": "vite build --config site/vite.config.ts"
   },
   "peerDependencies": {
     "react": "^19.0.0",

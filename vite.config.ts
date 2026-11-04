@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
-import { dependencies } from "./package.json" with { type: "json" };
+import packageJson from "./package.json" with { type: "json" };
 
 /** The package: ESM only, React and Floating UI left to the consumer, the CSS built apart (`scripts/build-css.mjs`). */
 export default defineConfig({
@@ -17,7 +17,7 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      external: (id) => ["react", "react-dom", ...Object.keys(dependencies)].some((name) => id === name || id.startsWith(`${name}/`)),
+      external: (id) => ["react", "react-dom", ...Object.keys(packageJson.dependencies)].some((name) => id === name || id.startsWith(`${name}/`)),
       output: { preserveModules: false },
     },
   },
