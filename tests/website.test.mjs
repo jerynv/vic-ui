@@ -4,8 +4,10 @@ import { chromium } from "playwright";
 import { preview } from "vite";
 import { readFile } from "node:fs/promises";
 
+const base = process.env.VIC_UI_BASE ?? "/vic-ui/";
+
 test("marketing uses working library components and links to the full catalogue", { timeout: 30000 }, async () => {
-  const server = await preview({ configFile: false, root: "website", base: "/vic-ui/", build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ reducedMotion: "reduce" });
@@ -33,7 +35,6 @@ test("marketing uses working library components and links to the full catalogue"
 });
 
 test("prerendered documentation, search, theme, and mobile navigation", { timeout: 60000 }, async () => {
-  const base = process.env.VIC_UI_BASE ?? "/vic-ui/";
   const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
   const browser = await chromium.launch({ headless: true });
   try {
@@ -76,7 +77,7 @@ test("prerendered documentation, search, theme, and mobile navigation", { timeou
 
 test("every catalogue example renders on desktop and fits a mobile viewport", { timeout: 120000 }, async () => {
   const registry = JSON.parse(await readFile(new URL("../src/ui/registry.json", import.meta.url), "utf8"));
-  const server = await preview({ configFile: false, root: "website", base: "/vic-ui/", build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ reducedMotion: "reduce" });
@@ -104,7 +105,7 @@ test("every catalogue example renders on desktop and fits a mobile viewport", { 
 });
 
 test("the original catalogue retains every component and its source", { timeout: 120000 }, async () => {
-  const server = await preview({ configFile: false, root: "website", base: "/vic-ui/", build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ reducedMotion: "reduce", viewport: { width: 390, height: 844 } });

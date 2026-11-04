@@ -4,8 +4,8 @@
 
 `website/` ports Fumadocs' React Router SPA template. MDX lives in `website/content/docs`;
 the static search index and each document are prerendered. `npm run dev:website` starts it;
-`npm run build:website` emits `website/build/client`. The existing `site/` remains the
-deployment target until the full catalogue and marketing page have passed browser checks.
+`npm run build:website` emits `website/build/client`. The `dev:site` and `build:site`
+commands now target this website. GitHub Pages runs library and browser tests before deployment.
 The shared website theme control and live examples import the actual `vic-ui/ui` API.
 All 66 upstream families have a page, a live example, a source tab, usage, and API links.
 `website/upstream.json` records the imported demos. The original catalogue reuses
@@ -13,6 +13,8 @@ All 66 upstream families have a page, a live example, a source tab, usage, and A
 The marketing page composes actual library fields, switches, buttons, avatars, tabs, and
 source blocks around a geometric SVG. The component directory filters all 66 families.
 Its workspace form is a local interactive demonstration, with no account or service call.
+`site/` retains the original catalogue source and reusable examples; `build:legacy-site`
+builds that reference shell. Both shells use the exported icon-based ColorModeSwitch.
 
 ## Current component API
 

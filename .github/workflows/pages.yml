@@ -31,14 +31,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run typecheck:website
       - run: npm run check:design
       - run: npm run check:dashes
-      - run: npm run build
-      - run: npm run build:site
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm run test:website
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site/dist
+          path: website/build/client
 
   deploy:
     needs: build
