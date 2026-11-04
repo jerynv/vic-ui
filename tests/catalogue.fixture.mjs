@@ -1,11 +1,12 @@
 import { createElement as h, useEffect, useState } from "react";
-import { Button, ColorModeSwitch, CodeSnippet, Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerDescription, DrawerClose, InputOTP, InputOTPGroup, InputOTPSlot, Slider, Toggle, ScrollArea, Card, CardContent, Input, Switch } from "../dist/ui.js";
+import { Button, ColorModeSwitch, CodeSnippet, Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerDescription, DrawerClose, InputOTP, InputOTPGroup, InputOTPSlot, Slider, Toggle, ScrollArea, Card, CardContent, Input, Switch, Badge, Checkbox, RadioGroup, RadioGroupItem, Tabs, TabsList, TabsTrigger, TabsContent } from "../dist/ui.js";
 
-import { Button as OriginalButton, Card as OriginalCard, Switch as OriginalSwitch, TextField } from "../dist/index.js";
+import { Button as OriginalButton, Card as OriginalCard, Switch as OriginalSwitch, TextField, Checkbox as OriginalCheckbox, Badge as OriginalBadge, Tabs as OriginalTabs } from "../dist/index.js";
 
 export function CatalogueFixture() {
   const [mode, setMode] = useState("light");
   const [volume, setVolume] = useState(30);
+  const [tab, setTab] = useState("one");
   const [otp, setOtp] = useState("");
   useEffect(() => { document.documentElement.dataset.mode = mode; }, [mode]);
   return h("main", { style: { maxWidth: 600, margin: "40px auto", padding: 24, display: "grid", gap: 24 } },
@@ -15,6 +16,11 @@ export function CatalogueFixture() {
       h(OriginalCard, { id: "original-card" }, "Details"), h(Card, { id: "composed-card" }, h(CardContent, {}, "Details")),
       h(TextField, { id: "original-field", "aria-label": "Original field" }), h(Input, { id: "composed-field", "aria-label": "Composed field" }),
       h(OriginalSwitch, { id: "original-switch", checked: true, "aria-label": "Original switch" }), h(Switch, { id: "composed-switch", defaultChecked: true, "aria-label": "Composed switch" }),
+      h(OriginalBadge, { id: "original-badge" }, "Ready"), h(Badge, { id: "composed-badge" }, "Ready"),
+      h(OriginalCheckbox, { id: "original-check", defaultChecked: true, "aria-label": "Original check" }), h(Checkbox, { defaultChecked: true, "aria-label": "Composed check" }),
+      h(OriginalTabs, { items: [{ value: "one", label: "One" }, { value: "two", label: "Two" }], value: tab, onValueChange: setTab, "aria-label": "Original tabs" }),
+      h(Tabs, { value: tab, onValueChange: setTab }, h(TabsList, { "aria-label": "Composed tabs" }, h(TabsTrigger, { value: "one" }, "One"), h(TabsTrigger, { value: "two" }, "Two")), h(TabsContent, { value: "one" }, "First panel"), h(TabsContent, { value: "two" }, "Second panel")),
+      h(RadioGroup, { defaultValue: "one", "aria-label": "Radio choices" }, h(RadioGroupItem, { value: "one", "aria-label": "First choice" }), h(RadioGroupItem, { value: "two", "aria-label": "Second choice" })),
       h(Button, { render: h("a", { href: "#destination" }), nativeButton: false }, "Composed link"),
     ),
     h(ColorModeSwitch, { value: mode, onValueChange: setMode }),

@@ -16,8 +16,9 @@
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; }
 .marketing h2 { margin-top: .75rem; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 500; line-height: 1.1; letter-spacing: -.035em; }
 .section-heading > p { max-width: 20rem; font-size: .9rem; line-height: 1.6; color: var(--fg-subtle); }
-.component-shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--radius-panel); overflow: hidden; }
-.shelf-item + .shelf-item { border-left: 1px solid var(--line); }
+.component-shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--radius-panel); overflow: hidden; }
+.shelf-item:nth-child(even) { border-left: 1px solid var(--line); }
+.shelf-item:nth-child(n+3) { border-top: 1px solid var(--line); }
 .shelf-preview { display: flex; align-items: center; justify-content: center; min-height: 14rem; padding: 1.5rem; }
 .shelf-label { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--line); padding: 1rem 1.5rem; font-size: .8rem; }
 .shelf-label svg, .component-directory svg { width: .9rem; height: .9rem; color: var(--fg-subtle); }
@@ -35,7 +36,8 @@
   .hero-copy h1 { font-size: clamp(3.3rem, 9vw, 5rem); }
   .hero-stage { min-height: 32rem; }
   .component-shelf { grid-template-columns: 1fr; }
-  .shelf-item + .shelf-item { border-left: 0; border-top: 1px solid var(--line); }
+  .shelf-item:nth-child(n) { border-left: 0; }
+  .shelf-item + .shelf-item { border-top: 1px solid var(--line); }
   .shelf-preview { min-height: 12rem; }
   .getting-started { grid-template-columns: 1fr; gap: 2rem; }
   .component-directory { grid-template-columns: repeat(3, minmax(0, 1fr)); }

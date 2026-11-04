@@ -22,6 +22,9 @@ test("marketing uses working library components and links to the full catalogue"
     await page.getByText("Only people you invite can join.", { exact: true }).waitFor();
     await page.getByRole("button", { name: "Create workspace", exact: true }).click();
     await page.getByRole("button", { name: "Workspace created", exact: true }).waitFor();
+    assert.equal(await page.locator(".workspace-preview .ui-org-mark").textContent(), "F");
+    await page.getByText("Personal", { exact: true }).click();
+    assert.equal(await page.getByRole("radio", { name: "Personal", exact: false }).isChecked(), true);
     await page.getByRole("textbox", { name: "Find a component" }).fill("slider");
     assert.equal(await page.locator('[aria-label="Component directory"] a').count(), 1);
     await page.setViewportSize({ width: 390, height: 844 });

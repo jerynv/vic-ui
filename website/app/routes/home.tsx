@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { Link } from "react-router";
-import { ArrowRightIcon, CheckIcon, CodeIcon, CornerDownLeftIcon, MagnifyingGlassIcon as SearchIcon } from "vic-ui/icons";
+import { ArrowRightIcon, CheckIcon, CornerDownLeftIcon, MagnifyingGlassIcon as SearchIcon } from "vic-ui/icons";
 import { Avatar, AvatarFallback, AvatarGroup, Badge, Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, CodeSnippet, Field, FieldContent, FieldDescription, FieldLabel, Input, InputGroup, InputGroupAddon, InputGroupInput, Kbd, Label, Separator, Slider, Switch, Tabs, TabsContent, TabsList, TabsTrigger, toast } from "vic-ui/ui";
+import { ChoiceCards, OrgMark, Badge as StateBadge } from "vic-ui";
 import { catalogue } from "../lib/catalogue";
 import { baseOptions } from "../lib/layout";
 import "../marketing.css";
@@ -13,7 +14,7 @@ function WorkspacePreview() {
   const [shared, setShared] = useState(true);
   const [created, setCreated] = useState(false);
   return <Card className="workspace-preview">
-    <CardHeader><div className="mb-3 flex items-center justify-between"><span className="grid size-9 place-items-center rounded-(--radius-control) bg-primary text-primary-foreground"><CodeIcon className="size-5" /></span><Badge variant="outline">Live preview</Badge></div>
+    <CardHeader><div className="mb-3 flex items-center justify-between"><OrgMark name={name || "Workspace"} slug="studio-north" /><Badge variant="outline">Live preview</Badge></div>
       <CardTitle className="text-xl">A home for your next idea.</CardTitle><CardDescription>Bring your people and projects together.</CardDescription>
     </CardHeader>
     <form onSubmit={event => { event.preventDefault(); setCreated(true); toast.add({ title: `${name.trim()} created`, description: "Your workspace preview is ready." }); }}>
@@ -42,10 +43,15 @@ function Geometry() {
 
 function ComponentShelf() {
   const [volume, setVolume] = useState(64);
+  const [plan, setPlan] = useState("studio");
   return <div className="component-shelf">
-    <section className="shelf-item"><div className="shelf-preview flex-col gap-5"><div className="flex gap-2"><Button onClick={() => toast.add({ title: "Changes saved" })}>Save changes</Button><Button variant="outline" render={<Link to="/docs/components/button" />}>Explore</Button></div><div className="flex gap-2"><Badge>Default</Badge><Badge variant="secondary">In progress</Badge><Badge variant="outline">Draft</Badge></div></div><Link to="/docs/components/button" className="shelf-label">Actions & states <ArrowRightIcon /></Link></section>
+    <section className="shelf-item"><div className="shelf-preview flex-col gap-5"><div className="flex gap-2"><Button onClick={() => toast.add({ title: "Changes saved" })}>Save changes</Button><Button variant="outline" render={<Link to="/docs/components/button" />}>Explore</Button></div><div className="flex gap-2"><StateBadge tone="settled" dot>Published</StateBadge><StateBadge tone="moving" dot>In progress</StateBadge><StateBadge>Draft</StateBadge></div></div><Link to="/docs/components/button" className="shelf-label">Actions & states <ArrowRightIcon /></Link></section>
     <section className="shelf-item"><div className="shelf-preview flex-col gap-5"><Field orientation="horizontal"><Checkbox id="shelf-updates" defaultChecked /><FieldLabel htmlFor="shelf-updates">Keep me in the loop</FieldLabel></Field><div className="grid w-full max-w-64 gap-3"><div className="flex justify-between text-sm"><Label htmlFor="shelf-volume">Volume</Label><output>{volume}%</output></div><Slider id="shelf-volume" aria-label="Preview volume" value={volume} onValueChange={value => setVolume(Array.isArray(value) ? value[0]! : value)} /></div></div><Link to="/docs/components/field" className="shelf-label">Inputs that feel right <ArrowRightIcon /></Link></section>
     <section className="shelf-item"><div className="shelf-preview"><Tabs defaultValue="overview" className="w-full max-w-64"><TabsList className="w-full"><TabsTrigger value="overview">Overview</TabsTrigger><TabsTrigger value="activity">Activity</TabsTrigger></TabsList><TabsContent value="overview" className="pt-4 text-sm text-muted-foreground">A place for everything you’re building.</TabsContent><TabsContent value="activity" className="pt-4 text-sm text-muted-foreground">All caught up. Time for the next idea.</TabsContent></Tabs></div><Link to="/docs/components/tabs" className="shelf-label">A little more structure <ArrowRightIcon /></Link></section>
+    <section className="shelf-item"><div className="shelf-preview"><ChoiceCards legend="Room to grow" name="preview-plan" value={plan} onChange={setPlan} items={[
+      { value: "personal", label: "Personal", hint: "A space for your own work", end: "1 seat" },
+      { value: "studio", label: "Studio", hint: "A shared home for your team", end: "8 seats" },
+    ]} /></div><Link to="/docs/components/choice-cards" className="shelf-label">Choices with context <ArrowRightIcon /></Link></section>
   </div>;
 }
 
@@ -64,7 +70,7 @@ export default function Home() {
         </div>
         <div className="hero-stage"><Geometry /><WorkspacePreview /><div className="hero-caption"><span>COMPONENTS, IN COMPOSITION</span><span>01 / {catalogue.length}</span></div></div>
       </section>
-      <div className="foundation-strip"><span>One system, from the ground up.</span><span>React 19</span><span>Base UI</span><span>shadcn/ui</span><span>Fumadocs</span></div>
+      <div className="foundation-strip"><span>One system, from the ground up.</span><span>React 19</span><span>Base UI</span><span>Owned SVGs</span><span>Light & dark</span></div>
       <section className="marketing-section"><div className="section-heading"><div><p className="eyebrow">FEEL THE DETAILS</p><h2>Small pieces. A complete language.</h2></div><p>Keyboard behavior, clear states, consistent spacing. Try the components right here.</p></div><ComponentShelf /></section>
       <section className="getting-started"><div><p className="eyebrow">LESS SETUP, MORE MAKING</p><h2>Your next interface<br />starts with an import.</h2><p>Use the compiled stylesheet and typed components. The docs put a working preview, its source, and the API in one place.</p><Button variant="outline" render={<Link to="/docs" />}>Installation guide <CornerDownLeftIcon /></Button></div><CodeSnippet filename="save-button.tsx" code={starter} /></section>
       <section className="marketing-section" id="components"><div className="section-heading"><div><p className="eyebrow">THE COMPONENT LIBRARY</p><h2>Find your building blocks.</h2></div><InputGroup className="max-w-xs"><InputGroupAddon><SearchIcon /></InputGroupAddon><InputGroupInput aria-label="Find a component" placeholder="Find a component…" value={query} onChange={event => setQuery(event.target.value)} /><InputGroupAddon align="inline-end"><Kbd>{catalogue.length}</Kbd></InputGroupAddon></InputGroup></div>

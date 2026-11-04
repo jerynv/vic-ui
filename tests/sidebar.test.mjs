@@ -7,7 +7,7 @@ import { createServer } from "vite";
 import { SidebarFixture } from "./sidebar.fixture.mjs";
 
 test("mobile sidebar traps focus, restores the opener, and respects contained layouts", { timeout: 60000 }, async (t) => {
-  const server = await createServer({ configFile: false, cacheDir: "node_modules/.vite-sidebar-test", server: { host: "127.0.0.1", port: 0 }, plugins: [{
+  const server = await createServer({ configFile: false, cacheDir: "node_modules/.vite-sidebar-test", optimizeDeps: { entries: ["tests/sidebar-hydrate.fixture.mjs"] }, server: { host: "127.0.0.1", port: 0 }, plugins: [{
     name: "sidebar-fixture",
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
