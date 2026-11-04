@@ -15,3 +15,7 @@
   --color-fd-muted-foreground: var(--muted-foreground);
   --color-fd-border: var(--border);
 }
+
+.preview-canvas > * { max-width: 100%; }
+.preview-canvas [data-slot="sidebar-wrapper"] { min-height: 20rem; }
+.preview-canvas [data-slot="sidebar-container"] { position: absolute; height: 100%; }

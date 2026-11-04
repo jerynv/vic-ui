@@ -12,12 +12,12 @@
     },
     {
       "id": "alert",
-      "name": "Problem",
+      "name": "Alert",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/alert.tsx"
     },
     {
       "id": "alert-dialog",
-      "name": "Typed confirmation",
+      "name": "Alert Dialog",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/alert-dialog.tsx"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "id": "avatar",
-      "name": "Mark and hues",
+      "name": "Avatar",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/avatar.tsx"
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "id": "button",
-      "name": "Icon button",
+      "name": "Button",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/button.tsx"
     },
     {
@@ -159,12 +159,12 @@
     },
     {
       "id": "input",
-      "name": "Number field",
+      "name": "Input",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input.tsx"
     },
     {
       "id": "input-group",
-      "name": "Search field",
+      "name": "Input Group",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input-group.tsx"
     },
     {
@@ -239,7 +239,7 @@
     },
     {
       "id": "radio-group",
-      "name": "Choice cards",
+      "name": "Radio Group",
       "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/radio-group.tsx"
     },
     {

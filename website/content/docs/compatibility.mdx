@@ -1,0 +1,19 @@
+---
+title: Original components
+description: The existing vic/ui API, including its application-specific compositions.
+---
+
+Existing applications can keep importing from `vic-ui`. These components preserve the original prop contracts and styles. New interfaces can use the shadcn Base UI catalogue at `vic-ui/ui`.
+
+```tsx
+import "vic-ui/styles.css";
+import { Button } from "vic-ui";
+
+<Button look="ink">Save changes</Button>
+```
+
+## Browse the original library
+
+Every example below runs the exported component, with its actual source beside it. The selector includes Choice Cards, Typed Confirmation, Emoji Picker, Flow, Org Mark, and the other original components.
+
+<LegacyCatalogue />

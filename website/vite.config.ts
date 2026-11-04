@@ -13,6 +13,8 @@ export default defineConfig({
       "@": fileURLToPath(new URL("../src", import.meta.url)),
       "~": fileURLToPath(new URL("./app", import.meta.url)),
       "vic-ui/ui": fileURLToPath(new URL("../src/ui/index.ts", import.meta.url)),
+      "vic-ui/icons": fileURLToPath(new URL("../src/icons/icons.tsx", import.meta.url)),
+      "vic-ui": fileURLToPath(new URL("../src/index.ts", import.meta.url)),
     },
     dedupe: ["react", "react-dom", "react-router", "@base-ui/react"],
   },

@@ -5,7 +5,9 @@
     "paths": {
       "@/*": ["../src/*"],
       "~/*": ["./app/*"],
-      "vic-ui/ui": ["../src/ui/index.ts"]
+      "vic-ui/ui": ["../src/ui/index.ts"],
+      "vic-ui/icons": ["../src/icons/icons.tsx"],
+      "vic-ui": ["../src/index.ts"]
     }
   },
   "include": ["app", "*.ts", ".react-router/types"]

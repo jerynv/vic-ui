@@ -17,7 +17,7 @@ function walk(at) {
   }
 }
 // The library and the site that documents it.
-for (const dir of [join(root, "src"), join(root, "site/src")]) if (existsSync(dir)) walk(dir);
+for (const dir of [join(root, "src"), join(root, "site/src"), join(root, "website/app")]) if (existsSync(dir)) walk(dir);
 
 
 /** One shadow of a list: a token, an inset line, or a ring that casts nothing. */
