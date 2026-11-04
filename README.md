@@ -143,16 +143,17 @@ What every piece already does, and what anything built with them is held to:
 
 ## Component foundation migration
 
-The migration adopts shadcn's Base UI foundation, followed by its component catalogue
-and Fumadocs documentation. Existing root exports remain compatibility APIs. The
+The library now uses shadcn's Base UI catalogue and Fumadocs documentation. This gives
+the shared design system the full component set and established interaction primitives.
+Existing root exports remain compatibility APIs. The
 local consumer audit found `puzzles` and `phaethon`: both use button props, and Phaethon
 also styles the `.ui-button-face` slot. Preserve that markup, native refs, `type`, busy
 states, disabled explanations, and router links while adapting the implementation.
 Native form exports on the separate disclosure branch remain owned by that change.
 
-The delivery sequence is button and server-rendering compatibility; upstream component
-imports and token integration; remaining compatibility adapters and overlay focus;
-Fumadocs and the marketing site; then consumer and component-gallery checks.
+The migration preserves those contracts while adding all 66 catalogue families, the
+marketing site, and live documentation. The consumer repositories keep their existing
+versions until their owners choose to upgrade.
 
 ## Scripts
 
