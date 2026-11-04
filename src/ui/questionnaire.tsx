@@ -226,7 +226,7 @@ function QuestionnairePrevious({
       )}
       {...props}
     >
-      {children ?? "Previous"}
+      <span className="ui-button-face">{children ?? "Previous"}</span>
     </QuestionnairePrimitive.Previous>
   )
 }
@@ -251,7 +251,7 @@ function QuestionnaireSkip({
       )}
       {...props}
     >
-      {children ?? "Skip"}
+      <span className="ui-button-face">{children ?? "Skip"}</span>
     </QuestionnairePrimitive.Skip>
   )
 }
@@ -276,7 +276,7 @@ function QuestionnaireNext({
       )}
       {...props}
     >
-      {children ?? "Next"}
+      <span className="ui-button-face">{children ?? "Next"}</span>
     </QuestionnairePrimitive.Next>
   )
 }
@@ -301,7 +301,7 @@ function QuestionnaireSubmit({
       )}
       {...props}
     >
-      {children ?? "Submit"}
+      <span className="ui-button-face">{children ?? "Submit"}</span>
     </QuestionnairePrimitive.Submit>
   )
 }

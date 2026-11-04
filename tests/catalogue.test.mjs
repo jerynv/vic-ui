@@ -28,6 +28,23 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(server.resolvedUrls.local[0]);
+    for (const mode of ["light", "dark"]) {
+      await page.evaluate(mode => { document.documentElement.dataset.mode = mode; }, mode);
+      for (const part of ["button", "line", "card", "field", "switch"]) {
+        const styles = await page.evaluate(part => {
+          const original = document.querySelector(`#original-${part}`);
+          const composed = document.querySelector(part === "switch" ? "#identity [data-slot=switch]" : `#composed-${part}`);
+          const appearance = element => {
+            const style = getComputedStyle(element);
+            return Object.fromEntries(["height", "backgroundImage", "backgroundColor", "borderRadius", "boxShadow", "fontSize", "color"].map(key => [key, style[key]]));
+          };
+          return [original, composed].map(element => ({ outer: appearance(part === "field" ? element.parentElement : element), inner: element.querySelector(".ui-button-face, .ui-switch-knob") ? appearance(element.firstElementChild) : null }));
+        }, part);
+        assert.deepEqual(styles[1], styles[0], `${part} preserves vic's ${mode} appearance`);
+      }
+    }
+    await page.evaluate(() => { document.documentElement.dataset.mode = "light"; });
+    assert.equal(await page.getByRole("link", { name: "Composed link" }).getAttribute("href"), "#destination");
     const theme = page.getByRole("button", { name: "Change color theme" });
     assert.equal(await theme.textContent(), "");
     assert.equal(await theme.locator("svg").count(), 1);
