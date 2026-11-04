@@ -11,6 +11,10 @@ export interface Piece {
 export const GROUPS = ["Actions", "Inputs", "Overlays", "Navigation", "Display", "Data", "Feedback", "Timeline"] as const;
 
 export const PIECES: Piece[] = [
+  { id: "native-fields", name: "Native fields", group: "Inputs", summary: "Input and multiline field leaves for caller-owned labels, descriptions and compound layouts.", exports: ["Input", "TextareaControl"], file: "Input.tsx" },
+  { id: "native-select", name: "Native select", group: "Inputs", summary: "The platform picker with native options, keyboard navigation and form validation.", exports: ["NativeSelect"], file: "NativeSelect.tsx" },
+  { id: "disclosure", name: "Disclosure", group: "Display", summary: "Details that open with a native summary, with a visible chevron and no JavaScript required.", exports: ["Disclosure"], file: "Disclosure.tsx" },
+  { id: "skeleton", name: "Skeleton", group: "Feedback", summary: "A quiet, static placeholder. Announce loading once on its containing region.", exports: ["Skeleton"], file: "Skeleton.tsx" },
   { id: "button", name: "Button", group: "Actions", summary: "A native button in four looks: ink for a page's one committing action, line beside it, quiet for words that act, link for words that act inside a sentence; and a button that chooses a file.", exports: ["Button", "ButtonLink", "FileButton"], file: "Button.tsx" },
   { id: "danger-button", name: "Danger and caution", group: "Actions", summary: "The commit of something that removes or ends, in the danger ink, and of a change to agreed terms, in the caution ink.", exports: ["DangerButton", "CautionButton", "DangerButtonLink"], file: "DangerButton.tsx" },
   { id: "icon-button", name: "Icon button", group: "Actions", summary: "An icon alone that acts, on a button or a link: its words are its accessible name and its tooltip.", exports: ["IconButton", "IconButtonLink"], file: "IconButton.tsx" },
@@ -25,7 +29,7 @@ export const PIECES: Piece[] = [
   { id: "number-field", name: "Number field", group: "Inputs", summary: "A number with what is fixed before and after it, whole or with decimals.", exports: ["NumberField"], file: "NumberField.tsx" },
   { id: "date-picker", name: "Date picker", group: "Inputs", summary: "A calendar date as YYYY-MM-DD, never an instant, chosen from a month that opens under the field, or a month standing on the page.", exports: ["DatePicker", "MonthGrid"], file: "DatePicker.tsx" },
   { id: "checkbox", name: "Checkbox", group: "Inputs", summary: "A native box with its label, that can say why it cannot be ticked.", exports: ["Checkbox"], file: "Checkbox.tsx" },
-  { id: "radio", name: "Radio group", group: "Inputs", summary: "One of a few, as a list, across a row, or as cards with a line each.", exports: ["RadioGroup"], file: "Radio.tsx" },
+  { id: "radio", name: "Radio group", group: "Inputs", summary: "One of a few, as a list, across a row, or as cards with a line each.", exports: ["Radio", "RadioGroup"], file: "Radio.tsx" },
   { id: "typed-confirm", name: "Typed confirmation", group: "Inputs", summary: "A name, an address or a number typed to confirm what cannot be taken back, its label holding two lines so nothing moves.", exports: ["TypedConfirm", "typedFirst"], file: "TypedConfirm.tsx" },
   { id: "switch", name: "Switch", group: "Inputs", summary: "On or off, taking effect at once.", exports: ["Switch"], file: "Switch.tsx" },
 
