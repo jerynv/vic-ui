@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from "react";
+import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { toOptions, type Items, type Option } from "./items";
 import { useFieldReason } from "./reason";
 
@@ -70,3 +70,10 @@ function RadioItem(props: { item: Option; name: string; chosen: boolean; onChoos
     </label>
   );
 }
+
+/** One native radio in a caller-owned labelled layout; name joins it to its group. */
+export const Radio = forwardRef<HTMLInputElement, Omit<InputHTMLAttributes<HTMLInputElement>, "type">>(
+  function Radio({ className, ...props }, ref) {
+    return <input {...props} ref={ref} type="radio" className={["ui-radio-dot", className].filter(Boolean).join(" ")} />;
+  },
+);
