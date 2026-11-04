@@ -1,5 +1,6 @@
 // Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
 "use client"
+import type { SurfaceProps } from "../components/Surface";
 
 import * as React from "react"
 import { Select as SelectPrimitive } from "@base-ui/react/select"
@@ -31,14 +32,16 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
 function SelectTrigger({
   className,
   size = "default",
+  surface,
   children,
   ...props
-}: SelectPrimitive.Trigger.Props & {
+}: SelectPrimitive.Trigger.Props & SurfaceProps & {
   size?: "sm" | "default"
 }) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
+      data-ui-surface={surface}
       data-size={size}
       className={cn(
         "ui-field-box ui-select-box gap-2 px-3 text-sm data-[size=sm]:h-(--control-h-sm) data-disabled:opacity-55 data-placeholder:text-muted-foreground",

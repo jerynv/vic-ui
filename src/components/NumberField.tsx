@@ -1,3 +1,4 @@
+import type { SurfaceStyle } from "./Surface";
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
 import { useFieldReason } from "./reason";
@@ -22,10 +23,10 @@ export const NumberField = forwardRef<
     error?: ReactNode;
     /** Whole numbers only: the numeric keyboard rather than the decimal one. */
     whole?: boolean;
-    size?: "sm";
+    size?: "sm"; surface?: SurfaceStyle;
     disabledReason?: string | undefined;
   }
->(function NumberField({ value, onValueChange, label, prefix, suffix, hint, error, whole, size, className, id, disabled, disabledReason, onFocus, onBlur, onKeyDown, ...rest }, ref) {
+>(function NumberField({ value, onValueChange, label, prefix, suffix, hint, error, whole, size, surface, className, id, disabled, disabledReason, onFocus, onBlur, onKeyDown, ...rest }, ref) {
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
@@ -33,7 +34,7 @@ export const NumberField = forwardRef<
   const said = describedBy(field, error, hint, why.describedBy);
   const classes = ["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ");
   return (
-    <div className={classes}>
+    <div data-ui-surface={surface} className={classes}>
       <FieldHead field={field} label={label} error={error} />
       <div ref={why.anchor} className="ui-field-box ui-number-box" data-invalid={error ? "" : undefined} data-disabled={disabled || held ? "" : undefined} {...why.box}>
         {prefix ? (

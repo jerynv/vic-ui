@@ -173,6 +173,11 @@ test("card spacing, composable disclosure, and file-row actions", { timeout: 300
     await page.goto(`${url}docs/components/card/`, { waitUntil: "networkidle" });
     const flushHeader = page.locator('.ui-card-head:has(+ .ui-card-flush)');
     assert.equal(await flushHeader.evaluate(el => getComputedStyle(el).paddingBottom), "16px");
+    const field = page.getByRole("textbox", { name: "First name", exact: true });
+    const flatFill = await field.evaluate(el => getComputedStyle(el.parentElement).backgroundColor);
+    await page.getByRole("combobox", { name: "Preview surface", exact: true }).click();
+    await page.getByRole("option", { name: "Bordered", exact: true }).click();
+    assert.notEqual(await field.evaluate(el => getComputedStyle(el.parentElement).backgroundColor), flatFill);
     assert.equal(await page.locator("main details").count(), 0);
     const disclosure = page.getByRole("button", { name: "Composable API", exact: true });
     await disclosure.focus();

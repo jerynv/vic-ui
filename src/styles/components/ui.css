@@ -376,7 +376,8 @@
     min-width: 0;
     height: var(--control-h);
     border-radius: var(--radius-field);
-    background: var(--field-fill);
+    background: var(--ui-field-fill, var(--field-fill));
+    box-shadow: inset 0 0 0 1px var(--ui-field-edge, transparent);
     transition:
       box-shadow 120ms,
       background-color 120ms;
@@ -392,7 +393,7 @@
   }
 
   .ui-field-box:hover:not(:focus-within, :has(:disabled)) {
-    background: var(--field-fill-hover);
+    background: var(--ui-field-hover, var(--field-fill-hover));
   }
 
   .ui-field-box[data-invalid] {

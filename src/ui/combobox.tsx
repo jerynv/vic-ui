@@ -1,5 +1,6 @@
 // Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
 "use client"
+import type { SurfaceProps } from "../components/Surface";
 
 import * as React from "react"
 import { Combobox as ComboboxPrimitive } from "@base-ui/react"
@@ -55,14 +56,15 @@ function ComboboxInput({
   children,
   disabled = false,
   showTrigger = true,
+  surface,
   showClear = false,
   ...props
-}: ComboboxPrimitive.Input.Props & {
+}: ComboboxPrimitive.Input.Props & SurfaceProps & {
   showTrigger?: boolean
   showClear?: boolean
 }) {
   return (
-    <InputGroup className={cn("w-auto", className)}>
+    <InputGroup surface={surface} className={cn("w-auto", className)}>
       <ComboboxPrimitive.Input
         render={<InputGroupInput disabled={disabled} />}
         {...props}

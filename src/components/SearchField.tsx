@@ -1,3 +1,4 @@
+import type { SurfaceStyle } from "./Surface";
 import { forwardRef, useCallback, useId, useRef, type InputHTMLAttributes, type ReactNode } from "react";
 import { MagnifyingGlassIcon, XIcon } from "../icons/icons";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
@@ -21,11 +22,11 @@ export const SearchField = forwardRef<
     error?: ReactNode;
     /** What the clear button says to a screen reader. */
     clearLabel?: string;
-    size?: "sm";
+    size?: "sm"; surface?: SurfaceStyle;
     bare?: boolean;
     disabledReason?: string | undefined;
   }
->(function SearchField({ value, onValueChange, label, hint, error, clearLabel = "Clear the search", size, bare, className, id, disabled, disabledReason, onKeyDown, onFocus, onBlur, ...rest }, ref) {
+>(function SearchField({ value, onValueChange, label, hint, error, clearLabel = "Clear the search", size, surface, bare, className, id, disabled, disabledReason, onKeyDown, onFocus, onBlur, ...rest }, ref) {
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
@@ -47,7 +48,7 @@ export const SearchField = forwardRef<
 
   const classes = ["ui-field", size === "sm" ? "ui-field-sm" : "", bare ? "ui-search-bare" : "", className ?? ""].filter(Boolean).join(" ");
   return (
-    <div className={classes} role={bare ? undefined : "search"}>
+    <div data-ui-surface={surface} className={classes} role={bare ? undefined : "search"}>
       <FieldHead field={field} label={label} error={error} />
       <div ref={why.anchor} className="ui-field-box ui-search-box" data-invalid={error ? "" : undefined} data-disabled={disabled || held ? "" : undefined} {...why.box}>
         <MagnifyingGlassIcon size={size === "sm" ? 14 : 16} className="ui-search-glass" aria-hidden="true" />

@@ -9,6 +9,25 @@ The compiled stylesheet includes Cal Sans UI, Space Mono, and the vic palette. C
 
 Override tokens in your application stylesheet, after importing `vic-ui/ui/styles.css`. Radius tokens are `--radius-mark`, `--radius-row`, `--radius-control`, `--radius-float`, `--radius-panel`, and `--radius-round`.
 
+## Flat and bordered surfaces
+
+Use one shared style for a form, card, or page. Both styles keep the same sizes, behavior, validation and action buttons. Flat fields use a soft fill; bordered fields use a clear outline. Cards keep their surface with or without an edge.
+
+<ComponentPreview name="surfaces" />
+
+```tsx
+import { Surface, TextField, Select, Card } from "vic-ui";
+
+<Surface surface="bordered">
+  <TextField label="Name" placeholder="Your full name" />
+  <TextField surface="flat" label="Search" placeholder="Find a project" />
+</Surface>
+```
+
+`surface="flat" | "bordered"` is available on TextField, Textarea, Select, Combobox, SearchField, NumberField, DatePicker and Card. The composable API exposes it on Input, Textarea, SelectTrigger, ComboboxInput, NativeSelect, InputGroup and Card. You can import Surface from either entry point. A nested Surface or an individual prop overrides its parent.
+
+Buttons, badges, avatars and floating menus keep their own styles. Card's explicit `look="recessed"` and danger tone remain meaningful in either surface. Outside a Surface, existing component defaults are preserved. Portalled dialogs need their own Surface around form content; the setting follows the DOM tree.
+
 ## Light, dark, and system
 
 Set `data-mode` on the document element to `light`, `dark`, or `system`. The icon control uses the library's Button and radio menu. Its accessible name is “Change color theme”. Your application owns the selected mode and persistence.

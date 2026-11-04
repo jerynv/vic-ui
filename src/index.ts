@@ -69,3 +69,5 @@ export { FileChip } from "./components/FileChip";
 export { MediaGrid, FileCard, MEDIA_WIDE, MEDIA_TALL, type MediaItem } from "./components/Attachment";
 export { TimelineDivider, Reaction, Reactions, ActionBar, ActionBarRule } from "./components/Timeline";
 export { FileGrid, FileTile } from "./components/Attachment";
+
+export { Surface, type SurfaceStyle, type SurfaceProps } from "./components/Surface";

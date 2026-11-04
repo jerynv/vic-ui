@@ -66,3 +66,5 @@ export * from "./toggle";
 export * from "./tooltip";
 export * from "./trace";
 export * from "./typography";
+
+export { Surface, type SurfaceStyle, type SurfaceProps } from "../components/Surface";

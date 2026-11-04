@@ -1,3 +1,5 @@
+import { Surface, Select as NativeVicSelect, Textarea as NativeVicTextarea } from "../dist/index.js";
+import { NativeSelect, NativeSelectOption, InputGroup, InputGroupInput } from "../dist/ui.js";
 import { createElement as h, useEffect, useState } from "react";
 import { Button, ColorModeSwitch, CodeSnippet, Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerDescription, DrawerClose, InputOTP, InputOTPGroup, InputOTPSlot, Slider, Toggle, ScrollArea, Card, CardContent, Input, Switch, Badge, Checkbox, RadioGroup, RadioGroupItem, Tabs, TabsList, TabsTrigger, TabsContent } from "../dist/ui.js";
 
@@ -10,6 +12,18 @@ export function CatalogueFixture() {
   const [otp, setOtp] = useState("");
   useEffect(() => { document.documentElement.dataset.mode = mode; }, [mode]);
   return h("main", { style: { maxWidth: 600, margin: "40px auto", padding: 24, display: "grid", gap: 24 } },
+    h("section", { id: "surface-tests" }, ["flat", "bordered"].map(surface => h(Surface, { key: surface, surface, id: surface },
+      h(TextField, { "aria-label": `${surface} name`, placeholder: "Your name" }),
+      h(Input, { "aria-label": `${surface} input`, placeholder: "Your name" }),
+      h(NativeVicTextarea, { label: `${surface} note`, placeholder: "Your note" }),
+      h(NativeVicSelect, { label: `${surface} access`, value: "editor", items: { editor: "Can edit", viewer: "Can view" } }),
+      h(NativeSelect, { "aria-label": `${surface} native select` }, h(NativeSelectOption, { value: "editor" }, "Can edit")),
+      h(InputGroup, {}, h(InputGroupInput, { "aria-label": `${surface} group` })),
+      h(OriginalCard, {}, "A card"),
+      h(TextField, { "aria-label": `${surface} override`, surface: surface === "flat" ? "bordered" : "flat" }),
+      h(TextField, { "aria-label": `${surface} invalid`, error: "Check this value" }),
+      h(TextField, { "aria-label": `${surface} held`, disabled: true, disabledReason: "Read only" })
+    ))),
     h("div", { id: "identity", style: { display: "grid", gap: 12 } },
       h(OriginalButton, { id: "original-button" }, "Save"), h(Button, { id: "composed-button" }, "Save"),
       h(OriginalButton, { id: "original-line", look: "line" }, "Cancel"), h(Button, { id: "composed-line", variant: "outline" }, "Cancel"),
