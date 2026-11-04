@@ -87,8 +87,18 @@
     pointer-events: auto;
   }
 
-  .ui-sidebar-window > .ui-sidebar-sheet,
-  .ui-sidebar-window > .ui-sidebar-backdrop {
+  .ui-sidebar-portal { display: contents; }
+
+  .ui-sidebar-close {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.5rem;
+  }
+
+  .ui-sidebar-sheet > .ui-sidebar-header { padding-inline-end: 3rem; }
+
+  .ui-sidebar-window > .ui-sidebar-portal > .ui-sidebar-sheet,
+  .ui-sidebar-window > .ui-sidebar-portal > .ui-sidebar-backdrop {
     position: fixed;
   }
 
