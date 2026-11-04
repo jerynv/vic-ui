@@ -3,6 +3,7 @@ import test from "node:test";
 import { chromium } from "playwright";
 import { preview } from "vite";
 import { readFile } from "node:fs/promises";
+import { PIECES } from "../site/src/registry.ts";
 
 const base = process.env.VIC_UI_BASE ?? "/vic-ui/";
 
@@ -15,7 +16,7 @@ test("marketing uses working library components and links to the full catalogue"
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(server.resolvedUrls.local[0]);
     await page.getByRole("heading", { name: "Good interfaces start here.", level: 1 }).waitFor();
-    assert.equal(await page.locator('[aria-label="Component directory"] a').count(), 66);
+    assert.equal(await page.locator('[aria-label="Component directory"] a').count(), 91);
     await page.getByLabel("Workspace name", { exact: true }).fill("Field Notes");
     await page.getByRole("switch", { name: "Open to your team" }).click();
     await page.getByText("Only people you invite can join.", { exact: true }).waitFor();
@@ -88,7 +89,9 @@ test("every catalogue example renders on desktop and fits a mobile viewport", { 
       await page.goto(`${server.resolvedUrls.local[0]}docs/components/${id}/`);
       await page.getByRole("heading", { name, exact: true, level: 1 }).waitFor();
       assert.equal(await page.title(), `${name} · vic/ui`);
-      const preview = page.getByRole("tabpanel", { name: "Preview", exact: true });
+      const compound = page.locator("details").filter({ has: page.getByText("Composable API", { exact: true }) });
+      if (await compound.count()) await compound.locator("summary").click();
+      const preview = page.locator(".preview-canvas");
       await preview.waitFor();
       await preview.locator(":scope > :visible").first().waitFor();
       await page.waitForFunction(() => !document.querySelector('.preview-canvas [data-slot="skeleton"]') || location.pathname.includes("skeleton"));
@@ -104,23 +107,25 @@ test("every catalogue example renders on desktop and fits a mobile viewport", { 
   }
 });
 
-test("the original catalogue retains every component and its source", { timeout: 120000 }, async () => {
+test("every vic component has a primary page with its examples and source", { timeout: 120000 }, async () => {
   const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ reducedMotion: "reduce", viewport: { width: 390, height: 844 } });
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
-    await page.goto(`${server.resolvedUrls.local[0]}docs/compatibility/`);
-    const select = page.getByLabel("Original component", { exact: true });
-    await select.waitFor();
-    const options = await select.locator("option").evaluateAll(options => options.map(option => ({ id: option.value, name: option.textContent })));
-    assert.ok(options.length >= 40);
-    for (const { id, name } of options) {
-      await select.selectOption(id);
-      await page.getByRole("heading", { name, exact: true, level: 2 }).waitFor();
-      await page.locator(".legacy-preview").first().waitFor();
-      assert.ok(await page.locator(".legacy-preview > *").count() > 0, id);
+    for (const { id } of PIECES) {
+      await page.goto(`${server.resolvedUrls.local[0]}docs/components/${id}/`, { waitUntil: "networkidle" });
+      await page.locator(".vic-preview > *").first().waitFor();
+      assert.ok(await page.locator(".vic-preview > *").count() > 0, id);
+      assert.equal(await page.getByRole("link", { name: "Props and component source", exact: true }).count(), 1);
+      if (id === "button") {
+        assert.ok(await page.locator('.vic-preview .ui-button-face').count() > 8);
+        assert.equal(await page.locator('.vic-preview [aria-busy="true"]').count(), 3);
+        await page.getByRole("button", { name: "Stop the wait", exact: true }).click();
+        await page.getByRole("button", { name: "Start the wait", exact: true }).waitFor();
+        assert.equal(await page.locator('.vic-preview [aria-busy="true"]').count(), 0);
+      }
       await page.waitForFunction(() => document.documentElement.scrollWidth <= innerWidth, null, { timeout: 5000 });
     }
     await page.getByRole("tab", { name: "Source", exact: true }).first().click();

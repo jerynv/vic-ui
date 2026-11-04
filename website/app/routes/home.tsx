@@ -4,7 +4,7 @@ import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { Link } from "react-router";
 import { ArrowRightIcon, CheckIcon, CodeIcon, CornerDownLeftIcon, MagnifyingGlassIcon as SearchIcon } from "vic-ui/icons";
 import { Avatar, AvatarFallback, AvatarGroup, Badge, Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, CodeSnippet, Field, FieldContent, FieldDescription, FieldLabel, Input, InputGroup, InputGroupAddon, InputGroupInput, Kbd, Label, Separator, Slider, Switch, Tabs, TabsContent, TabsList, TabsTrigger, toast } from "vic-ui/ui";
-import registry from "../../../src/ui/registry.json";
+import { catalogue } from "../lib/catalogue";
 import { baseOptions } from "../lib/layout";
 import "../marketing.css";
 
@@ -49,28 +49,27 @@ function ComponentShelf() {
   </div>;
 }
 
-const starter = 'import "vic-ui/ui/styles.css";\nimport { Button } from "vic-ui/ui";\n\nexport function SaveButton() {\n  return <Button>Save changes</Button>;\n}';
+const starter = 'import "vic-ui/ui/styles.css";\nimport { Button } from "vic-ui";\n\nexport function SaveButton() {\n  return <Button>Save changes</Button>;\n}';
 export default function Home() {
   const [query, setQuery] = useState("");
-  const components = registry.components.filter(component => component.name.toLowerCase().includes(query.toLowerCase()));
+  const components = catalogue.filter(component => component.name.toLowerCase().includes(query.toLowerCase()));
   return <HomeLayout {...baseOptions()}>
-    <title>vic/ui · Good interfaces start here.</title><meta name="description" content="66 React component families, a shared visual language, and source you can read. Built on shadcn and Base UI." />
+    <title>vic/ui · Good interfaces start here.</title><meta name="description" content="Textured controls, considered states, and an owned SVG catalogue. React components with source you can read." />
     <main className="marketing">
       <section className="marketing-hero" aria-labelledby="hero-title">
         <div className="hero-copy"><p className="eyebrow"><span className="brand-dot" /> A COMPONENT LIBRARY FOR REACT</p><h1 id="hero-title">Good interfaces<br />start here.</h1>
-          <p className="hero-description">The small details, already considered. Build with 66 component families that share one visual language, from the first input to the finished product.</p>
+          <p className="hero-description">The small details, already considered. Build with components that share vic’s visual language, from the first input to the finished product.</p>
           <div className="hero-actions"><Button size="lg" render={<Link to="/docs" />}>Start building <ArrowRightIcon /></Button><Button size="lg" variant="outline" render={<a href="#components" />}>Browse components</Button></div>
-          <p className="hero-footnote">Built on shadcn/ui + Base UI. Open source.</p>
+          <p className="hero-footnote">Textured controls. Considered states. Open source.</p>
         </div>
-        <div className="hero-stage"><Geometry /><WorkspacePreview /><div className="hero-caption"><span>COMPONENTS, IN COMPOSITION</span><span>01 / 66</span></div></div>
+        <div className="hero-stage"><Geometry /><WorkspacePreview /><div className="hero-caption"><span>COMPONENTS, IN COMPOSITION</span><span>01 / {catalogue.length}</span></div></div>
       </section>
       <div className="foundation-strip"><span>One system, from the ground up.</span><span>React 19</span><span>Base UI</span><span>shadcn/ui</span><span>Fumadocs</span></div>
       <section className="marketing-section"><div className="section-heading"><div><p className="eyebrow">FEEL THE DETAILS</p><h2>Small pieces. A complete language.</h2></div><p>Keyboard behavior, clear states, consistent spacing. Try the components right here.</p></div><ComponentShelf /></section>
       <section className="getting-started"><div><p className="eyebrow">LESS SETUP, MORE MAKING</p><h2>Your next interface<br />starts with an import.</h2><p>Use the compiled stylesheet and typed components. The docs put a working preview, its source, and the API in one place.</p><Button variant="outline" render={<Link to="/docs" />}>Installation guide <CornerDownLeftIcon /></Button></div><CodeSnippet filename="save-button.tsx" code={starter} /></section>
-      <section className="marketing-section" id="components"><div className="section-heading"><div><p className="eyebrow">THE COMPONENT LIBRARY</p><h2>Find your building blocks.</h2></div><InputGroup className="max-w-xs"><InputGroupAddon><SearchIcon /></InputGroupAddon><InputGroupInput aria-label="Find a component" placeholder="Find a component…" value={query} onChange={event => setQuery(event.target.value)} /><InputGroupAddon align="inline-end"><Kbd>{registry.components.length}</Kbd></InputGroupAddon></InputGroup></div>
+      <section className="marketing-section" id="components"><div className="section-heading"><div><p className="eyebrow">THE COMPONENT LIBRARY</p><h2>Find your building blocks.</h2></div><InputGroup className="max-w-xs"><InputGroupAddon><SearchIcon /></InputGroupAddon><InputGroupInput aria-label="Find a component" placeholder="Find a component…" value={query} onChange={event => setQuery(event.target.value)} /><InputGroupAddon align="inline-end"><Kbd>{catalogue.length}</Kbd></InputGroupAddon></InputGroup></div>
         <div className="component-directory" aria-label="Component directory">{components.map(component => <Link key={component.id} to={`/docs/components/${component.id}`}>{component.name}<ArrowRightIcon /></Link>)}</div>
         {components.length === 0 && <p role="status" className="py-8 text-muted-foreground">No components match “{query}”. Try another name.</p>}
-        <p className="mt-6 text-sm text-muted-foreground">Already using vic/ui? <Link to="/docs/compatibility" className="underline underline-offset-4">The original components are here too.</Link></p>
       </section>
       <footer className="marketing-footer"><Link to="/" className="font-mono text-xl font-semibold">vic/ui</Link><p>Thoughtful defaults. Room to make it yours.</p><a href="https://github.com/jerynv/vic-ui">Source on GitHub <ArrowRightIcon className="inline size-4" /></a></footer>
     </main>

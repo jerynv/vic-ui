@@ -1,12 +1,3 @@
-@import "../../src/styles/components/ui.css";
-@import "../../src/styles/components/ui-overlays.css";
-@import "../../src/styles/components/ui-inputs.css";
-@import "../../src/styles/components/ui-display.css";
-@import "../../src/styles/components/ui-data.css";
-@import "../../src/styles/components/ui-feedback.css";
-@import "../../src/styles/components/ui-sidebar.css";
-@import "../../src/styles/components/ui-timeline.css";
-
 /* Existing documentation demo layouts, reused with the original components. */
 .demo-row {
   display: flex;

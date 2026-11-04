@@ -57,7 +57,7 @@
     "build:website": "cd website && react-router build",
     "typecheck:website": "cd website && react-router typegen && tsc --noEmit -p tsconfig.json",
     "test:website": "npm run build:website && node --test tests/website.test.mjs",
-    "build:legacy-site": "vite build --config site/vite.config.ts"
+    "build:reference-site": "vite build --config site/vite.config.ts"
   },
   "peerDependencies": {
     "react": "^19.0.0",
