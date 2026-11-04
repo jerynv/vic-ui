@@ -32,10 +32,10 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
     await page.goto(server.resolvedUrls.local[0]);
     for (const mode of ["light", "dark"]) {
       await page.evaluate(mode => { document.documentElement.dataset.mode = mode; }, mode);
-      for (const part of ["button", "line", "card", "field", "switch"]) {
+      for (const part of ["button", "line", "card", "field", "switch", "badge", "check"]) {
         const styles = await page.evaluate(part => {
           const original = document.querySelector(`#original-${part}`);
-          const composed = document.querySelector(part === "switch" ? "#identity [data-slot=switch]" : `#composed-${part}`);
+          const composed = document.querySelector(part === "switch" ? "#identity [data-slot=switch]" : part === "check" ? "#identity [data-slot=checkbox]" : `#composed-${part}`);
           const appearance = element => {
             const style = getComputedStyle(element);
             return Object.fromEntries(["height", "backgroundImage", "backgroundColor", "borderRadius", "boxShadow", "fontSize", "color"].map(key => [key, style[key]]));
@@ -47,11 +47,32 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
     }
     await page.evaluate(() => { document.documentElement.dataset.mode = "light"; });
     assert.equal(await page.getByRole("link", { name: "Composed link" }).getAttribute("href"), "#destination");
+    const tabs = page.getByRole("tablist", { name: "Composed tabs" });
+    await tabs.getByRole("tab", { name: "One", exact: true }).focus();
+    await page.keyboard.press("ArrowRight");
+    await page.getByRole("tabpanel", { name: "Two", exact: true }).waitFor();
+    await page.waitForFunction(() => {
+      const list = document.querySelector('[aria-label="Composed tabs"]');
+      const mark = list.querySelector(".ui-tabs-mark").getBoundingClientRect();
+      const tab = list.querySelector('[aria-selected="true"]').getBoundingClientRect();
+      return Math.abs(mark.left - tab.left) < 1 && Math.abs(mark.width - tab.width) < 1;
+    });
+    const check = page.getByRole("checkbox", { name: "Composed check" });
+    await check.focus();
+    await page.keyboard.press("Space");
+    assert.equal(await check.getAttribute("aria-checked"), "false");
+    await page.getByRole("radio", { name: "Second choice" }).click();
+    assert.equal(await page.getByRole("radio", { name: "Second choice" }).getAttribute("aria-checked"), "true");
     const theme = page.getByRole("button", { name: "Change color theme" });
     assert.equal(await theme.textContent(), "");
     assert.equal(await theme.locator("svg").count(), 1);
     const light = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
     await theme.click();
+    const menu = page.getByRole("menu");
+    assert.ok((await menu.getAttribute("class")).includes("ui-menu"));
+    const surface = await menu.evaluate(element => ({ fill: getComputedStyle(element).backgroundColor, shadow: getComputedStyle(element).boxShadow, width: element.getBoundingClientRect().width }));
+    assert.notEqual(surface.shadow, "none");
+    assert.ok(surface.width >= 160);
     await page.getByRole("menuitemradio", { name: "Dark" }).click();
     await page.waitForFunction(() => document.documentElement.dataset.mode === "dark");
     assert.notEqual(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), light);
@@ -67,6 +88,14 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
     await page.getByRole("dialog", { name: "Edit project" }).waitFor();
     await page.keyboard.press("Escape");
     await page.getByRole("dialog", { name: "Edit project" }).waitFor({ state: "hidden" });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole("button", { name: "Open dialog" }).click();
+    const mobileDialog = page.getByRole("dialog", { name: "Edit project" });
+    await mobileDialog.waitFor();
+    const bounds = await mobileDialog.boundingBox();
+    assert.ok(bounds.x >= 0 && bounds.width <= 390 && Math.abs(bounds.y + bounds.height - 844) < 1);
+    await page.keyboard.press("Escape");
+    await mobileDialog.waitFor({ state: "hidden" });
     await page.getByRole("button", { name: "Open drawer" }).click();
     await page.getByRole("dialog", { name: "Project filters" }).waitFor();
     await page.getByRole("button", { name: "Apply filters" }).click();

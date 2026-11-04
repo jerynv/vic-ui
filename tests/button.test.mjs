@@ -18,6 +18,8 @@ test("buttons and descriptions render on the server and hydrate without changing
   };
   const server = await createServer({
     configFile: false,
+    cacheDir: "node_modules/.vite-button-test",
+    optimizeDeps: { entries: ["tests/hydrate.fixture.mjs"] },
     server: { host: "127.0.0.1", port: 0 },
     plugins: [{ name: "button-fixture", configureServer: (server) => { server.middlewares.use(serveFixture); } }],
   });

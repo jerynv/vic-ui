@@ -28,7 +28,11 @@
     animation: ui-dialog-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
   }
 
-  .ui-dialog::backdrop {
+  .ui-dialog::backdrop,
+  [data-slot="dialog-overlay"],
+  [data-slot="alert-dialog-overlay"],
+  [data-slot="sheet-overlay"],
+  [data-slot="drawer-overlay"] {
     background: light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62));
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);

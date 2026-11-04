@@ -17,17 +17,17 @@
 :root {
   --background: var(--bg-canvas);
   --foreground: var(--fg);
-  --card: var(--bg-base);
+  --card: var(--surface-lifted);
   --card-foreground: var(--fg);
-  --popover: var(--bg-base);
+  --popover: var(--surface-lifted);
   --popover-foreground: var(--fg);
   --primary: var(--fg-strong);
   --primary-foreground: var(--fg-inverse);
   --secondary: var(--bg-tint);
   --secondary-foreground: var(--fg-strong);
-  --muted: var(--bg-tint);
+  --muted: var(--field-fill);
   --muted-foreground: var(--fg-subtle);
-  --accent: var(--bg-tint);
+  --accent: var(--fill-hover);
   --accent-foreground: var(--fg-strong);
   --destructive: var(--tone-danger-ink);
   --border: var(--line);

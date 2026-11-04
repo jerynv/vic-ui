@@ -2367,3 +2367,5 @@ Both are declared in `base.css` with `font-display: swap`. Fallback stacks are t
 `body` sets `--font-sans` at `--text-body` with `-webkit-font-smoothing: antialiased` and `-moz-osx-font-smoothing: grayscale`. Selection is `light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0))` behind `light-dark(oklch(0.9851 0 0), oklch(0.1448 0 0))`.
 
 The composable `vic-ui/ui` controls share the original component styles. Its Button renders the same rim, face, busy state and disabled explanation as `vic-ui`; Input, Textarea, Card and Switch use the existing field, surface and switch classes. Import `vic-ui/ui/styles.css` once for either API.
+
+Composable menus, selectors, popovers, tooltips, badges, tabs, checks, radios, tables, progress and dialog typography reuse the corresponding vic classes. Base UI owns their state and positioning; the existing stylesheet owns their appearance. Tabs use Base UI’s indicator measurements for vic’s moving ink mark.

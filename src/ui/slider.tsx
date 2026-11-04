@@ -47,7 +47,7 @@ function Slider({
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             getAriaLabel={getAriaLabel}
-            className="relative block size-3 shrink-0 rounded-(--radius-round) border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50"
+            className="ui-switch-knob relative block shrink-0 after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--focus)"
           />
         ))}
       </SliderPrimitive.Control>
