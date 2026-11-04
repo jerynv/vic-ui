@@ -3,6 +3,7 @@
 @import "./upstream.css";
 @import "../styles/fonts.css";
 @import "../styles/tokens.css";
+@import "../components.css";
 @source ".";
 
 @custom-variant dark {

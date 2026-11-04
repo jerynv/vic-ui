@@ -31,7 +31,7 @@ function classes(look: ButtonLook, size: "md" | "lg", full?: boolean, extra?: st
   return ["ui-button", `ui-button-${look}`, size === "lg" ? "ui-button-lg" : "", full ? "ui-button-full" : "", square ? "ui-button-square" : "", round ? "ui-button-round" : "", extra ?? ""].filter(Boolean).join(" ");
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; busy?: boolean; disabledReason?: string | undefined }>(function Button(
+export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; busy?: boolean; disabledReason?: string | undefined; render?: ButtonPrimitive.Props["render"]; nativeButton?: boolean }>(function Button(
   { look = "ink", size = "md", full, square, round, icon, busy, className, children, type = "button", disabled, disabledReason, ...rest },
   ref,
 ) {

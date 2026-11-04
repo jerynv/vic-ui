@@ -1,58 +1,22 @@
-// Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
-import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "cn"
+import { isValidElement, type ComponentProps } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Button as VicButton } from "../components/Button";
 
-const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-(--radius-control) border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
-        outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
-        ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
-        destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default:
-          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-        xs: "h-6 gap-1 rounded-(--radius-row) px-2 text-xs in-data-[slot=button-group]:rounded-(--radius-control) has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-1 rounded-(--radius-row) px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-(--radius-control) has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-        icon: "size-8",
-        "icon-xs":
-          "size-6 rounded-(--radius-row) in-data-[slot=button-group]:rounded-(--radius-control) [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm":
-          "size-7 rounded-(--radius-row) in-data-[slot=button-group]:rounded-(--radius-control)",
-        "icon-lg": "size-9",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-)
+// The composable API uses vic's actual textured button, including its rim and face.
+const buttonVariants = cva("ui-button group/button", {
+  variants: {
+    variant: { default: "ui-button-ink", outline: "ui-button-line", secondary: "ui-button-line", ghost: "ui-button-quiet", destructive: "ui-button-ink ui-button-danger", link: "ui-button-link" },
+    size: { default: "", md: "", xs: "", sm: "", lg: "ui-button-lg", icon: "ui-button-square", "icon-xs": "ui-button-square", "icon-sm": "ui-button-square", "icon-lg": "ui-button-square ui-button-lg" },
+  },
+  defaultVariants: { variant: "default", size: "default" },
+});
 
-function Button({
-  className,
-  variant = "default",
-  size = "default",
-  ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
-  return (
-    <ButtonPrimitive
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+type ButtonProps = Omit<ComponentProps<typeof VicButton>, "size"> & VariantProps<typeof buttonVariants>;
+function Button({ variant = "default", size = "default", look, className, ...props }: ButtonProps) {
+  const appearance = look ?? (variant === "outline" || variant === "secondary" ? "line" : variant === "ghost" ? "quiet" : variant === "link" ? "link" : "ink");
+  const link = isValidElement<{ href?: string; to?: unknown }>(props.render) && (props.render.props.href !== undefined || props.render.props.to !== undefined);
+  return <VicButton data-slot="button" {...props} nativeButton={props.nativeButton ?? !link} role={props.role ?? (link ? "link" : undefined)} look={appearance} size={size === "lg" || size === "icon-lg" ? "lg" : "md"}
+    square={props.square ?? size?.startsWith("icon") ?? false} className={["group/button", variant === "destructive" ? "ui-button-danger" : "", className].filter(Boolean).join(" ")} />;
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };
