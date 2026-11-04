@@ -23,7 +23,7 @@ export default function Example() {
           </>
         }
       >
-        <TextField label="Name" defaultValue="design-reviews" />
+        <TextField label="Name" placeholder="Channel name" defaultValue="design-reviews" />
       </Dialog>
     </>
   );

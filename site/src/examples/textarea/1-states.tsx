@@ -9,9 +9,9 @@ export default function Example() {
   return (
     <div className="demo-stack">
       <Textarea label="What it is for" placeholder="A sentence or two" rows={3} maxLength={280} value={about} onValueChange={setAbout} hint="Shown under its name in the list." />
-      <Textarea label="Note" grow rows={2} maxRows={6} value={note} onValueChange={setNote} hint="Grows with its words up to six lines." />
-      <Textarea label="Reason" rows={2} defaultValue="" maxLength={120} error="Say why, so the record carries it." />
-      <Textarea label="Refusal" size="sm" rows={2} defaultValue="Too long" maxLength={8} />
+      <Textarea label="Note" placeholder="Add a note for your team" grow rows={2} maxRows={6} value={note} onValueChange={setNote} hint="Grows with its words up to six lines." />
+      <Textarea label="Reason" placeholder="Explain the change" rows={2} defaultValue="" maxLength={120} error="Say why, so the record carries it." />
+      <Textarea label="Refusal" placeholder="Short reason" size="sm" rows={2} defaultValue="Too long" maxLength={8} />
       <Textarea label="Agreement" rows={2} disabled defaultValue="Closed while the account is suspended." />
       <Textarea label="Agreement" rows={2} disabledReason="Only an owner can change what guests agree to." defaultValue="Guests keep what they see here to themselves." />
     </div>

@@ -9,6 +9,8 @@ import { useMDXComponents } from "../components/mdx";
 import { redirect } from "react-router";
 import { PIECES } from "../../../site/src/registry";
 import registry from "../../../src/ui/registry.json";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "vic-ui/ui";
+import { ChevronDownIcon, ChevronUpIcon } from "vic-ui/icons";
 const VicExamples = lazy(() => import("../components/vic-examples"));
 import type { Route } from "./+types/docs";
 
@@ -36,7 +38,15 @@ export default function Page({ loaderData }: Route.ComponentProps) {
     <DocsTitle>{page.title}</DocsTitle><DocsDescription>{piece?.summary ?? page.description}</DocsDescription>
     <DocsBody>
       {piece ? <Suspense fallback={<p>Loading examples…</p>}><VicExamples key={piece.id} name={piece.id} /></Suspense> : <Content components={useMDXComponents()} />}
-      {piece && composable && <details className="mt-10 border-t pt-6"><summary className="cursor-pointer font-medium">Composable API</summary><Content components={useMDXComponents()} /></details>}
+      {piece && !composable && <Content components={useMDXComponents()} />}
+      {piece && composable && <Collapsible key={id} className="not-prose mt-10 border-t pt-2">
+        <CollapsibleTrigger className="ui-accordion-trigger group w-full">
+          Composable API
+          <ChevronDownIcon size={16} className="group-aria-expanded:hidden" />
+          <ChevronUpIcon size={16} className="hidden group-aria-expanded:inline" />
+        </CollapsibleTrigger>
+        <CollapsibleContent className="prose"><Content components={useMDXComponents()} /></CollapsibleContent>
+      </Collapsible>}
     </DocsBody>
   </DocsPage></DocsLayout>;
 }

@@ -333,16 +333,15 @@
     list-style: none;
   }
 
-  /* One line at one height, whatever its end holds: the words take what is left and are cut
-     short, and the link over the words covers the whole row, which lights only then. */
+  /* A row grows with its description. The title link covers the row; end actions stay above it. */
   .ui-list-row {
     position: relative;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    height: 2.5rem;
+    min-height: 2.75rem;
     margin-inline: -0.5rem;
-    padding: 0 0.5rem;
+    padding: 0.625rem 0.5rem;
     border-radius: var(--radius-row);
     font-size: var(--text-ui);
     transition: background-color 150ms ease;
@@ -386,6 +385,24 @@
   }
 
   .ui-list-row[data-quiet] .ui-list-row-words {
+    color: var(--fg-subtle);
+  }
+
+  .ui-list-row-title,
+  .ui-list-row-description {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ui-list-row:has(.ui-list-row-description) .ui-list-row-title {
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .ui-list-row-description {
+    margin-top: 0.125rem;
+    font-size: var(--text-tag);
     color: var(--fg-subtle);
   }
 

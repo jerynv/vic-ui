@@ -46,7 +46,7 @@ export const PIECES: Piece[] = [
   { id: "badge", name: "Badge", group: "Display", summary: "A standing state in a tone, hairline or solid, with a dot, an icon or a count. State always carries a word.", exports: ["Badge", "Count", "HeadCount", "toneClass"], file: "Badge.tsx" },
   { id: "notice", name: "Notice", group: "Display", summary: "The tone's tint behind a rule in its ink, with a title, words and an action.", exports: ["Notice"], file: "Notice.tsx" },
   { id: "card", name: "Card", group: "Display", summary: "The one surface on the page: an edge and no shadow, lifted or recessed, plain, flush, as a form, or edged in danger.", exports: ["Card"], file: "Card.tsx" },
-  { id: "list", name: "Rows", group: "Display", summary: "Groups of rows of one line at one height, each lit only where pressing it goes somewhere, and an empty group said in one quiet line.", exports: ["RowGroup", "Rows", "Row", "RowsMore", "EmptyLine"], file: "List.tsx" },
+  { id: "list", name: "Rows", group: "Display", summary: "Scannable lists with a title, optional supporting details, metadata and independent actions.", exports: ["RowGroup", "Rows", "Row", "RowsMore", "EmptyLine"], file: "List.tsx" },
   { id: "accordion", name: "Accordion", group: "Display", summary: "Sections that open one at a time or several, worked by the arrow keys.", exports: ["Accordion", "AccordionItem"], file: "Accordion.tsx" },
   { id: "avatar-stack", name: "Avatar stack", group: "Display", summary: "Faces overlapping, each cut back by the one before, with a count of the rest.", exports: ["AvatarStack"], file: "AvatarStack.tsx" },
   { id: "kbd", name: "Key", group: "Display", summary: "A key name drawn as a key, with what a screen reader hears.", exports: ["Kbd"], file: "Kbd.tsx" },

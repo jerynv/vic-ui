@@ -26,7 +26,7 @@ export default function PopoverDemo() {
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="width">Width</Label>
               <Input
-                id="width"
+                id="width" placeholder="e.g. 100%"
                 defaultValue="100%"
                 className="col-span-2 h-8"
               />
@@ -34,7 +34,7 @@ export default function PopoverDemo() {
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="maxWidth">Max. width</Label>
               <Input
-                id="maxWidth"
+                id="maxWidth" placeholder="e.g. 300px"
                 defaultValue="300px"
                 className="col-span-2 h-8"
               />
@@ -42,7 +42,7 @@ export default function PopoverDemo() {
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="height">Height</Label>
               <Input
-                id="height"
+                id="height" placeholder="e.g. 25px"
                 defaultValue="25px"
                 className="col-span-2 h-8"
               />
@@ -50,7 +50,7 @@ export default function PopoverDemo() {
             <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="maxHeight">Max. height</Label>
               <Input
-                id="maxHeight"
+                id="maxHeight" placeholder="e.g. none"
                 defaultValue="none"
                 className="col-span-2 h-8"
               />

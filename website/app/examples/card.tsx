@@ -21,11 +21,11 @@ export default function CardDemo() {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link">Sign Up</Button>
+          <Button variant="outline">Sign up</Button>
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form>
+        <form id="card-login" onSubmit={event => event.preventDefault()}>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -46,13 +46,13 @@ export default function CardDemo() {
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" placeholder="Enter your password" autoComplete="current-password" required />
             </div>
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
+        <Button type="submit" form="card-login" className="w-full">
           Login
         </Button>
         <Button variant="outline" className="w-full">

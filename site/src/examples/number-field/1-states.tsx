@@ -10,9 +10,9 @@ export default function Example() {
   const [seats, setSeats] = useState("abc");
   return (
     <div className="demo-stack">
-      <NumberField label="Price per seat" prefix="$" suffix="a month" value={price} onValueChange={setPrice} hint="In whole dollars or cents." />
-      <NumberField label="Recording rate" prefix="$" suffix="per hour" value={rate} onValueChange={setRate} />
-      <NumberField label="Seats" whole value={seats} onValueChange={setSeats} error={/^\d+$/.test(seats) ? undefined : "Type a whole number of seats."} />
+      <NumberField label="Price per seat" placeholder="0.00" prefix="$" suffix="a month" value={price} onValueChange={setPrice} hint="In whole dollars or cents." />
+      <NumberField label="Recording rate" placeholder="0.00" prefix="$" suffix="per hour" value={rate} onValueChange={setRate} />
+      <NumberField label="Seats" placeholder="Number of seats" whole value={seats} onValueChange={setSeats} error={/^\d+$/.test(seats) ? undefined : "Type a whole number of seats."} />
       <NumberField aria-label="Minutes each" size="sm" whole suffix="minutes" value="30" onValueChange={() => undefined} />
       <NumberField label="Seats" value="12" onValueChange={() => undefined} disabled />
       <NumberField label="Seats" value="12" onValueChange={() => undefined} disabledReason="Seats change with a change of terms." />

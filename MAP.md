@@ -7,7 +7,9 @@ the static search index and each document are prerendered. `npm run dev:website`
 `npm run build:website` emits `website/build/client`. The `dev:site` and `build:site`
 commands now target this website. GitHub Pages runs library and browser tests before deployment.
 The shared website theme control and live examples import the actual `vic-ui/ui` API.
-All 47 vic catalogue entries have first-class component pages. The 66 composable families share those pages where applicable, with their examples under Composable API.
+All 47 vic catalogue entries have first-class component pages. The 66 composable families share those pages where applicable, with their examples under the keyboard-accessible Composable API disclosure.
+Rows support an optional description beneath the title; the file-list example demonstrates independent save actions.
+Avatar is a single-person primitive; AvatarStack is the overlapping group composition.
 `website/upstream.json` records the imported demos. The original catalogue reuses
 `site/src/examples` with root package exports, including the vic-specific compositions.
 The marketing page composes actual library fields, switches, buttons, avatars, tabs, and
@@ -688,7 +690,7 @@ The one surface on the page: `lifted` sits on the page on the lifted surface wit
 | `children` | `ReactNode` | none | The body. |
 | native attributes | `HTMLAttributes<HTMLElement>` less `title` | | Passed through (a form's `onSubmit`). |
 
-States: none interactive. Radius `--radius-panel`, `--text-ui`, `--fg`. Lifted: `--surface-lifted` with `--edge`. Recessed: `--field-fill`, its foot's rule `--bone`. Danger (`data-tone="danger"`): `box-shadow: 0 0 0 1px var(--tone-danger-edge)`. Head padding `0.75rem 0.875rem 0` (with nothing under it, centred and padded 0.75rem below); body `0.75rem 0.875rem` (`flush` 0); foot `0.625rem 0.875rem` with a top rule `1px solid var(--line)`. Title `--text-read` weight 600, line height 1.35, `--fg-strong`; description `--fg-subtle`.
+States: none interactive. Radius `--radius-panel`, `--text-ui`, `--fg`. Lifted: `--surface-lifted` with `--edge`. Recessed: `--field-fill`, its foot's rule `--bone`. Danger (`data-tone="danger"`): `box-shadow: 0 0 0 1px var(--tone-danger-edge)`. Head padding `1rem 1rem 0` (alone or above flush content, padded 1rem below); body `1rem` (`flush` 0); foot `0.75rem 1rem` with a top rule `1px solid var(--line)`. Title `--text-read` weight 600, line height 1.35, `--fg-strong`; description `--fg-subtle`.
 
 Tokens: `--radius-panel`, `--text-ui`, `--text-read`, `--fg`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--edge`, `--field-fill`, `--line`, `--bone`, `--tone-danger-edge`.
 
@@ -1154,7 +1156,7 @@ Dependencies: icon `ArrowDownIcon`.
 
 ### RowGroup, Rows, Row, RowsMore
 
-Groups of rows of one line at one height (`List.tsx`): a group's head is a small mark in its hue, a short heading, its count and where the rest is; its rows each carry a mark, the words, where and when, and one action at the end. A row lights under the pointer only where pressing it goes somewhere.
+Groups of rows with an optional secondary `description` (`List.tsx`): a group's head is a small mark in its hue, a short heading, its count and where the rest is; its rows each carry a mark, the words, where and when, and one action at the end. A row lights under the pointer only where pressing it goes somewhere.
 
 `RowGroup`:
 
@@ -1187,7 +1189,7 @@ Groups of rows of one line at one height (`List.tsx`): a group's head is a small
 States:
 
 - Head: height 2rem, `--text-ui`; mark `var(--hue-ink, var(--fg-subtle))`; title weight 600 `--fg-strong`; count tabular `--fg-subtle`; more `--fg-subtle`, `--fg-strong` on hover, focus outline 2px `--focus`. Head and rows hang 0.5rem past the column, so the words line up with what is above them.
-- Row: height 2.5rem, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
+- Row: minimum height 2.75rem, padding 0.625rem 0.5rem, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
 - Under 640px: a place that is not a link goes, and when goes from a row with an action.
 
 Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--hue-ink`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.

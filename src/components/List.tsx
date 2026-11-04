@@ -49,7 +49,7 @@ export function Rows(props: { children: ReactNode; className?: string | undefine
 }
 
 /**
- * One row of one line at one height: a mark, the words (a link over the whole row where `to`
+ * A row with an optional description: a mark, the words (a link over the whole row where `to`
  * is given, which is when the row lights under the pointer), where it is, when, and its one
  * action at the end, which sits above the row's link so it is pressed on its own. `quiet`
  * words say something in place of a row. `after` is drawn under the row, inside its item,
@@ -60,6 +60,7 @@ export function Row(props: {
   state?: unknown;
   mark: ReactNode;
   words: ReactNode;
+  description?: ReactNode;
   title?: string | undefined;
   place?: ReactNode;
   when?: ReactNode;
@@ -73,11 +74,13 @@ export function Row(props: {
         <span className="ui-list-row-mark">{props.mark}</span>
         {props.to ? (
           <Link to={props.to} state={props.state} className="ui-list-row-words ui-list-row-link" title={props.title}>
-            {props.words}
+            <span className="ui-list-row-title">{props.words}</span>
+            {props.description && <span className="ui-list-row-description">{props.description}</span>}
           </Link>
         ) : (
           <span className="ui-list-row-words" title={props.title}>
-            {props.words}
+            <span className="ui-list-row-title">{props.words}</span>
+            {props.description && <span className="ui-list-row-description">{props.description}</span>}
           </span>
         )}
         {props.place ? <span className="ui-list-row-place">{props.place}</span> : null}
