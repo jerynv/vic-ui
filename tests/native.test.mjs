@@ -14,7 +14,7 @@ test('native select keeps form value, validation and its accessible name', () =>
 test('disclosure keeps native open state and summary', () => {
   const html = render(h(Disclosure, { open: true, summary: 'Details', id: 'detail' }, 'Evidence'));
   assert.match(html, /<details[^>]*open=""/);
-  assert.match(html, /<summary[^>]*>Details<\/summary>/);
+  assert.match(html, /<summary[\s\S]*<\/svg>Details<\/summary>/);
   assert.match(html, /Evidence/);
 });
 test('skeleton is decorative even if a caller sets aria-hidden false', () => {
