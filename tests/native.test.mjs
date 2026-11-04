@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createElement as h } from 'react';
 import { renderToStaticMarkup as render } from 'react-dom/server';
-import { NativeSelect, Disclosure, Skeleton } from '../dist/index.js';
+import { NativeSelect, Disclosure, Skeleton, Radio } from '../dist/index.js';
 
 test('native select keeps form value, validation and its accessible name', () => {
   const html = render(h(NativeSelect, { name: 'course', required: true, defaultValue: 'math', 'aria-label': 'Course' }, h('option', { value: 'math' }, 'Math')));
@@ -19,4 +19,11 @@ test('disclosure keeps native open state and summary', () => {
 });
 test('skeleton is decorative even if a caller sets aria-hidden false', () => {
   assert.match(render(h(Skeleton, { 'aria-hidden': false, className: 'wide' })), /aria-hidden="true"/);
+});
+
+test('radio preserves native grouping, checked state and event target attributes', () => {
+  const html = render(h(Radio, { name: 'answer', value: 'b', defaultChecked: true, 'aria-label': 'B' }));
+  assert.match(html, /type="radio"/);
+  assert.match(html, /name="answer"/);
+  assert.match(html, /checked=""/);
 });

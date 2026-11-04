@@ -9,7 +9,7 @@ export { FileButton } from "./components/FileButton";
 export { HUES, hueFor, type Hue } from "./components/hue";
 export { toOptions, textOf, type Items, type Option } from "./components/items";
 export { OrgMark, useLogo } from "./components/OrgMark";
-export { RadioGroup } from "./components/Radio";
+export { Radio, RadioGroup } from "./components/Radio";
 export { Select, SelectField } from "./components/Select";
 export { Switch } from "./components/Switch";
 export { TextField } from "./components/TextField";
