@@ -10,6 +10,9 @@ The shared website theme control and live examples import the actual `vic-ui/ui`
 All 66 upstream families have a page, a live example, a source tab, usage, and API links.
 `website/upstream.json` records the imported demos. The original catalogue reuses
 `site/src/examples` with root package exports, including the vic-specific compositions.
+The marketing page composes actual library fields, switches, buttons, avatars, tabs, and
+source blocks around a geometric SVG. The component directory filters all 66 families.
+Its workspace form is a local interactive demonstration, with no account or service call.
 
 ## Current component API
 

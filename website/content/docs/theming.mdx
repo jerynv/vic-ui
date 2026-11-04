@@ -1,0 +1,34 @@
+---
+title: Theming
+description: Shared colors, typography, shape, and light or dark appearance.
+---
+
+## One set of tokens
+
+The compiled stylesheet includes Cal Sans UI, Space Mono, and the vic palette. Components map shadcn's semantic colors to those tokens: `--background`, `--foreground`, `--primary`, `--border`, and the chart and sidebar colors.
+
+Override tokens in your application stylesheet, after importing `vic-ui/ui/styles.css`. Radius tokens are `--radius-mark`, `--radius-row`, `--radius-control`, `--radius-float`, `--radius-panel`, and `--radius-round`.
+
+## Light, dark, and system
+
+Set `data-mode` on the document element to `light`, `dark`, or `system`. The icon control uses the library's Button and radio menu. Its accessible name is “Change color theme”. Your application owns the selected mode and persistence.
+
+```tsx
+"use client";
+import { useEffect, useState } from "react";
+import { ColorModeSwitch } from "vic-ui/ui";
+
+export function ThemeControl() {
+  const [mode, setMode] = useState<"light" | "dark" | "system">("system");
+  useEffect(() => {
+    document.documentElement.dataset.mode = mode;
+  }, [mode]);
+  return <ColorModeSwitch value={mode} onValueChange={setMode} />;
+}
+```
+
+If your app uses `next-themes`, pass its `theme` and `setTheme` to the control. The stylesheet also supports its `light` and `dark` classes. Keep theme state on the document element so menus and dialogs rendered in portals inherit it.
+
+## Accessible composition
+
+Keep visible labels connected to inputs. Give icon buttons an `aria-label`, and supply Dialog titles and descriptions. The examples demonstrate these relationships; Base UI supplies focus management and keyboard interaction. Respect `prefers-reduced-motion` when adding application animations.
