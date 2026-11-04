@@ -242,7 +242,7 @@
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
-    padding: 0.75rem 0.875rem 0;
+    padding: 1rem 1rem 0;
   }
 
   .ui-card-heading {
@@ -273,7 +273,7 @@
   }
 
   .ui-card-body {
-    padding: 0.75rem 0.875rem;
+    padding: 1rem;
   }
 
   /* Rows that run to the card's edges bring their own inset. */
@@ -283,9 +283,10 @@
 
   /* A head with nothing under it is padded the same above and below, so its title sits in
      the middle of the card. */
-  .ui-card-head:last-child {
+  .ui-card-head:last-child,
+  .ui-card-head:has(+ .ui-card-flush) {
     align-items: center;
-    padding-bottom: 0.75rem;
+    padding-bottom: 1rem;
   }
 
   .ui-card-head + .ui-card-foot {
@@ -296,7 +297,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.625rem 0.875rem;
+    padding: 0.75rem 1rem;
     border-top: 1px solid var(--line);
   }
 

@@ -8,8 +8,8 @@ export default function Example() {
     <div className="demo-wide">
       <Card plain as="section" aria-label="Plain">
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(10rem, 1fr))", gap: "0.75rem" }}>
-          <TextField label="First name" defaultValue="Ines" />
-          <TextField label="Last name" defaultValue="Okafor" />
+          <TextField label="First name" placeholder="e.g. Ines" defaultValue="Ines" />
+          <TextField label="Last name" placeholder="e.g. Okafor" defaultValue="Okafor" />
         </div>
       </Card>
       <Card title="Devices" flush>
@@ -20,7 +20,7 @@ export default function Example() {
         ))}
       </Card>
       <Card as="form" title="Rename" description="What everybody sees it called." onSubmit={(event) => event.preventDefault()} foot={<Button type="submit">Save</Button>}>
-        <TextField aria-label="Name" defaultValue="Halden Partners" />
+        <TextField aria-label="Name" placeholder="Organisation name" defaultValue="Halden Partners" />
       </Card>
       <Card tone="danger" title="Delete this organisation" description="Everything in it goes, and it cannot be taken back." actions={<DangerButton look="line">Delete</DangerButton>} />
     </div>

@@ -27,11 +27,11 @@ export default function SheetDemo() {
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
           <div className="grid gap-3">
             <Label htmlFor="sheet-demo-name">Name</Label>
-            <Input id="sheet-demo-name" defaultValue="Pedro Duarte" />
+            <Input id="sheet-demo-name" placeholder="Your full name" defaultValue="Pedro Duarte" />
           </div>
           <div className="grid gap-3">
             <Label htmlFor="sheet-demo-username">Username</Label>
-            <Input id="sheet-demo-username" defaultValue="@peduarte" />
+            <Input id="sheet-demo-username" placeholder="@username" defaultValue="@peduarte" />
           </div>
         </div>
         <SheetFooter>

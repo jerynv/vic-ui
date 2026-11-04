@@ -92,8 +92,8 @@ test("every catalogue example renders on desktop and fits a mobile viewport", { 
       await page.goto(`${server.resolvedUrls.local[0]}docs/components/${id}/`);
       await page.getByRole("heading", { name, exact: true, level: 1 }).waitFor();
       assert.equal(await page.title(), `${name} · vic/ui`);
-      const compound = page.locator("details").filter({ has: page.getByText("Composable API", { exact: true }) });
-      if (await compound.count()) await compound.locator("summary").click();
+      const compound = page.getByRole("button", { name: "Composable API", exact: true });
+      if (await compound.count()) await compound.click();
       const preview = page.locator(".preview-canvas");
       await preview.waitFor();
       await preview.locator(":scope > :visible").first().waitFor();
@@ -162,4 +162,31 @@ test("owned icons render their source strokes and copy a usable import", { timeo
     await browser.close();
     await new Promise(resolve => server.httpServer.close(resolve));
   }
+});
+
+test("card spacing, composable disclosure, and file-row actions", { timeout: 30000 }, async () => {
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    const url = server.resolvedUrls.local[0];
+    await page.goto(`${url}docs/components/card/`, { waitUntil: "networkidle" });
+    const flushHeader = page.locator('.ui-card-head:has(+ .ui-card-flush)');
+    assert.equal(await flushHeader.evaluate(el => getComputedStyle(el).paddingBottom), "16px");
+    assert.equal(await page.locator("main details").count(), 0);
+    const disclosure = page.getByRole("button", { name: "Composable API", exact: true });
+    await disclosure.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(await disclosure.getAttribute("aria-expanded"), "true");
+    await page.getByPlaceholder("Enter your password").fill("demo-password");
+    const action = page.getByRole("button", { name: "Sign up", exact: true });
+    assert.ok(await action.evaluate(el => el.classList.contains("ui-button-line")));
+    await page.goto(`${url}docs/components/list/`, { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: "Save Project brief", exact: true }).click();
+    await page.getByRole("region", { name: "Saved files", exact: true }).getByText("Project brief", { exact: true }).waitFor();
+    await page.getByRole("button", { name: "Unsave Project brief", exact: true }).click();
+    await page.getByText("Save a file to keep it here.", { exact: true }).waitFor();
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  } finally { await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
 });
