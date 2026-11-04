@@ -1,6 +1,6 @@
 # vic-ui
 
-A quiet, dense React 19 component library. 48 pieces (buttons, fields, lists, rows, overlays, a table, feedback, a sidebar and timeline pieces), one oklch palette in light and dark, one corner scale, one elevation scale, and the rule that no state ever changes the size of anything.
+A React 19 component library built on shadcn/ui and Base UI, with vic's oklch palette, typography, radius scale, and elevation tokens. The new API includes 63 upstream component families and an icon-based color mode switch. Existing root imports remain available for compatibility.
 
 The documentation site shows every piece live, in every state it has, with the code that draws it, and every token measured in both modes. Build it with `npm run build:site`.
 
@@ -15,6 +15,29 @@ npm install github:jerynv/vic-ui
 React 19 and React DOM are peer dependencies. Base UI supplies the button primitive used by shadcn/ui; Floating UI positions floating surfaces. Tailwind is not needed by existing imports: the stylesheet is plain CSS.
 
 ## Use
+
+For new interfaces, import the shadcn component API and its compiled stylesheet:
+
+```tsx
+import "vic-ui/ui/styles.css";
+import { Button, Input, Label, TooltipProvider } from "vic-ui/ui";
+
+export function Invite() {
+  return (
+    <TooltipProvider>
+      <form>
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" name="email" type="email" required />
+        <Button type="submit">Send invitation</Button>
+      </form>
+    </TooltipProvider>
+  );
+}
+```
+
+No consumer Tailwind configuration is required. Import `vic-ui/ui/styles.css` once.
+The new API uses `variant`, compound components, and Base UI's `render` composition.
+The existing API below retains `look`, `to`, `busy`, disabled explanations, and its CSS slots.
 
 ```tsx
 import "vic-ui/styles.css";

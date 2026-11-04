@@ -68,7 +68,7 @@ for (const file of files.filter((f) => f.endsWith(".tsx"))) {
     // Only what is inside a string or a template can be a class name.
     for (const literal of line.match(/"[^"]*"|`[^`]*`|'[^']*'/g) ?? []) {
       for (const util of literal.match(UTILITY) ?? []) {
-        const bare = util.replace(/^.*:/, "");
+        const bare = util.replace(/^.*:/, "").replace(/!$/, "");
         if (bare === "rounded" && !/className|class=|cn\(|"[^"]*\brounded\b[^"]*\b(?:flex|block|grid|p-|px-|bg-)/.test(line)) continue;
         if (!UTILITY_OK.test(bare)) found.push(`${relative(root, file)}:${at + 1}  ${bare}`);
       }

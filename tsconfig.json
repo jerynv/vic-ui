@@ -27,6 +27,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "paths": {
+      "@/*": ["./src/*"],
       "vic-ui": [
         "./src/index.ts"
       ],

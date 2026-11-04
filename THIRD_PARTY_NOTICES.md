@@ -26,7 +26,12 @@ The OFL lets the fonts be bundled and redistributed with software, provided each
 
 ## Code and constructions
 
-- **Tailwind CSS preflight** (`src/styles/preflight.css`), by Tailwind Labs, Inc. MIT License, `licenses/MIT-tailwindcss.txt`. Copied from `tailwindcss@4.3.3` with its theme calls resolved to vic-ui's tokens; Tailwind itself is not a dependency.
+- **shadcn/ui**, by shadcn. MIT License, `licenses/MIT-shadcn-ui.txt`. The 63 component modules in `src/ui`, their hooks and highlighter are imported with `shadcn@4.23.0 add --all` from the Base UI `base-nova` registry (source snapshot `8a35366`, November 4, 2026). Imports use this package's aliases; radii map to vic tokens; the button press translation is removed; strict optional types are adapted. `components.json` records the registry configuration.
+- **Lucide**, ISC License, `licenses/ISC-lucide.txt`. The shadcn components use Lucide icons, installed from npm.
+- shadcn's `packages/shadcn/src/tailwind.css` is retained in `src/ui/upstream.css` under the same MIT license. It supplies the state variants, scroll fades, and animation utilities used by the imported components.
+- **Base UI**, MIT License, `licenses/MIT-base-ui.txt`. Installed from npm; supplies the accessible behavior of the shadcn components and the existing Button and mobile Sidebar adapters.
+
+- **Tailwind CSS preflight** (`src/styles/preflight.css`), by Tailwind Labs, Inc. MIT License, `licenses/MIT-tailwindcss.txt`. Copied from `tailwindcss@4.3.3` with its theme calls resolved to vic-ui's tokens. Tailwind builds the new component stylesheet; consumers import the compiled CSS.
 - **Cult UI's Texture Button**, by Nolly Studio (copyright Jordan Gilliam). MIT License, `licenses/MIT-cult-ui.txt`. The button's construction (a rim round a face, each with its own gradient) and its colours are adapted from `texture-button.tsx`, rewritten as plain CSS on the palette (`src/components/Button.tsx`, the `--ink-*` and `--line-*` tokens).
 - **Kibo UI's avatar stack**, by shadcnblocks. MIT License, `licenses/MIT-kibo-ui.txt`. `src/components/AvatarStack.tsx` keeps its cut-out, each face masked by the outline of the one before it, ported onto the library's own classes.
 

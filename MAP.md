@@ -1,5 +1,18 @@
 # vic-ui: the map
 
+## Current component API
+
+`vic-ui/ui` exports the shadcn Base UI catalogue from `src/ui/index.ts`.
+`src/ui/registry.json` records the 63 upstream families, source revision, and registry style.
+Their prop contracts come from the component source and emitted declarations. The compiled
+`vic-ui/ui/styles.css` maps shadcn semantic colors, radii, and shadows to the existing vic tokens;
+consumers do not need Tailwind. `ColorModeSwitch` composes the icon button and radio menu;
+`CodeSnippet` composes the code block, copy button, and lazy Shiki highlighter.
+Slider also forwards accessible names to its thumbs and supports scalar or range values.
+Upstream licensing and the local adaptations are recorded in `THIRD_PARTY_NOTICES.md`.
+
+The reference below describes the compatible `vic-ui` root API and `vic-ui/styles.css`.
+
 vic-ui is a React component library and the design system it draws with: about fifty pieces (buttons, fields, lists, rows, overlays, tables, feedback, a sidebar, timeline pieces), one token file, one stylesheet per kind of piece, and the rules the pieces are held to.
 
 It was extracted from the v-client application, where it lived in `web/src/ui` (components), `web/src/styles/tokens.css` and `web/src/styles/components/ui*.css` (styles), and `web/src/components/icons.tsx` (icons). This map was read from the checkout at `/Users/jeryn/Documents/GitHub/.v-client-work/design-system`, branch `design/system`, commit `e7221f50`, brought up to date with v-client's library at commit `8d7c0b2c` (the `ds/dedupe` work), and again at commit `0f17780a`. Every value below is copied from that source.

@@ -1,0 +1,99 @@
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@import "./upstream.css";
+@import "../styles/fonts.css";
+@import "../styles/tokens.css";
+@source ".";
+
+@custom-variant dark {
+  &:where(.dark, .dark *, [data-mode="dark"], [data-mode="dark"] *) { @slot; }
+  @media (prefers-color-scheme: dark) {
+    &:where([data-mode="system"], [data-mode="system"] *) { @slot; }
+  }
+}
+
+/* shadcn's semantic contract, backed by the same palette as existing vic components. */
+:root {
+  --background: var(--bg-canvas);
+  --foreground: var(--fg);
+  --card: var(--bg-base);
+  --card-foreground: var(--fg);
+  --popover: var(--bg-base);
+  --popover-foreground: var(--fg);
+  --primary: var(--fg-strong);
+  --primary-foreground: var(--fg-inverse);
+  --secondary: var(--bg-tint);
+  --secondary-foreground: var(--fg-strong);
+  --muted: var(--bg-tint);
+  --muted-foreground: var(--fg-subtle);
+  --accent: var(--bg-tint);
+  --accent-foreground: var(--fg-strong);
+  --destructive: var(--tone-danger-ink);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--focus);
+  --radius: var(--radius-control);
+  --chart-1: var(--tone-moving-ink);
+  --chart-2: var(--tone-settled-ink);
+  --chart-3: var(--tone-caution-ink);
+  --chart-4: var(--tone-danger-ink);
+  --chart-5: var(--fg-subtle);
+  --sidebar: var(--bg-base);
+  --sidebar-foreground: var(--fg);
+  --sidebar-primary: var(--fg-strong);
+  --sidebar-primary-foreground: var(--fg-inverse);
+  --sidebar-accent: var(--bg-tint);
+  --sidebar-accent-foreground: var(--fg-strong);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--focus);
+}
+.dark { color-scheme: dark; }
+.light { color-scheme: light; }
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --shadow-xs: var(--shadow-raise);
+  --shadow-sm: var(--shadow-raise);
+  --shadow-md: var(--shadow-float);
+  --shadow-lg: var(--shadow-float);
+  --shadow-xl: var(--shadow-float);
+  --shadow-2xl: var(--shadow-float);
+}
+
+@layer base {
+  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
+  * { border-color: var(--border); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
