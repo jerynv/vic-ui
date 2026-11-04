@@ -43,6 +43,7 @@ export function makeIcon(name: string, shapes: IconShapes): Icon {
         focusable="false"
         aria-hidden={labelled ? undefined : true}
         {...rest}
+        children={undefined}
         dangerouslySetInnerHTML={{ __html: shape.body }}
       />
     );

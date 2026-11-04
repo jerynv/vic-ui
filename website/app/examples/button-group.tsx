@@ -2,17 +2,7 @@
 "use client"
 
 import * as React from "react"
-import {
-  ArchiveIcon,
-  ArrowLeftIcon,
-  CalendarPlusIcon,
-  ClockIcon,
-  ListFilterIcon,
-  MailCheckIcon,
-  MoreHorizontalIcon,
-  TagIcon,
-  Trash2Icon,
-} from "lucide-react"
+import { ArchiveIcon, ArrowLeftIcon, CalendarPlusIcon, ClockIcon, FilterIcon as ListFilterIcon, MailCheckIcon, DotsThreeIcon as MoreHorizontalIcon, TagIcon, TrashIcon as Trash2Icon } from "vic-ui/icons"
 
 import { Button } from "vic-ui/ui"
 import { ButtonGroup } from "vic-ui/ui"

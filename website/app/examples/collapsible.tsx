@@ -2,7 +2,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronsUpDown } from "lucide-react"
+import { ChevronUpDownIcon as ChevronsUpDown } from "vic-ui/icons"
 
 import { Button } from "vic-ui/ui"
 import {

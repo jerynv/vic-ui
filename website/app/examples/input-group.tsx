@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { Search } from "lucide-react"
+import { MagnifyingGlassIcon as Search } from "vic-ui/icons"
 
 import {
   InputGroup,

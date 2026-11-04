@@ -1,7 +1,7 @@
 // Adapted from shadcn/ui's date-picker composition (MIT), using its Base UI components.
 import { useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "@/icons/icons";
 import { Button } from "./button";
 import { Calendar } from "./calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";

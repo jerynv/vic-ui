@@ -1,0 +1,17 @@
+---
+title: Icons
+description: An owned SVG catalogue, shared by the library and its documentation.
+---
+
+Import a glyph from `vic-ui/icons`. It inherits the surrounding text color and defaults to `1em`. Give an icon-only control an accessible name; its decorative icon stays hidden from screen readers.
+
+```tsx
+import { IconButton } from "vic-ui";
+import { SunIcon } from "vic-ui/icons";
+
+<IconButton label="Switch to light mode" icon={<SunIcon />} />
+```
+
+Our SVG sources are [Tabler](https://tabler.io/icons) (MIT), [MingCute](https://www.mingcute.com) (Apache 2.0), [IconMCP](https://iconmcp.com/licence) (MIT), and vic's own drawings. Source files and licenses live in the repository. Nothing is fetched at runtime.
+
+<IconCatalogue />

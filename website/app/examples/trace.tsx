@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { ChevronRightIcon, FileTextIcon, SearchIcon } from "lucide-react"
+import { ChevronRightIcon, FileTextIcon, MagnifyingGlassIcon as SearchIcon } from "vic-ui/icons"
 
 import { Badge } from "vic-ui/ui"
 import { CodeBlock, CodeBlockContent } from "vic-ui/ui"

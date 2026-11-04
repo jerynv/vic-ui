@@ -9,7 +9,7 @@ import {
 import { cn } from "cn"
 
 import { Button } from "@/ui/button"
-import { ArrowDownIcon } from "lucide-react"
+import { ArrowDownIcon } from "@/icons/icons"
 
 function MessageScrollerProvider(
   props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>

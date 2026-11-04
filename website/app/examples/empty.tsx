@@ -1,6 +1,6 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { FolderCodeIcon as IconFolderCode } from "lucide-react"
-import { ArrowUpRightIcon } from "lucide-react"
+import { FolderCodeIcon as IconFolderCode } from "vic-ui/icons"
+import { ArrowUpRightIcon } from "vic-ui/icons"
 
 import { Button } from "vic-ui/ui"
 import {

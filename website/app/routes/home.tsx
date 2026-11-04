@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { Link } from "react-router";
-import { ArrowRightIcon, CheckIcon, CodeIcon, CornerDownLeftIcon, SearchIcon } from "lucide-react";
+import { ArrowRightIcon, CheckIcon, CodeIcon, CornerDownLeftIcon, MagnifyingGlassIcon as SearchIcon } from "vic-ui/icons";
 import { Avatar, AvatarFallback, AvatarGroup, Badge, Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, CodeSnippet, Field, FieldContent, FieldDescription, FieldLabel, Input, InputGroup, InputGroupAddon, InputGroupInput, Kbd, Label, Separator, Slider, Switch, Tabs, TabsContent, TabsList, TabsTrigger, toast } from "vic-ui/ui";
 import registry from "../../../src/ui/registry.json";
 import { baseOptions } from "../lib/layout";

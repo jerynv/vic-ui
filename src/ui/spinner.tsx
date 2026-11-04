@@ -1,6 +1,6 @@
 // Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
 import { cn } from "cn"
-import { Loader2Icon } from "lucide-react"
+import { LoaderIcon as Loader2Icon } from "@/icons/icons"
 
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (

@@ -1,12 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from "lucide-react"
+import { CalculatorIcon as Calculator, CalendarIcon as Calendar, CreditCardIcon as CreditCard, GearIcon as Settings, SmileyIcon as Smile, UserIcon as User } from "vic-ui/icons"
 
 import {
   Command,

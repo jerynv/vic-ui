@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { Bold, Italic, Underline } from "lucide-react"
+import { TextBIcon as Bold, TextItalicIcon as Italic, UnderlineIcon as Underline } from "vic-ui/icons"
 
 import {
   ToggleGroup,

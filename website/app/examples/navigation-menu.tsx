@@ -3,11 +3,7 @@
 
 import * as React from "react"
 import { Link } from "react-router"
-import {
-  CircleAlertIcon,
-  CircleCheckIcon,
-  CircleDashedIcon,
-} from "lucide-react"
+import { AlertCircleIcon as CircleAlertIcon, CheckCircleIcon as CircleCheckIcon, CircleDashedIcon } from "vic-ui/icons"
 
 import {
   NavigationMenu,

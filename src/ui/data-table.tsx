@@ -1,7 +1,7 @@
 // Adapted from shadcn/ui's Base UI data-table guide (MIT), using TanStack Table v9.
 import { useState } from "react";
 import { columnFilteringFeature, columnVisibilityFeature, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, rowPaginationFeature, rowSelectionFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_basic, sortFn_datetime, sortFn_text, tableFeatures, useTable, type ColumnDef, type ColumnFiltersState, type OnChangeFn, type RowData, type RowSelectionState, type SortingState } from "@tanstack/react-table";
-import { ArrowUpDownIcon, ChevronDownIcon } from "lucide-react";
+import { ArrowsSortIcon as ArrowUpDownIcon, ChevronDownIcon } from "@/icons/icons";
 import { Button } from "./button";
 import { Checkbox } from "./checkbox";
 import { Input } from "./input";
