@@ -1,0 +1,38 @@
+.icon-page { width: min(100%, 86rem); margin-inline: auto; padding: 4rem 2rem; }
+.icon-intro { margin-bottom: 2.5rem; }
+.icon-intro h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; margin-bottom: 1rem; }
+.icon-intro p { max-width: 42rem; font-size: 1.125rem; color: var(--fg-subtle); }
+.icon-workspace { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; gap: 1.5rem 2.5rem; align-items: start; }
+.icon-controls { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 11rem 10rem; align-items: end; gap: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+.icon-size { display: grid; gap: 1.125rem; padding-bottom: 1rem; }
+.icon-size label { display: flex; justify-content: space-between; font-size: var(--text-ui); }
+.icon-size output { color: var(--fg-subtle); font-variant-numeric: tabular-nums; }
+.icon-results { min-width: 0; }
+.icon-result-count { min-height: 1.5rem; margin-bottom: 1rem; font-size: var(--text-ui); color: var(--fg-subtle); }
+.icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); gap: 0.5rem; }
+.icon-grid .icon-tile { display: flex; flex-direction: column; justify-content: center; gap: 1rem; width: 100%; height: 7.5rem; padding: 0.75rem; border-radius: var(--radius-control); background: transparent; color: var(--fg); font-weight: 400; white-space: normal; }
+.icon-grid .icon-tile svg { flex: none; }
+.icon-grid .icon-tile span { font-size: var(--text-tag); line-height: 1.25; text-align: center; }
+.icon-grid .icon-tile:hover { background: var(--field-fill); color: var(--fg-strong); }
+.icon-grid .icon-tile[data-pressed] { background: var(--field-fill); box-shadow: inset 0 0 0 1px var(--line); color: var(--fg-strong); }
+.icon-inspector { position: sticky; top: 6rem; display: grid; min-width: 0; gap: 1rem; padding-top: 2.5rem; }
+.icon-specimen { display: grid; place-items: center; min-height: 12rem; border-radius: var(--radius-panel); background: var(--field-fill); }
+.icon-inspector h2 { font-size: 1.25rem; font-weight: 600; }
+.icon-source { margin-top: -0.75rem; color: var(--fg-subtle); font-size: var(--text-tag); overflow-wrap: anywhere; }
+.icon-actions { display: flex; gap: 0.5rem; }
+.icon-usage, .icon-inspector > a { font-size: var(--text-ui); line-height: 1.5; color: var(--fg-subtle); }
+.icon-empty { display: grid; justify-items: start; gap: 0.75rem; padding: 3rem 0; }
+.icon-empty h2 { font-size: 1.25rem; font-weight: 500; }
+.icon-empty p { color: var(--fg-subtle); }
+@media (width < 960px) {
+  .icon-workspace { grid-template-columns: minmax(0, 1fr); }
+  .icon-controls { grid-template-columns: minmax(0, 1fr) 10rem; }
+  .icon-size { grid-column: 1 / -1; max-width: 14rem; }
+  .icon-inspector { position: static; padding-top: 0; border-top: 1px solid var(--line); }
+  .icon-specimen { margin-top: 1.5rem; }
+}
+@media (width < 480px) {
+  .icon-page { padding: 2rem 1rem; }
+  .icon-controls { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .icon-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
