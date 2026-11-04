@@ -1,0 +1,30 @@
+/* Ported from v-client's CodeField/ui-focus.css: separated cells on one native input. */
+@layer components.parts {
+  .ui-code-scope { display: contents; }
+  .ui-code { display: flex; align-items: center; gap: 0.75rem; width: fit-content; max-width: 100%; }
+  .ui-code-group { display: flex; gap: 0.5rem; min-width: 0; }
+  .ui-code:has(:disabled) { opacity: 0.55; cursor: not-allowed; }
+  .ui-code-cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 1 1 2.75rem;
+    width: 2.75rem;
+    min-width: 0;
+    height: 3rem;
+    border-radius: var(--radius-control);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.375rem;
+    color: var(--fg-strong);
+    background: var(--ui-field-fill, var(--field-fill));
+    box-shadow: inset 0 0 0 1px var(--ui-field-edge, transparent);
+    transition: box-shadow 150ms ease;
+  }
+  .ui-code-cell[data-active="true"] { box-shadow: inset 0 0 0 1.5px var(--hue-ink, var(--fg-strong)); }
+  .ui-code:has(input[aria-invalid="true"]) .ui-code-cell,
+  .ui-code-cell[aria-invalid="true"] { box-shadow: inset 0 0 0 1px var(--tone-danger-ink); }
+  .ui-code-cursor { width: 2px; height: 1.1em; background: var(--fg-strong); animation: ui-code-blink 1.28s step-end infinite; }
+  @keyframes ui-code-blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .ui-code-cursor { animation: none; } }
+}

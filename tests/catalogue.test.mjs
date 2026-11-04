@@ -122,8 +122,27 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
     await page.getByRole("dialog", { name: "Project filters" }).waitFor();
     await page.getByRole("button", { name: "Apply filters" }).click();
     await page.getByRole("dialog", { name: "Project filters" }).waitFor({ state: "hidden" });
-    await page.getByRole("textbox", { name: "One-time code" }).fill("123456");
+    const codeInput = page.getByRole("textbox", { name: "One-time code" });
+    await codeInput.focus();
+    assert.equal(await page.locator(".ui-code-cursor").evaluate(el => getComputedStyle(el).animationName), "none");
+    await codeInput.fill("123456");
     assert.equal(await page.locator("#otp").textContent(), "123456");
+    await page.evaluate(() => navigator.clipboard.writeText("654321"));
+    await page.keyboard.press("ControlOrMeta+a");
+    await page.keyboard.press("ControlOrMeta+v");
+    await page.waitForFunction(() => document.querySelector("#otp").textContent === "654321");
+    const cell = page.locator(".ui-code-cell").first();
+    assert.equal(await cell.evaluate(el => getComputedStyle(el).height), "48px");
+    await page.getByRole("button", { name: "Disable code", exact: true }).click();
+    await page.waitForFunction(() => {
+      const edges = [...document.querySelectorAll(".ui-code-cell")].map(el => getComputedStyle(el).boxShadow);
+      return new Set(edges).size === 1 && !/\/ 0\)|rgba\(0, 0, 0, 0\)/.test(edges[0]);
+    });
+    const errorEdges = await page.locator(".ui-code-cell").evaluateAll(cells => cells.map(el => getComputedStyle(el).boxShadow));
+    assert.equal(new Set(errorEdges).size, 1, "root validation marks every cell");
+    assert.ok(!errorEdges[0].includes("rgba(0, 0, 0, 0)"));
+    assert.equal(await codeInput.isDisabled(), true);
+    assert.equal(await page.locator(".ui-code").evaluate(el => getComputedStyle(el).opacity), "0.55");
     const viewport = page.locator('[data-slot="scroll-area-viewport"]');
     assert.equal(await viewport.evaluate((element) => element.scrollHeight > element.clientHeight), true);
     await page.waitForFunction(() => document.querySelectorAll('[data-slot="code-block-code"] span[style]').length > 2);

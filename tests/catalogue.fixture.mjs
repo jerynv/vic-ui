@@ -10,6 +10,7 @@ export function CatalogueFixture() {
   const [volume, setVolume] = useState(30);
   const [tab, setTab] = useState("one");
   const [otp, setOtp] = useState("");
+  const [otpDisabled, setOtpDisabled] = useState(false);
   useEffect(() => { document.documentElement.dataset.mode = mode; }, [mode]);
   return h("main", { style: { maxWidth: 600, margin: "40px auto", padding: 24, display: "grid", gap: 24 } },
     h("section", { id: "surface-tests" }, ["flat", "bordered"].map(surface => h(Surface, { key: surface, surface, id: surface },
@@ -43,8 +44,9 @@ export function CatalogueFixture() {
     h(Toggle, { "aria-label": "Bold" }, "B"),
     h(Dialog, {}, h(DialogTrigger, { render: h(Button) }, "Open dialog"), h(DialogContent, {}, h(DialogTitle, {}, "Edit project"), h(DialogDescription, {}, "Update project details."), h(Button, {}, "Save"))),
     h(Drawer, {}, h(DrawerTrigger, { render: h(Button) }, "Open drawer"), h(DrawerContent, {}, h(DrawerTitle, {}, "Project filters"), h(DrawerDescription, {}, "Choose the projects to show."), h(DrawerClose, { render: h(Button) }, "Apply filters"))),
-    h(InputOTP, { maxLength: 6, "aria-label": "One-time code", value: otp, onChange: setOtp }, h(InputOTPGroup, {}, ...Array.from({ length: 6 }, (_, index) => h(InputOTPSlot, { index, key: index })))),
+    h(InputOTP, { maxLength: 6, disabled: otpDisabled, "aria-invalid": otpDisabled || undefined, "aria-label": "One-time code", value: otp, onChange: setOtp }, h(InputOTPGroup, {}, ...Array.from({ length: 6 }, (_, index) => h(InputOTPSlot, { index, key: index })))),
     h("output", { id: "otp" }, otp),
+    h(Button, { onClick: () => setOtpDisabled(true) }, "Disable code"),
     h(ScrollArea, { style: { height: 80, width: 240 } }, ...Array.from({ length: 20 }, (_, index) => h("p", { key: index }, `Row ${index + 1}`))),
     h(CodeSnippet, { code: "const answer = 42;\n", language: "tsx", filename: "example.tsx" }),
   );

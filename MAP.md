@@ -18,6 +18,12 @@ Its workspace form is a local interactive demonstration, with no account or serv
 `site/` retains the original catalogue source and reusable examples; `build:reference-site`
 builds that reference shell. Both shells use the exported icon-based ColorModeSwitch.
 
+## One-time codes
+
+InputOTP uses the separated cells from v-client's CodeField (`ui-focus.css`), mapped to vic
+tokens. The input-otp primitive retains paste, selection and autocomplete. Flat/bordered
+surfaces, root-level validation, disabled state and reduced-motion carets are styled together.
+
 ## Shared surface styles
 
 `Surface` scopes `surface="flat" | "bordered"` to fields and cards. Native controls and
