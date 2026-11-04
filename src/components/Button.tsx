@@ -1,4 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode, type Ref } from "react";
+import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { Link } from "./Link";
 import { useBlocked } from "./reason";
 import { Spinner } from "./Spinner";
@@ -38,13 +39,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLBut
   const over = busy && !icon && children !== undefined && children !== null;
   return (
     <>
-      <button type={type} className={classes(look, size, full, className, square, round)} aria-busy={busy || undefined} {...rest} {...held.props}>
+      {/* Base UI foundation used by shadcn/ui; preserve vic's public props and face slot. */}
+      <ButtonPrimitive type={type} className={classes(look, size, full, className, square, round)} aria-busy={busy || undefined} {...rest} {...held.props}>
         <span className="ui-button-face">
           {busy && !over ? <Spinner /> : icon}
           {over ? <span className="ui-button-busy-words">{children}</span> : children}
           {over ? <Spinner className="ui-button-busy-mark" /> : null}
         </span>
-      </button>
+      </ButtonPrimitive>
       {held.node}
     </>
   );

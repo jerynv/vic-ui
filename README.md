@@ -12,7 +12,7 @@ The documentation site shows every piece live, in every state it has, with the c
 npm install github:jerynv/vic-ui
 ```
 
-React 19 and React DOM are peer dependencies. `@floating-ui/dom` comes with the package and positions what floats. Tailwind is not needed: the stylesheet is plain CSS.
+React 19 and React DOM are peer dependencies. Base UI supplies the button primitive used by shadcn/ui; Floating UI positions floating surfaces. Tailwind is not needed by existing imports: the stylesheet is plain CSS.
 
 ## Use
 
@@ -113,7 +113,24 @@ What every piece already does, and what anything built with them is held to:
 - **Nothing moves** on load, on choosing or on pressing.
 - **No em or en dashes** as punctuation.
 
+## Component foundation migration
+
+The migration adopts shadcn's Base UI foundation, followed by its component catalogue
+and Fumadocs documentation. Existing root exports remain compatibility APIs. The
+local consumer audit found `puzzles` and `phaethon`: both use button props, and Phaethon
+also styles the `.ui-button-face` slot. Preserve that markup, native refs, `type`, busy
+states, disabled explanations, and router links while adapting the implementation.
+Native form exports on the separate disclosure branch remain owned by that change.
+
+The delivery sequence is button and server-rendering compatibility; upstream component
+imports and token integration; remaining compatibility adapters and overlay focus;
+Fumadocs and the marketing site; then consumer and component-gallery checks.
+
 ## Scripts
+
+`npm test` builds the package and exercises server rendering, button compatibility,
+keyboard activation, disabled reasons, and tooltip hydration in Chromium. Install the
+browser once with `npx playwright install chromium`.
 
 ```sh
 npm run build          # dist/: ESM, types, vic-ui.css, tokens.css, fonts.css, fonts

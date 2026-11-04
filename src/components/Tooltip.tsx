@@ -46,21 +46,20 @@ export function useTip(content: ReactNode, how: { placement?: Placement | undefi
     });
   };
 
-  // Drawn at the foot of the body rather than beside its trigger, so no rule about the
-  // trigger's parent (a grid's cells, `> *`, an overflow) can size, clip or hide it.
+  // Keep the description in server markup. Only an opened tooltip needs a browser portal.
   const node = has
-    ? createPortal(
+    ? (
         <>
           <span id={id} hidden>
             {content}
           </span>
-          {open ? (
+          {open ? createPortal(
             <div ref={tip} popover="manual" role="tooltip" aria-hidden="true" className="ui-tooltip">
               {content}
-            </div>
+            </div>,
+            document.body,
           ) : null}
-        </>,
-        document.body,
+        </>
       )
     : null;
 

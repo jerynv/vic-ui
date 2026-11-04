@@ -14,7 +14,7 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      external: [/^react($|\/)/, /^react-dom($|\/)/, /^@floating-ui\//],
+      external: [/^react($|\/)/, /^react-dom($|\/)/, /^@floating-ui\//, /^@base-ui\//],
       output: { preserveModules: false },
     },
   },
