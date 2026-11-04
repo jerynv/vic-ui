@@ -1,0 +1,29 @@
+---
+title: Getting started
+description: Install the library and build your first interface.
+---
+
+## Installation
+
+```sh
+npm install github:jerynv/vic-ui
+```
+
+Import the shared stylesheet once, at your application entry point.
+
+```tsx
+import "vic-ui/ui/styles.css";
+import { Button } from "vic-ui/ui";
+
+export function SaveButton() {
+  return <Button>Save changes</Button>;
+}
+```
+
+## The component library
+
+The `vic-ui/ui` entry point provides the shadcn Base UI component catalogue with vic/ui's colors, type, spacing, and shape. The CSS is compiled; your application does not need Tailwind.
+
+The existing `vic-ui` entry point and `vic-ui/styles.css` remain available for applications using the original components.
+
+Try the [Slider](./slider) to see a live component and its source.

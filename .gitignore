@@ -3,3 +3,5 @@ dist
 site/dist
 *.log
 .DS_Store
+website/build
+website/.react-router

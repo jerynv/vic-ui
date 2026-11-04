@@ -1,5 +1,13 @@
 # vic-ui: the map
 
+## Documentation website
+
+`website/` ports Fumadocs' React Router SPA template. MDX lives in `website/content/docs`;
+the static search index and each document are prerendered. `npm run dev:website` starts it;
+`npm run build:website` emits `website/build/client`. The existing `site/` remains the
+deployment target until the full catalogue and marketing page have passed browser checks.
+The shared website theme control and live examples import the actual `vic-ui/ui` API.
+
 ## Current component API
 
 `vic-ui/ui` exports the shadcn Base UI catalogue from `src/ui/index.ts`.

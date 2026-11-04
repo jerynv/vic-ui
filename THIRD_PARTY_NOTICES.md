@@ -39,5 +39,7 @@ The OFL lets the fonts be bundled and redistributed with software, provided each
 
 - **TanStack Table**, MIT License, installed from npm. `src/ui/data-table.tsx` follows shadcn's v9 feature-based table recipe; DatePicker and Typography follow the corresponding shadcn composition examples.
 
+- **Fumadocs**, by Fuma Nama, MIT License, `licenses/MIT-fumadocs.txt`. `website/` ports the official React Router SPA example at `f27c79d`; the Base UI edition supplies documentation layout, navigation, search, and Markdown rendering. Live examples, source snippets, and theme controls use `vic-ui/ui`.
+
 - **Floating UI** (`@floating-ui/dom`), by the Floating UI contributors. MIT License, `licenses/MIT-floating-ui.txt`. Installed from npm; it positions what floats.
 - **React** and **React DOM** are peer dependencies, installed by the consumer under their own MIT License.

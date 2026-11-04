@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDirs": [".", ".react-router/types"],
+    "paths": {
+      "@/*": ["../src/*"],
+      "~/*": ["./app/*"],
+      "vic-ui/ui": ["../src/ui/index.ts"]
+    }
+  },
+  "include": ["app", "*.ts", ".react-router/types"]
+}
