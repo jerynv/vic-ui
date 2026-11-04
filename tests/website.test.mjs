@@ -4,6 +4,34 @@ import { chromium } from "playwright";
 import { preview } from "vite";
 import { readFile } from "node:fs/promises";
 
+test("marketing uses working library components and links to the full catalogue", { timeout: 30000 }, async () => {
+  const server = await preview({ configFile: false, root: "website", base: "/vic-ui/", build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ reducedMotion: "reduce" });
+    const errors = [];
+    page.on("pageerror", error => errors.push(error.message));
+    await page.goto(server.resolvedUrls.local[0]);
+    await page.getByRole("heading", { name: "Good interfaces start here.", level: 1 }).waitFor();
+    assert.equal(await page.locator('[aria-label="Component directory"] a').count(), 66);
+    await page.getByLabel("Workspace name", { exact: true }).fill("Field Notes");
+    await page.getByRole("switch", { name: "Open to your team" }).click();
+    await page.getByText("Only people you invite can join.", { exact: true }).waitFor();
+    await page.getByRole("button", { name: "Create workspace", exact: true }).click();
+    await page.getByRole("button", { name: "Workspace created", exact: true }).waitFor();
+    await page.getByRole("textbox", { name: "Find a component" }).fill("slider");
+    assert.equal(await page.locator('[aria-label="Component directory"] a').count(), 1);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.waitForFunction(() => document.documentElement.scrollWidth <= innerWidth);
+    await page.locator('[aria-label="Component directory"]').getByRole("link", { name: "Slider" }).click();
+    await page.getByRole("slider", { name: "Volume" }).waitFor();
+    assert.deepEqual(errors, []);
+  } finally {
+    await browser.close();
+    await new Promise(resolve => server.httpServer.close(resolve));
+  }
+});
+
 test("prerendered documentation, search, theme, and mobile navigation", { timeout: 60000 }, async () => {
   const base = process.env.VIC_UI_BASE ?? "/vic-ui/";
   const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
