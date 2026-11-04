@@ -12,6 +12,8 @@ Rows support an optional description beneath the title; the file-list example de
 Avatar is a single-person primitive; AvatarStack is the overlapping group composition.
 `website/upstream.json` records the imported demos. The original catalogue reuses
 `site/src/examples` with root package exports, including the vic-specific compositions.
+`/icons` is the standalone SVG browser: collection and text filters, size preview,
+React import and raw SVG copying. `/docs/icons` remains the usage and licensing guide.
 The marketing page composes actual library fields, switches, buttons, avatars, tabs, and
 source blocks around a geometric SVG. The component directory includes every vic component and each added primitive.
 Its workspace form is a local interactive demonstration, with no account or service call.

@@ -8,7 +8,7 @@ export default {
   basename: process.env.VIC_UI_BASE ?? "/vic-ui/",
   routeDiscovery: { mode: "initial" },
   async prerender() {
-    const paths = ["/", "/api/search"];
+    const paths = ["/", "/icons", "/api/search"];
     for await (const path of glob("**/*.mdx", { cwd: "content/docs" })) {
       paths.push(["/docs", ...getSlugs(path)].join("/"));
     }
