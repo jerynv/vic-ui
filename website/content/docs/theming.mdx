@@ -24,7 +24,7 @@ import { Surface, TextField, Select, Card } from "vic-ui";
 </Surface>
 ```
 
-`surface="flat" | "bordered"` is available on TextField, Textarea, Select, Combobox, SearchField, NumberField, DatePicker and Card. The composable API exposes it on Input, Textarea, SelectTrigger, ComboboxInput, NativeSelect, InputGroup and Card. You can import Surface from either entry point. A nested Surface or an individual prop overrides its parent.
+`surface="flat" | "bordered"` is available on TextField, Textarea, Select, Combobox, SearchField, NumberField, DatePicker and Card. The composable API exposes it on Input, Textarea, SelectTrigger, ComboboxInput, NativeSelect, InputGroup, InputOTP and Card. You can import Surface from either entry point. A nested Surface or an individual prop overrides its parent.
 
 Buttons, badges, avatars and floating menus keep their own styles. Card's explicit `look="recessed"` and danger tone remain meaningful in either surface. Outside a Surface, existing component defaults are preserved. Portalled dialogs need their own Surface around form content; the setting follows the DOM tree.
 

@@ -5,6 +5,10 @@ description: "Accessible one-time password component with copy-paste functionali
 
 <ComponentPreview name="input-otp" />
 
+The separated cells use vic's original CodeField proportions and active-cell outline. The real input keeps paste, selection, password-manager integration and `autoComplete="one-time-code"`.
+
+Use `surface="flat"` or `surface="bordered"`, or inherit a Surface around the form. Set `aria-invalid` on InputOTP to mark every cell; connect a visible error with `aria-describedby`. The slots also accept `aria-invalid` for individual states.
+
 ## Usage
 
 ```tsx showLineNumbers
