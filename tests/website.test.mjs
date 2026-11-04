@@ -131,3 +131,27 @@ test("the original catalogue retains every component and its source", { timeout:
     await new Promise(resolve => server.httpServer.close(resolve));
   }
 });
+
+test("owned icons render their source strokes and copy a usable import", { timeout: 30000 }, async () => {
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ permissions: ["clipboard-read", "clipboard-write"] });
+    await page.goto(`${server.resolvedUrls.local[0]}docs/icons/`);
+    await page.getByLabel("Find an icon", { exact: true }).fill("iconmcp");
+    await page.getByRole("status").filter({ hasText: /^4 icons$/ }).waitFor();
+    const catalogue = page.getByLabel("Icon catalogue", { exact: true });
+    assert.equal(await catalogue.locator(":scope > div").count(), 4);
+    assert.equal(await catalogue.locator("svg").first().getAttribute("viewBox"), "0 0 16 16");
+    assert.equal(await catalogue.locator("svg g[stroke-width]").first().getAttribute("stroke-width"), "1.333");
+    await page.getByRole("button", { name: "Copy ArchiveIcon import", exact: true }).click();
+    await page.getByRole("status").filter({ hasText: "Copied ArchiveIcon" }).waitFor();
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'import { ArchiveIcon } from "vic-ui/icons";');
+    assert.equal(await page.locator("svg.lucide").count(), 0);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.waitForFunction(() => document.documentElement.scrollWidth <= innerWidth);
+  } finally {
+    await browser.close();
+    await new Promise(resolve => server.httpServer.close(resolve));
+  }
+});

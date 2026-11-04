@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { GitBranchIcon, SearchIcon } from "lucide-react"
+import { GitBranchIcon, MagnifyingGlassIcon as SearchIcon } from "vic-ui/icons"
 
 import { Marker, MarkerContent, MarkerIcon } from "vic-ui/ui"
 import { Spinner } from "vic-ui/ui"

@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { CheckCircle2Icon, InfoIcon } from "lucide-react"
+import { CheckCircleIcon as CheckCircle2Icon, InfoCircleIcon as InfoIcon } from "vic-ui/icons"
 
 import {
   Alert,

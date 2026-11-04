@@ -1,7 +1,7 @@
 // Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import { cn } from "cn"
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
+import { ChevronDownIcon, ChevronUpIcon } from "@/icons/icons"
 
 function Accordion({ className, ...props }: AccordionPrimitive.Root.Props) {
   return (

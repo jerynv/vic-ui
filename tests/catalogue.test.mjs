@@ -4,9 +4,11 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { chromium } from "playwright";
 import { createServer } from "vite";
+import { ArchiveIcon } from "../dist/icons.js";
 import { CatalogueFixture } from "./catalogue.fixture.mjs";
 
 test("packaged shadcn controls hydrate, respond to keyboard input, and render themed source", { timeout: 60000 }, async () => {
+  assert.doesNotThrow(() => renderToString(createElement(ArchiveIcon, { children: "Primitive fallback" })));
   const html = renderToString(createElement(CatalogueFixture));
   assert.match(html, /Change color theme/);
   const server = await createServer({ configFile: false, cacheDir: "node_modules/.vite-catalogue-test", optimizeDeps: { entries: ["tests/catalogue-hydrate.fixture.mjs"] }, server: { host: "127.0.0.1", port: 0 }, plugins: [{

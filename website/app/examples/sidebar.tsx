@@ -1,13 +1,7 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
 "use client"
 
-import {
-  FrameIcon,
-  LifeBuoyIcon,
-  MapIcon,
-  PieChartIcon,
-  SendIcon,
-} from "lucide-react"
+import { FrameIcon, LifebuoyIcon as LifeBuoyIcon, MapIcon, ChartPieIcon as PieChartIcon, PaperPlaneRightIcon as SendIcon } from "vic-ui/icons"
 
 import { SidebarTrigger } from "vic-ui/ui"
 import {

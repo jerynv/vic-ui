@@ -1,7 +1,7 @@
 // Adapted from shadcn/ui base-nova (MIT), snapshot 8a35366; see THIRD_PARTY_NOTICES.md.
 import * as React from "react"
 import { cn } from "cn"
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon } from "@/icons/icons"
 
 type NativeSelectProps = Omit<React.ComponentProps<"select">, "size"> & {
   size?: "sm" | "default"

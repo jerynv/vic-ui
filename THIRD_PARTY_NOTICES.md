@@ -9,6 +9,7 @@ The icons are copied at build time from these sets by `scripts/gen-icons.mjs` in
 | Set | By | Licence | Text |
 | --- | --- | --- | --- |
 | Tabler Icons, https://tabler.io/icons | Paweł Kuna | MIT | `licenses/MIT-tabler-icons.txt` |
+| IconMCP, https://iconmcp.com/licence | UI8 | MIT | `licenses/MIT-iconmcp.txt` |
 | MingCute Icon, https://github.com/Richard9394/MingCute | MingCute Design | Apache License 2.0 | `licenses/Apache-2.0-mingcute.txt` |
 
 MingCute supplies one name, `UsersThreeIcon`, for which Tabler has no filled multi-person shape. The three chevrons in `src/icons/own` are drawn for vic-ui and are under its MIT License.
@@ -27,7 +28,6 @@ The OFL lets the fonts be bundled and redistributed with software, provided each
 ## Code and constructions
 
 - **shadcn/ui**, by shadcn. MIT License, `licenses/MIT-shadcn-ui.txt`. The 63 component modules in `src/ui`, their hooks and highlighter are imported with `shadcn@4.23.0 add --all` from the Base UI `base-nova` registry (source snapshot `8a35366`, November 4, 2026). Imports use this package's aliases; radii map to vic tokens; the button press translation is removed; strict optional types are adapted. `components.json` records the registry configuration.
-- **Lucide**, ISC License, `licenses/ISC-lucide.txt`. The shadcn components use Lucide icons, installed from npm.
 - shadcn's `packages/shadcn/src/tailwind.css` is retained in `src/ui/upstream.css` under the same MIT license. It supplies the state variants, scroll fades, and animation utilities used by the imported components.
 - **Base UI**, MIT License, `licenses/MIT-base-ui.txt`. Installed from npm; supplies the accessible behavior of the shadcn components and the existing Button and mobile Sidebar adapters.
 
@@ -44,3 +44,5 @@ The OFL lets the fonts be bundled and redistributed with software, provided each
 
 - **Floating UI** (`@floating-ui/dom`), by the Floating UI contributors. MIT License, `licenses/MIT-floating-ui.txt`. Installed from npm; it positions what floats.
 - **React** and **React DOM** are peer dependencies, installed by the consumer under their own MIT License.
+
+IconMCP supplies Archive, Filter, FolderCode and Robot, retrieved through its official MCP endpoint on 2026-11-04. The original SVGs are in `src/icons/iconmcp`; their presentation attributes are preserved by the generator. Fumadocs resolves its icon imports to this same local catalogue at build time.

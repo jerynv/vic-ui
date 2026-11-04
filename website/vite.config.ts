@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [fumadocsMdx(), tailwindcss(), reactRouter()],
   resolve: {
     alias: {
+      "lucide-react": fileURLToPath(new URL("./app/lib/docs-icons.ts", import.meta.url)),
       "@": fileURLToPath(new URL("../src", import.meta.url)),
       "~": fileURLToPath(new URL("./app", import.meta.url)),
       "vic-ui/ui": fileURLToPath(new URL("../src/ui/index.ts", import.meta.url)),

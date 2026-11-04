@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { FileCodeIcon, XIcon } from "lucide-react"
+import { FileCodeIcon, XIcon } from "vic-ui/icons"
 
 import {
   Attachment,

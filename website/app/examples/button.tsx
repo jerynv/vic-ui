@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { ArrowUpIcon } from "lucide-react"
+import { ArrowUpIcon } from "vic-ui/icons"
 
 import { Button } from "vic-ui/ui"
 

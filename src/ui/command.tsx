@@ -14,7 +14,7 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "@/ui/input-group"
-import { SearchIcon, CheckIcon } from "lucide-react"
+import { MagnifyingGlassIcon as SearchIcon, CheckIcon } from "@/icons/icons"
 
 function Command({
   className,

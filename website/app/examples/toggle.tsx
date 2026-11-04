@@ -1,5 +1,5 @@
 // Adapted from shadcn/ui (MIT), snapshot 8a35366. See website/upstream.json.
-import { BookmarkIcon } from "lucide-react"
+import { BookmarkIcon } from "vic-ui/icons"
 
 import { Toggle } from "vic-ui/ui"
 
