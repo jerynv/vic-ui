@@ -1,20 +1,23 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { fileURLToPath } from "node:url";
+import { dependencies } from "./package.json" with { type: "json" };
 
 /** The package: ESM only, React and Floating UI left to the consumer, the CSS built apart (`scripts/build-css.mjs`). */
 export default defineConfig({
   plugins: [react()],
+  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   build: {
     outDir: "dist",
     emptyOutDir: true,
     sourcemap: true,
     minify: false,
     lib: {
-      entry: { index: "src/index.ts", icons: "src/icons/icons.tsx" },
+      entry: { index: "src/index.ts", icons: "src/icons/icons.tsx", ui: "src/ui/index.ts" },
       formats: ["es"],
     },
     rollupOptions: {
-      external: [/^react($|\/)/, /^react-dom($|\/)/, /^@floating-ui\//, /^@base-ui\//],
+      external: (id) => ["react", "react-dom", ...Object.keys(dependencies)].some((name) => id === name || id.startsWith(`${name}/`)),
       output: { preserveModules: false },
     },
   },

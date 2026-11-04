@@ -1,0 +1,328 @@
+{
+  "upstream": "shadcn/ui",
+  "revision": "8a35366",
+  "style": "base-nova",
+  "cli": "4.23.0",
+  "license": "MIT",
+  "components": [
+    {
+      "id": "accordion",
+      "name": "Accordion",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/accordion.tsx"
+    },
+    {
+      "id": "alert-dialog",
+      "name": "Typed confirmation",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/alert-dialog.tsx"
+    },
+    {
+      "id": "alert",
+      "name": "Problem",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/alert.tsx"
+    },
+    {
+      "id": "aspect-ratio",
+      "name": "Aspect Ratio",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/aspect-ratio.tsx"
+    },
+    {
+      "id": "attachment",
+      "name": "Attachment",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/attachment.tsx"
+    },
+    {
+      "id": "avatar",
+      "name": "Mark and hues",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/avatar.tsx"
+    },
+    {
+      "id": "badge",
+      "name": "Badge",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/badge.tsx"
+    },
+    {
+      "id": "breadcrumb",
+      "name": "Breadcrumb",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/breadcrumb.tsx"
+    },
+    {
+      "id": "bubble",
+      "name": "Bubble",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/bubble.tsx"
+    },
+    {
+      "id": "button-group",
+      "name": "Button Group",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/button-group.tsx"
+    },
+    {
+      "id": "button",
+      "name": "Icon button",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/button.tsx"
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/calendar.tsx"
+    },
+    {
+      "id": "card",
+      "name": "Card",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/card.tsx"
+    },
+    {
+      "id": "carousel",
+      "name": "Carousel",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/carousel.tsx"
+    },
+    {
+      "id": "chart",
+      "name": "Chart",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/chart.tsx"
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/checkbox.tsx"
+    },
+    {
+      "id": "code-block",
+      "name": "Code Block",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/code-block.tsx"
+    },
+    {
+      "id": "collapsible",
+      "name": "Collapsible",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/collapsible.tsx"
+    },
+    {
+      "id": "combobox",
+      "name": "Combobox",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/combobox.tsx"
+    },
+    {
+      "id": "command",
+      "name": "Command",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/command.tsx"
+    },
+    {
+      "id": "context-menu",
+      "name": "Context Menu",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/context-menu.tsx"
+    },
+    {
+      "id": "dialog",
+      "name": "Dialog",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/dialog.tsx"
+    },
+    {
+      "id": "direction",
+      "name": "Direction",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/direction.tsx"
+    },
+    {
+      "id": "drawer",
+      "name": "Drawer",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/drawer.tsx"
+    },
+    {
+      "id": "dropdown-menu",
+      "name": "Dropdown Menu",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/dropdown-menu.tsx"
+    },
+    {
+      "id": "empty",
+      "name": "Empty",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/empty.tsx"
+    },
+    {
+      "id": "field",
+      "name": "Field",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/field.tsx"
+    },
+    {
+      "id": "hover-card",
+      "name": "Hover Card",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/hover-card.tsx"
+    },
+    {
+      "id": "input-group",
+      "name": "Search field",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input-group.tsx"
+    },
+    {
+      "id": "input-otp",
+      "name": "Input OTP",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input-otp.tsx"
+    },
+    {
+      "id": "input",
+      "name": "Number field",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/input.tsx"
+    },
+    {
+      "id": "item",
+      "name": "Item",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/item.tsx"
+    },
+    {
+      "id": "kbd",
+      "name": "Kbd",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/kbd.tsx"
+    },
+    {
+      "id": "label",
+      "name": "Label",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/label.tsx"
+    },
+    {
+      "id": "marker",
+      "name": "Marker",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/marker.tsx"
+    },
+    {
+      "id": "menubar",
+      "name": "Menubar",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/menubar.tsx"
+    },
+    {
+      "id": "message-scroller",
+      "name": "Message Scroller",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/message-scroller.tsx"
+    },
+    {
+      "id": "message",
+      "name": "Message",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/message.tsx"
+    },
+    {
+      "id": "native-select",
+      "name": "Native Select",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/native-select.tsx"
+    },
+    {
+      "id": "navigation-menu",
+      "name": "Navigation Menu",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/navigation-menu.tsx"
+    },
+    {
+      "id": "pagination",
+      "name": "Pagination",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/pagination.tsx"
+    },
+    {
+      "id": "popover",
+      "name": "Popover",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/popover.tsx"
+    },
+    {
+      "id": "progress",
+      "name": "Progress",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/progress.tsx"
+    },
+    {
+      "id": "questionnaire",
+      "name": "Questionnaire",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/questionnaire.tsx"
+    },
+    {
+      "id": "radio-group",
+      "name": "Choice cards",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/radio-group.tsx"
+    },
+    {
+      "id": "resizable",
+      "name": "Resizable",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/resizable.tsx"
+    },
+    {
+      "id": "scroll-area",
+      "name": "Scroll Area",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/scroll-area.tsx"
+    },
+    {
+      "id": "select",
+      "name": "Select",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/select.tsx"
+    },
+    {
+      "id": "separator",
+      "name": "Separator",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/separator.tsx"
+    },
+    {
+      "id": "sheet",
+      "name": "Sheet",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/sheet.tsx"
+    },
+    {
+      "id": "sidebar",
+      "name": "Sidebar",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/sidebar.tsx"
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/skeleton.tsx"
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/slider.tsx"
+    },
+    {
+      "id": "spinner",
+      "name": "Spinner",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/spinner.tsx"
+    },
+    {
+      "id": "switch",
+      "name": "Switch",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/switch.tsx"
+    },
+    {
+      "id": "table",
+      "name": "Table",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/table.tsx"
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/tabs.tsx"
+    },
+    {
+      "id": "textarea",
+      "name": "Textarea",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/textarea.tsx"
+    },
+    {
+      "id": "toast",
+      "name": "Toast",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/toast.tsx"
+    },
+    {
+      "id": "toggle-group",
+      "name": "Toggle Group",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/toggle-group.tsx"
+    },
+    {
+      "id": "toggle",
+      "name": "Toggle",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/toggle.tsx"
+    },
+    {
+      "id": "tooltip",
+      "name": "Tooltip",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/tooltip.tsx"
+    },
+    {
+      "id": "trace",
+      "name": "Trace",
+      "source": "https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/registry/bases/base/ui/trace.tsx"
+    }
+  ],
+  "compositions": [
+    "code-snippet",
+    "color-mode-switch"
+  ]
+}
