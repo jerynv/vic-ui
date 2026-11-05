@@ -16,19 +16,47 @@ import {
 } from "@/ui/input-group"
 import { MagnifyingGlassIcon as SearchIcon, CheckIcon } from "@/icons/icons"
 
+type CommandItemRefs = { selectedValue: string; itemIds: ReadonlyMap<string, string>; registerItem: (value: string, id: string | null) => void }
+const CommandItemRefsContext = React.createContext<CommandItemRefs | null>(null)
+
+function setRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
+  if (typeof ref === "function") ref(value)
+  else if (ref) ref.current = value
+}
+
 function Command({
   className,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive>) {
+  const [internalValue, setInternalValue] = React.useState(props.value ?? props.defaultValue ?? "")
+  const [itemIds, setItemIds] = React.useState<ReadonlyMap<string, string>>(() => new Map())
+  const registerItem = React.useCallback((value: string, id: string | null) => {
+    setItemIds((current) => {
+      if (id && current.get(value.trim()) === id) return current
+      if (!id && !current.has(value.trim())) return current
+      const next = new Map(current)
+      if (id) next.set(value.trim(), id)
+      else next.delete(value.trim())
+      return next
+    })
+  }, [])
+  const handleValueChange = React.useCallback((value: string) => {
+    if (props.value === undefined) setInternalValue(value)
+    props.onValueChange?.(value)
+  }, [props.onValueChange, props.value])
+  const itemRefs = React.useMemo(() => ({ selectedValue: props.value ?? internalValue, itemIds, registerItem }), [props.value, internalValue, itemIds, registerItem])
   return (
-    <CommandPrimitive
-      data-slot="command"
-      className={cn(
-        "flex size-full flex-col overflow-hidden rounded-(--radius-float)! bg-popover p-1 text-popover-foreground",
-        className
-      )}
-      {...props}
-    />
+    <CommandItemRefsContext.Provider value={itemRefs}>
+      <CommandPrimitive
+        data-slot="command"
+        className={cn(
+          "flex size-full flex-col overflow-hidden rounded-(--radius-float)! bg-popover p-1 text-popover-foreground",
+          className
+        )}
+        {...props}
+        onValueChange={handleValueChange}
+      />
+    </CommandItemRefsContext.Provider>
   )
 }
 
@@ -67,8 +95,20 @@ function CommandDialog({
 
 function CommandInput({
   className,
+  ref: forwardedRef,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
+  const refs = React.useContext(CommandItemRefsContext)
+  const inputRef = React.useRef<HTMLInputElement | null>(null)
+  React.useLayoutEffect(() => {
+    const activeId = refs?.itemIds.get(refs.selectedValue.trim())
+    if (activeId) inputRef.current?.setAttribute("aria-activedescendant", activeId)
+    else inputRef.current?.removeAttribute("aria-activedescendant")
+  }, [refs?.itemIds, refs?.selectedValue])
+  const setInputRef = React.useCallback((node: HTMLInputElement | null) => {
+    inputRef.current = node
+    setRef(forwardedRef, node)
+  }, [forwardedRef])
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       <InputGroup className="h-8! rounded-(--radius-control)! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
@@ -78,6 +118,7 @@ function CommandInput({
             "w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
             className
           )}
+          ref={setInputRef}
           {...props}
         />
         <InputGroupAddon>
@@ -149,8 +190,19 @@ function CommandSeparator({
 function CommandItem({
   className,
   children,
+  value,
+  ref: forwardedRef,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Item>) {
+  const refs = React.useContext(CommandItemRefsContext)
+  const setItemRef = React.useCallback((node: HTMLDivElement | null) => {
+    if (value != null && node) refs?.registerItem(value, node.id)
+    setRef(forwardedRef, node)
+  }, [forwardedRef, refs?.registerItem, value])
+  React.useLayoutEffect(() => {
+    if (value == null) return
+    return () => refs?.registerItem(value, null)
+  }, [refs?.registerItem, value])
   return (
     <CommandPrimitive.Item
       data-slot="command-item"
@@ -158,6 +210,8 @@ function CommandItem({
         "group/command-item relative flex cursor-default items-center gap-2 rounded-(--radius-mark) px-2 py-1.5 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-(--radius-control)! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-muted data-selected:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-foreground",
         className
       )}
+      ref={setItemRef}
+      {...(value !== undefined ? { value } : {})}
       {...props}
     >
       {children}
