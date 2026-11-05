@@ -77,6 +77,7 @@ export { DialogSurface, DialogHeading, DialogActions, MenuSurface, PopoverSurfac
 export { NativeSelect } from "./components/NativeSelect";
 export { Disclosure } from "./components/Disclosure";
 export { MetricSummary, WorkspaceHeader, type MetricSummaryItem } from "./components/Analytics";
+export { TraceWaterfall, type TraceWaterfallSpan } from "./components/TraceWaterfall";
 export { Skeleton } from "./components/Skeleton";
 export { Input, TextareaControl } from "./components/Input";
 

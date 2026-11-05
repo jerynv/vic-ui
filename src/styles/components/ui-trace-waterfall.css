@@ -1,0 +1,12 @@
+@layer components.parts {
+  .ui-trace-waterfall { list-style:none; padding:0; margin:0; min-width:0; }
+  .ui-trace-waterfall-row { display:grid; grid-template-columns:minmax(140px,1fr) minmax(140px,1fr) auto; gap:16px; align-items:center; border-top:1px solid var(--line,#dededb); padding-block:10px; min-width:0; }
+  .ui-trace-waterfall-label { min-width:0; overflow-wrap:anywhere; }
+  .ui-trace-waterfall-label small { display:block; color:var(--ink-muted,#61615d); font-size:var(--text-xs,11px); }
+  .ui-trace-waterfall-timing { font-variant-numeric:tabular-nums; font-size:var(--text-sm,12px); min-width:0; }
+  .ui-trace-waterfall-track { height:7px; background:var(--line-subtle,#e7e7e4); border-radius:3px; margin-block:5px; overflow:hidden; position:relative; }
+  .ui-trace-waterfall-track>span { display:block; position:absolute; inset-block:0; background:var(--ink-muted,#686e60); min-width:2px; }
+  .ui-trace-waterfall-row[data-status="error"] .ui-trace-waterfall-track>span { background:var(--danger-ink,#a53c32); }
+  .ui-trace-waterfall-status { white-space:nowrap; }
+  @media(max-width:40rem) { .ui-trace-waterfall-row { grid-template-columns:minmax(0,1fr) auto; gap:8px; } .ui-trace-waterfall-timing { grid-column:1/-1; grid-row:2; } }
+}
