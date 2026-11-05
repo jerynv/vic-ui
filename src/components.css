@@ -17,3 +17,6 @@
 @import "./styles/components/ui-native.css";
 @import "./styles/components/ui-surfaces.css";
 @import "./styles/components/ui-code.css";
+@import "./styles/components/ui-preview.css";
+@import "./styles/components/ui-preview-image.css";
+@import "./styles/components/ui-preview-text.css";

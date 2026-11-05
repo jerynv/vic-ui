@@ -52,6 +52,7 @@ export const PIECES: Piece[] = [
   { id: "kbd", name: "Key", group: "Display", summary: "A key name drawn as a key, with what a screen reader hears.", exports: ["Kbd"], file: "Kbd.tsx" },
   { id: "announcement", name: "Announcement", group: "Display", summary: "A small pill: a tag in a hue, the words and an arrow, the whole of it one link.", exports: ["Announcement"], file: "Announcement.tsx" },
   { id: "empty", name: "Empty", group: "Display", summary: "What a place is for and the one action that ends its emptiness, over the shape of what is coming.", exports: ["Empty", "EmptyArt", "EmptyLine"], file: "Empty.tsx" },
+  { id: "file-preview", name: "File preview", group: "Display", summary: "Inspect local images, text and delimited data in a shared stage, with zoom, recovery states and a full-screen file viewer.", exports: ["FilePreviewStage", "FilePreviewToolbar", "FilePreviewStatus", "FilePreviewDialog", "ImagePreview", "TextPreview", "DelimitedPreview"], file: "preview/FilePreview.tsx" },
   { id: "flow", name: "Flow", group: "Display", summary: "A tree drawn top down with ruled connectors, for a chart of who reports to whom.", exports: ["Flow"], file: "Flow.tsx" },
   { id: "org-mark", name: "Mark and hues", group: "Display", summary: "A place's first letter on a tile in one of the five hues, chosen by hashing what names it.", exports: ["OrgMark", "HUES", "hueFor"], file: "OrgMark.tsx" },
 

@@ -20,7 +20,7 @@ test("component families have one alphabetical entry and one active usage view",
     await page.goto(`${url}docs/components/button/`, { waitUntil: "networkidle" });
     const links = page.locator('#nd-sidebar a[href*="/docs/components/"]');
     const names = await links.allTextContents();
-    assert.equal(names.length, 84);
+    assert.equal(names.length, 85);
     assert.equal(new Set(names.map(name => name.toLowerCase())).size, names.length);
     assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
     assert.equal(await page.locator("#nd-sidebar").getByRole("link", { name: "Icons", exact: true }).count(), 1);
@@ -62,7 +62,7 @@ test("component families have one alphabetical entry and one active usage view",
     const urls = new Set();
     const visit = value => { if (value && typeof value === "object") for (const [key, child] of Object.entries(value)) { if (key === "url" && typeof child === "string") urls.add(child.split("#")[0]); else visit(child); } };
     visit(search);
-    assert.ok(urls.size >= 84, "the search index contains the catalogue");
+    assert.ok(urls.size >= 85, "the search index contains the catalogue");
     for (const path of urls) {
       const id = path.replace(/\/$/, "").split("/").at(-1);
       assert.equal(id, canonicalComponentId(id), `search indexed alias ${id}`);
@@ -92,7 +92,7 @@ test("marketing uses working library components and links to the full catalogue"
     await page.goto(server.resolvedUrls.local[0]);
     await page.getByRole("heading", { name: "Good interfaces start here.", level: 1 }).waitFor();
     const names = await page.locator('[aria-label="Component directory"] a').allTextContents();
-    assert.equal(names.length, 84);
+    assert.equal(names.length, 85);
     assert.equal(new Set(names.map(name => name.toLowerCase())).size, names.length);
     assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
     assert.equal(await page.locator("[data-agentation-portal], [data-feedback-toolbar]").count(), 0, "review tools are excluded from production");

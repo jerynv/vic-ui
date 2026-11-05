@@ -50,3 +50,9 @@ IconMCP supplies Archive, Filter, FolderCode and Robot, retrieved through its of
 ## Local review tool
 
 Agentation 3.1.2, by Benji Taylor (https://github.com/benjitaylor/agentation), is a development-only dependency under PolyForm Shield 1.0.0 (`licenses/PolyForm-Shield-agentation.txt`). It is excluded from the published library and production website bundles. No endpoint or webhook is configured; annotations remain in the browser until copied or downloaded.
+
+## File preview source transfer
+
+The additive modules in `src/components/preview` and `ui-preview*.css` adapt first-party V-Client source at commit `2f2713d8744373455d6be2953af26f68ecb37f6f`: `FileView.tsx`, `viewers/Lightbox.tsx`, `viewers/ImageView.tsx`, the text-only portion of `viewers/TextView.tsx`, the CSV portion of `viewers/TableView.tsx`, and selected rules from `styles/app/viewers.css`. The project owner explicitly authorized this transfer into Vic UI. The supplied source repository has no root license; this record does not assert that V-Client was released under MIT.
+
+The verified source archive has SHA256 `35835c7112e44ec753719ff760612a36776cedb44fb3b8b35094f34ebe677906`; its manifest has SHA256 `751334183baaec3949e3972d2af9312eb798e54431ec0a59b1adb51e3465eb80`. This increment uses only the pinned main source, not the separately preserved recovery files. Application loaders, authorization, routes, icons and fonts are excluded; controls and icons come from Vic's existing implementations. No additional runtime dependency or PDF/Office resource is included. These exports render images, plain text and CSV/TSV; they do not provide PDF, DOCX, XLSX, PPTX, Markdown or media rendering.

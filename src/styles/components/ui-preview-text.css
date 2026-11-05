@@ -1,0 +1,112 @@
+@layer components.parts {
+  .ui-preview-text,
+  .ui-preview-table-scroll {
+    min-width: 0;
+    min-height: 16rem;
+    max-height: 32rem;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+    color: var(--fg-strong);
+    background: var(--bg-base);
+  }
+
+  .ui-preview-text:focus-visible,
+  .ui-preview-table-scroll:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-preview-text-notice {
+    margin: 0;
+    padding: 0.875rem 1rem;
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+    color: var(--fg-subtle);
+    white-space: normal;
+  }
+
+  .ui-preview-text-code {
+    margin: 0;
+    padding: 0.75rem 1rem 0.75rem 0;
+    font-family: var(--font-code);
+    font-size: var(--text-ui);
+    line-height: 1.6;
+    tab-size: 4;
+    counter-reset: preview-line;
+  }
+
+  .ui-preview-text-line {
+    display: block;
+    padding-left: 4.5rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    text-indent: -3.5rem;
+  }
+
+  .ui-preview-text-line::before {
+    counter-increment: preview-line;
+    content: counter(preview-line);
+    display: inline-block;
+    width: 2.75rem;
+    margin-right: 0.75rem;
+    text-align: right;
+    text-indent: 0;
+    color: var(--fg-subtle);
+    user-select: none;
+  }
+
+  .ui-preview-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-preview-table th,
+  .ui-preview-table td {
+    min-width: 4rem;
+    max-width: 24rem;
+    padding: 0.5rem 0.75rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    vertical-align: top;
+  }
+
+  .ui-preview-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 600;
+    background: var(--bg-tint);
+  }
+
+  .ui-preview-table .ui-preview-table-number {
+    position: sticky;
+    left: 0;
+    min-width: 3rem;
+    color: var(--fg-subtle);
+    font-weight: 400;
+    text-align: right;
+    background: var(--bg-base);
+  }
+
+  .ui-preview-table thead .ui-preview-table-number {
+    z-index: 2;
+    background: var(--bg-tint);
+  }
+
+  .ui-preview-text ::selection,
+  .ui-preview-table-scroll ::selection {
+    color: var(--fg-inverse);
+    background: var(--fg-strong);
+  }
+}

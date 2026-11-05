@@ -1,0 +1,161 @@
+---
+title: "File preview"
+description: "Local image, text and delimited-data previews, a shared file stage and full-screen navigation."
+---
+
+## Usage
+
+These components are exported from `vic-ui`. Load `vic-ui/styles.css`, or use the existing `vic-ui/ui/styles.css` entry if your application already imports it. Both include the preview styles; there is no separate stylesheet or provider.
+
+```tsx
+import { Button, FilePreviewStage, TextPreview } from "vic-ui";
+import "vic-ui/styles.css";
+
+function ReadmePreview({ input, onDownload }: {
+  input: Blob;
+  onDownload: () => void;
+}) {
+  return (
+    <FilePreviewStage
+      file={{ id: "readme-v1", name: "readme.txt", size: input.size }}
+      actions={<Button look="line" onClick={onDownload}>Download</Button>}
+    >
+      <TextPreview input={input} name="readme.txt" />
+    </FilePreviewStage>
+  );
+}
+```
+
+The examples above use local synthetic files. Their download links contain those exact sample contents. In an application, the host supplies its own download action and decides whether it is available.
+
+## What is included
+
+| Component | Purpose |
+| --- | --- |
+| `FilePreviewStage` | File name, optional size and description, toolbar, actions and preview body. |
+| `FilePreviewToolbar` | A named, wrapping group for existing Vic controls. |
+| `FilePreviewStatus` | Loading, error and unsupported states, with optional retry and host actions. |
+| `FilePreviewDialog` | Full-screen native dialog with file navigation, Escape to close and focus return. |
+| `ImagePreview` | Browser-decodable local images with zoom, pan and fit controls. |
+| `TextPreview` | Bounded UTF-8 text with line numbers and a truncation notice. |
+| `DelimitedPreview` | Bounded CSV or TSV in a scrollable table. |
+
+This increment does not include PDF, DOCX, XLSX, PPTX, Markdown, audio or video renderers. Text that contains markup remains text. There is no automatic renderer selection or file conversion.
+
+## Supply stable local input
+
+Each renderer takes `input: Blob | Uint8Array<ArrayBuffer>`. It does not accept a remote URL or fetch file bytes. Keep the input identity stable across unrelated renders, and replace it when the file's contents change.
+
+```tsx
+const input = useMemo(
+  () => new Blob(["A local sample\n"], { type: "text/plain" }),
+  [],
+);
+
+<TextPreview input={input} name="sample.txt" />
+```
+
+For real files, keep the loaded Blob or byte array in the host's loader state. Do not construct a new Blob inline on every render or mutate a supplied byte array in place. When a changed file should reset the renderer's view, key it by the file identity and version:
+
+```tsx
+<TextPreview key={`${file.id}:${file.version}`} input={input} name={file.name} />
+```
+
+Dialog item IDs should also include the version when replacing content under the same file name.
+
+The host owns permission checks, loading, cancellation and stale-result handling. Mount a renderer only with the bytes that belong to the current selection; use `FilePreviewStatus` while the host is loading or cannot provide them.
+
+## Images
+
+```tsx
+<ImagePreview input={imageBlob} alt="Floor plan of the shared workspace" />
+
+<ImagePreview
+  input={pngBytes}
+  mimeType="image/png"
+  alt="Floor plan of the shared workspace"
+  onError={reportPreviewError}
+/>
+```
+
+`alt` is required. A Blob carries its own MIME type; `mimeType` applies to byte arrays and defaults to `image/png`. The image is displayed in an `img` element, including SVG; SVG markup is never inserted into the document.
+
+Image input is limited to 20 MiB of encoded bytes before a copy or object URL is created. `maxBytes` can lower that limit. This bounds the encoded input, not the browser decoder's pixel memory; the host still decides which image sizes and formats to accept.
+
+The viewer provides zoom in, zoom out and fit controls. Pointer dragging pans a zoomed image. Double-click or double-tap toggles zoom; touch supports pinch. With the image area focused, `+` and `-` zoom, `0` fits, and vertical arrow or Page Up/Down keys pan a zoomed image. Browser decoding determines which image formats can be displayed.
+
+## Text and delimited data
+
+```tsx
+<TextPreview input={textBlob} name="readme.txt" maxLines={500} />
+
+<DelimitedPreview
+  input={tableBlob}
+  name="measurements.tsv"
+  delimiter={"\t"}
+  maxRows={250}
+  maxColumns={20}
+/>
+```
+
+`DelimitedPreview` uses a comma by default; `delimiter={"\t"}` selects TSV. Quoted fields can contain delimiters, escaped quotes and line breaks. Cell contents remain text, including values that look like spreadsheet formulas.
+
+| Renderer | Default byte budget | Default output budget |
+| --- | --- | --- |
+| `ImagePreview` | 20 MiB | Zoom from fit to 8 times the fitted size |
+| `TextPreview` | 512 KiB | 20,000 lines |
+| `DelimitedPreview` | 1 MiB | 1,000 total rows, including the header, and 60 columns |
+
+`maxBytes`, `maxLines`, `maxRows` and `maxColumns` can lower the corresponding budget; they cannot raise the library limits. A partial preview identifies truncation. Download remains a host action for accessing the original file.
+
+All three renderers accept `className` and `onError(error: Error)`. `name` supplies an accessible file name for text and table previews. These are preview components, not document editors.
+
+## Full-screen navigation
+
+```tsx
+const [activeId, setActiveId] = useState<string | null>(null);
+const opener = useRef<HTMLButtonElement>(null);
+
+<Button ref={opener} onClick={() => setActiveId("readme-v1")}>
+  Open full screen
+</Button>
+<FilePreviewDialog
+  items={[
+    {
+      id: "readme-v1",
+      label: "readme.txt",
+      content: <TextPreview input={textBlob} name="readme.txt" />,
+    },
+  ]}
+  activeId={activeId}
+  onActiveIdChange={setActiveId}
+  returnFocusRef={opener}
+  renderActions={() => <Button look="line" onClick={download}>Download</Button>}
+/>
+```
+
+`activeId={null}` closes the dialog. Each item has a unique, stable `id`, a `label` and host-provided `content`. With multiple items, previous and next controls navigate the list. With focus on the dialog content container, left and right arrow keys navigate files. Embedded controls and scrollable renderers keep their own arrow keys. If changing items removes the focused content, focus returns to that container. Closing restores focus to `returnFocusRef`, or to the element that opened the dialog when no ref is supplied.
+
+## Host-controlled states
+
+```tsx
+<FilePreviewStatus status="loading" message="Loading the selected file." />
+<FilePreviewStatus
+  status="error"
+  message="The file could not be read. Try loading it again."
+  onRetry={reloadSelectedFile}
+/>
+<FilePreviewStatus
+  status="unsupported"
+  message="This file type has no preview."
+  actions={<Button look="line" onClick={download}>Download</Button>}
+/>
+```
+
+Use `title` to override a state's default heading. `onRetry` adds a working Try again button whose callback belongs to the host; the status component does not start a request. The loading state exposes `aria-busy`, errors use an alert, and the preview body retains a reserved area for status content.
+
+## Source and compatibility
+
+The shared stage, full-screen boundary and image interactions were extracted from the verified V-Client source pin `2f2713d8744373455d6be2953af26f68ecb37f6f`, then adapted to Vic's existing controls and tokens. See the repository's third-party notices for provenance. Text and CSV parsing adapt the same pin's TextView and TableView implementations, with stricter input/output budgets and stale-read cleanup.
+
+These are additive root exports. Existing components and the `vic-ui/ui` API remain available; the preview components do not require a migration of existing surfaces.
