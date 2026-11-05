@@ -1150,8 +1150,8 @@
   /* ---- a round button (`round`) ------------------------------------------------- */
 
   /* A circle, as a message box's Send is (`round`). */
-  .ui-button-round,
-  .ui-button-round .ui-button-face {
+  .ui-button.ui-button-round,
+  .ui-button.ui-button-round > .ui-button-face {
     border-radius: var(--radius-round);
   }
 }
