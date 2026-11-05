@@ -4,8 +4,83 @@ import { chromium } from "playwright";
 import { preview } from "vite";
 import { readFile } from "node:fs/promises";
 import { PIECES } from "../site/src/registry.ts";
+import { componentAliases, canonicalComponentId } from "../website/app/lib/component-families.ts";
 
 const base = process.env.VIC_UI_BASE ?? "/vic-ui/";
+
+test("component families have one alphabetical entry and one active usage view", { timeout: 60000 }, async () => {
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ reducedMotion: "reduce", viewport: { width: 1440, height: 1000 } });
+    page.setDefaultTimeout(10000);
+    const errors = []; page.on("pageerror", error => errors.push(error.message));
+    page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+    const url = server.resolvedUrls.local[0];
+    await page.goto(`${url}docs/components/button/`, { waitUntil: "networkidle" });
+    const links = page.locator('#nd-sidebar a[href*="/docs/components/"]');
+    const names = await links.allTextContents();
+    assert.equal(names.length, 84);
+    assert.equal(new Set(names.map(name => name.toLowerCase())).size, names.length);
+    assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
+    assert.equal(await page.locator("#nd-sidebar").getByRole("link", { name: "Icons", exact: true }).count(), 1);
+    assert.equal(await page.locator("#nd-sidebar").getByRole("link", { name: "Icon guide", exact: true }).count(), 1);
+    for (const [alias, canonical] of Object.entries(componentAliases)) {
+      await page.goto(`${url}docs/components/${alias}/`, { waitUntil: "networkidle" });
+      await page.waitForURL(new RegExp(`/docs/components/${canonical}[/]?$`));
+      await page.locator(".vic-preview").first().waitFor();
+      assert.ok(await page.locator(".vic-preview").count() > 0, alias);
+      assert.equal(await page.locator(".preview-canvas").count(), 0, "composable examples are not repeated below native ones");
+      assert.equal(await page.locator("h2#usage").count(), 0);
+      await page.getByRole("tab", { name: "Composable", exact: true }).click();
+      await page.locator(".preview-canvas").waitFor();
+      await page.locator(".vic-preview").first().waitFor({ state: "detached" });
+      assert.equal(await page.locator(".vic-preview").count(), 0);
+      assert.equal(await page.locator("h2#usage").count(), 1);
+      assert.equal(await page.getByRole("heading", { name: "Setup", exact: true }).count(), 0);
+      await page.reload({ waitUntil: "networkidle" });
+      await page.locator(".vic-preview").first().waitFor().catch(error => {
+        return page.locator("body").innerText().then(body => { throw new Error(`${alias}: ${page.url()}\n${body.slice(0,900)}\n${errors.join("\n")}`, { cause: error }); });
+      });
+      assert.equal(await page.locator(".preview-canvas").count(), 0);
+      await page.getByRole("tab", { name: "Composable", exact: true }).click();
+      await page.locator(".preview-canvas").waitFor();
+      assert.equal(await page.getByRole("tab", { name: "Composable", exact: true }).getAttribute("aria-selected"), "true");
+    }
+    await page.locator('a[href="#usage"]').first().click();
+    await page.locator("h2#usage").waitFor();
+    await page.goto(`${url}docs/components/text-field/?from=bookmark#usage`, { waitUntil: "networkidle" });
+    await page.waitForURL(new RegExp('/docs/components/input/\\?from=bookmark#usage$'));
+    await page.locator("h2#usage").waitFor();
+    assert.equal(await page.getByRole("tab", { name: "Composable", exact: true }).getAttribute("aria-selected"), "true");
+    await page.keyboard.press("Meta+k");
+    await page.getByRole("combobox", { name: "Search", exact: true }).fill("TextField");
+    await page.getByRole("option").first().waitFor();
+    await page.keyboard.press("Enter");
+    await page.getByRole("heading", { name: "Input", exact: true, level: 1 }).waitFor();
+    const search = await (await page.request.get(`${url}api/search`)).json();
+    const urls = new Set();
+    const visit = value => { if (value && typeof value === "object") for (const [key, child] of Object.entries(value)) { if (key === "url" && typeof child === "string") urls.add(child.split("#")[0]); else visit(child); } };
+    visit(search);
+    assert.ok(urls.size >= 84, "the search index contains the catalogue");
+    for (const path of urls) {
+      const id = path.replace(/\/$/, "").split("/").at(-1);
+      assert.equal(id, canonicalComponentId(id), `search indexed alias ${id}`);
+    }
+    await page.goto(url);
+    await page.getByRole("textbox", { name: "Find a component" }).fill("TextField");
+    const result = page.locator('[aria-label="Component directory"] a');
+    assert.equal(await result.count(), 1);
+    assert.equal(await result.textContent(), "Input");
+    await page.setViewportSize({ width: 390, height: 844 });
+    await result.click();
+    await page.getByRole("button", { name: "Open Sidebar", exact: true }).click();
+    const mobile = page.locator('#nd-sidebar-mobile a[href*="/docs/components/"]');
+    assert.deepEqual(await mobile.allTextContents(), names);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    assert.deepEqual(errors, []);
+  } finally { await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
+});
 
 test("marketing uses working library components and links to the full catalogue", { timeout: 30000 }, async () => {
   const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
@@ -16,7 +91,10 @@ test("marketing uses working library components and links to the full catalogue"
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(server.resolvedUrls.local[0]);
     await page.getByRole("heading", { name: "Good interfaces start here.", level: 1 }).waitFor();
-    assert.equal(await page.locator('[aria-label="Component directory"] a').count(), 91);
+    const names = await page.locator('[aria-label="Component directory"] a').allTextContents();
+    assert.equal(names.length, 84);
+    assert.equal(new Set(names.map(name => name.toLowerCase())).size, names.length);
+    assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
     assert.equal(await page.locator("[data-agentation-portal], [data-feedback-toolbar]").count(), 0, "review tools are excluded from production");
     await page.getByLabel("Workspace name", { exact: true }).fill("Field Notes");
     await page.getByRole("switch", { name: "Open to your team" }).click();
@@ -93,7 +171,7 @@ test("every catalogue example renders on desktop and fits a mobile viewport", { 
       await page.goto(`${server.resolvedUrls.local[0]}docs/components/${id}/`);
       await page.getByRole("heading", { name, exact: true, level: 1 }).waitFor();
       assert.equal(await page.title(), `${name} · vic/ui`);
-      const compound = page.getByRole("button", { name: "Composable API", exact: true });
+      const compound = page.getByRole("tab", { name: "Composable", exact: true });
       if (await compound.count()) await compound.click();
       const preview = page.locator(".preview-canvas");
       await preview.waitFor();
@@ -181,7 +259,7 @@ test("owned icons render their source strokes and copy a usable import", { timeo
   }
 });
 
-test("card spacing, composable disclosure, and file-row actions", { timeout: 30000 }, async () => {
+test("card spacing, API selection, and file-row actions", { timeout: 30000 }, async () => {
   const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
   const browser = await chromium.launch({ headless: true });
   try {
@@ -196,10 +274,10 @@ test("card spacing, composable disclosure, and file-row actions", { timeout: 300
     await page.getByRole("option", { name: "Bordered", exact: true }).click();
     assert.notEqual(await field.evaluate(el => getComputedStyle(el.parentElement).backgroundColor), flatFill);
     assert.equal(await page.locator("main details").count(), 0);
-    const disclosure = page.getByRole("button", { name: "Composable API", exact: true });
+    const disclosure = page.getByRole("tab", { name: "Composable", exact: true });
     await disclosure.focus();
     await page.keyboard.press("Enter");
-    assert.equal(await disclosure.getAttribute("aria-expanded"), "true");
+    assert.equal(await disclosure.getAttribute("aria-selected"), "true");
     await page.getByPlaceholder("Enter your password").fill("demo-password");
     const action = page.getByRole("button", { name: "Sign up", exact: true });
     assert.ok(await action.evaluate(el => el.classList.contains("ui-button-line")));
