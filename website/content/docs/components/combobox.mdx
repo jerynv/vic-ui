@@ -40,8 +40,81 @@ export function ExampleCombobox() {
 }
 ```
 
-## API reference
+## Inline composition
 
-See the [full upstream guide](https://base-ui.com/react/components/combobox) for additional variants and primitive props. This package uses shadcn's Base UI edition.
+The root package also exports `ComboboxRoot`, `ComboboxSearch`, `ComboboxList`, `ComboboxItem`, `ComboboxGroup` and `ComboboxEmpty`. Use these when the search must stay beside a provider rail or above a scrolling list, with independent footer controls. The **Inline model picker** in the ready-made examples demonstrates both themes with a 44px rail and 32px, normal-weight rows.
 
-Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/combobox.mdx), under the MIT license.
+These root primitives are separate from the `vic-ui/ui` names used above. The original root `Combobox` remains available for a complete input and anchored popup.
+
+```tsx showLineNumbers
+import { useState } from "react";
+import {
+  Button, ComboboxEmpty, ComboboxGroup, ComboboxItem,
+  ComboboxList, ComboboxRoot, ComboboxSearch,
+} from "vic-ui";
+import "vic-ui/styles.css";
+
+const models = [
+  { value: "sample/atlas", label: "Atlas" },
+  { value: "sample/atlas-fast", label: "Atlas Fast" },
+  { value: "sample/atlas-legacy", label: "Atlas Legacy", disabled: true },
+];
+
+export function InlinePicker() {
+  const [query, setQuery] = useState("");
+  const [value, setValue] = useState<string | null>(null);
+  const [open, setOpen] = useState(true);
+  const visible = models.filter(model =>
+    model.label.toLowerCase().includes(query.trim().toLowerCase()));
+
+  return <ComboboxRoot label="Models" items={visible}
+    query={query} onQueryChange={setQuery}
+    value={value} onValueChange={setValue}
+    open={open} onOpenChange={setOpen}>
+    <ComboboxSearch placeholder="Search models" />
+    <ComboboxList style={{ maxHeight: 192 }}>
+      <ComboboxGroup label="Sample provider">
+        {visible.map(model => <ComboboxItem key={model.value} value={model.value}>
+          {model.label}
+        </ComboboxItem>)}
+      </ComboboxGroup>
+    </ComboboxList>
+    <ComboboxEmpty>No models match your search.</ComboboxEmpty>
+    <Button look="quiet" onClick={() => setOpen(!open)}>
+      {open ? "Hide models" : "Show models"}
+    </Button>
+  </ComboboxRoot>;
+}
+```
+
+### Controller contract
+
+| Prop | Behavior |
+| --- | --- |
+| `label` | Required accessible name for the search and list. |
+| `items` | Already filtered options in the exact order rendered. Each has a unique string `value`, a string `label` and optional `disabled`. Render every supplied option once. |
+| `query`, `onQueryChange` | Controlled search text. Use `defaultQuery` for internal state. Filtering stays with the caller. |
+| `value`, `onValueChange` | Controlled selected key, or `null`. Use `defaultValue` for internal state. Selection reports the option's string key. |
+| `open`, `onOpenChange` | Controlled list visibility. `defaultOpen` defaults to `true`; a closed list is removed and the input reports `aria-expanded="false"`. |
+| `closeOnSelect` | Defaults to `true`. Set `false` for a persistent inline picker, as in the live example. |
+| `disabled` | Disables the search and all option interaction. Individual unavailable options are marked in `items`. |
+
+Controlled props remain authoritative: callbacks request changes; declining a callback leaves that value unchanged. Closing or selecting preserves the query. Search focus, clicking and typing can request opening. The host owns provider catalogues, filtering, permissions, account actions, loading and any surrounding popup or dialog.
+
+### Keyboard, focus and composition
+
+Arrow Up/Down traverse enabled options and stop at the ends. Home/End move to the first/last enabled option while open. Enter selects the active option; Escape requests closing and consumes that Escape only while open. Modified keys retain native text-editing behavior, and IME composition does not select an option.
+
+Focus stays in the search while options use `aria-activedescendant`. Pointer hover updates the active row; selection keeps input focus. Generated IDs are isolated per root and stable when options reorder. Provider changes and filtering reconcile the active option against the current `items`.
+
+Use one `ComboboxSearch` and one `ComboboxList` per root. An enclosing popup or dialog owns its positioning and focus return.
+
+Keep provider buttons and footer actions **outside `ComboboxList`** so they retain normal Tab navigation and their own button semantics. Tab does not select or automatically close an inline list. Option children are display content; put separate actions in the rail or footer. `ComboboxGroup` supplies a labelled group; `ComboboxEmpty` is a sibling status region that announces an empty list. Search forwards its input ref and native input props; controlled text belongs on the root. Search-level `disabled` also disables option interaction, and `readOnly` prevents keyboard and pointer selection.
+
+The layout reference is T3's [model picker at `7f6f47b`](https://github.com/pingdotgg/t3code/blob/7f6f47b27b44456f1c8214d3b566b375c09f629e/apps/web/src/components/chat/ModelPickerContent.tsx), under MIT. The demonstration uses illustrative providers and models; it does not copy application loaders or account behavior.
+
+## Composable popup API reference
+
+See the [full upstream guide](https://base-ui.com/react/components/combobox) for the `vic-ui/ui` popup primitives and their additional props. That API uses shadcn's Base UI edition.
+
+The popup example and usage above are adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/combobox.mdx), under the MIT license.

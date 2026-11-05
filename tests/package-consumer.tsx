@@ -55,3 +55,19 @@ export const badPreviewInput = <Vic.TextPreview input="https://example.com/priva
 export const badDelimiter = <Vic.DelimitedPreview input={new Blob()} delimiter=";" />;
 // @ts-expect-error Image previews require an accessible description.
 export const badImagePreview = <Vic.ImagePreview input={new Blob()} />;
+
+const models: readonly Vic.ComboboxOption[] = [{ value: "model", label: "Model" }];
+export const inlinePicker = <Vic.ComboboxRoot label="Models" items={models} value="model" onValueChange={value => value.toUpperCase()} query="" onQueryChange={query => query.trim()} open onOpenChange={open => !open}>
+  <Vic.ComboboxSearch ref={input} placeholder="Search models" />
+  <Vic.ComboboxEmpty>No matching models</Vic.ComboboxEmpty>
+  <Vic.ComboboxList><Vic.ComboboxGroup label="Available">
+    <Vic.ComboboxItem value="model">Model</Vic.ComboboxItem>
+  </Vic.ComboboxGroup></Vic.ComboboxList>
+  <Vic.Button look="quiet">Configure providers</Vic.Button>
+</Vic.ComboboxRoot>;
+// @ts-expect-error Keys are stable strings, not catalogue objects.
+export const badComboboxItem = <Vic.ComboboxItem value={{ id: "model" }} />;
+// @ts-expect-error Root selection is a single string or null.
+export const badComboboxValue = <Vic.ComboboxRoot label="Models" items={models} value={[]} children={null} />;
+// @ts-expect-error Search is controlled by Root, not an independent value.
+export const badComboboxSearch = <Vic.ComboboxSearch value="different" />;

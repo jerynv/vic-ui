@@ -1,5 +1,15 @@
 # vic-ui: the map
 
+## Inline combobox composition
+
+Six additive root primitives (`ComboboxRoot`, `ComboboxSearch`, `ComboboxList`, `ComboboxItem`, `ComboboxGroup`, `ComboboxEmpty`) support a pinned search, inline list, provider rail and footer. Root controls query, selected string key and open state; the host supplies visible options in rendered order and retains filtering, catalogue data, permissions and popup ownership. Existing root and `vic-ui/ui` Combobox APIs remain intact. All 131 exports from `603c207` are preserved; there are now 137 runtime root exports and no new dependencies.
+
+Arrow keys skip disabled rows and clamp at the ends; Home/End traverse the open list, Enter selects and Escape requests closing. Modified keys and IME composition remain native. Input focus uses stable, safely encoded active-descendant IDs; filtering, provider replacement and reorder cannot retain an absent option. Tab reaches the external rail/footer because the scrollable list is explicitly outside tab order. Scrolling reveals the active row inside its own list after reorder/refocus without moving the surrounding page. Root or search-level disabled states and read-only search prevent both keyboard and pointer selection. Controlled state can decline requests, and selection/closing preserve the query.
+
+The existing Combobox family contains live light/dark examples with a 44px provider rail, pinned search, 32px normal-weight rows and independent footer. T3 layout reference: `7f6f47b27b44456f1c8214d3b566b375c09f629e` (MIT). Application loaders and account logic were not copied. Installed Base UI was evaluated: its permanently expanded inline state and Home/End caret behavior cannot implement this controller contract through public APIs.
+
+Validation covers SSR hydration, both stylesheet entries/themes, keyboard/pointer/IME, dynamic item identity, disabled/read-only changes, controlled refusal, empty results, focus/scroll recovery, mobile overflow and the old Combobox. Strict packed Bundler/NodeNext declarations use `skipLibCheck:false`, check all 131 prior exports and compile the new API. All three stylesheet outputs contain the new styles. Library/package, seven website and local review checks pass, as do both typechecks, design/dash checks and reference build. Independent review found the leaf restriction mismatch; controller-level guards and regressions resolve it. No Phaethon edits or changes to released preview/control behavior.
+
 ## Portable file previews
 
 Seven additive root exports adapt the verified V-Client source: FilePreviewStage, FilePreviewToolbar, FilePreviewStatus, FilePreviewDialog, ImagePreview, TextPreview and DelimitedPreview. These render browser-decodable images, plain UTF-8 text and CSV/TSV. No PDF/DOCX/XLSX/PPTX/Markdown/media renderer or new dependency is included. Inputs are ready Blob/Uint8Array values; host applications retain fetch, permissions, classification and download actions. No Phaethon/V-Client source edits are part of this increment.
