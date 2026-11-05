@@ -83,3 +83,6 @@ export { FilePreviewDialog, type FilePreviewItem } from "./components/preview/Fi
 export { ImagePreview, type ImagePreviewProps } from "./components/preview/ImagePreview";
 export { TextPreview, type TextPreviewProps } from "./components/preview/TextPreview";
 export { DelimitedPreview, type DelimitedPreviewProps } from "./components/preview/DelimitedPreview";
+
+export { Slider, type SliderProps } from "./components/Slider";
+export { SettingsLayout, SettingsSection, SettingsGroup, SettingsRow, type SettingsLayoutProps, type SettingsSectionProps, type SettingsGroupProps, type SettingsRowProps } from "./components/Settings";

@@ -87,3 +87,19 @@ export const optionalPreviews = <>
 export const badOfficeURL = <XlsxPreview input="https://example.com/private.xlsx" title="Workbook" />;
 // @ts-expect-error Native media previews require a title.
 export const badMediaTitle = <AudioPreview input={readyInput} />;
+
+const headingRef = createRef<HTMLHeadingElement>();
+export const settings = <Vic.SettingsLayout navigation={<a href="#reading">Reading</a>} actions={<Vic.Button>Done</Vic.Button>}>
+  <Vic.SettingsSection title="Reading" titleId="reading" headingLevel={3} headingProps={{ ref: headingRef, tabIndex: -1, onFocus: e => e.currentTarget.id }}>
+    <Vic.SettingsGroup title="Display" surface="flat" headingProps={{ ref: headingRef, tabIndex: -1 }}>
+      <Vic.SettingsRow label="Size" labelId="size-label" descriptionId="size-description" description="Reading size" align="start">
+        <Vic.Slider ref={input} aria-labelledby="size-label" aria-describedby="size-description" defaultValue={100} min={75} max={175} step={5} valueText={value => `${value} percent`} onValueChange={value => value.toFixed()} onValueCommitted={value => value.toFixed()} trackPress="step" dir="rtl" />
+      </Vic.SettingsRow>
+    </Vic.SettingsGroup>
+  </Vic.SettingsSection>
+</Vic.SettingsLayout>;
+// @ts-expect-error The root Slider is scalar; the ui subpath retains its range API.
+const invalidScalar = <Vic.Slider value={[10, 20]} />;
+// @ts-expect-error Heading content comes from title.
+const invalidHeadingContent = <Vic.SettingsSection title="Settings" headingProps={{ children: "Conflicting" }} />;
+void [invalidScalar, invalidHeadingContent];

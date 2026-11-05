@@ -6,13 +6,15 @@ export async function startFixture(port = 0) {
     configFile: false,
     root: fileURLToPath(new URL("..", import.meta.url)),
     cacheDir: "node_modules/.vite-controls-layout-test",
-    optimizeDeps: { entries: ["tests/controls-layout.fixture.tsx"] },
-    server: { host: "127.0.0.1", port, strictPort: true },
+    optimizeDeps: { entries: ["tests/controls-layout.fixture.tsx"], include: ["@base-ui/react/slider", "@base-ui/react/direction-provider"] },
+    server: { host: "127.0.0.1", port, strictPort: true, watch: { ignored: ["**/website/build/**", "**/site/dist/**", "**/website/.react-router/**"] } },
     plugins: [{ name: "controls-layout-fixture", configureServer(server) {
       server.middlewares.use((request, response, next) => {
-        if (new URL(request.url, "http://localhost").pathname !== "/") return next();
-        response.setHeader("Content-Type", "text/html");
-        response.end('<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Controls and settings</title></head><body><div id="root"></div><script type="module" src="/tests/controls-layout.fixture.tsx"></script></body></html>');
+        const url = new URL(request.url, "http://localhost");
+        if (url.pathname !== "/") return next();
+        const sheet = url.searchParams.get("sheet") === "ui" ? "ui/styles.css" : "vic-ui.css";
+        response.setHeader("Content-Type", "text/html; charset=utf-8");
+        response.end(`<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Controls and settings</title><link rel="stylesheet" href="/dist/${sheet}"></head><body><div id="root"></div><script type="module" src="/tests/controls-layout.fixture.tsx"></script></body></html>`);
       });
     } }],
   });

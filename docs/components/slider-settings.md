@@ -1,6 +1,6 @@
-# Slider and Settings source increment
+# Slider and Settings
 
-These additive components are ready for parent integration. They are **not yet package root exports**. Import `src/components/Slider.tsx` and `src/components/Settings.tsx` directly in repository fixtures, alongside the existing token/base styles and the dedicated `ui-slider.css` and `ui-settings.css`. The existing `vic-ui/ui` Slider remains unchanged.
+These additive components are exported from `vic-ui`. Use the existing `vic-ui/styles.css`, `vic-ui/components.css` or `vic-ui/ui/styles.css` entry; each includes the control and layout styles. The existing `vic-ui/ui` Slider remains unchanged.
 
 ## Slider
 
@@ -44,20 +44,18 @@ All four components forward a `HTMLDivElement` ref and native div attributes. Th
 
 Rows use an 18rem control width, capped at available width. Override `--settings-control-width` on a row or enclosing layout for placement. Words/actions wrap; components do not assume fixed page widths. Headings stay in the caller's outline using `headingLevel`; `titleId` supports external links/labels and takes precedence over `headingProps.id`. Both Section and Group accept `headingProps` with native heading attributes and `ref`, including `tabIndex={-1}` for host-controlled Go to/focus behavior; `children` and `dangerouslySetInnerHTML` are excluded because `title` owns heading content. Library classes are combined with `headingProps.className`. Row association is explicit rather than cloning or rewriting the host's controls.
 
-A source-import composition lives at `site/src/examples/settings/1-controls.tsx`. The browser fixture adds controlled refusal, custom track, RTL, disabled and wrapping examples; it makes no network or account mutations.
+A package-import composition lives at `site/src/examples/settings/1-controls.tsx`. The browser fixture adds controlled refusal, custom track, RTL, disabled and wrapping examples; it makes no network or account mutations.
 
-## Parent integration after the preview release
+## Package integration
 
-1. Add root runtime exports for `Slider`, `SettingsLayout`, `SettingsSection`, `SettingsGroup`, `SettingsRow` and their five props types in `src/index.ts`. Baseline has 137 runtime root exports; expected result is 142 absent other increments.
-2. Import `ui-slider.css` and `ui-settings.css` from `src/components.css`, verify all distributed style entries include them, and retain existing exports.
-3. Register the dedicated Settings example and write/attach canonical catalogue pages as appropriate. This increment deliberately does not edit the shared registry or existing Slider page.
-4. Integrate `tests/controls-layout.test.mjs` into the chosen CI command, update package-consumer/export assertions, and run packed declaration/package and website checks.
-5. Update shared MAP/release records, build and package only in the parent-owned release workspace. Nothing here publishes or modifies dist.
+All five components and their props types are root exports. The package preserves the 137 previous runtime exports and adds these five for a total of 142. All three component stylesheet entries include their styles. The optional Office/media preview entry points remain intact. The canonical Slider page offers Ready-made and Composable examples; Settings has its own page in the alphabetical catalogue.
 
 ## Verification
 
-Run `node --test tests/controls-layout.test.mjs`. It serves source imports through an isolated Vite server and launches the already-installed Playwright Chromium. No library build or dist import occurs. Set `CONTROLS_SCREENSHOTS=/absolute/path` for six full-page PNGs covering light/dark desktop, mobile and narrow embedded panel. Tests also assert 320px overflow behavior.
+Run `npm run build` followed by `node --test tests/controls-layout.test.mjs`. The fixture imports the built package and launches installed Playwright Chromium through an isolated Vite server. Set `CONTROLS_SCREENSHOTS=/absolute/path` for light/dark desktop, mobile and narrow-panel PNGs under both the native and composable stylesheet entries. Tests also assert 320px overflow behavior.
 
-Run `node tests/controls-layout.server.mjs --serve` for an interactive source fixture at port 4399 (`?theme=dark`, `?narrow`, or `?sidebar`). Stop only that owned process after inspection.
+Run `node tests/controls-layout.server.mjs --serve` for the same interactive fixture at port 4399 (`?theme=dark`, `?sheet=ui`, `?narrow`, or `?sidebar`). Stop only that owned process after inspection.
 
-Browser checks exercise actual keys, pointer drag/press, control bounds, custom paint, native disabled tab exclusion, host refusal, focus restoration after Reset, wrapping and Sidebar lifecycle. Scope is Chromium and source imports; package integration, Firefox/WebKit, assistive-technology sessions, native touch gestures, SSR hydration and final release validation remain parent follow-up as applicable.
+The nine focused checks cover keyboard, pointer drag/press, emulated touch tap/move/drag, bounds, custom paint, disabled tab exclusion, controlled refusal, callback/ARIA/FormData consistency, Reset focus, host heading focus through native refs, responsive wrapping, and Sidebar sibling-observer lifecycle with explicit dialog focus wrapping. Native and composable styles are exercised in both themes. Geometry assertions wait for style transitions to settle before reading bounds.
+
+The actual packed-package test checks all previous exports, the new runtime API, CSS/fonts, and strict Bundler/NodeNext declarations with `skipLibCheck: false`. Website checks exercise the live Settings heading-focus flow and scalar Slider control. No physical-device, Firefox/WebKit, assistive-technology session or Slider hydration check is claimed.

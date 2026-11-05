@@ -27,6 +27,7 @@ export const PIECES: Piece[] = [
   { id: "checkbox", name: "Checkbox", group: "Inputs", summary: "A native box with its label, that can say why it cannot be ticked.", exports: ["Checkbox"], file: "Checkbox.tsx" },
   { id: "radio", name: "Radio group", group: "Inputs", summary: "One of a few, as a list, across a row, or as cards with a line each.", exports: ["RadioGroup"], file: "Radio.tsx" },
   { id: "typed-confirm", name: "Typed confirmation", group: "Inputs", summary: "A name, an address or a number typed to confirm what cannot be taken back, its label holding two lines so nothing moves.", exports: ["TypedConfirm", "typedFirst"], file: "TypedConfirm.tsx" },
+  { id: "slider", name: "Slider", group: "Inputs", summary: "One numeric value with a thin thumb, stepped track presses, keyboard and touch control.", exports: ["Slider"], file: "Slider.tsx" },
   { id: "switch", name: "Switch", group: "Inputs", summary: "On or off, taking effect at once.", exports: ["Switch"], file: "Switch.tsx" },
 
   { id: "dialog", name: "Dialog", group: "Overlays", summary: "A native dialog with a title, a line, a body that scrolls and a foot of actions, in three widths.", exports: ["Dialog", "FootProblem"], file: "Dialog.tsx" },
@@ -53,6 +54,7 @@ export const PIECES: Piece[] = [
   { id: "announcement", name: "Announcement", group: "Display", summary: "A small pill: a tag in a hue, the words and an arrow, the whole of it one link.", exports: ["Announcement"], file: "Announcement.tsx" },
   { id: "empty", name: "Empty", group: "Display", summary: "What a place is for and the one action that ends its emptiness, over the shape of what is coming.", exports: ["Empty", "EmptyArt", "EmptyLine"], file: "Empty.tsx" },
   { id: "file-preview", name: "File preview", group: "Display", summary: "Inspect local images, text and delimited data in a shared stage, with zoom, recovery states and a full-screen file viewer.", exports: ["FilePreviewStage", "FilePreviewToolbar", "FilePreviewStatus", "FilePreviewDialog", "ImagePreview", "TextPreview", "DelimitedPreview"], file: "preview/FilePreview.tsx" },
+  { id: "settings", name: "Settings", group: "Display", summary: "Sections, groups and rows with host-owned navigation, controls and focus.", exports: ["SettingsLayout", "SettingsSection", "SettingsGroup", "SettingsRow"], file: "Settings.tsx" },
   { id: "flow", name: "Flow", group: "Display", summary: "A tree drawn top down with ruled connectors, for a chart of who reports to whom.", exports: ["Flow"], file: "Flow.tsx" },
   { id: "org-mark", name: "Mark and hues", group: "Display", summary: "A place's first letter on a tile in one of the five hues, chosen by hashing what names it.", exports: ["OrgMark", "HUES", "hueFor"], file: "OrgMark.tsx" },
 

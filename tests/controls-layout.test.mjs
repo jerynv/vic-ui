@@ -5,26 +5,34 @@ import { chromium } from "playwright";
 import { startFixture } from "./controls-layout.server.mjs";
 
 const screenshots = process.env.CONTROLS_SCREENSHOTS;
-const value = async (slider, expected) => assert.equal(Number(await slider.inputValue()), expected);
+const value = async (slider, expected) => {
+  assert.equal(Number(await slider.inputValue()), expected);
+  // The composable stylesheet uses a short reduced-motion transition. Wait for
+  // the real thumb position before subsequent coordinate-based drag gestures.
+  await slider.locator("..").evaluate(async element => {
+    await Promise.all(element.getAnimations({ subtree: true }).map(animation => animation.finished.catch(() => {})));
+  });
+};
 async function track(page, name, fraction, button = "left") {
   const control = page.getByRole("slider", { name, exact: true }).locator("xpath=../..");
   await control.scrollIntoViewIfNeeded();
   const box = await control.boundingBox();
-  await page.mouse.click(box.x + 12 + fraction * (box.width - 24), box.y + box.height / 2, { button });
+  await control.click({ position: { x: 12 + fraction * (box.width - 24), y: box.height / 2 }, button });
 }
 
-test("source controls and settings behave in both themes", { timeout: 120000 }, async (t) => {
+test("built controls and settings behave in both themes and stylesheet entries", { timeout: 120000 }, async (t) => {
   const server = await startFixture();
   const browser = await chromium.launch({ headless: true });
   try {
     if (screenshots) await mkdir(screenshots, { recursive: true });
-    for (const theme of ["light", "dark"]) {
-      await t.test(theme, async () => {
+    for (const sheet of ["native", "ui"]) for (const theme of ["light", "dark"]) {
+      await t.test(`${sheet}/${theme}`, async () => {
         const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
         page.setDefaultTimeout(6000);
         const errors = [];
         page.on("pageerror", (error) => errors.push(error.message));
-        await page.goto(`${server.resolvedUrls.local[0]}?theme=${theme}`);
+        await page.goto(`${server.resolvedUrls.local[0]}?theme=${theme}&sheet=${sheet}`, { waitUntil: "networkidle" });
+        await page.evaluate(() => document.fonts.ready);
         const size = page.getByRole("slider", { name: "Text size", exact: true });
         await size.waitFor();
         await value(size, 50);
@@ -111,7 +119,12 @@ test("source controls and settings behave in both themes", { timeout: 120000 }, 
         for (const [width, narrow, label] of [[1280, false, "desktop"], [390, false, "mobile"], [1280, true, "panel"], [320, false, "small-mobile"]]) {
           await page.setViewportSize({ width, height: 900 });
           await page.evaluate((narrow) => document.documentElement.toggleAttribute("data-narrow", narrow), narrow);
-          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+          await page.waitForFunction(({ narrow, width }) => {
+            const main = document.querySelector(".fixture-main");
+            return getComputedStyle(main).maxWidth === (narrow ? "380px" : "1120px")
+              && getComputedStyle(main).paddingLeft === (width <= 600 ? "16px" : "32px");
+          }, { narrow, width });
           const geometry = await page.evaluate(() => {
             const nav = document.querySelector(".ui-settings-navigation").getBoundingClientRect();
             const detail = document.querySelector(".ui-settings-detail").getBoundingClientRect();
@@ -127,7 +140,7 @@ test("source controls and settings behave in both themes", { timeout: 120000 }, 
           assert.equal(geometry.stackedRow, width < 700 || narrow, label);
           assert.ok(geometry.thumb >= 24 && geometry.visual === 14);
           assert.deepEqual(geometry.borders, ["1px", "0px", "0px"]);
-          if (screenshots && label !== "small-mobile") await page.screenshot({ path: `${screenshots}/${theme}-${label}.png`, fullPage: true });
+          if (screenshots && label !== "small-mobile") await page.screenshot({ path: `${screenshots}/${sheet}-${theme}-${label}.png`, fullPage: true });
         }
         await page.getByRole("textbox").fill("Readable at small widths");
         await page.keyboard.press("Tab");

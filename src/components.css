@@ -24,3 +24,6 @@
 @import "./styles/components/ui-preview-media.css";
 @import "./styles/components/ui-preview-office.css";
 @import "./styles/components/ui-preview-docx.css";
+
+@import "./styles/components/ui-slider.css";
+@import "./styles/components/ui-settings.css";

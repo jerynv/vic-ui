@@ -1,19 +1,17 @@
 import { useRef, useState } from "react";
-// Source imports keep this additive example runnable before package integration.
-import { Slider } from "../../../../src/components/Slider";
-import { SettingsGroup, SettingsLayout, SettingsRow, SettingsSection } from "../../../../src/components/Settings";
-import { Button } from "../../../../src/components/Button";
-import "../../../../src/styles/components/ui-slider.css";
-import "../../../../src/styles/components/ui-settings.css";
+import { Button, Slider, SettingsGroup, SettingsLayout, SettingsRow, SettingsSection } from "vic-ui";
 
+export const title = "Reading settings";
+export const note = "Host-owned navigation, focus and local values. Groups can be bordered or flat.";
 export default function SettingsControlsExample() {
   const [scale, setScale] = useState(100);
   const slider = useRef<HTMLInputElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
   return <SettingsLayout
-    navigation={<a href="#reading-settings" aria-current="page">Reading</a>}
+    navigation={<Button look="quiet" onClick={() => heading.current?.focus()}>Go to reading</Button>}
     actions={<Button look="line" onClick={() => { setScale(100); slider.current?.focus(); }}>Reset reading settings</Button>}
   >
-    <SettingsSection id="reading-settings" title="Reading" description="Local example preferences.">
+    <SettingsSection id="reading-settings" title="Reading" description="Local example preferences." headingProps={{ tabIndex: -1, ref: heading }}>
       <SettingsGroup title="Text" surface="bordered">
         <SettingsRow label="Text size" labelId="reading-scale-label" description="Adjust the size of reading text." descriptionId="reading-scale-description">
           <Slider ref={slider} value={scale} onValueChange={setScale} min={75} max={175} step={5}

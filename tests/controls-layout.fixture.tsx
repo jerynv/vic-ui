@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { DirectionProvider } from "@base-ui/react/direction-provider";
-import { Slider } from "../src/components/Slider";
-import { SettingsSection, SettingsGroup, SettingsRow, SettingsLayout } from "../src/components/Settings";
-import { Sidebar, SidebarHeader, SidebarProvider, useSidebar } from "../src/components/Sidebar";
-import { Button } from "../src/components/Button";
-import "../src/index.css";
-import "../src/styles/components/ui-slider.css";
-import "../src/styles/components/ui-settings.css";
+import { Slider, SettingsSection, SettingsGroup, SettingsRow, SettingsLayout, Sidebar, SidebarHeader, SidebarProvider, useSidebar, Button } from "../dist/index.js";
 import "./controls-layout.fixture.css";
 
 declare global { interface Window { touchCommits: number[]; observer: { mounts: number; unmounts: number; active: number; received: number }; } }

@@ -20,7 +20,7 @@ test("component families have one alphabetical entry and one active usage view",
     await page.goto(`${url}docs/components/button/`, { waitUntil: "networkidle" });
     const links = page.locator('#nd-sidebar a[href*="/docs/components/"]');
     const names = await links.allTextContents();
-    assert.equal(names.length, 85);
+    assert.equal(names.length, 86);
     assert.equal(new Set(names.map(name => name.toLowerCase())).size, names.length);
     assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
     assert.equal(await page.locator("#nd-sidebar").getByRole("link", { name: "Icons", exact: true }).count(), 1);
@@ -62,7 +62,7 @@ test("component families have one alphabetical entry and one active usage view",
     const urls = new Set();
     const visit = value => { if (value && typeof value === "object") for (const [key, child] of Object.entries(value)) { if (key === "url" && typeof child === "string") urls.add(child.split("#")[0]); else visit(child); } };
     visit(search);
-    assert.ok(urls.size >= 85, "the search index contains the catalogue");
+    assert.ok(urls.size >= 86, "the search index contains the catalogue");
     for (const path of urls) {
       const id = path.replace(/\/$/, "").split("/").at(-1);
       assert.equal(id, canonicalComponentId(id), `search indexed alias ${id}`);
@@ -92,7 +92,7 @@ test("marketing uses working library components and links to the full catalogue"
     await page.goto(server.resolvedUrls.local[0]);
     await page.getByRole("heading", { name: "Good interfaces start here.", level: 1 }).waitFor();
     const names = await page.locator('[aria-label="Component directory"] a').allTextContents();
-    assert.equal(names.length, 85);
+    assert.equal(names.length, 86);
     assert.equal(new Set(names.map(name => name.toLowerCase())).size, names.length);
     assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
     assert.equal(await page.locator("[data-agentation-portal], [data-feedback-toolbar]").count(), 0, "review tools are excluded from production");
@@ -128,6 +128,7 @@ test("prerendered documentation, search, theme, and mobile navigation", { timeou
     const url = server.resolvedUrls.local[0];
     const response = await page.goto(`${url}docs/components/slider/`);
     assert.match(await response.text(), /Slider/);
+    await page.getByRole("tab", { name: "Composable", exact: true }).click();
     await page.getByRole("slider", { name: "Volume" }).focus();
     await page.keyboard.press("ArrowRight");
     assert.equal(await page.getByRole("slider", { name: "Volume" }).getAttribute("aria-valuenow"), "76");
@@ -311,6 +312,33 @@ test("optional file previews render real local Office and media samples", { time
       await page.waitForFunction(() => document.documentElement.scrollWidth <= innerWidth);
     }
     await page.locator('.ui-preview-office').first().screenshot({ path: "/tmp/vic-office-docs-workbook.png" });
+    assert.deepEqual(errors, []);
+  } finally { await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
+});
+
+test("settings package examples preserve heading focus and scalar slider control", { timeout: 30000 }, async () => {
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
+    const errors = []; page.on("pageerror", error => errors.push(error.message));
+    await page.goto(`${server.resolvedUrls.local[0]}docs/components/settings/`);
+    const example = page.locator('[data-vic-example]').first();
+    await example.getByRole("button", { name: "Go to reading" }).click();
+    assert.ok(await example.getByRole("heading", { name: "Reading", exact: true }).evaluate(el => el === document.activeElement));
+    const size = example.getByRole("slider", { name: "Text size", exact: true });
+    await size.focus(); await page.keyboard.press("ArrowRight");
+    assert.equal(await size.getAttribute("aria-valuetext"), "105 percent");
+    await example.getByRole("button", { name: "Reset reading settings" }).click();
+    assert.equal(await size.inputValue(), "100");
+    assert.ok(await size.evaluate(el => el === document.activeElement));
+    for (const [mode, width] of [["Light", 1280], ["Dark", 390]]) {
+      await page.getByRole("button", { name: "Change color theme" }).click();
+      await page.getByRole("menuitemradio", { name: mode, exact: true }).click();
+      await page.setViewportSize({ width, height: 900 });
+      await page.waitForFunction(() => document.documentElement.scrollWidth <= innerWidth);
+      await example.screenshot({ path: `/tmp/vic-settings-docs-${mode.toLowerCase()}.png` });
+    }
     assert.deepEqual(errors, []);
   } finally { await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
 });
