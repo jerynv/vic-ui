@@ -5,11 +5,12 @@ import { readFile } from "node:fs/promises";
 import { chromium } from "playwright";
 
 // Exercise the development-only integration through the same CLI developers use.
-test("local annotations survive navigation and reload, and download a cross-page review", { timeout: 120000 }, async () => {
-  const server = spawn(process.execPath, ["--conditions=development", "../node_modules/@react-router/dev/bin.cjs", "dev", "--host", "127.0.0.1", "--port", "0"], {
+test("local annotations survive navigation and reload, and download a cross-page review", { timeout: 120000 }, async (t) => {
+  const server = spawn(process.execPath, ["--conditions=development", "../node_modules/@react-router/dev/bin.cjs", "dev", "--force", "--host", "127.0.0.1", "--port", "0"], {
     cwd: new URL("../website", import.meta.url), env: { ...process.env, NO_COLOR: "1" }, stdio: ["ignore", "pipe", "pipe"],
   });
   let output = "";
+  const diagnostics = [];
   let browser;
   const exited = new Promise(resolve => server.once("exit", resolve));
   try {
@@ -28,6 +29,8 @@ test("local annotations survive navigation and reload, and download a cross-page
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: "reduce" });
     page.setDefaultTimeout(15000);
     const external = [];
+    page.on("pageerror", error => diagnostics.push(error.message));
+    page.on("requestfailed", request => diagnostics.push(`${request.url()}: ${request.failure()?.errorText}`));
     page.on("request", request => { if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== new URL(url).origin) external.push(request.url()); });
     await page.goto(`${url}docs/components/card`, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Start feedback mode", exact: true }).click();
@@ -63,6 +66,9 @@ test("local annotations survive navigation and reload, and download a cross-page
     await page.getByRole("button", { name: "Delete annotation", exact: true }).click();
     await page.getByRole("button", { name: "Download review (1)", exact: true }).waitFor();
     assert.deepEqual(external, [], "reviewing sends no requests to external services");
+  } catch (error) {
+    t.diagnostic(JSON.stringify({ browser: diagnostics.slice(-12), server: output.slice(-6000) }));
+    throw error;
   } finally {
     await browser?.close();
     server.kill("SIGTERM");
