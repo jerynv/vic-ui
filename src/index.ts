@@ -76,3 +76,9 @@ export { NativeSelect } from "./components/NativeSelect";
 export { Disclosure } from "./components/Disclosure";
 export { Skeleton } from "./components/Skeleton";
 export { Input, TextareaControl } from "./components/Input";
+
+export { FilePreviewStage, FilePreviewToolbar, FilePreviewStatus, type FilePreviewFile } from "./components/preview/FilePreview";
+export { FilePreviewDialog, type FilePreviewItem } from "./components/preview/FilePreviewDialog";
+export { ImagePreview, type ImagePreviewProps } from "./components/preview/ImagePreview";
+export { TextPreview, type TextPreviewProps } from "./components/preview/TextPreview";
+export { DelimitedPreview, type DelimitedPreviewProps } from "./components/preview/DelimitedPreview";

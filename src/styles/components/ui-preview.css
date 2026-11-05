@@ -1,0 +1,71 @@
+/* Adapted from V-Client's file stage and lightbox; all surfaces use Vic tokens. */
+@layer components.parts {
+  .ui-preview-stage {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    background: var(--bg-base);
+    box-shadow: var(--edge);
+    color: var(--fg);
+  }
+  .ui-preview-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-lifted);
+  }
+  .ui-preview-heading, .ui-preview-header > .ui-preview-name { flex: 1; min-width: 8rem; }
+  .ui-preview-name { margin: 0; font-size: var(--text-ui); font-weight: 500; color: var(--fg-strong); overflow-wrap: anywhere; }
+  .ui-preview-description { margin: 0; font-size: var(--text-meta); line-height: 1.5; color: var(--fg-subtle); overflow-wrap: anywhere; }
+  .ui-preview-body { min-width: 0; }
+  .ui-preview-toolbar, .ui-preview-actions, .ui-preview-status-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .ui-preview-actions { margin-inline-start: auto; }
+  .ui-preview-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 16rem;
+    padding: 2rem;
+    text-align: center;
+  }
+  .ui-preview-status > [role] { display: grid; justify-items: center; gap: 0.5rem; max-width: 36rem; }
+  .ui-preview-status-title { margin: 0; font-size: var(--text-read); font-weight: 500; color: var(--fg-strong); }
+  .ui-preview-dialog {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--bg-base);
+    color: var(--fg);
+  }
+  .ui-preview-dialog::backdrop { background: var(--bg-base); }
+  .ui-preview-dialog-frame { display: flex; flex-direction: column; height: 100%; min-width: 0; }
+  .ui-preview-dialog-body { flex: 1; min-height: 0; min-width: 0; overflow: auto; overscroll-behavior: contain; }
+  .ui-preview-dialog-body:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+  .ui-preview-dialog-content { display: flex; flex-direction: column; height: 100%; min-height: 0; min-width: 0; }
+  .ui-preview-dialog-content > :is(.ui-preview-image, .ui-preview-text, .ui-preview-table-scroll) { flex: 1; min-height: 0; max-height: none; }
+  .ui-preview-dialog-content .ui-preview-image-viewport { height: auto; }
+  .ui-preview-navigation { display: flex; justify-content: center; gap: 1rem; padding: 0.5rem; border-top: 1px solid var(--line); }
+  .ui-preview-count { font-size: var(--text-meta); font-variant-numeric: tabular-nums; color: var(--fg-subtle); white-space: nowrap; }
+  @media (max-width: 480px) {
+    .ui-preview-header { padding: 0.5rem 0.75rem; }
+    .ui-preview-status { padding: 1.25rem; }
+  }
+}

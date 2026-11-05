@@ -34,9 +34,14 @@ test("packed library preserves historical exports and types in Bundler and NodeN
     }
     await writeFile(join(temporary, "package.json"), JSON.stringify({ private: true, type: "module" }));
     const names = JSON.parse(await readFile(new URL("./historical-exports.json", import.meta.url), "utf8"));
+    const previewNames = ["FilePreviewStage", "FilePreviewToolbar", "FilePreviewStatus", "FilePreviewDialog", "ImagePreview", "TextPreview", "DelimitedPreview"];
+    for (const sheet of ["vic-ui.css", "components.css", "ui/styles.css"]) {
+      const css = await readFile(join(temporary, "package/dist", sheet), "utf8");
+      for (const name of ["ui-preview-stage", "ui-preview-dialog", "ui-preview-image", "ui-preview-text", "ui-preview-table"]) assert.ok(css.includes(name), `${sheet} contains ${name}`);
+    }
     const runtime = `import * as Vic from "vic-ui";
       import * as UI from "vic-ui/ui"; import * as Icons from "vic-ui/icons";
-      const missing = ${JSON.stringify(names)}.filter(name => !(name in Vic));
+      const missing = ${JSON.stringify([...names, ...previewNames])}.filter(name => !(name in Vic));
       if (missing.length) throw new Error("Missing historical exports: " + missing.join(", "));
       if (!UI.Button || !Icons.ArchiveIcon) throw new Error("Broken secondary entry point");`;
     await run(process.execPath, ["--input-type=module", "-e", runtime], { cwd: temporary });

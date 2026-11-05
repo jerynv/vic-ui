@@ -20,6 +20,13 @@ export const example = <>
   <Vic.Button look="quiet" square round icon={<ArchiveIcon size={16} />} />
   <Button variant="ghost" size="icon" round tone="accent" />
   <Input placeholder="Search" /><ScrollArea>Items</ScrollArea><Dialog />
+  <Vic.FilePreviewStage file={{ id: "example", name: "Example.csv" }} tools={<Vic.FilePreviewToolbar><Vic.Button>Columns</Vic.Button></Vic.FilePreviewToolbar>}>
+    <Vic.DelimitedPreview input={new Uint8Array([65, 44, 66])} delimiter="," maxRows={10} />
+    <Vic.TextPreview input={new Blob(["Text"])} maxLines={100} />
+    <Vic.ImagePreview input={new Blob()} alt="Example" maxBytes={1024} />
+    <Vic.FilePreviewStatus status="loading" />
+  </Vic.FilePreviewStage>
+  <Vic.FilePreviewDialog items={[{ id: "example", label: "Example", content: <Vic.TextPreview input={new Blob()} /> }]} activeId={null} onActiveIdChange={() => {}} />
   <Slider defaultValue={[40]} />
   <Vic.Switch look="flat" checked={false} onCheckedChange={() => {}} />
   <Switch look="flat" defaultChecked />
@@ -41,3 +48,10 @@ export const badDisclosure = <Vic.Disclosure />;
 export const badSwitch = <Vic.Switch checked={false} look="missing-look" />;
 // @ts-expect-error Composable switch looks are restricted.
 export const badComposableSwitch = <Switch look="missing-look" />;
+
+// @ts-expect-error Preview bytes must be supplied, not a fetch URL.
+export const badPreviewInput = <Vic.TextPreview input="https://example.com/private.txt" />;
+// @ts-expect-error Delimited preview supports comma or tab only.
+export const badDelimiter = <Vic.DelimitedPreview input={new Blob()} delimiter=";" />;
+// @ts-expect-error Image previews require an accessible description.
+export const badImagePreview = <Vic.ImagePreview input={new Blob()} />;
