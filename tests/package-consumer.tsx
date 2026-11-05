@@ -1,6 +1,6 @@
 import { createRef } from "react";
 import * as Vic from "vic-ui";
-import { Button, Input, ScrollArea, Dialog, Slider, DataTable, type DataTableColumnDef } from "vic-ui/ui";
+import { Button, Input, ScrollArea, Dialog, Slider, DataTable, Switch, type DataTableColumnDef } from "vic-ui/ui";
 import { ArchiveIcon } from "vic-ui/icons";
 
 const input = createRef<HTMLInputElement>();
@@ -21,6 +21,8 @@ export const example = <>
   <Button variant="ghost" size="icon" round tone="accent" />
   <Input placeholder="Search" /><ScrollArea>Items</ScrollArea><Dialog />
   <Slider defaultValue={[40]} />
+  <Vic.Switch look="flat" checked={false} onCheckedChange={() => {}} />
+  <Switch look="flat" defaultChecked />
   <DataTable columns={columns} data={[{ name: "Example" }]} />
 </>;
 
@@ -34,3 +36,8 @@ export const badComposable = <Button variant="missing-variant" />;
 export const badInput = <Vic.Input href="/" />;
 // @ts-expect-error A disclosure requires its summary.
 export const badDisclosure = <Vic.Disclosure />;
+
+// @ts-expect-error Native switch looks are restricted.
+export const badSwitch = <Vic.Switch checked={false} look="missing-look" />;
+// @ts-expect-error Composable switch looks are restricted.
+export const badComposableSwitch = <Switch look="missing-look" />;

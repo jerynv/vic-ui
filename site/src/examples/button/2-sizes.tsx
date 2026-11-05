@@ -11,7 +11,7 @@ export default function Example() {
         <Button size="lg">Sign in</Button>
         <Button icon={<PlusIcon size={16} />}>New request</Button>
         <Button look="line" square aria-label="Add" icon={<PlusIcon size={16} />} />
-        <Button round aria-label="Send" icon={<ArrowUpIcon size={16} />} />
+        <Button square round aria-label="Send" icon={<ArrowUpIcon size={16} />} />
       </div>
       <div className="demo-stack">
         <Button size="lg" full>
