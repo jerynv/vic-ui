@@ -1,12 +1,13 @@
 # vic-ui: the map
 
-## Active docs cleanup
+## Consumer compatibility fix
 
-Worktree `/Users/jeryn/.t3/worktrees/vic-ui/t3-c2cc92d0`, branch `fix/catalogue-navigation`, baseline `85a3c33`; the original checkout is owned by another agent.
-Requested outcomes: one discoverable entry per component family, no repeated usage/example sections, and alphabetical component navigation. Acceptance: inspect rendered navigation/directory labels for order and uniqueness; exercise canonical pages and old URLs; keep both exported APIs usable and examples reachable. Public API removal is outside this cleanup.
-Implemented seven canonical alias mappings, alphabetical display-name sorting in Fumadocs and the directory, a single active API view, removal of repeated Setup blocks, and distinct icon-browser/guide labels. Read-only audit `/root/catalogue_audit` completed. Targeted browser checks pass for 84 unique sorted sidebar entries, all seven aliases, API switching/reload, search-index uniqueness, alias directory search and mobile navigation. API selection is local page state, with composable heading links opening their view.
-Static routing diagnosis: trailing-slash React Router navigation requested unbuilt `/<page>/_.data`; changing Fumadocs tree URLs also broke its active-folder matching. Resolved by keeping native tree URLs and using a full alias redirect to the canonical document directory. Both exported APIs and old prerendered paths remain available.
-All acceptance checks pass: seven website tests cover both catalogues at desktop/mobile widths; the extended family test also preserves query/hash bookmarks and finds Input by TextField in documentation search. Typechecks, design/dash checks, eight library tests, the local-review test and the reference build pass. Logs are `/tmp/vic-catalogue-{website,test,review,library}.log`. Implementation and verification are complete; next: commit and deliver. No owner decisions pending.
+Worktree `/Users/jeryn/.t3/worktrees/vic-ui/t3-c2cc92d0`, branch `fix/round-buttons-surfaces`, baseline `1db3239`. Phaethon and the original Vic checkout are owned by other workers and remain untouched.
+Requested outcomes: quiet/ghost, line and ink round buttons retain circular rim/face geometry at rest, hover and press; restore the seven shared surface exports from `f156af1` with their original contract. Acceptance: exercise both shipped stylesheets and both themes with native/composable buttons and links; verify root imports, asChild props/ref behavior, native scrolling and emitted types; document imports and behavioral ownership.
+Implemented the round selector correction and restored all seven surface exports, with `Surfaces.tsx` identical to `f156af1`. Added the Shared surfaces guide covering styling/controller ownership, `asChild` precedence and native scrolling. Worker `/root/restore_surfaces` completed; parent integrated and inspected its changes.
+Verification passed: the baseline reproduced 12px quiet-button corners, then the round matrix passed across all looks, both APIs, links, sizes, themes and both packaged stylesheets. All ten library tests (including surface hydration, focus/Escape, refs/events and wheel scrolling), seven website tests, the local-review test, both typechecks, design/dash checks and builds pass. The optional design detector reported only an unchanged easing at `ui.css:740`. Code acceptance criteria are complete; release is tracked by the PR for this branch and its Pages deployment. Logs: `/tmp/vic-round-{before,after}.log` and `/tmp/vic-compat-{build,library,website,review}.log`. Other root exports removed since `f156af1` are outside this seven-surface restoration; no claim of full historical API compatibility.
+
+The previous catalogue cleanup is complete and deployed in PR #22 (`1db3239`): 84 alphabetical family entries, one active API usage view, preserved aliases, all local/CI checks passed.
 
 ## Documentation website
 

@@ -71,3 +71,4 @@ export { TimelineDivider, Reaction, Reactions, ActionBar, ActionBarRule } from "
 export { FileGrid, FileTile } from "./components/Attachment";
 
 export { Surface, type SurfaceStyle, type SurfaceProps } from "./components/Surface";
+export { DialogSurface, DialogHeading, DialogActions, MenuSurface, PopoverSurface, TooltipSurface, ScrollArea } from "./components/Surfaces";

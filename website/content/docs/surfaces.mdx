@@ -1,0 +1,61 @@
+---
+title: Shared surfaces
+description: Keep Vic's overlay appearance with your existing dialog, menu, popover, or tooltip controller.
+---
+
+These root exports preserve the shared surfaces from `f156af1`. Existing imports and props remain supported; no consumer migration is required.
+
+```tsx
+import "vic-ui/styles.css";
+import {
+  DialogSurface, DialogHeading, DialogActions,
+  MenuSurface, PopoverSurface, TooltipSurface, ScrollArea,
+} from "vic-ui";
+```
+
+If your application already imports `vic-ui/ui/styles.css`, it includes these styles too. Load one complete stylesheet.
+
+## Overlay controllers
+
+Surfaces supply Vic's existing classes and visual treatment. Your controller owns opening, closing, portals, positioning, focus management, keyboard behavior, and accessible names. Use [Dialog](/docs/components/dialog), [Dropdown Menu](/docs/components/dropdown-menu), [Popover](/docs/components/popover), or [Tooltip](/docs/components/tooltip) when you want Vic's complete behavior.
+
+Each surface accepts the native props of a `div`, including `ref`, `className`, and `style`. It renders a `div` by default. With `asChild`, it clones exactly one element without adding a wrapper:
+
+```tsx
+<DialogSurface asChild>
+  <dialog ref={dialogRef} aria-labelledby="settings-title">
+    <DialogHeading asChild>
+      <header><h2 id="settings-title">Settings</h2></header>
+    </DialogHeading>
+    <p>Dialog content</p>
+    <DialogActions>
+      <button onClick={() => dialogRef.current?.close()}>Close</button>
+    </DialogActions>
+  </dialog>
+</DialogSurface>
+```
+
+Call `dialogRef.current?.showModal()` from your trigger to open this native dialog. When wrapping another controller's element, put its semantics, event handlers, positioning styles, and ref on that child. Child props take precedence over surface props, including handlers and refs; class names are combined. Handlers and styles are not merged. Custom component children must forward those props to their DOM element.
+
+| Export | Shared visual classes |
+| --- | --- |
+| DialogSurface | `ui-dialog` |
+| DialogHeading | `ui-dialog-head` |
+| DialogActions | `ui-dialog-foot` |
+| MenuSurface | `ui-menu ui-menu-actions` |
+| PopoverSurface | `ui-menu ui-popover` |
+| TooltipSurface | `ui-tooltip` |
+
+These are separate from the [Surface](/docs/theming) component that scopes flat or bordered field and card styles.
+
+## Native scrolling
+
+The root `ScrollArea` keeps the original outer element and native scrolling viewport. Give the outer element a bounded height. Native div props, refs and handlers target that outer element.
+
+```tsx
+<ScrollArea aria-label="Recent activity" style={{ height: 240 }}>
+  {activity}
+</ScrollArea>
+```
+
+The outer element has `data-slot="scroll-area"`; its single child has `data-slot="scroll-area-viewport"` and `overflow: auto`. It uses Vic's native scrollbar styling. This root export is independent of the composable [Scroll Area](/docs/components/scroll-area) from `vic-ui/ui`, which uses a custom scrollbar primitive.
