@@ -27,6 +27,8 @@ export function Dialog(props: {
   size?: "sm" | "lg";
   role?: "dialog" | "alertdialog";
   still?: boolean;
+  /** Dock to the right edge for reading beside the page. */
+  side?: "right";
   className?: string;
   bare?: boolean;
   ref?: Ref<HTMLDialogElement>;
@@ -50,7 +52,7 @@ export function Dialog(props: {
     };
   }, []);
 
-  const classes = ["ui-dialog", props.size ? `ui-dialog-${props.size}` : "", props.still ? "ui-dialog-still" : "", props.className ?? ""].filter(Boolean).join(" ");
+  const classes = ["ui-dialog", props.size ? `ui-dialog-${props.size}` : "", props.side ? `ui-dialog-side-${props.side}` : "", props.still ? "ui-dialog-still" : "", props.className ?? ""].filter(Boolean).join(" ");
   const inner = props.bare ? (
     props.children
   ) : (
@@ -79,6 +81,7 @@ export function Dialog(props: {
       // The browser's own close on Escape is turned into a request, so `open` stays the truth.
       onCancel={(event) => {
         event.preventDefault();
+        event.stopPropagation();
         props.onOpenChange(false);
       }}
       // A press on the veil reaches the dialog itself, since its frame fills every pixel of it.

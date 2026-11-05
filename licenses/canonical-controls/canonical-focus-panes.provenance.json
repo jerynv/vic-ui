@@ -1,0 +1,42 @@
+{
+  "sourceCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+  "authorization": "Owner-authorized first-party transfer; no upstream MIT grant asserted.",
+  "files": [
+    {
+      "path": "web/src/ui/CodeField.tsx",
+      "gitBlob": "d4de76d6c169c57bfa953fd967ca896868c7c839",
+      "sha256": "7d0de9e98019d785b9d38197aa9b1ab7748f079997414b8da111140301c8c5aa",
+      "bytes": 2596
+    },
+    {
+      "path": "web/src/ui/FocusLines.tsx",
+      "gitBlob": "fad34f3bab58c4e2ab17397375492c441e35cdc2",
+      "sha256": "d49863ecf43e6f9f0a1ded0f8187df655bee1366545202d2f81ec0d618985e80",
+      "bytes": 1438
+    },
+    {
+      "path": "web/src/ui/Grow.tsx",
+      "gitBlob": "388340b9a500af42f539b5a36ab95ef3054732de",
+      "sha256": "5bd40112f760592033c352334f8bf93de9f89af5b327791bad69f1c63cb23d35",
+      "bytes": 1537
+    },
+    {
+      "path": "web/src/ui/PaneViews.tsx",
+      "gitBlob": "13baf34fefe1c9fe205440ade43cdda41669118d",
+      "sha256": "e9cd43db3eff43a3cecfbf9255517466407457b8ff502031085d1acd4b06d34b",
+      "bytes": 1254
+    },
+    {
+      "path": "web/src/styles/components/ui-display.css",
+      "gitBlob": "17b0fe6ba41c91424ad6a56426983d45f460946b",
+      "sha256": "d7e734bdd139ed286e7f7a4fd49b231aec575381d63bc78f8b6b7c885fd765f4",
+      "bytes": 39340
+    },
+    {
+      "path": "web/src/styles/components/ui-focus.css",
+      "gitBlob": "c2b88e51bfbd750db0862e639f168475c2a3ace8",
+      "sha256": "0eff07255228228fbef175430a2e98b8b0c48e3ef73db45cda79d6fe7cd3f6e8",
+      "bytes": 18083
+    }
+  ]
+}

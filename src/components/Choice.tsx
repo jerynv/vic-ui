@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes } from "react";
 import { useBlocked } from "./reason";
+import { reasonOf } from "./held";
 
 /**
  * One of a row of choices, a day or a time: a native button that says whether it is the one
@@ -11,7 +12,7 @@ export function Choice({ chosen, className, type = "button", children, disabled,
   const held = useBlocked<HTMLButtonElement>(disabled, disabledReason);
   return (
     <>
-      <button type={type} className={className ? `ui-button ui-choice ${className}` : "ui-button ui-choice"} aria-pressed={chosen} {...rest} {...held.props}>
+      <button type={type} className={className ? `ui-button ui-choice ${className}` : "ui-button ui-choice"} aria-pressed={chosen} {...rest} {...held.props} aria-describedby={[rest["aria-describedby"], reasonOf(held.props)["aria-describedby"]].filter(Boolean).join(" ") || undefined}>
         <span className="ui-button-face">{children}</span>
       </button>
       {held.node}

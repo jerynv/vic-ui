@@ -1,0 +1,32 @@
+---
+title: "Settings dialog"
+description: "Section navigation, mounted panes and one save action."
+---
+
+## Usage
+
+```tsx
+import {
+  SettingsDialog, SettingsPane, type SettingsPaneSection,
+} from "vic-ui";
+
+type Section = "general" | "access";
+const sections: SettingsPaneSection<Section>[] = [
+  { value: "general", label: "General" },
+  { value: "access", label: "Access" },
+];
+
+<SettingsDialog open={open} onOpenChange={setOpen} title="Workspace settings"
+  sections={sections} section={section} onSection={setSection}
+  changes={changes} onSubmit={save}
+>
+  <SettingsPane value="general" label="General">{generalControls}</SettingsPane>
+  <SettingsPane value="access" label="Access">{accessControls}</SettingsPane>
+</SettingsDialog>
+```
+
+The host owns open state, selected section, drafts, change count and saving. A section descriptor has `value`, `label`, optional `icon` and a quiet `state` mark. `SettingsPaneSection<V>` is a descriptor type; the existing [SettingsSection](/docs/components/settings) remains a separate runtime layout component.
+
+Switching sections keeps panes mounted and makes inactive panes inert and hidden from accessibility. Closing the dialog unmounts its presentation. Keep durable subscriptions outside the dialog. The measured room follows the current pane, and the section rail becomes a row of chips on a phone.
+
+A zero `changes` count or `disabled` prevents submission. Optional `save`, `cancel`, `changesWords`, `problem`, `disabledReason`, `eyebrow` and `className` customize presentation. Saving does not automatically close the dialog or persist data.

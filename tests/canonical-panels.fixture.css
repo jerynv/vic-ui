@@ -1,0 +1,6 @@
+.canonical-panel-fixture { max-width: 760px; padding: 32px; margin: 0 auto; }
+.canonical-panel-fixture h1 { font-size: 1.5rem; }
+.canonical-panel-fixture output { display: block; color: var(--fg-subtle); font-size: var(--text-ui); margin-top: 8px; }
+.canonical-panel-fixture > .ui-settings-section { margin-block: 24px; }
+.fixture-after { flex-basis: 100%; color: var(--fg-subtle); font-size: var(--text-ui); }
+@media (max-width: 600px) { .canonical-panel-fixture { padding: 16px; } }

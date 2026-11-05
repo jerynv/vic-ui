@@ -19,12 +19,15 @@ function inline(file, nested = false) {
 }
 
 /** The source names the fonts from src/styles/; in dist they sit beside the stylesheet. */
-const relocate = (css) => css.replaceAll('url("../fonts/', 'url("./fonts/');
+const relocate = (css) => css.replaceAll('url("../fonts/', 'url("./fonts/').replaceAll('url("../assets/', 'url("./assets/');
 
 mkdirSync(join(dist, "fonts"), { recursive: true });
 writeFileSync(join(dist, "vic-ui.css"), relocate(inline(join(root, "src/index.css"))));
-writeFileSync(join(dist, "components.css"), inline(join(root, "src/components.css")));
+writeFileSync(join(dist, "components.css"), relocate(inline(join(root, "src/components.css"))));
 writeFileSync(join(dist, "tokens.css"), readFileSync(join(root, "src/styles/tokens.css"), "utf8"));
 writeFileSync(join(dist, "fonts.css"), relocate(readFileSync(join(root, "src/styles/fonts.css"), "utf8")));
 for (const font of readdirSync(join(root, "src/fonts"))) copyFileSync(join(root, "src/fonts", font), join(dist, "fonts", font));
 console.log("Wrote dist/vic-ui.css, dist/components.css, dist/tokens.css, dist/fonts.css and dist/fonts/.");
+
+mkdirSync(join(dist, "assets"), { recursive: true });
+for (const asset of readdirSync(join(root, "src/styles/assets"))) copyFileSync(join(root, "src/styles/assets", asset), join(dist, "assets", asset));

@@ -1,0 +1,8 @@
+body { margin: 0; background: var(--bg-canvas); color: var(--fg); }
+main { max-width: 960px; margin: auto; padding: 24px; }
+h1 { font-size: 1.5rem; margin-bottom: 24px; }
+section { margin-block: 24px; }
+.fit-container { max-width: 100%; margin-block: 24px; }
+.fit-container .ui-table td { white-space: nowrap; }
+main > button { margin: 8px; padding: 8px; border: 1px solid var(--line); }
+output { display: block; }

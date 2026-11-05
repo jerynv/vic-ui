@@ -1,5 +1,9 @@
 # vic-ui: the map
 
+## Canonical controls source sync (active)
+
+Owner-authorized additive source sync from V-Client555625f4 is tracked in [docs/tasks/canonical-controls-sync.md](docs/tasks/canonical-controls-sync.md). Historical extraction and current parity are distinct; preview transfers do not close controls coverage. Preserve released142 root exports and all existing defaults. Implementation isolated on feat/canonical-controls-sync.
+
 ## Optional Office/media release
 
 Owned isolated branch `feat/office-media-previews` in `t3-c2cc92d0`, baseline `6deb7fc`. Five additive optional exports: AudioPreview/VideoPreview at `vic-ui/preview/media`, XlsxPreview/PptxPreview at `vic-ui/preview/office`, DocxPreview at `vic-ui/preview/docx`. All require ready Blob/Uint8Array input and title; host retains loading/auth/classification/downloads. Root137 exports unchanged. DOCX alone needs exact optional peer docx-preview0.4.1. No Phaethon/shared checkout edits. Provenance is authorized first-party V-Client pin2f2713d8, with all116 source-pack payload hashes reverified; no invented upstream MIT grant.

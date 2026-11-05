@@ -1,0 +1,18 @@
+---
+title: "Grow"
+description: "A measured region that follows its content height."
+---
+
+## Usage
+
+```tsx
+import { Grow } from "vic-ui";
+
+<Grow contentKey={step} className="form-room">
+  {content}
+</Grow>
+```
+
+Grow observes its inner content with ResizeObserver and adjusts the outer height. Changing `contentKey` replaces the inner content and restarts measurement; omit it when child identity should be retained. `className` styles the outer region and `innerClassName` the inner content.
+
+An optional `remember` string retains the last measured height across remounts with that key. Use a key scoped to the host flow; this is an in-memory height cache, not persisted form state. Observers disconnect on replacement and unmount. Reduced motion disables height and entry animation.

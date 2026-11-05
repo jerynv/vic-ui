@@ -1,0 +1,19 @@
+---
+title: "Facts"
+description: "Compact labels and values in a semantic description list."
+---
+
+## Usage
+
+```tsx
+import { Facts, type Fact } from "vic-ui";
+
+const facts: Fact[] = [
+  { label: "Owner", value: "Operations" },
+  { label: "Updated", value: "Today" },
+];
+
+<Facts items={facts} aria-label="Report details" />
+```
+
+Each item has a `label`, `value` and optional decorative `mark`. Values may contain React content. Omit absent facts in the host data; the component does not fetch or invent values. Long content wraps within the available space. `className` and `aria-label` apply to the description list.

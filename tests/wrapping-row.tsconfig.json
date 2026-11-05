@@ -1,0 +1,5 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "skipLibCheck": false },
+  "include": ["wrapping-row.fixture.tsx", "../site/src/examples/wrapping-row/*.tsx"]
+}

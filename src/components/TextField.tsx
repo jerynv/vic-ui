@@ -29,9 +29,9 @@ export const TextField = forwardRef<
           ref={ref}
           id={field}
           className="ui-field-input"
-          aria-invalid={error ? true : undefined}
-          aria-describedby={describedBy(field, error, hint, why.describedBy)}
           {...rest}
+          aria-invalid={error ? true : rest["aria-invalid"]}
+          aria-describedby={[describedBy(field, error, hint, why.describedBy), rest["aria-describedby"]].filter(Boolean).join(" ") || undefined}
           disabled={held ? undefined : disabled}
           readOnly={held || rest.readOnly}
           aria-disabled={held ? true : undefined}

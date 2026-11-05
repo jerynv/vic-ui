@@ -27,3 +27,13 @@
 
 @import "./styles/components/ui-slider.css";
 @import "./styles/components/ui-settings.css";
+
+@import "./styles/components/ui-canonical-controls.css";
+@import "./styles/components/ui-canonical-data.css";
+@import "./styles/components/ui-canonical-tree-facts.css";
+@import "./styles/components/ui-canonical-focus-panes.css";
+@import "./styles/components/ui-canonical-focus-shell.css";
+@import "./styles/components/ui-canonical-panels.css";
+@import "./styles/components/ui-canonical-player-place.css";
+@import "./styles/components/ui-canonical-time.css";
+@import "./styles/components/ui-wrapping-row.css";

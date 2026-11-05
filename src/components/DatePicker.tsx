@@ -1,9 +1,11 @@
 import type { SurfaceStyle } from "./Surface";
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import { CalendarEventIcon, ChevronRightIcon } from "../icons/icons";
+import { CalendarEventIcon, ChevronDownIcon, ChevronRightIcon } from "../icons/icons";
+import { CheckMark } from "./Checkbox";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
 import { useAnchored, usePressAway } from "./Popover";
 import { useBlocked } from "./reason";
+import { reasonOf, unlessHeld } from "./held";
 
 /** A calendar date as `YYYY-MM-DD`, never an instant. */
 type Day = string;
@@ -54,7 +56,11 @@ const words = (day: Day): string => {
  * them are drawn and passed over. In the grid the arrows move a day or a week, Page Up and Page
  * Down a month (with Shift a year), Home and End the start and end of the week, Enter or Space
  * chooses and Escape closes, the focus going back to the field. Today is ringed, the chosen day
- * filled with ink. `format` says the date another way in the field; `name` posts it.
+ * filled with ink, today being `today` where the caller counts it in another zone. `format` says
+ * the date another way in the field; `name` posts it. `lead` names the choice inside the field
+ * before its value, as `Select`'s does, and draws `Select`'s caret, so it sits in a row of
+ * selects as one of them; `none` is a first choice over the month that takes the day away,
+ * chosen as `""`, Tab and Shift Tab moving between it and the month.
  */
 export function DatePicker(props: {
   label?: ReactNode;
@@ -63,6 +69,8 @@ export function DatePicker(props: {
   onValueChange?: (value: Day) => void;
   min?: Day | undefined;
   max?: Day | undefined;
+  /** Today as the caller counts it (an organization's zone); the browser's own day where not given. */
+  today?: Day | undefined;
   placeholder?: string;
   format?: (value: Day) => string;
   hint?: ReactNode;
@@ -71,21 +79,31 @@ export function DatePicker(props: {
   disabledReason?: string | undefined;
   name?: string;
   id?: string;
-  size?: "sm";
+  /** `sm` the dense size, `xs` the thin one (`--size-control-height-xs`). */
+  size?: "sm" | "xs";
   surface?: SurfaceStyle;
+  "aria-describedby"?: string;
+  /** `text`: the date in words with no box, for a date set inside a line, as `Select`'s `text` look. */
+  look?: "field" | "text";
+  /** What the choice is, inside the field before its value ("Due"), as `Select`'s lead. */
+  lead?: ReactNode;
+  /** The words of a first choice that takes the day away ("No due day"), chosen as `""`. */
+  none?: string;
   className?: string;
 }) {
   const made = useId();
   const field = props.id ?? made;
   const grid = `${field}-grid`;
-  const said = describedBy(field, props.error, props.hint);
+  const said = [describedBy(field, props.error, props.hint), props["aria-describedby"]].filter(Boolean).join(" ") || undefined;
   const value = isDay(props.value) ? props.value : null;
   const trigger = useRef<HTMLButtonElement>(null);
   const pop = useRef<HTMLDivElement>(null);
+  const noneButton = useRef<HTMLButtonElement>(null);
   const held = useBlocked(props.disabled, props.disabledReason, trigger);
   const [open, setOpen] = useState(false);
-  const [focus, setFocus] = useState<Day>(() => value ?? today());
-  const now = today();
+  const [noneActive, setNoneActive] = useState(false);
+  const now = isDay(props.today) ? props.today : today();
+  const [focus, setFocus] = useState<Day>(() => value ?? now);
 
   const allowed = (day: Day) => (!props.min || day >= props.min) && (!props.max || day <= props.max);
   const clamp = (day: Day) => (props.min && day < props.min ? props.min : props.max && day > props.max ? props.max : day);
@@ -100,13 +118,26 @@ export function DatePicker(props: {
     if (refocus) trigger.current?.focus();
   };
   const choose = (day: Day) => {
-    if (!allowed(day)) return;
+    if (props.disabled || !allowed(day)) return;
     if (day !== value) props.onValueChange?.(day);
+    close(true);
+  };
+  const chooseNone = () => {
+    if (props.disabled) return;
+    if (value !== null) props.onValueChange?.("");
     close(true);
   };
 
   useAnchored(open, () => trigger.current?.parentElement ?? null, pop, { placement: "bottom-start", fit: false, track: focus.slice(0, 7) });
   usePressAway(open, () => [trigger.current?.parentElement, pop.current], () => close(false));
+
+  // An open editor must not be stranded when its owner disables the field.
+  useEffect(() => {
+    if (!props.disabled || !open) return;
+    const inside = pop.current?.contains(document.activeElement);
+    setOpen(false);
+    if (inside && props.disabledReason) trigger.current?.focus();
+  }, [props.disabled, props.disabledReason, open]);
 
   // The focused day takes the focus as it moves, so the keys and a screen reader follow it.
   useEffect(() => {
@@ -119,14 +150,23 @@ export function DatePicker(props: {
         event.preventDefault();
         event.stopPropagation();
         return close(true);
-      case "Tab":
+      case "Tab": {
+        // Between the first choice and the month, the focus moves; past either end, it closes.
+        const onNone = event.target === noneButton.current;
+        if (props.none && onNone !== event.shiftKey) {
+          event.preventDefault();
+          if (onNone) pop.current?.querySelector<HTMLElement>(`[data-day="${focus}"]`)?.focus();
+          else noneButton.current?.focus();
+          return;
+        }
         return close(false);
+      }
     }
   };
 
   const [year, month] = parts(monthStart(focus));
 
-  const classes = ["ui-field", props.size === "sm" ? "ui-field-sm" : "", props.className ?? ""].filter(Boolean).join(" ");
+  const classes = [props.look === "text" ? "ui-field-text" : "ui-field", props.size === "sm" ? "ui-field-sm" : props.size === "xs" ? "ui-field-sm ui-field-xs" : "", props.className ?? ""].filter(Boolean).join(" ");
   return (
     <div data-ui-surface={props.surface} className={classes}>
       <FieldHead field={field} label={props.label} labelId={`${field}-label`} error={props.error} />
@@ -140,24 +180,42 @@ export function DatePicker(props: {
           aria-expanded={open}
           aria-controls={open ? grid : undefined}
           aria-invalid={props.error ? true : undefined}
-          aria-describedby={said}
           {...held.props}
-          data-empty={value ? undefined : ""}
-          onClick={() => (open ? close(false) : show())}
-          onKeyDown={(event) => {
+          aria-describedby={[said, reasonOf(held.props)["aria-describedby"]].filter(Boolean).join(" ") || undefined}
+          data-empty={value || props.lead ? undefined : ""}
+          onClick={unlessHeld(props.disabled, reasonOf(held.props).onClick, () => (open ? close(false) : show()))}
+          onKeyDown={unlessHeld(props.disabled, reasonOf(held.props).onKeyDown, (event: KeyboardEvent<HTMLButtonElement>) => {
             if (event.key !== "ArrowDown" || open) return;
             event.preventDefault();
             show();
-          }}
+          })}
         >
+          {props.lead ? <span className="ui-select-lead">{props.lead}</span> : null}
           <span className="ui-select-words">{value ? (props.format ? props.format(value) : words(value)) : (props.placeholder ?? "")}</span>
         </button>
-        <CalendarEventIcon size={16} className="ui-select-caret ui-date-mark" aria-hidden="true" />
+        {props.look === "text" || props.lead ? <ChevronDownIcon size={props.lead ? 16 : 14} className="ui-select-caret" aria-hidden="true" /> : <CalendarEventIcon size={16} className="ui-select-caret ui-date-mark" aria-hidden="true" />}
         {held.node}
         {props.name ? <input type="hidden" name={props.name} value={value ?? ""} /> : null}
       </div>
       {open ? (
         <div ref={pop} id={grid} role="dialog" popover="manual" aria-modal="false" aria-label={`Choose a date, ${MONTHS[month - 1]} ${year}`} className="ui-menu ui-date-pop" onKeyDown={keyed}>
+          {props.none ? (
+            <button
+              ref={noneButton}
+              type="button"
+              className="ui-menu-item ui-date-none"
+              aria-pressed={value === null}
+              data-active={noneActive ? "" : undefined}
+              onPointerEnter={() => setNoneActive(true)}
+              onPointerLeave={() => setNoneActive(false)}
+              onFocus={() => setNoneActive(true)}
+              onBlur={() => setNoneActive(false)}
+              onClick={chooseNone}
+            >
+              <CheckMark checked={value === null} className="ui-date-none-mark" />
+              <span className="ui-menu-words">{props.none}</span>
+            </button>
+          ) : null}
           <MonthGrid focus={focus} onFocusChange={setFocus} value={value} onChoose={choose} min={props.min} max={props.max} today={now} />
         </div>
       ) : null}

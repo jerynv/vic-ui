@@ -1,0 +1,20 @@
+---
+title: "Player"
+description: "Browser-native media controls for a host-owned URL."
+---
+
+## Usage
+
+```tsx
+import { Player } from "vic-ui";
+
+<Player src={audioUrl} audio aria-label="Meeting recording"
+  onTime={milliseconds => setPosition(milliseconds)}
+  onError={() => setFailed(true)} />
+```
+
+Omit `audio` to render inline video. Both variants use native controls, metadata preload and no autoplay. Video fills its column up to 60vh; audio uses the browser's audio controls. The optional ref targets the native media element.
+
+`onTime` reports milliseconds on native play/timeupdate events. An initial paused position of zero is silent. `onError` tells the host to present a fallback, retry or download.
+
+The host owns the URL, permission checks, loading, expiry and cleanup. Player creates and revokes no object URLs, accepts no ready-byte input, and performs no transcoding. For Blob/Uint8Array input, use the optional [media preview modules](/docs/components/file-preview). Codec and streaming support follow the browser.

@@ -38,3 +38,17 @@ import {
 See the [full upstream guide](https://base-ui.com/react/components/dialog) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/dialog.mdx), under the MIT license.
+
+## Root Dialog: right-side sheet and nested Escape
+
+```tsx
+import { Dialog } from "vic-ui";
+
+<Dialog open={open} onOpenChange={setOpen} title="Report details" side="right">
+  {details}
+</Dialog>
+```
+
+The root Dialog uses a native modal dialog. `side="right"` docks its frame to the right edge; omit it for the existing centered/phone-sheet behavior. `size`, `foot`, `problem`, `onSubmit`, `bare` and `still` remain available.
+
+Native Escape cancellation requests `onOpenChange(false)` and stops propagation, so a nested dialog's cancel event does not also request that its parent close. Each dialog remains controlled by its host. Closing unmounts its presentation; persistent observers belong outside that presentation.

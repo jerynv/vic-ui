@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["canonical-focus-panes.fixture.tsx", "../src/components/CodeField.tsx", "../src/components/Grow.tsx", "../src/components/FocusLines.tsx", "../src/components/PaneViews.tsx", "../site/src/examples/pane-views", "../site/src/examples/code-field", "../site/src/examples/grow", "../site/src/examples/focus-lines"]
+}

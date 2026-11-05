@@ -1,0 +1,13 @@
+body { margin: 0; background: var(--bg-canvas); color: var(--fg); font-family: var(--font-sans); }
+main { width: min(100%, 760px); margin: auto; padding: 20px; }
+h1 { font-size: 1.5rem; margin-bottom: 24px; }
+h2 { font-size: 1rem; margin-bottom: 12px; }
+section { margin-block: 24px; }
+button { border: 1px solid var(--line); border-radius: var(--radius-control); padding: 6px 10px; margin: 4px; }
+output { display: block; min-height: 1.5rem; }
+[data-testid="old-otp"] { margin-top: 12px; }
+.pane-scroll { height: 90px; overflow: auto; border: 1px solid var(--line); }
+.pane-tall { height: 500px; padding: 8px; }
+.ui-pane-view label { display: grid; gap: 6px; }
+.ui-pane-view input { background: var(--field-fill); border-radius: var(--radius-control); padding: 8px; }
+.grow-content { background: var(--field-fill); }

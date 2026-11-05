@@ -1,0 +1,582 @@
+/* V-Client555625f4 source geometry; host-owned branding, art and provider policy. */
+/*
+ * The calm register (`web/src/ui/Focus.tsx`, `CodeField.tsx`, `Providers.tsx`): a screen where a
+ * person does one thing, drawn as the way in is. The place on one side, optional host-owned
+ * artwork in its colour, and the form in the middle of the open ground
+ * beside it under a large display title, its column easing to each step's height. On a phone
+ * there is no side, only the place's mark and name above the form.
+ *
+ * Outside the layers, as the way in's rules always were: inside the column these adjust the
+ * library's own buttons and fields, and a utility on one of those would otherwise outrank them.
+ */
+
+/* ---- the layout ----------------------------------------------------------------------- */
+
+.ui-focus {
+  display: grid;
+  grid-template-columns: minmax(22rem, 42%) minmax(0, 1fr);
+  min-height: 100dvh;
+  background: var(--bg-canvas);
+}
+
+.ui-focus-side {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  height: calc(100dvh - 1.5rem);
+  margin: 0.75rem;
+  padding: 1.5rem;
+  border-radius: var(--radius-panel);
+  background: var(--hue-ink);
+  color: var(--hue);
+  overflow: hidden;
+  isolation: isolate;
+  user-select: none;
+}
+
+/* A screen that destroys something (`tone="danger"`): the side, and on a phone the head above the
+   form, in the danger tint with the light and words in its ink. */
+.ui-focus-side[data-tone="danger"],
+.ui-focus-phone-head[data-tone="danger"] {
+  --hue: var(--tone-danger-tint);
+  --hue-ink: var(--tone-danger-ink);
+}
+
+/* Host-owned artwork fills the side behind its content. The source canvas entrance remains
+   available to a host canvas; no shader or artwork implementation is bundled here. */
+.ui-focus-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--hue-ink);
+}
+
+.ui-focus-art canvas {
+  animation: ui-art-arrive 1100ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+@keyframes ui-art-arrive {
+  from {
+    opacity: 0;
+    filter: blur(28px);
+  }
+  45% {
+    opacity: 1;
+  }
+  to {
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-focus-art canvas {
+    animation: none;
+  }
+}
+
+/* What is read off the side stands over the light where the light is blurred: the words on it
+   (the mark and name, the steps) over a blur of their own, washed in the light's own ground, its
+   ink, and fading out from its middle, so it hugs the words rather than barring the side, the words
+   read in the hue's block on it and the light shows around them, with no edge to the blur. How the
+   app looks is a control with a surface of its own and stands on the light plain. */
+.ui-focus-side> :not(.ui-focus-art) {
+  position: relative;
+  z-index: 1;
+}
+
+.ui-focus-top::before,
+.ui-focus-steps::before {
+  content: "";
+  position: absolute;
+  inset: -1.25rem -1.75rem;
+  z-index: -1;
+  pointer-events: none;
+  background: color-mix(in oklab, var(--hue-ink) 82%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  -webkit-mask-image: radial-gradient(closest-side, oklch(0 0 0) 55%, transparent);
+  mask-image: radial-gradient(closest-side, oklch(0 0 0) 55%, transparent);
+}
+
+.ui-focus-top,
+.ui-focus-steps,
+.ui-focus-foot {
+  justify-self: start;
+  align-self: flex-start;
+}
+
+/* How the app looks, in the corner at the foot of the side on every screen; on a phone, which has no
+   side, under the form on Your account alone (`looksOnPhone`). */
+.ui-focus-foot {
+  margin-top: auto;
+}
+
+.ui-focus-phone-foot {
+  display: none;
+}
+
+.ui-focus-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+}
+
+.ui-focus-top .ui-focus-mark {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-row);
+  font-size: 1rem;
+}
+
+.ui-focus-name {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+/* The steps: done ones ticked, this one in the full block, the rest quieter. */
+.ui-focus-steps {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: way;
+}
+
+.ui-focus-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--text-read);
+  font-weight: 500;
+  counter-increment: way;
+  color: color-mix(in oklab, var(--hue) 72%, var(--hue-ink));
+  transition: color 240ms;
+}
+
+.ui-focus-steps li::before {
+  content: counter(way);
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-round);
+  font-size: var(--text-tag);
+  font-weight: 600;
+  transition:
+    background-color 240ms,
+    color 240ms;
+}
+
+.ui-focus-steps li[data-at="now"] {
+  color: var(--hue);
+}
+
+.ui-focus-steps li[data-at="now"]::before {
+  border-color: var(--hue);
+  background: var(--hue);
+  color: var(--hue-ink);
+}
+
+.ui-focus-steps li[data-at="done"]::before {
+  content: "✓";
+}
+
+/* The form stands from a fixed place near the top of its ground, so a step taller or shorter than
+   the last grows or shrinks downward and its title never moves. A form taller than the window
+   scrolls from that same top. */
+.ui-focus-main {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  min-width: 0;
+  min-height: 100dvh;
+  padding: clamp(3rem, 22vh, 10rem) 2rem 3rem;
+}
+
+.ui-focus-phone-head {
+  display: none;
+}
+
+/* The calm register keeps its own measure; Grow owns the shared height and entry motion. */
+.ui-focus-grow { max-width: calc(24rem + 1rem); }
+.ui-focus-grow:has([data-width="list"]) { max-width: calc(30rem + 1rem); }
+
+.ui-focus-form {
+  width: 100%;
+  max-width: 24rem;
+}
+
+.ui-focus-form[data-width="list"] {
+  max-width: 30rem;
+}
+
+/* A phone has no side: the place's mark and name stand above the form, and nothing else. */
+@media (max-width: 56rem) {
+  .ui-focus-phone-foot {
+    display: flex;
+    margin-top: 2rem;
+  }
+
+  .ui-focus {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ui-focus-side {
+    display: none;
+  }
+
+  .ui-focus-main {
+    padding: clamp(2rem, 10vh, 5rem) 1rem 2rem;
+  }
+
+  .ui-focus-phone-head {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    max-width: calc(24rem + 1rem);
+    margin-bottom: 2rem;
+    font-weight: 600;
+    color: var(--fg-strong);
+  }
+
+  /* As wide as the column under it, so its mark starts where the form does: a list's wider column too. */
+  .ui-focus-main:has(.ui-focus-form[data-width="list"]) .ui-focus-phone-head {
+    max-width: calc(30rem + 1rem);
+  }
+
+  .ui-focus-phone-head .ui-focus-mark {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-row);
+    font-size: 0.9375rem;
+  }
+
+  .ui-focus-phone-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* ---- the title on open ground ------------------------------------------------------------ */
+
+.ui-focus-head {
+  display: grid;
+  justify-items: start;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+/* The screen's ways on, at the end of its title: square, quiet until pointed at. */
+.ui-focus-head[data-actions] {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.ui-focus-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.ui-focus-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  color: var(--fg-strong);
+}
+
+/* What a card on the way in is about, a step under the screen's title: the booked time. */
+.ui-focus-when {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--fg-strong);
+}
+
+/* The way back above a screen's title: an arrow and the page it is under. */
+.ui-focus-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0 0 1rem -0.375rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.375rem;
+  border-radius: var(--radius-row);
+  font-size: var(--text-ui);
+  color: var(--fg-subtle);
+  text-decoration: none;
+  transition:
+    background-color 120ms,
+    color 120ms;
+}
+
+/* A screen with no way back keeps its room, so every title stands at the same height. */
+.ui-focus-back[data-none] {
+  visibility: hidden;
+}
+
+/* Beside actions the way back takes its own row, the title and the actions sharing the next. */
+.ui-focus-head[data-actions] .ui-focus-back {
+  grid-column: 1 / -1;
+}
+
+.ui-focus-back:hover {
+    --fg-subtle: var(--fg-subtle-on-fill);
+  background: var(--field-fill);
+  color: var(--fg-strong);
+}
+
+.ui-focus-back:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---- an organization's mark -------------------------------------------------------------- */
+
+/* The letter tile the rest of the product draws an organization with, larger. */
+.ui-focus-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-control);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--fg-inverse);
+  background: var(--bg-contrast);
+}
+
+/* In its own colour: the tile in the colour's ink, the letter on it in the page's ground, which
+   holds in both modes since the ink is dark in light mode and light in dark. */
+.ui-focus-mark[data-hue] {
+  color: var(--bg-base);
+  background: var(--hue-ink);
+}
+
+/* On the side, whose light is grounded in the ink, the tile is the block and the letter the ink. */
+.ui-focus-side .ui-focus-mark[data-hue] {
+  color: var(--hue-ink);
+  background: var(--hue);
+}
+
+/* The organization's logo where it has one (`useLogo`): over the letter, in the same box. */
+.ui-focus-mark[data-logo] {
+  color: transparent;
+  background: transparent;
+}
+
+/* ---- the providers ----------------------------------------------------------------------- */
+
+/* Each button is its own form, so they sit in a grid: a form is a block and three of them stacked
+   need the gap to come from the container. */
+.ui-providers {
+  display: grid;
+  gap: 0.625rem;
+  margin-bottom: 1.5rem;
+}
+
+/* The buttons and Apple's heads-up in one cell, so the taller of the two sizes it from the first frame. */
+.ui-providers-stack {
+  display: grid;
+}
+
+.ui-providers-stack>* {
+  grid-area: 1 / 1;
+  /* Visibility swaps must complete before focus moves into the newly active surface. */
+  transition-property: none;
+}
+
+.ui-providers-stack>[data-hidden] {
+  visibility: hidden;
+}
+
+.ui-providers-buttons {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.ui-providers-heads {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.ui-providers-said {
+  margin: 0;
+  font-size: var(--text-read);
+  line-height: var(--text-read--line-height);
+  color: var(--fg);
+}
+
+.ui-providers-acts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* The mark at the left edge and the words after it, in the reading weight. */
+.ui-provider-button {
+  width: 100%;
+  height: var(--control-h);
+  font-size: var(--text-read);
+  font-weight: 400;
+}
+
+.ui-provider-button .ui-button-face {
+  justify-content: flex-start;
+  gap: 0.75rem;
+}
+
+/* The mark keeps its size whatever the label does, and never takes the ink's weight. */
+.ui-provider-button svg {
+  flex: none;
+}
+
+/* A word on a rule, because two ways in are alternatives and a gap does not say so. */
+.ui-providers-or {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.875rem 0 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-ui);
+  color: var(--fg-subtle);
+}
+
+.ui-providers-or::before,
+.ui-providers-or::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+
+@layer components.parts {
+  .ui-form-steps { --form-steps-surface: var(--bg-base); --form-step-size: 2.5rem; --form-step-gap: 0.75rem; --form-step-marker-size: 1.75rem; --form-step-height: 2.5rem; --form-step-label-start: calc((var(--form-step-size) + var(--form-step-marker-size)) / 2 + 0.5rem); width: 100%; }
+  .ui-form-steps ol {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--form-step-gap);
+    width: calc(100% + var(--form-step-size) - var(--form-step-marker-size));
+    list-style: none;
+    padding: 0;
+    margin: 0 calc((var(--form-step-marker-size) - var(--form-step-size)) / 2);
+  }
+  .ui-form-steps li { position: relative; z-index: 0; flex: 0 0 var(--form-step-size); min-width: 0; }
+  .ui-form-steps li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: calc(var(--form-step-size) / 2);
+    top: 50%;
+    translate: 0 -50%;
+    width: calc(100% + var(--form-step-gap));
+    height: 3px;
+    background: var(--line);
+    pointer-events: none;
+  }
+  .ui-form-steps li[data-complete]:not(:last-child)::after { background: var(--progress-complete-fill); }
+  .ui-form-steps li[data-complete]:has(+ li[data-current])::after {
+    background: linear-gradient(to right, var(--progress-complete-fill), color-mix(in oklab, var(--progress-complete-fill) 15%, var(--line)));
+  }
+  /* Keep the track masked even when the button is dimmed or its border is dotted. */
+  .ui-form-steps li::before {
+    content: "";
+    position: absolute;
+    left: calc((var(--form-step-size) - var(--form-step-marker-size)) / 2);
+    top: 50%;
+    translate: 0 -50%;
+    width: var(--form-step-marker-size);
+    height: var(--form-step-marker-size);
+    border-radius: var(--radius-round);
+    background: var(--form-steps-surface);
+    pointer-events: none;
+  }
+  .ui-form-steps li[data-current] { flex: 1 1 auto; min-width: 7.5rem; }
+  .ui-form-steps li > button { position: relative; width: var(--form-step-size); height: var(--form-step-height); }
+  .ui-form-steps .ui-button-face { justify-content: center; }
+  .ui-form-step-mark {
+    display: grid;
+    place-items: center;
+    width: var(--form-step-marker-size);
+    height: var(--form-step-marker-size);
+    flex: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-round);
+    background: var(--form-steps-surface);
+    color: var(--fg-subtle);
+    font-size: var(--text-meta);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--text-ui--line-height);
+    transition: color 180ms, background-color 180ms, border-color 180ms;
+  }
+  .ui-form-steps [data-branch] .ui-form-step-mark { border-style: dashed; }
+  .ui-form-steps [data-complete] > button { opacity: 1; }
+  .ui-form-steps [data-complete] > button:hover { text-decoration-color: var(--progress-complete-text); }
+  .ui-form-steps [data-complete] .ui-form-step-mark {
+    background: var(--progress-complete-fill);
+    color: var(--progress-complete-text);
+    border: 1px solid var(--progress-complete-fill);
+  }
+  .ui-form-steps [data-current] .ui-form-step-mark { border: 2px dotted var(--fg-subtle); }
+  .ui-form-step-label {
+    position: absolute;
+    left: var(--form-step-label-start);
+    top: 0;
+    display: flex;
+    align-items: center;
+    height: var(--form-step-height);
+    max-width: calc(100% - var(--form-step-label-start));
+    padding-right: 2rem;
+    background: linear-gradient(to right, var(--form-steps-surface) calc(100% - 2rem), transparent);
+    color: var(--fg-subtle);
+    font-size: var(--text-meta);
+    font-weight: 500;
+    line-height: var(--text-ui--line-height);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .ui-form-step-label > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 26rem) {
+    .ui-form-steps { --form-step-size: 2rem; --form-step-gap: 0.25rem; --form-step-marker-size: 1.5rem; }
+    .ui-form-steps li[data-current] { min-width: 6.75rem; }
+    .ui-form-step-label { padding-right: 1rem; background: linear-gradient(to right, var(--form-steps-surface) calc(100% - 1rem), transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) { .ui-form-step-mark { transition: none; } }
+
+}
+
+.ui-form-step-description { display: block; }

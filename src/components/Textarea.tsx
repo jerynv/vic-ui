@@ -22,15 +22,17 @@ export const Textarea = forwardRef<
     onValueChange?: (value: string) => void;
     grow?: boolean;
     maxRows?: number;
+    /** Hide the displayed count without removing the native length limit. */
+    count?: boolean;
     size?: "sm"; surface?: SurfaceStyle;
     disabledReason?: string | undefined;
   }
->(function Textarea({ label, hint, error, onValueChange, onChange, grow, maxRows = 8, rows = 3, size, surface, className, id, value, defaultValue, maxLength, disabledReason, disabled, onFocus, onBlur, onKeyDown, ...rest }, ref) {
+>(function Textarea({ label, hint, error, onValueChange, onChange, grow, count = true, maxRows = 8, rows = 3, size, surface, className, id, value, defaultValue, maxLength, disabledReason, disabled, onFocus, onBlur, onKeyDown, ...rest }, ref) {
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
   const held = why.held;
-  const said = describedBy(field, error, hint, why.describedBy);
+  const said = [describedBy(field, error, hint, why.describedBy), rest["aria-describedby"]].filter(Boolean).join(" ") || undefined;
   const own = useRef<HTMLTextAreaElement | null>(null);
   const [typed, setTyped] = useState(() => String(defaultValue ?? ""));
   const length = (value === undefined ? typed : String(value)).length;
@@ -59,7 +61,7 @@ export const Textarea = forwardRef<
 
   useLayoutEffect(fit, [fit, value]);
 
-  const counted = maxLength !== undefined;
+  const counted = count && maxLength !== undefined;
   const classes = ["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ");
   return (
     <div data-ui-surface={surface} className={classes}>
@@ -87,7 +89,7 @@ export const Textarea = forwardRef<
             onKeyDown?.(event);
             why.key(event);
           }}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={error ? true : rest["aria-invalid"]}
           aria-describedby={said}
           value={value}
           defaultValue={defaultValue}
@@ -106,9 +108,10 @@ export const Textarea = forwardRef<
           <p id={`${field}-hint`} className="ui-field-hint">
             {hint}
           </p>
-          <span className="ui-field-count" data-full={length >= maxLength ? "" : undefined} aria-live="polite">
+          <span className="ui-field-count" data-full={length >= maxLength ? "" : undefined}>
             {length} of {maxLength}
           </span>
+          <span className="sr-only" aria-live="polite">{length >= maxLength * 0.9 ? `${length} of ${maxLength}` : ""}</span>
         </div>
       ) : (
         <FieldHint field={field} hint={hint} />

@@ -59,3 +59,7 @@ The same props work on `SettingsGroup`. Focus remains a host action; changing se
 Navigation sits beside detail content and moves above it when the layout container is 44rem or narrower. Rows wrap their controls beneath their labels as space shrinks. `stacked` always puts the control below at full width; `align="start"` aligns a taller control to the first line of text.
 
 `SettingsGroup` defaults to a border without a shadow. `surface="flat"` removes the outer border and horizontal row inset. `--settings-control-width` defaults to 18rem and can be overridden on a row or enclosing layout. All existing stylesheet entries include these styles.
+
+## Dialog composition
+
+Use [Settings dialog](/docs/components/settings-dialog) for a controlled modal with a section rail, mounted panes and a shared Save action. Its `SettingsPaneSection<V>` descriptor type is distinct from the runtime `SettingsSection` documented here. Existing page layouts and heading focus props remain unchanged.

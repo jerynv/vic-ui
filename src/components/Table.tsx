@@ -1,5 +1,6 @@
-import { Fragment, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref, type TableHTMLAttributes } from "react";
+import { Fragment, useLayoutEffect, useRef, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode, type Ref, type TableHTMLAttributes } from "react";
 import { ArrowDownIcon } from "../icons/icons";
+import { Tooltip } from "./Tooltip";
 
 /** One column: its key, the words at its head, and how it sits. */
 export interface TableColumn {
@@ -13,6 +14,8 @@ export interface TableColumn {
   sort?: boolean;
   /** On its `col`, its head and every cell of it, for a page that lets a column go where the room is short. */
   className?: string;
+  /** Drawn only where the window is wider than a phone (640px): on a phone it goes, so the columns that say what a row is keep the width. */
+  wide?: boolean;
 }
 
 export interface TableSort {
@@ -29,10 +32,14 @@ export interface TableSort {
  * caller's. With `onRowPress` each row is pressable by pointer and by Enter or Space, and only
  * those `rowPressable` says, where some rows open nothing; a row that is not lights nothing. `empty`
  * fills the body when there are no rows. `height` caps the scroller so the head stays pinned
- * inside it; without it the head pins to the page's own scroller. `rowProps` and `tableProps`
+ * inside it; without it the head pins to the page's own scroller when the columns fit.
+ * Wide content scrolls sideways, with a named keyboard entry. `rowProps` and `tableProps`
  * add to a row and to the table what a page that works its rows itself needs (choosing,
  * dragging, a grid's keys), spread after the table's own. `after` draws a line of its own
  * under a row across every column, for what is wrong with it or still to do, read as part of it.
+ * `look="roster"` is the product's list of things on its own page, as People and Documents draw
+ * theirs: on the page's own ground, fixed columns, every row one height at the working size, the
+ * cells in the quieter ink and the row's lead (`Cell strong`) in the strong one.
  */
 export function Table<Row>(props: {
   columns: ReadonlyArray<TableColumn>;
@@ -51,11 +58,26 @@ export function Table<Row>(props: {
   empty?: ReactNode;
   "aria-label"?: string;
   height?: string;
+  look?: "roster";
   className?: string;
   rowProps?: (row: Row) => HTMLAttributes<HTMLTableRowElement> & { [data: `data-${string}`]: string | boolean | undefined };
   tableProps?: TableHTMLAttributes<HTMLTableElement>;
   tableRef?: Ref<HTMLTableElement>;
 }) {
+  const scroller = useRef<HTMLDivElement>(null);
+  const [fits, setFits] = useState(false);
+  useLayoutEffect(() => {
+    const box = scroller.current;
+    const table = box?.querySelector("table");
+    if (!box || !table) return;
+    const measure = () => setFits(box.scrollWidth <= box.clientWidth);
+    measure();
+    const watch = new ResizeObserver(measure);
+    watch.observe(box);
+    watch.observe(table);
+    return () => watch.disconnect();
+  }, []);
+  const scrollable = !fits || !!props.height;
   const draw = props.cell ?? ((row: Row, column: TableColumn) => (row as Record<string, ReactNode>)[column.key]);
   const pressableAt = (row: Row) => props.onRowPress !== undefined && (props.rowPressable?.(row) ?? true);
   const sortBy = (column: TableColumn) => {
@@ -69,11 +91,21 @@ export function Table<Row>(props: {
   };
 
   return (
-    <div className={props.className ? `ui-table-scroll ${props.className}` : "ui-table-scroll"} style={props.height ? { maxHeight: props.height } : undefined} data-height={props.height ? "" : undefined}>
+    <div
+      ref={scroller}
+      className={props.className ? `ui-table-scroll ${props.className}` : "ui-table-scroll"}
+      role={scrollable ? "region" : undefined}
+      aria-label={scrollable ? (props["aria-label"] ?? props.tableProps?.["aria-label"] ?? "Table") : undefined}
+      tabIndex={scrollable ? 0 : undefined}
+      style={props.height ? { maxHeight: props.height } : undefined}
+      data-height={props.height ? "" : undefined}
+      data-fits={fits ? "" : undefined}
+      data-look={props.look}
+    >
       <table ref={props.tableRef} className="ui-table" aria-label={props["aria-label"]} {...props.tableProps}>
         <colgroup>
           {props.columns.map((column) => (
-            <col key={column.key} className={column.className} style={column.width !== undefined ? { width: typeof column.width === "number" ? `${column.width}px` : column.width } : undefined} />
+            <col key={column.key} className={column.className} data-wide={column.wide ? "" : undefined} style={column.width !== undefined ? { width: typeof column.width === "number" ? `${column.width}px` : column.width } : undefined} />
           ))}
         </colgroup>
         <thead>
@@ -81,7 +113,7 @@ export function Table<Row>(props: {
             {props.columns.map((column) => {
               const sorted = props.sort?.key === column.key ? props.sort.direction : null;
               return (
-                <th key={column.key} scope="col" className={column.className} data-align={column.align ?? "start"} aria-sort={column.sort ? (sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : "none") : undefined}>
+                <th key={column.key} scope="col" className={column.className} data-wide={column.wide ? "" : undefined} data-align={column.align ?? "start"} aria-sort={column.sort ? (sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : "none") : undefined}>
                   {column.sort ? (
                     <button type="button" className="ui-table-sort" data-sorted={sorted ?? undefined} onClick={() => sortBy(column)}>
                       <span>{column.label}</span>
@@ -116,7 +148,7 @@ export function Table<Row>(props: {
                     {...props.rowProps?.(row)}
                   >
                     {props.columns.map((column) => (
-                      <td key={column.key} className={column.className} data-align={column.align ?? "start"}>
+                      <td key={column.key} className={column.className} data-wide={column.wide ? "" : undefined} data-align={column.align ?? "start"}>
                         {draw(row, column)}
                       </td>
                     ))}
@@ -133,5 +165,40 @@ export function Table<Row>(props: {
         </tbody>
       </table>
     </div>
+  );
+}
+
+/**
+ * What a cell holds where it is more than words: a small mark before them (a place's kind, a
+ * clock, a face), the words cut short on one line, `strong` for the row's lead (what the row is),
+ * and `quiet` for a cell that says there is nothing ("None", "Nobody joined"). Usable in a list's
+ * row as well as a table's. `onPress` makes the cell a button of its own, pressed apart from its
+ * row (a person or a place pressed to show only them): it reads as the row's words until pointed
+ * at, and `tip` says what pressing it does.
+ */
+export function Cell(props: { mark?: ReactNode; quiet?: boolean; strong?: boolean; title?: string | undefined; onPress?: (() => void) | undefined; tip?: string | undefined; children: ReactNode }) {
+  const inner = (
+    <>
+      {props.mark ? (
+        <span className="ui-cell-mark" aria-hidden="true">
+          {props.mark}
+        </span>
+      ) : null}
+      <span className="ui-cell-words">{props.children}</span>
+    </>
+  );
+  const states = { "data-quiet": props.quiet ? "" : undefined, "data-strong": props.strong ? "" : undefined, title: props.title };
+  if (props.onPress) {
+    const button = (
+      <button type="button" className="ui-cell ui-cell-press" {...states} onClick={event => { event.stopPropagation(); props.onPress?.(); }}>
+        {inner}
+      </button>
+    );
+    return props.tip ? <Tooltip content={props.tip}>{button}</Tooltip> : button;
+  }
+  return (
+    <span className="ui-cell" {...states}>
+      {inner}
+    </span>
   );
 }

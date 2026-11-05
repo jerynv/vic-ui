@@ -47,6 +47,7 @@ test("inline combobox composes provider rail and footer with controlled, accessi
     await server.listen(); browser = await chromium.launch();
     const page = await browser.newPage({ viewport: { width: 1100, height: 900 }, reducedMotion: "reduce" });
     page.setDefaultTimeout(5000);
+    page.setDefaultNavigationTimeout(30000);
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });

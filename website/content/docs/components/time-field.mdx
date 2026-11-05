@@ -1,0 +1,23 @@
+---
+title: "Time field"
+description: "Typed suggestions for a wall-clock time within one day."
+---
+
+## Usage
+
+```tsx
+import { TimeField } from "vic-ui";
+
+<TimeField label="Starts" value={start} onValueChange={setStart}
+  min={8 * 60} max={18 * 60} />
+<TimeField label="Ends" value={end} onValueChange={setEnd}
+  after={start} max={18 * 60} />
+```
+
+Values and bounds are integer minutes from 0 through 1439. `min` and `max` are inclusive; `after` is an exclusive lower bound and adds duration words to suggestions. `durationLabel(minutes)` can format that duration. Invalid or reversed constraints offer no choices; controlled values are never silently clamped.
+
+Typing accepts source clock forms such as `930`, `9:30` and `9:30p`. Blank suggestions use 15-minute steps; typed off-grid minutes remain selectable and stay selected when reopened, including end times using `after`. `24:00` is outside the supported day. There is no overnight wrap, timezone conversion or calendar policy.
+
+Supply `label` or `aria-label`. Optional `size="sm"`, `disabled`, `disabledReason` and `className` follow the field controls. Selection calls `onValueChange`; the host decides whether to accept it. [Time picker](/docs/components/time-picker) offers explicit hour/minute segments with string values.
+
+Disabling an open field closes its suggestions and clears the transient search without changing the selected time. With a disabled reason, the input remains focusable so the reason can be read.

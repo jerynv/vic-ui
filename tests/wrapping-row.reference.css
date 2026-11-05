@@ -1,0 +1,77 @@
+/* Exact selected source declarations from d44c231f, not imported by the library.
+   Only the chevron URL is relocated. Shared font/radius/type/base rules use Vic. */
+:root, [data-mode] {
+  --color-text-subtle: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
+  --color-text-subtle-on-fill: light-dark(oklch(0.47 0 0), oklch(0.708 0 0));
+  --color-control-fill: light-dark(oklch(0.948 0.002 286), oklch(0.235 0.002 286));
+  --color-surface-raised: light-dark(oklch(1 0 0), oklch(0.1913 0 0));
+  --color-border-default: light-dark(oklch(0.145 0 0 / 0.1), oklch(0.32 0 0));
+  --elevation-edge: 0 0 0 1px var(--color-border-default);
+  --type-ui-size: 0.8125rem;
+}
+
+@layer components.parts {
+  .ui-wrapping-row,
+  .hit-row {
+    display: flex;
+    gap: 0.875rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: var(--radius-row);
+    color: inherit;
+    font-size: var(--type-ui-size);
+    transition: background-color 200ms ease;
+  }
+
+  .ui-wrapping-row:hover,
+  .ui-wrapping-row:focus-visible,
+  .hit-row:hover,
+  .hit-row:focus-visible {
+    --color-text-subtle: var(--color-text-subtle-on-fill);
+    background: var(--color-control-fill);
+  }
+}
+
+@layer components.console {
+  .console-frame ul:is(:has(> li > .hit-row), :has(> li.hit-row)) {
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    background: var(--color-surface-raised);
+    box-shadow: var(--elevation-edge);
+  }
+
+  .console-frame ul:is(:has(> li > .hit-row), :has(> li.hit-row)) > li + li {
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .console-frame ul:is(:has(> li > .hit-row), :has(> li.hit-row)) .hit-row {
+    border-radius: 0;
+    padding-inline: 1rem;
+  }
+
+  .console-frame a.hit-row::after {
+    content: "";
+    flex: none;
+    align-self: center;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--color-text-subtle);
+    mask: url("../src/styles/assets/wrapping-row-chevron-right.svg") center / contain no-repeat;
+  }
+
+  .console-frame .hit-row:not(a, button):hover {
+    background: none;
+  }
+}
+
+.ui-wrapping-row,
+.hit-row {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-wrapping-row,
+  .hit-row {
+    transition: none;
+  }
+}

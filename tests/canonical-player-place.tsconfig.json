@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["canonical-player-place.fixture.tsx", "../site/src/examples/player/*.tsx", "../site/src/examples/place-picker/*.tsx"]
+}

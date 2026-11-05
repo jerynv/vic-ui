@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes } from "react";
 import { useBlocked } from "./reason";
+import { reasonOf } from "./held";
 
 /**
  * Something on or off, said at once: a native button with the switch role, a track that fills
@@ -18,7 +19,7 @@ export function Switch({ checked, onCheckedChange, className, look = "rimmed", t
       className={["ui-switch", look === "flat" ? "ui-switch-flat" : "", className].filter(Boolean).join(" ")}
       onClick={() => onCheckedChange?.(!checked)}
       {...rest}
-      {...held.props}
+      {...held.props} aria-describedby={[rest["aria-describedby"], reasonOf(held.props)["aria-describedby"]].filter(Boolean).join(" ") || undefined}
     >
       <span className="ui-switch-knob" />
     </button>

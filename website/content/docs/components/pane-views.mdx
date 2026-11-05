@@ -1,0 +1,19 @@
+---
+title: "Pane views"
+description: "Instant pane changes that retain mounted child state."
+---
+
+## Usage
+
+```tsx
+import { PaneViews, PaneView } from "vic-ui";
+
+<PaneViews active={section}>
+  <PaneView value="details">{details}</PaneView>
+  <PaneView value="history">{history}</PaneView>
+</PaneViews>
+```
+
+Both components accept native div attributes. `PaneViews` requires a controlled string `active`; each `PaneView` requires its matching `value`. All panes stay mounted. Inactive panes immediately become `hidden` and `inert`, preserving local state and scroll position while removing their controls from focus.
+
+The controller owns `hidden` and `inert`; passed attributes cannot expose an inactive pane. Selection and focus movement remain host policy. Use [Sliding views](/docs/components/sliding-views) when a sliding transition is required; PaneViews performs no animation.

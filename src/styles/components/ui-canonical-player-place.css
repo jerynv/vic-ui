@@ -1,0 +1,172 @@
+/* Canonical V-Client Player and PlacePicker, source 555625f4. */
+@layer components.parts {
+  .ui-place .ui-select-words { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-place-sheet {
+    width: 19rem;
+    max-width: min(22rem, calc(100vw - 1rem));
+    max-height: min(24rem, calc(100dvh - 2rem));
+    padding: 0.375rem;
+    overflow: hidden;
+  }
+
+  .ui-place-inner {
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 0.25rem;
+    max-height: calc(min(24rem, 100dvh - 2rem) - 0.75rem);
+  }
+
+  /* Inside a space: one row that goes back, the arrow, the space's name and the word. */
+  .ui-place-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 2.125rem;
+    padding: 0 0.5rem 0 0.375rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    color: var(--fg-subtle);
+    font: inherit;
+    font-size: var(--text-ui);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .ui-place-head:hover {
+    background: var(--field-fill);
+    color: var(--fg-strong);
+  }
+
+  .ui-place-head:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-place-head-arrow {
+    flex: none;
+  }
+
+  .ui-place-head-words {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ui-place-head-back {
+    flex: none;
+    font-size: var(--text-meta);
+  }
+
+  /* The rows scroll to the sheet's own edge, so a scrollbar, when there is one, stands on the
+     edge and not inset from it; the rows keep their end where it was by padding that room back. */
+  .ui-place-rows {
+    display: grid;
+    gap: 1px;
+    overflow-y: auto;
+    min-height: 0;
+    margin-right: -0.375rem;
+    padding-right: 0.375rem;
+  }
+
+  /* A row: its icon, its name, a quiet word at the end, and a chevron where it goes into a space. */
+  .ui-place-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 2.125rem;
+    padding: 0 0.5rem 0 0.375rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    font-size: var(--text-ui);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .ui-place-row:hover:not(:disabled),
+  .ui-place-row[aria-selected="true"] {
+    background: var(--field-fill);
+    color: var(--fg-strong);
+  }
+
+  .ui-place-row:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .ui-place-row:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-place-row-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--fg-subtle);
+  }
+
+  .ui-place-row:is(:hover, [aria-selected="true"]) .ui-place-row-icon {
+    color: var(--fg-strong);
+  }
+
+  .ui-place-row-words {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ui-place-row-meta {
+    flex: none;
+    font-size: var(--text-meta);
+    color: var(--fg-subtle);
+  }
+
+  .ui-place-row-chevron {
+    flex: none;
+    color: var(--fg-subtle);
+  }
+
+  /* The space itself stands over its projects: the strong ink and the label weight, no fill,
+     so only the row that is chosen is ever filled. */
+  .ui-place-row[data-parent] {
+    color: var(--fg-strong);
+    font-weight: 600;
+  }
+
+  .ui-place-rule {
+    height: 1px;
+    margin: 0.25rem 0.375rem;
+    background: var(--line);
+  }
+
+  .ui-place-none {
+    margin: 0;
+    padding: 0.5rem;
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+  }
+
+  /* The browser's own player across its column, never taller than most of the window, on the
+     tint until its first picture arrives; sound alone is the bare control. */
+  .ui-player {
+    display: block;
+    width: 100%;
+    max-height: 60vh;
+    border-radius: var(--radius-panel);
+    background: var(--bg-tint);
+  }
+
+  .ui-player[data-audio] {
+    border-radius: var(--radius-field);
+    background: none;
+  }
+}

@@ -1,0 +1,29 @@
+---
+title: "Focus"
+description: "A responsive layout for a single focused task."
+---
+
+## Usage
+
+```tsx
+import { FocusLayout, FocusHead, FocusMark } from "vic-ui";
+
+<FocusLayout title="Verify your details"
+  org={{ name: "Field Notes", slug: "field-notes" }}
+  steps={[
+    { words: "Details", at: "done" },
+    { words: "Verify", at: "now" },
+    { words: "Review", at: "next" },
+  ]}
+>
+  {form}
+</FocusLayout>
+```
+
+The desktop layout places a sticky side panel beside the form. At narrower widths, the organization mark and name move above the form. `width="list"` widens the content column; `tone="danger"` uses the danger palette. `back={{to,label,onClick}}` uses Vic Link, and `actions` supplies header actions.
+
+Without `org`, supply host `brand` content. `renderAppearance(placement)` supplies controls for `"side"` and, with `looksOnPhone`, `"phone"` placement. The host owns theme changes, preference storage and document titles.
+
+`renderArt({pulse})` optionally fills the decorative side region. Pulse contains an incrementing `n` and `amount`: input emits 0.7, button/link pointer presses emit 2, and submission emits 3. No shader or artwork engine is bundled. An optional `remember` key opts into Grow's remembered height across remounts.
+
+`FocusHead` is also available independently with `title`, `back` and `actions`. `FocusMark` accepts `name`, optional `slug` and `logo`, falling back to the first letter when a logo cannot load. [Focus lines](/docs/components/focus-lines) provide the surrounding form copy.

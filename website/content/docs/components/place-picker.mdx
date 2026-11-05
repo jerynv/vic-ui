@@ -1,0 +1,22 @@
+---
+title: "Place picker"
+description: "Browse and search host-supplied spaces and projects."
+---
+
+## Usage
+
+```tsx
+import { PlacePicker, type PlaceValue } from "vic-ui";
+
+<PlacePicker aria-label="Location" value={place} onValueChange={setPlace}
+  organization
+  spaces={[{ id: "operations", name: "Operations", whole: true }]}
+  projects={[{ id: "weekly", name: "Weekly reports", spaceId: "operations" }]}
+/>
+```
+
+`PlaceValue` contains `spaceId` and `projectId:string|null`. An empty space ID represents the whole organization. `organization` controls whether that choice is offered. A space's `whole` flag controls whether the space itself is selectable; its projects remain independent choices.
+
+The host supplies all data and owns authorization. Optional `now` metadata preserves the current space/project names when those entries are absent from the supplied lists; it is display information, not a permission decision. Selection requests a value and closes the popup even if the host declines it.
+
+The popup supports browsing into spaces, backing out, search across names and paths, and keyboard selection. Optional `label`, `size="base"|"sm"|"xs"`, `disabled`, `disabledReason` and `className` style the trigger. `placeWords(space, project)` formats the path from nullable name-bearing objects. No fetch or session loader is included.

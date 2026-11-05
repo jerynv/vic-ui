@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["canonical-panels.fixture.tsx", "../site/src/examples/panel/**/*.tsx", "../site/src/examples/mode-choice/**/*.tsx", "../site/src/examples/settings-dialog/**/*.tsx"]
+}

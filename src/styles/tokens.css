@@ -33,6 +33,7 @@
   --fg-strong: light-dark(oklch(0.145 0 0), oklch(0.985 0 0));
   --fg: light-dark(oklch(0.205 0 0), oklch(0.97 0 0));
   --fg-subtle: light-dark(oklch(0.556 0 0), oklch(0.708 0 0));
+  --fg-subtle-on-fill: light-dark(oklch(0.47 0 0), oklch(0.708 0 0));
   --fg-inverse: light-dark(oklch(0.97 0 0), oklch(0.205 0 0));
   --fg-placeholder: light-dark(oklch(0.708 0 0), oklch(0.556 0 0));
   --fg-inactive: light-dark(oklch(0.87 0 0), oklch(0.439 0 0));
@@ -92,6 +93,17 @@
   --radius-field: var(--radius-control);
   /* A box to type into is a filled surface a step off the ground, with no outline until focus. */
   --field-fill: light-dark(oklch(0.948 0.002 286), oklch(0.235 0.002 286));
+  --progress-complete-fill: light-dark(oklch(0.51 0.14 155), oklch(0.51 0.14 155));
+  --progress-complete-text: light-dark(oklch(1 0 0), oklch(1 0 0));
+  --control-h-xs: 1.5rem;
+  --button-glass-fill: light-dark(oklch(1 0 0 / 0.6), oklch(0.145 0.004 270 / 0.6));
+  --button-glass-fill-hover: light-dark(oklch(0.97 0 0 / 0.72), oklch(0.205 0.004 270 / 0.7));
+  --button-glass-fill-press: light-dark(oklch(0.94 0 0 / 0.8), oklch(0.245 0.004 270 / 0.76));
+  --button-glass-edge: light-dark(oklch(1 0 0 / 0.75), oklch(1 0 0 / 0.18));
+  --button-glass-edge-hover: light-dark(oklch(1 0 0 / 0.95), oklch(1 0 0 / 0.28));
+  --bg-panel: var(--field-fill);
+  --bg-on-panel: light-dark(oklch(0.912 0.002 286), oklch(0.205 0.002 286));
+  --bg-on-panel-hover: light-dark(oklch(0.89 0.002 286), oklch(0.185 0.002 286));
   /*
    * The buttons, after Cult UI's Texture Button (MIT, `texture-button.tsx`), its Tailwind
    * colours written as the oklch they are. A button is a rim (`--rim-*`: a hairline edge round

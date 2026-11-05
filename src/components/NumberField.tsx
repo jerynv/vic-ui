@@ -31,7 +31,7 @@ export const NumberField = forwardRef<
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
   const held = why.held;
-  const said = describedBy(field, error, hint, why.describedBy);
+  const said = [describedBy(field, error, hint, why.describedBy), rest["aria-describedby"]].filter(Boolean).join(" ") || undefined;
   const classes = ["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ");
   return (
     <div data-ui-surface={surface} className={classes}>
@@ -55,7 +55,7 @@ export const NumberField = forwardRef<
           disabled={held ? undefined : disabled}
           readOnly={held || rest.readOnly}
           aria-disabled={held ? true : undefined}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={error ? true : rest["aria-invalid"]}
           aria-describedby={said}
           onFocus={(event) => {
             onFocus?.(event);

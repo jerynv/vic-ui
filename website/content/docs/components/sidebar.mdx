@@ -74,3 +74,7 @@ import { Sidebar, SidebarProvider } from "vic-ui"
 This separation preserves the mobile dialog's focus trap, background isolation, Escape/outside dismissal and return to its opener. The closed mobile presentation stays absent and unfocusable. `keepMounted` alone does not establish the sibling lifetime contract, and force-mounting hidden focusable presentation is not a substitute.
 
 The source regression in `tests/controls-layout.test.mjs` asserts one observer mount and one active subscription through desktop collapse, mobile open/close and both breakpoint directions. It also checks closed presentation absence, tab order, focus trapping and focus return. No root Sidebar runtime change is needed for this composition.
+
+## Root Sidebar current location
+
+`SidebarMenuButton` from `vic-ui` emits `aria-current="page"` for its current item. An explicitly supplied `aria-current` takes precedence. Keep selection in the host and use the persistent-controller composition above for subscriptions.
