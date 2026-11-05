@@ -27,12 +27,12 @@ import { Spinner } from "./Spinner";
  */
 export type ButtonLook = "ink" | "line" | "quiet" | "link";
 
-function classes(look: ButtonLook, size: "md" | "lg", full?: boolean, extra?: string, square?: boolean, round?: boolean): string {
-  return ["ui-button", `ui-button-${look}`, size === "lg" ? "ui-button-lg" : "", full ? "ui-button-full" : "", square ? "ui-button-square" : "", round ? "ui-button-round" : "", extra ?? ""].filter(Boolean).join(" ");
+function classes(look: ButtonLook, size: "md" | "lg", full?: boolean, extra?: string, square?: boolean, round?: boolean, tone?: "accent"): string {
+  return ["ui-button", `ui-button-${look}`, tone === "accent" ? "ui-button-accent" : "", size === "lg" ? "ui-button-lg" : "", full ? "ui-button-full" : "", square ? "ui-button-square" : "", round ? "ui-button-round" : "", extra ?? ""].filter(Boolean).join(" ");
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; busy?: boolean; disabledReason?: string | undefined; render?: ButtonPrimitive.Props["render"]; nativeButton?: boolean }>(function Button(
-  { look = "ink", size = "md", full, square, round, icon, busy, className, children, type = "button", disabled, disabledReason, ...rest },
+export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; tone?: "accent" | undefined; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; busy?: boolean; disabledReason?: string | undefined; render?: ButtonPrimitive.Props["render"]; nativeButton?: boolean }>(function Button(
+  { look = "ink", tone, size = "md", full, square, round, icon, busy, className, children, type = "button", disabled, disabledReason, ...rest },
   ref,
 ) {
   const held = useBlocked(disabled || busy, disabledReason, ref);
@@ -40,7 +40,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLBut
   return (
     <>
       {/* Base UI foundation used by shadcn/ui; preserve vic's public props and face slot. */}
-      <ButtonPrimitive type={type} className={classes(look, size, full, className, square, round)} aria-busy={busy || undefined} {...rest} {...held.props}>
+      <ButtonPrimitive type={type} className={classes(look, size, full, className, square, round, tone)} aria-busy={busy || undefined} {...rest} {...held.props}>
         <span className="ui-button-face">
           {busy && !over ? <Spinner /> : icon}
           {over ? <span className="ui-button-busy-words">{children}</span> : children}
@@ -60,10 +60,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLBut
  * it a circle.
  */
 export function ButtonLink(
-  props: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & { to?: string; state?: unknown; href?: string; look?: ButtonLook; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; newTab?: boolean; children?: ReactNode; ref?: Ref<HTMLAnchorElement> },
+  props: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & { to?: string; state?: unknown; href?: string; look?: ButtonLook; tone?: "accent" | undefined; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; newTab?: boolean; children?: ReactNode; ref?: Ref<HTMLAnchorElement> },
 ) {
-  const { to, state, href, look, size, full, square, round, icon, newTab, className: extra, children, ...rest } = props;
-  const className = classes(look ?? "ink", size ?? "md", full, extra, square, round);
+  const { to, state, href, look, tone, size, full, square, round, icon, newTab, className: extra, children, ...rest } = props;
+  const className = classes(look ?? "ink", size ?? "md", full, extra, square, round, tone);
   const face = (
     <span className="ui-button-face">
       {icon}

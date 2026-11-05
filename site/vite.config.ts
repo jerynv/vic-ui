@@ -17,6 +17,7 @@ export default defineConfig({
     alias: [
       { find: /^@\//, replacement: here("../src/") },
       { find: /^vic-ui\/icons$/, replacement: here("../src/icons/icons.tsx") },
+      { find: /^vic-ui\/ui$/, replacement: here("../src/ui/index.ts") },
       { find: /^vic-ui\/styles\.css$/, replacement: here("../src/index.css") },
       { find: /^vic-ui$/, replacement: here("../src/index.ts") },
     ],
