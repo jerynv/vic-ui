@@ -20,6 +20,15 @@ Its workspace form is a local interactive demonstration, with no account or serv
 `site/` retains the original catalogue source and reusable examples; `build:reference-site`
 builds that reference shell. Both shells use the exported icon-based ColorModeSwitch.
 
+## Local visual review
+
+`npm run dev:website` enables Agentation on every route. Its picker, comments and per-page
+markers are upstream; `local-review.tsx` stores a cross-page archive under `vic-ui:review:v1`
+and downloads a Markdown review with URL, selector, appearance and viewport context.
+Route changes remount the picker so page markers cannot leak into the next document.
+The DEV import guard excludes the tool from production. `npm run test:review` exercises
+annotation, navigation, reload and the downloaded file against a real dev server.
+
 ## One-time codes
 
 InputOTP uses the separated cells from v-client's CodeField (`ui-focus.css`), mapped to vic

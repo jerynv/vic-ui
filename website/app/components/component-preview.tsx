@@ -16,7 +16,7 @@ export function ComponentPreview({ name }: { name: string }) {
     return () => { active = false; };
   }, [path]);
   if (!Example) throw new Error(`Missing component example: ${name}`);
-  return <Tabs defaultValue="preview" className="not-prose my-6 min-w-0 gap-3">
+  return <Tabs data-vic-example={name} defaultValue="preview" className="not-prose my-6 min-w-0 gap-3">
     <TabsList aria-label={`${name} example`} variant="line">
       <TabsTrigger value="preview">Preview</TabsTrigger><TabsTrigger value="source">Source</TabsTrigger>
     </TabsList>

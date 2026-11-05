@@ -1,7 +1,7 @@
 import { Badge, Button, Card } from "vic-ui";
 
 export const title = "Lifted and recessed";
-export const note = "A surface on the page has an edge and casts no shadow.";
+export const note = "Use a lifted surface for a section and a recessed surface for supporting content.";
 
 export default function Example() {
   return (

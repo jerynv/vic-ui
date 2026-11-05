@@ -46,3 +46,7 @@ The OFL lets the fonts be bundled and redistributed with software, provided each
 - **React** and **React DOM** are peer dependencies, installed by the consumer under their own MIT License.
 
 IconMCP supplies Archive, Filter, FolderCode and Robot, retrieved through its official MCP endpoint on 2026-11-04. The original SVGs are in `src/icons/iconmcp`; their presentation attributes are preserved by the generator. Fumadocs resolves its icon imports to this same local catalogue at build time.
+
+## Local review tool
+
+Agentation 3.1.2, by Benji Taylor (https://github.com/benjitaylor/agentation), is a development-only dependency under PolyForm Shield 1.0.0 (`licenses/PolyForm-Shield-agentation.txt`). It is excluded from the published library and production website bundles. No endpoint or webhook is configured; annotations remain in the browser until copied or downloaded.
