@@ -319,12 +319,25 @@ test("optional file previews render real local Office and media samples", { time
 test("settings package examples preserve heading focus and scalar slider control", { timeout: 30000 }, async () => {
   const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
   const browser = await chromium.launch({ headless: true });
+  let releaseExamples;
+  const examplesReady = new Promise(resolve => { releaseExamples = resolve; });
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
     const errors = []; page.on("pageerror", error => errors.push(error.message));
-    await page.goto(`${server.resolvedUrls.local[0]}docs/components/settings/`);
+    // The prerendered example must not accept actions before its client handlers attach.
+    await page.route("**/assets/vic-examples-*.js", async route => {
+      await examplesReady;
+      await route.continue();
+    });
+    await page.goto(`${server.resolvedUrls.local[0]}docs/components/settings/`, { waitUntil: "commit" });
     const example = page.locator('[data-vic-example]').first();
-    await example.getByRole("button", { name: "Go to reading" }).click();
+    const goTo = example.getByRole("button", { name: "Go to reading" });
+    await goTo.waitFor({ timeout: 5000 });
+    assert.equal(await goTo.isDisabled(), true);
+    assert.equal(await example.getByRole("button", { name: "Reset reading settings" }).isDisabled(), true);
+    assert.equal(await example.locator(".ui-slider input[type=range]").first().isDisabled(), true);
+    releaseExamples();
+    await goTo.click({ timeout: 5000 });
     assert.ok(await example.getByRole("heading", { name: "Reading", exact: true }).evaluate(el => el === document.activeElement));
     const size = example.getByRole("slider", { name: "Text size", exact: true });
     await size.focus(); await page.keyboard.press("ArrowRight");
@@ -340,5 +353,5 @@ test("settings package examples preserve heading focus and scalar slider control
       await example.screenshot({ path: `/tmp/vic-settings-docs-${mode.toLowerCase()}.png` });
     }
     assert.deepEqual(errors, []);
-  } finally { await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
+  } finally { releaseExamples(); await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
 });
