@@ -1,0 +1,14 @@
+@layer components.parts {
+  .ui-workspace-header { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--space-5,20px); margin-block-end:var(--space-6,24px); min-width:0; }
+  .ui-workspace-header-copy { min-width:0; }
+  .ui-workspace-header h1 { margin:0 0 var(--space-2,8px); font-size:var(--text-2xl,24px); line-height:1.2; letter-spacing:-.025em; }
+  .ui-workspace-header p { margin:0; max-width:70ch; color:var(--ink-muted,#61615d); }
+  .ui-workspace-header-action { flex:none; }
+  .ui-metric-summary dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr)); margin:0; padding-block:var(--space-4,16px); border-block:1px solid var(--line,#dededb); }
+  .ui-metric-summary-item { min-width:0; padding-inline:var(--space-4,16px); }
+  .ui-metric-summary-item dt { color:var(--ink-muted,#61615d); font-size:var(--text-sm,12px); }
+  .ui-metric-summary-item dd { margin:2px 0 0; font-size:var(--text-2xl,24px); font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .ui-metric-summary-description { margin-block-start:2px; color:var(--ink-muted,#61615d); font-size:var(--text-xs,11px); }
+  .ui-metric-summary-action { margin-block-start:var(--space-2,8px); }
+  @media (max-width:40rem) { .ui-workspace-header { flex-direction:column; } .ui-metric-summary-item { padding:8px; } }
+}

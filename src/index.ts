@@ -76,6 +76,7 @@ export { Surface, type SurfaceStyle, type SurfaceProps } from "./components/Surf
 export { DialogSurface, DialogHeading, DialogActions, MenuSurface, PopoverSurface, TooltipSurface, ScrollArea } from "./components/Surfaces";
 export { NativeSelect } from "./components/NativeSelect";
 export { Disclosure } from "./components/Disclosure";
+export { MetricSummary, WorkspaceHeader, type MetricSummaryItem } from "./components/Analytics";
 export { Skeleton } from "./components/Skeleton";
 export { Input, TextareaControl } from "./components/Input";
 
