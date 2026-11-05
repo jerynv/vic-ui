@@ -1,0 +1,36 @@
+@layer components.parts {
+  .ui-combobox-search { min-width: 0; width: 100%; }
+  .ui-combobox-list {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: 4px;
+    padding: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
+  .ui-combobox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    padding: 4px 8px;
+    border-radius: var(--radius-row);
+    color: var(--fg);
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+    font-weight: 400;
+    cursor: default;
+    overflow-wrap: anywhere;
+  }
+  .ui-combobox-item[data-active] { background: var(--fill-hover); }
+  .ui-combobox-item[aria-disabled="true"] { color: var(--fg-subtle); cursor: not-allowed; }
+  .ui-combobox-item[aria-disabled="true"][data-active] { background: transparent; }
+  .ui-combobox-group-label, .ui-combobox-empty {
+    padding: 8px;
+    color: var(--fg-subtle);
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+  }
+  .ui-combobox-empty:empty { padding: 0; }
+}

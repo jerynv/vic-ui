@@ -24,6 +24,7 @@ export { Notice } from "./components/Notice";
 export { Problem } from "./components/Problem";
 export { Textarea } from "./components/Textarea";
 export { Combobox, type ComboboxProps } from "./components/Combobox";
+export { ComboboxRoot, ComboboxSearch, ComboboxList, ComboboxItem, ComboboxGroup, ComboboxEmpty, type ComboboxOption, type ComboboxRootProps, type ComboboxSearchProps, type ComboboxListProps, type ComboboxItemProps, type ComboboxGroupProps, type ComboboxEmptyProps } from "./components/ComboboxParts";
 export { SearchField } from "./components/SearchField";
 export { NumberField } from "./components/NumberField";
 export { Dialog, FootProblem } from "./components/Dialog";

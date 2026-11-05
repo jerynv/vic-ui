@@ -52,7 +52,7 @@
     "icons": "node scripts/gen-icons.mjs",
     "prepublishOnly": "npm run typecheck && npm run check:design && npm run check:dashes && npm run build",
     "prepare": "npm run build",
-    "test": "node --test tests/package.test.mjs && node --test tests/button.test.mjs tests/round-button.test.mjs tests/switch-variants.test.mjs tests/accent-button.test.mjs tests/surfaces.test.mjs tests/native-controls.test.mjs tests/sidebar.test.mjs tests/catalogue.test.mjs tests/recipes.test.mjs tests/preview-dialog.test.mjs tests/preview-image.test.mjs tests/preview-text.test.mjs",
+    "test": "node --test tests/package.test.mjs && node --test tests/button.test.mjs tests/round-button.test.mjs tests/switch-variants.test.mjs tests/accent-button.test.mjs tests/surfaces.test.mjs tests/native-controls.test.mjs tests/sidebar.test.mjs tests/catalogue.test.mjs tests/recipes.test.mjs tests/preview-dialog.test.mjs tests/preview-image.test.mjs tests/preview-text.test.mjs tests/inline-combobox.test.mjs",
     "dev:website": "cd website && react-router dev",
     "build:website": "cd website && react-router build",
     "typecheck:website": "cd website && react-router typegen && tsc --noEmit -p tsconfig.json",
