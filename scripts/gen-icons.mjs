@@ -229,6 +229,7 @@ const ICONS = {
   StarIcon: ["tabler:star"],
   SunMoonIcon: ["tabler:sun-moon"],
   UnderlineIcon: ["tabler:underline"],
+  QrCodeIcon: ["tabler:qrcode"],
 };
 
 function shape(ref) {

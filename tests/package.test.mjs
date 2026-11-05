@@ -63,7 +63,7 @@ test("packed library preserves historical exports and types in Bundler and NodeN
       const missing = ${JSON.stringify([...currentBaseline, ...baselineNames, ...names, ...previewNames, ...comboboxNames])}.filter(name => !(name in Vic));
       if (missing.length) throw new Error("Missing historical exports: " + missing.join(", "));
       if (![Vic.Slider, Vic.SettingsLayout, Vic.SettingsSection, Vic.SettingsGroup, Vic.SettingsRow].every(value => typeof value === "function" || typeof value === "object")) throw new Error("Missing controls");
-      if (!UI.Button || !Icons.ArchiveIcon) throw new Error("Broken secondary entry point");
+      if (!UI.Button || !Icons.ArchiveIcon || !Icons.QrCodeIcon) throw new Error("Broken secondary entry point");
       if (typeof Vic.SidebarTrigger !== "object") throw new Error("Missing SidebarTrigger");`;
     await run(process.execPath, ["--input-type=module", "-e", runtime], { cwd: temporary });
     const consumer = await readFile(new URL("./package-consumer.tsx", import.meta.url), "utf8");
