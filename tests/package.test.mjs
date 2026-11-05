@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { execFile } from "node:child_process";
-import { copyFile, mkdtemp, mkdir, readFile, rm, stat, symlink, writeFile } from "node:fs/promises";
+import { copyFile, mkdtemp, mkdir, readFile, readdir, rm, stat, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { promisify } from "node:util";
@@ -11,9 +11,13 @@ test("packed library preserves historical exports and types in Bundler and NodeN
   const root = resolve(".");
   const temporary = await mkdtemp(join(tmpdir(), "vic-package-test-"));
   try {
-    const { stdout } = await run("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", temporary], { cwd: root });
-    const [archive] = JSON.parse(stdout);
-    await run("tar", ["-xzf", join(temporary, archive.filename), "-C", temporary]);
+    // Exercise the real prepare/build lifecycle before browser tests start. npm
+    // versions differ in whether lifecycle output contaminates --json output.
+    await run("npm", ["pack", "--ignore-scripts=false", "--pack-destination", temporary], { cwd: root });
+    const archives = (await readdir(temporary)).filter(name => name.endsWith(".tgz"));
+    assert.equal(archives.length, 1);
+    const archive = join(temporary, archives[0]);
+    await run("tar", ["-xzf", archive, "-C", temporary]);
     const manifest = JSON.parse(await readFile(join(temporary, "package/package.json"), "utf8"));
     for (const entry of Object.values(manifest.exports)) {
       for (const target of typeof entry === "string" ? [entry] : Object.values(entry)) {
@@ -46,6 +50,6 @@ test("packed library preserves historical exports and types in Bundler and NodeN
       try { await run(join(root, "node_modules/.bin/tsc"), ["-p", join(temporary, "tsconfig.json")], { cwd: temporary }); }
       catch (error) { assert.fail(`${resolution} packed declarations:\n${error.stdout}\n${error.stderr}`); }
     }
-    if (process.env.VIC_UI_PACKAGE_OUT) await copyFile(join(temporary, archive.filename), process.env.VIC_UI_PACKAGE_OUT);
+    if (process.env.VIC_UI_PACKAGE_OUT) await copyFile(archive, process.env.VIC_UI_PACKAGE_OUT);
   } finally { await rm(temporary, { recursive: true, force: true }); }
 });
