@@ -12,8 +12,25 @@ import { Switch } from "vic-ui/ui"
 ```
 
 ```tsx
-<Switch />
+<Switch look="flat" aria-label="Notifications" />
 ```
+
+## Track appearance
+
+Both `vic-ui` and `vic-ui/ui` accept `look="flat" | "rimmed"`. The default is `rimmed`, preserving the existing appearance. Flat removes the decorative track rim in both states and both themes; it keeps the track fill, knob, hover feedback, disabled behavior and keyboard focus ring.
+
+```tsx
+import { Switch } from "vic-ui";
+
+<Switch
+  look="flat"
+  checked={notifications}
+  onCheckedChange={setNotifications}
+  aria-label="Notifications"
+/>
+```
+
+An application can choose `look="flat"` in its shared Switch adapter to apply the appearance consistently. No consumer CSS override is needed. Flat and bordered field/card scopes do not change a switch's chosen look.
 
 ## API reference
 

@@ -7,9 +7,11 @@ import { cn } from "cn"
 function Switch({
   className,
   size = "default",
+  look = "rimmed",
   ...props
 }: SwitchPrimitive.Root.Props & {
   size?: "sm" | "default"
+  look?: "flat" | "rimmed"
 }) {
   return (
     <SwitchPrimitive.Root
@@ -17,6 +19,7 @@ function Switch({
       data-size={size}
       className={cn(
         "ui-switch peer",
+        look === "flat" && "ui-switch-flat",
         className
       )}
       {...props}

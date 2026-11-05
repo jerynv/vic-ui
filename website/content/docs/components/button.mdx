@@ -15,6 +15,12 @@ import { Button } from "vic-ui/ui"
 <Button variant="outline">Button</Button>
 ```
 
+## Shapes
+
+Use `square round` for a native circular icon button, or `size="icon" round` with the composable API. `round` on a text button makes a pill. Without `round`, buttons use the `--radius-button` token; compact toolbar and file controls use their smaller contextual radius.
+
+The face follows the outer corner minus the border and padding inset: 2px for filled and outlined buttons, 0px for quiet and link buttons. The same geometry applies on hover and press, including accent buttons. Consumers need no radius overrides.
+
 ## Custom accent
 
 Both APIs support `tone="accent"` on a filled button: `Button` from `vic-ui` uses `look="ink"`; `Button` from `vic-ui/ui` uses `variant="default"`. `ButtonLink` and `buttonVariants({ tone: "accent" })` support the same treatment. The live Custom accent example above compares both APIs in both themes, including higher-contrast colors.

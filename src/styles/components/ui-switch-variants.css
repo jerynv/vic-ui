@@ -1,0 +1,6 @@
+@layer components.parts {
+  /* The flat track keeps its fill and knob; keyboard focus remains an outline. */
+  .ui-switch-flat {
+    box-shadow: none;
+  }
+}

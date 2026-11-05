@@ -35,6 +35,9 @@ function cornerAllowed(part) {
 
 /** A whole value, which may name up to four corners and an elliptical second half. */
 function valueAllowed(value) {
+  // Button geometry shares the token-derived outer radius and the real border/padding inset.
+  // These two exact expressions are the only component-local corner aliases.
+  if (value === "var(--ui-button-radius)" || value === "max(0px, calc(var(--ui-button-radius) - var(--ui-button-inset)))") return true;
   const parts = value.replace(/\s*\/\s*/g, " ").match(/calc\((?:[^()]|\([^()]*\))*\)|\S+/g) ?? [];
   return parts.length > 0 && parts.every(cornerAllowed);
 }

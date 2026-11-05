@@ -19,7 +19,7 @@ import { Spinner } from "./Spinner";
  * `disabledReason` keeps a button that cannot be pressed yet in reach and says why on hover and
  * focus (`useBlocked` in `reason.ts`), rather than leaving a greyed shape nobody can ask about.
  * `square` draws an icon alone as wide as the button is tall; its words are its `aria-label`.
- * `round` makes it a circle, as a message box's Send is. `link` is words that act inside a
+ * `round` makes a pill, or a circle together with `square`, as a message box's Send is. `link` is words that act inside a
  * sentence: the sentence's own size and weight, in the strong ink and underlined, wrapping with it.
  * `busy` is `IconButton`'s: the button is `aria-busy` and held while it lasts, and a spinner
  * stands where its icon was, or over its words where it has none, the words kept in place but
@@ -57,7 +57,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLBut
  * anywhere else by `href`. Every
  * other attribute of a link passes through (`aria-label`, `tabIndex`, a `ref`); `icon` comes
  * before the words, `square` draws the icon alone, its words in `aria-label`, and `round` makes
- * it a circle.
+ * a pill (a circle when combined with `square`).
  */
 export function ButtonLink(
   props: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & { to?: string; state?: unknown; href?: string; look?: ButtonLook; tone?: "accent" | undefined; size?: "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; newTab?: boolean; children?: ReactNode; ref?: Ref<HTMLAnchorElement> },
