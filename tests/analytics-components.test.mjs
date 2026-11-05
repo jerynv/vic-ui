@@ -10,12 +10,13 @@ test("WorkspaceHeader exposes semantic title, description and action slots", () 
   assert.match(html, /<h1>Usage<\/h1>/);
   assert.match(html, /<p>Recent activity<\/p>/);
   assert.match(html, /<button>Download<\/button>/);
+  const embedded = renderToString(h(WorkspaceHeader, { as: "div", role: "banner", title: "Usage" }));
+  assert.match(embedded, /^<div[^>]*role="banner"/);
 });
 
 test("MetricSummary renders caller-formatted values as a labeled definition list", () => {
   const html = renderToString(h(MetricSummary, { items: [{ label: "Sessions", value: "1,234", description: "This month", action: h("a", { href: "/sessions" }, "Details") }] }));
   assert.match(html, /<section[^>]*aria-label="Summary metrics"/);
-  assert.match(html, /<dt>Sessions<\/dt><dd>1,234<\/dd>/);
-  assert.match(html, /This month/);
-  assert.match(html, /<a href="\/sessions">Details<\/a>/);
+  assert.match(html, /<dt>Sessions<\/dt><dd><span class="ui-metric-summary-value">1,234<\/span>/);
+  assert.match(html, /<dd>.*<div class="ui-metric-summary-description">This month<\/div>.*<div class="ui-metric-summary-action"><a href="\/sessions">Details<\/a><\/div><\/dd>/);
 });

@@ -7,7 +7,8 @@
   .ui-metric-summary dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr)); margin:0; padding-block:var(--space-4,16px); border-block:1px solid var(--line,#dededb); }
   .ui-metric-summary-item { min-width:0; padding-inline:var(--space-4,16px); }
   .ui-metric-summary-item dt { color:var(--ink-muted,#61615d); font-size:var(--text-sm,12px); }
-  .ui-metric-summary-item dd { margin:2px 0 0; font-size:var(--text-2xl,24px); font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .ui-metric-summary-item dd { margin:2px 0 0; }
+  .ui-metric-summary-value { display:block; font-size:var(--text-2xl,24px); font-weight:600; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
   .ui-metric-summary-description { margin-block-start:2px; color:var(--ink-muted,#61615d); font-size:var(--text-xs,11px); }
   .ui-metric-summary-action { margin-block-start:var(--space-2,8px); }
   @media (max-width:40rem) { .ui-workspace-header { flex-direction:column; } .ui-metric-summary-item { padding:8px; } }

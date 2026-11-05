@@ -1,15 +1,16 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
 /** A page-level heading with optional supporting copy and caller-owned actions. */
-export function WorkspaceHeader({ title, description, action, className, ...props }: Omit<HTMLAttributes<HTMLElement>, "title"> & {
+export function WorkspaceHeader({ as: Tag = "header", title, description, action, className, ...props }: Omit<HTMLAttributes<HTMLElement>, "title"> & {
+  as?: "header" | "div";
   title: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
 }) {
-  return <header className={["ui-workspace-header", className].filter(Boolean).join(" ")} {...props}>
+  return <Tag className={["ui-workspace-header", className].filter(Boolean).join(" ")} {...props}>
     <div className="ui-workspace-header-copy"><h1>{title}</h1>{description != null && <p>{description}</p>}</div>
     {action != null && <div className="ui-workspace-header-action">{action}</div>}
-  </header>;
+  </Tag>;
 }
 
 export interface MetricSummaryItem {
@@ -30,9 +31,10 @@ export function MetricSummary({ items, label = "Summary metrics", className, ...
 }) {
   return <section aria-label={label} className={["ui-metric-summary", className].filter(Boolean).join(" ")} {...props}>
     <dl>{items.map((item, index) => <div className="ui-metric-summary-item" key={index}>
-      <dt>{item.label}</dt><dd>{item.value}</dd>
-      {item.description != null && <div className="ui-metric-summary-description">{item.description}</div>}
-      {item.action != null && <div className="ui-metric-summary-action">{item.action}</div>}
+      <dt>{item.label}</dt><dd><span className="ui-metric-summary-value">{item.value}</span>
+        {item.description != null && <div className="ui-metric-summary-description">{item.description}</div>}
+        {item.action != null && <div className="ui-metric-summary-action">{item.action}</div>}
+      </dd>
     </div>)}</dl>
   </section>;
 }
