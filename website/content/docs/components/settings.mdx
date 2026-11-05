@@ -1,0 +1,61 @@
+---
+title: "Settings"
+description: "Generic sections, groups, rows and navigation for settings pages."
+---
+
+## Usage
+
+```tsx
+import {
+  SettingsLayout, SettingsSection, SettingsGroup, SettingsRow, Slider,
+} from "vic-ui";
+import "vic-ui/styles.css";
+
+<SettingsLayout navigation={<a href="#reading">Reading</a>}>
+  <SettingsSection title="Reading" titleId="reading">
+    <SettingsGroup title="Text" surface="bordered">
+      <SettingsRow label="Text size" labelId="text-size-label">
+        <Slider aria-labelledby="text-size-label" defaultValue={100}
+          min={75} max={175} step={5} valueText={value => `${value} percent`} />
+      </SettingsRow>
+    </SettingsGroup>
+  </SettingsSection>
+</SettingsLayout>
+```
+
+The host supplies navigation, selected content, controls, persistence and actions. These components only arrange them. No account operation or automatic save is included.
+
+| Component | Slots and options |
+| --- | --- |
+| `SettingsLayout` | `navigation`, `navigationLabel` (default `Settings`), detail `children` and trailing `actions`. |
+| `SettingsSection` | Required `title`, optional `description`, `actions`, `titleId`, `headingLevel` (2, 3 or 4; default 2) and `headingProps`. |
+| `SettingsGroup` | Section heading options, default heading level 3, plus `surface="bordered"` or `"flat"`. |
+| `SettingsRow` | Required `label`; optional `description`, `labelId`, `descriptionId`, `htmlFor`, `stacked` and `align="center"` or `"start"`; control `children`. |
+
+All four forward a div ref and accept native div attributes. Section/group headings provide structure without creating a landmark per group. Row labels associate with native fields through `htmlFor`; composite controls use explicit `aria-labelledby` and `aria-describedby`. The library does not clone or rewrite child controls.
+
+## Heading focus belongs to the host
+
+`headingProps` accepts native heading attributes and an `HTMLHeadingElement` ref. It excludes `children` and `dangerouslySetInnerHTML`, because `title` supplies the content. `titleId` takes precedence over `headingProps.id`; custom heading classes are combined with the library class.
+
+```tsx
+const heading = useRef<HTMLHeadingElement>(null);
+
+<Button onClick={() => heading.current?.focus()}>Go to reading</Button>
+<SettingsSection
+  title="Reading"
+  titleId="reading"
+  headingLevel={3}
+  headingProps={{ ref: heading, tabIndex: -1 }}
+>
+  {controls}
+</SettingsSection>
+```
+
+The same props work on `SettingsGroup`. Focus remains a host action; changing sections does not move it automatically.
+
+## Layout and surfaces
+
+Navigation sits beside detail content and moves above it when the layout container is 44rem or narrower. Rows wrap their controls beneath their labels as space shrinks. `stacked` always puts the control below at full width; `align="start"` aligns a taller control to the first line of text.
+
+`SettingsGroup` defaults to a border without a shadow. `surface="flat"` removes the outer border and horizontal row inset. `--settings-control-width` defaults to 18rem and can be overridden on a row or enclosing layout. All existing stylesheet entries include these styles.

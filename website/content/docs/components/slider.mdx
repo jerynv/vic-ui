@@ -20,3 +20,39 @@ import { Slider } from "vic-ui/ui"
 See the [full upstream guide](https://base-ui.com/react/components/slider) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/slider.mdx), under the MIT license.
+
+## Scalar slider from the root package
+
+The ready-made examples use `Slider` from `vic-ui`. It represents one numeric value, with a 14px visible thumb inside a transparent target of at least 24px. The `vic-ui/ui` range/composable API above remains unchanged.
+
+```tsx
+import { Slider } from "vic-ui";
+
+<Slider
+  label="Text size"
+  value={size}
+  onValueChange={setSize}
+  min={75} max={175} step={5}
+  valueText={value => `${value} percent`}
+/>
+```
+
+Use `value` and `onValueChange` for controlled state, or `defaultValue` for local state. `onValueCommitted` reports a completed keyboard change, drag or stepped press. The host can decline controlled changes. The forwarded ref reaches the native range input, so a host Reset action can restore focus directly.
+
+Initial values and callback values snap to the nearest step anchored at `min`, capped at the highest valid step below `max`. For `min=0`, `max=10`, `step=3`, End selects 9. Native input, ARIA, `valueText` and form submission use that same value. Use finite bounds with `max > min` and a positive `step`.
+
+| Option | Behavior |
+| --- | --- |
+| `label`, `hint` | Optional visible name and description, associated with generated IDs. |
+| `aria-label`, `aria-labelledby`, `aria-describedby` | Name and describe the range input. External description IDs combine with the hint ID. |
+| `valueText` | A string or `(value: number) => string` for readable `aria-valuetext`. |
+| `largeStep` | Page Up/Down and Shift+Arrow increment; defaults to ten steps. Use a multiple of `step`. |
+| `trackPress` | `"step"` by default; `"jump"` selects the position directly. Thumb dragging follows the pointer in either mode. |
+| `trackStyle` | Custom track paint; providing it hides the filled indicator. The host owns custom color contrast. |
+| `dir` | `"ltr"` or `"rtl"`; otherwise inherits the Base UI DirectionProvider. A DOM ancestor's dir alone does not configure Base UI navigation. |
+| `disabled` | Excludes the input from keyboard navigation and ignores pointer/touch changes. |
+| `name`, `form` | Native form participation. |
+
+A stepped track press advances one step for ranges with at most 25 intervals; denser ranges advance by a rounded twentieth of the range. Touch presses follow the same rule. Arrow keys, Home/End, Page keys and thumb dragging remain available.
+
+The root `id`, `className`, `style` and other div attributes apply to the wrapper. To name a slider from `SettingsRow`, pass its `labelId` to `aria-labelledby`; use `htmlFor` for ordinary native fields.

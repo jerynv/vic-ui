@@ -40,7 +40,7 @@ test("packed library preserves historical exports and types in Bundler and NodeN
     const previewNames = ["FilePreviewStage", "FilePreviewToolbar", "FilePreviewStatus", "FilePreviewDialog", "ImagePreview", "TextPreview", "DelimitedPreview"];
     for (const sheet of ["vic-ui.css", "components.css", "ui/styles.css"]) {
       const css = await readFile(join(temporary, "package/dist", sheet), "utf8");
-      for (const name of ["ui-preview-docx", "ui-preview-office", "ui-preview-media", "ui-preview-stage", "ui-preview-dialog", "ui-preview-image", "ui-preview-text", "ui-preview-table", "ui-combobox-search", "ui-combobox-list", "ui-combobox-item"]) assert.ok(css.includes(name), `${sheet} contains ${name}`);
+      for (const name of ["ui-slider-thumb", "ui-settings-row", "ui-preview-docx", "ui-preview-office", "ui-preview-media", "ui-preview-stage", "ui-preview-dialog", "ui-preview-image", "ui-preview-text", "ui-preview-table", "ui-combobox-search", "ui-combobox-list", "ui-combobox-item"]) assert.ok(css.includes(name), `${sheet} contains ${name}`);
     }
     const runtime = `try { import.meta.resolve("docx-preview"); throw new Error("Optional dependency unexpectedly installed in fixture"); } catch (error) { if (error.code !== "ERR_MODULE_NOT_FOUND") throw error; }
       import * as Vic from "vic-ui";
@@ -49,9 +49,10 @@ test("packed library preserves historical exports and types in Bundler and NodeN
       import { XlsxPreview, PptxPreview } from "vic-ui/preview/office";
       import { DocxPreview } from "vic-ui/preview/docx";
       if (![AudioPreview, VideoPreview, XlsxPreview, PptxPreview, DocxPreview].every(value => typeof value === "function")) throw new Error("Missing optional previews");
-      if (Object.keys(Vic).length !== 137) throw new Error("Root export count changed");
+      if (Object.keys(Vic).length !== 142) throw new Error("Root export count changed");
       const missing = ${JSON.stringify([...baselineNames, ...names, ...previewNames, ...comboboxNames])}.filter(name => !(name in Vic));
       if (missing.length) throw new Error("Missing historical exports: " + missing.join(", "));
+      if (![Vic.Slider, Vic.SettingsLayout, Vic.SettingsSection, Vic.SettingsGroup, Vic.SettingsRow].every(value => typeof value === "function" || typeof value === "object")) throw new Error("Missing controls");
       if (!UI.Button || !Icons.ArchiveIcon) throw new Error("Broken secondary entry point");`;
     await run(process.execPath, ["--input-type=module", "-e", runtime], { cwd: temporary });
     const consumer = await readFile(new URL("./package-consumer.tsx", import.meta.url), "utf8");

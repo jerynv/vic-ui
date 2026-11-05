@@ -52,3 +52,25 @@ export function AppSidebar() {
 See the [full upstream guide](https://ui.shadcn.com/docs/components/base/sidebar) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/sidebar.mdx), under the MIT license.
+
+## Persistent controllers with the root Sidebar
+
+This contract applies to `SidebarProvider` and `Sidebar` imported from **`vic-ui`**, the root API. Keep persistent observers and subscriptions as stable siblings of `Sidebar` inside the provider:
+
+```tsx
+import { Sidebar, SidebarProvider } from "vic-ui"
+
+<SidebarProvider>
+  <ConversationObservers />
+  <Sidebar>presentation</Sidebar>
+  <main />
+</SidebarProvider>
+```
+
+`ConversationObservers` is host-owned application logic; the library does not implement or start subscriptions. It can use the root `useSidebar()` context and remains mounted while the provider remains mounted with stable child identity. Keep it outside any conditional branch that hides the presentation.
+
+`Sidebar` children are **not persistent controllers**. The desktop `aside` becomes a mobile dialog at the breakpoint, and the closed mobile dialog unmounts its presentation. Closing and reopening can remount those children. Put durable data subscriptions, background observers and nonvisual state above the presentation or in the sibling slot shown here.
+
+This separation preserves the mobile dialog's focus trap, background isolation, Escape/outside dismissal and return to its opener. The closed mobile presentation stays absent and unfocusable. `keepMounted` alone does not establish the sibling lifetime contract, and force-mounting hidden focusable presentation is not a substitute.
+
+The source regression in `tests/controls-layout.test.mjs` asserts one observer mount and one active subscription through desktop collapse, mobile open/close and both breakpoint directions. It also checks closed presentation absence, tab order, focus trapping and focus return. No root Sidebar runtime change is needed for this composition.
