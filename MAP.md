@@ -28,6 +28,9 @@ and downloads a Markdown review with URL, selector, appearance and viewport cont
 Route changes remount the picker so page markers cannot leak into the next document.
 The DEV import guard excludes the tool from production. `npm run test:review` exercises
 annotation, navigation, reload and the downloaded file against a real dev server.
+The test forces dependency optimization from scratch. Vite scans the app, library and
+catalogue examples up front so a fresh checkout does not discover their imports late
+and interrupt its first page load.
 
 ## One-time codes
 

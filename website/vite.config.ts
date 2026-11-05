@@ -20,5 +20,9 @@ export default defineConfig({
     dedupe: ["react", "react-dom", "react-router", "@base-ui/react"],
   },
   ssr: { noExternal: ["fumadocs-core", "fumadocs-ui", "@fumadocs/base-ui"] },
-  optimizeDeps: { exclude: ["fumadocs-core", "fumadocs-ui"] },
+  optimizeDeps: {
+    // Scan lazy catalogue examples before serving a cold page (vite.dev/config/dep-optimization-options).
+    entries: ["app/**/*.{ts,tsx}", "../src/**/*.{ts,tsx}", "../site/src/examples/**/*.tsx"],
+    exclude: ["fumadocs-core", "fumadocs-ui"],
+  },
 });
