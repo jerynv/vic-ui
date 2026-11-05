@@ -7,7 +7,10 @@
       "~/*": ["./app/*"],
       "vic-ui/ui": ["../src/ui/index.ts"],
       "vic-ui/icons": ["../src/icons/icons.tsx"],
-      "vic-ui": ["../src/index.ts"]
+      "vic-ui": ["../src/index.ts"],
+      "vic-ui/preview/media": ["../src/preview/media/index.ts"],
+      "vic-ui/preview/office": ["../src/preview/office/index.ts"],
+      "vic-ui/preview/docx": ["../src/preview/docx/index.ts"]
     }
   },
   "include": ["app", "*.ts", ".react-router/types"]

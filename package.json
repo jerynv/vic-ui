@@ -34,7 +34,19 @@
       "types": "./dist/ui/index.d.ts",
       "import": "./dist/ui.js"
     },
-    "./ui/styles.css": "./dist/ui/styles.css"
+    "./ui/styles.css": "./dist/ui/styles.css",
+    "./preview/media": {
+      "types": "./dist/preview/media/index.d.ts",
+      "import": "./dist/preview-media.js"
+    },
+    "./preview/office": {
+      "types": "./dist/preview/office/index.d.ts",
+      "import": "./dist/preview-office.js"
+    },
+    "./preview/docx": {
+      "types": "./dist/preview/docx/index.d.ts",
+      "import": "./dist/preview-docx.js"
+    }
   },
   "engines": {
     "node": ">=22"
@@ -52,7 +64,7 @@
     "icons": "node scripts/gen-icons.mjs",
     "prepublishOnly": "npm run typecheck && npm run check:design && npm run check:dashes && npm run build",
     "prepare": "npm run build",
-    "test": "node --test tests/package.test.mjs && node --test tests/button.test.mjs tests/round-button.test.mjs tests/switch-variants.test.mjs tests/accent-button.test.mjs tests/surfaces.test.mjs tests/native-controls.test.mjs tests/sidebar.test.mjs tests/catalogue.test.mjs tests/recipes.test.mjs tests/preview-dialog.test.mjs tests/preview-image.test.mjs tests/preview-text.test.mjs tests/inline-combobox.test.mjs",
+    "test": "node --test tests/package.test.mjs && node --test tests/button.test.mjs tests/round-button.test.mjs tests/switch-variants.test.mjs tests/accent-button.test.mjs tests/surfaces.test.mjs tests/native-controls.test.mjs tests/sidebar.test.mjs tests/catalogue.test.mjs tests/recipes.test.mjs tests/preview-dialog.test.mjs tests/preview-image.test.mjs tests/preview-text.test.mjs tests/inline-combobox.test.mjs tests/office-preview-parser.test.mjs tests/office-preview-browser.test.mjs tests/docx-preview.test.mjs tests/media-preview.test.mjs",
     "dev:website": "cd website && react-router dev",
     "build:website": "cd website && react-router build",
     "typecheck:website": "cd website && react-router typegen && tsc --noEmit -p tsconfig.json",
@@ -62,7 +74,8 @@
   },
   "peerDependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "docx-preview": "0.4.1"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -95,6 +108,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "agentation": "^3.1.2",
+    "docx-preview": "0.4.1",
     "fumadocs-core": "^16.17.10",
     "fumadocs-mdx": "^15.4.10",
     "fumadocs-ui": "npm:@fumadocs/base-ui@^16.17.10",
@@ -119,5 +133,10 @@
     "type": "git",
     "url": "git+https://github.com/jerynv/vic-ui.git"
   },
-  "homepage": "https://jerynv.github.io/vic-ui/"
+  "homepage": "https://jerynv.github.io/vic-ui/",
+  "peerDependenciesMeta": {
+    "docx-preview": {
+      "optional": true
+    }
+  }
 }

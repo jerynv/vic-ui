@@ -290,3 +290,27 @@ test("card spacing, API selection, and file-row actions", { timeout: 30000 }, as
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   } finally { await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
 });
+
+test("optional file previews render real local Office and media samples", { timeout: 45000 }, async () => {
+  const server = await preview({ configFile: false, root: "website", base, build: { outDir: "build/client" }, preview: { host: "127.0.0.1", port: 0 } });
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, reducedMotion: "reduce" });
+    page.setDefaultTimeout(10000);
+    const errors = []; page.on("pageerror", error => errors.push(error.message));
+    await page.goto(`${server.resolvedUrls.local[0]}docs/components/file-preview/`);
+    const workbook = page.getByRole("region", { name: "Example workbook", exact: true });
+    await workbook.getByRole("cell", { name: "October", exact: true }).waitFor();
+    await workbook.getByRole("tab", { name: "Regions", exact: true }).click();
+    await workbook.getByRole("cell", { name: "North", exact: true }).waitFor();
+    await page.getByRole("region", { name: "Example slides", exact: true }).getByText("Requests completed faster.", { exact: true }).waitFor();
+    await page.frameLocator('iframe[title="Example Word document"]').getByText("Project update", { exact: true }).waitFor();
+    await page.waitForFunction(() => [document.querySelector('.ui-preview-audio-element'), document.querySelector('.ui-preview-video-element')].every(media => media && media.readyState >= 1 && media.duration > 0));
+    for (const width of [1200, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.waitForFunction(() => document.documentElement.scrollWidth <= innerWidth);
+    }
+    await page.locator('.ui-preview-office').first().screenshot({ path: "/tmp/vic-office-docs-workbook.png" });
+    assert.deepEqual(errors, []);
+  } finally { await browser.close(); await new Promise(resolve => server.httpServer.close(resolve)); }
+});

@@ -71,3 +71,19 @@ export const badComboboxItem = <Vic.ComboboxItem value={{ id: "model" }} />;
 export const badComboboxValue = <Vic.ComboboxRoot label="Models" items={models} value={[]} children={null} />;
 // @ts-expect-error Search is controlled by Root, not an independent value.
 export const badComboboxSearch = <Vic.ComboboxSearch value="different" />;
+
+import { AudioPreview, VideoPreview } from "vic-ui/preview/media";
+import { XlsxPreview, PptxPreview } from "vic-ui/preview/office";
+import { DocxPreview } from "vic-ui/preview/docx";
+const readyInput = new Uint8Array([1, 2, 3]);
+export const optionalPreviews = <>
+  <AudioPreview input={readyInput} title="Audio" mimeType="audio/wav" maxBytes={1024} onError={error => error.message} />
+  <VideoPreview input={readyInput} title="Video" mimeType="video/webm" />
+  <XlsxPreview input={readyInput} title="Workbook" />
+  <PptxPreview input={readyInput} title="Slides" />
+  <DocxPreview input={readyInput} title="Document" maxBytes={1024} />
+</>;
+// @ts-expect-error Optional Office previews accept ready bytes, never a remote URL.
+export const badOfficeURL = <XlsxPreview input="https://example.com/private.xlsx" title="Workbook" />;
+// @ts-expect-error Native media previews require a title.
+export const badMediaTitle = <AudioPreview input={readyInput} />;
