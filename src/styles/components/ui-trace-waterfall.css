@@ -1,6 +1,6 @@
 @layer components.parts {
   .ui-trace-waterfall { list-style:none; padding:0; margin:0; min-width:0; }
-  .ui-trace-waterfall-row { display:grid; grid-template-columns:minmax(140px,1fr) minmax(140px,1fr) auto; gap:16px; align-items:center; border-top:1px solid var(--line,#dededb); padding-block:10px; min-width:0; }
+  .ui-trace-waterfall-row { display:grid; grid-template-columns:minmax(140px,1fr) minmax(140px,1fr) 9rem; gap:16px; align-items:center; border-top:1px solid var(--line,#dededb); padding-block:10px; min-width:0; }
   .ui-trace-waterfall-label { min-width:0; overflow-wrap:anywhere; }
   .ui-trace-waterfall-label small { display:block; color:var(--ink-muted,#61615d); font-size:var(--text-xs,11px); }
   .ui-trace-waterfall-timing { font-variant-numeric:tabular-nums; font-size:var(--text-sm,12px); min-width:0; }
