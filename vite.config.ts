@@ -13,11 +13,11 @@ export default defineConfig({
     sourcemap: true,
     minify: false,
     lib: {
-      entry: { index: "src/index.ts", icons: "src/icons/icons.tsx", ui: "src/ui/index.ts" },
+      entry: { index: "src/index.ts", icons: "src/icons/icons.tsx", ui: "src/ui/index.ts", "preview-media": "src/preview/media/index.ts", "preview-office": "src/preview/office/index.ts", "preview-docx": "src/preview/docx/index.ts" },
       formats: ["es"],
     },
     rollupOptions: {
-      external: (id) => ["react", "react-dom", ...Object.keys(packageJson.dependencies)].some((name) => id === name || id.startsWith(`${name}/`)),
+      external: (id) => [...Object.keys(packageJson.peerDependencies), ...Object.keys(packageJson.dependencies)].some((name) => id === name || id.startsWith(`${name}/`)),
       output: { preserveModules: false },
     },
   },

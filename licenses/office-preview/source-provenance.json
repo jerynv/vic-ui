@@ -1,0 +1,57 @@
+{
+  "mainCommit": "2f2713d8744373455d6be2953af26f68ecb37f6f",
+  "authority": "explicit user-authorized cross-project handoff; no inferred open-source grant for first-party code",
+  "sourceArchiveSha256": "35835c7112e44ec753719ff760612a36776cedb44fb3b8b35094f34ebe677906",
+  "selectedFiles": [
+    {
+      "path": "source/main/web/src/components/DocxView.tsx",
+      "bytes": 8371,
+      "sha256": "4aa2b3ddc4919fc149c77ca5d839b448109a8d0c312813658f8f7f050c3c18e0",
+      "kind": "original-git-file",
+      "originalPath": "web/src/components/DocxView.tsx",
+      "commit": "2f2713d8744373455d6be2953af26f68ecb37f6f",
+      "gitBlob": "23c74bcf038805fe5e8042781784a7e7fe4ce7e5",
+      "role": "candidate implementation; adapt app-bound imports/loaders"
+    },
+    {
+      "path": "source/main/web/src/components/viewers/MediaView.tsx",
+      "bytes": 2397,
+      "sha256": "57b533ace87f344c1f9f0b51e1a6f4aded2bf90582c69ab19a687623afa599d9",
+      "kind": "original-git-file",
+      "originalPath": "web/src/components/viewers/MediaView.tsx",
+      "commit": "2f2713d8744373455d6be2953af26f68ecb37f6f",
+      "gitBlob": "6a639cd29c83f3127fab8b60914a809e287a19d4",
+      "role": "candidate implementation; adapt app-bound imports/loaders"
+    },
+    {
+      "path": "source/main/web/src/components/viewers/SlidesView.tsx",
+      "bytes": 4516,
+      "sha256": "792e700aa9b3631dd4b514343b90372a90c84264e3b268b386d8e5cba8e8c55a",
+      "kind": "original-git-file",
+      "originalPath": "web/src/components/viewers/SlidesView.tsx",
+      "commit": "2f2713d8744373455d6be2953af26f68ecb37f6f",
+      "gitBlob": "37922b4dd13e134c85c15fd3c2af013a6bf472c9",
+      "role": "candidate implementation; adapt app-bound imports/loaders"
+    },
+    {
+      "path": "source/main/web/src/components/viewers/TableView.tsx",
+      "bytes": 10806,
+      "sha256": "1916ba31af56c8a696cb8b79487c50463071172ed98dcaf94cb15bfb24492521",
+      "kind": "original-git-file",
+      "originalPath": "web/src/components/viewers/TableView.tsx",
+      "commit": "2f2713d8744373455d6be2953af26f68ecb37f6f",
+      "gitBlob": "362de8944f7d8e7aaec73e8350ab6996d7c60151",
+      "role": "candidate implementation; adapt app-bound imports/loaders"
+    },
+    {
+      "path": "source/main/web/src/lib/zipread.ts",
+      "bytes": 5655,
+      "sha256": "377b3b2ab8534617823a8e9fdd335dd5fbf4bbb5f7f102bb970f926e2621b785",
+      "kind": "original-git-file",
+      "originalPath": "web/src/lib/zipread.ts",
+      "commit": "2f2713d8744373455d6be2953af26f68ecb37f6f",
+      "gitBlob": "66a45063844046e3b1eba9bb284773219a53383d",
+      "role": "candidate implementation; adapt app-bound imports/loaders"
+    }
+  ]
+}

@@ -21,3 +21,6 @@
 @import "./styles/components/ui-preview-image.css";
 @import "./styles/components/ui-preview-text.css";
 @import "./styles/components/ui-combobox-parts.css";
+@import "./styles/components/ui-preview-media.css";
+@import "./styles/components/ui-preview-office.css";
+@import "./styles/components/ui-preview-docx.css";

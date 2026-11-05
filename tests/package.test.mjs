@@ -28,22 +28,28 @@ test("packed library preserves historical exports and types in Bundler and NodeN
     await mkdir(modules);
     await symlink(join(temporary, "package"), join(modules, "vic-ui"), "dir");
     // Reuse installed dependency versions, but resolve Vic through the tarball's exports map.
-    for (const name of [...Object.keys(manifest.dependencies), ...Object.keys(manifest.peerDependencies), "@types"]) {
+    for (const name of [...Object.keys(manifest.dependencies), ...Object.keys(manifest.peerDependencies).filter(name => !manifest.peerDependenciesMeta?.[name]?.optional), "@types"]) {
       await mkdir(dirname(join(modules, name)), { recursive: true });
       await symlink(join(root, "node_modules", name), join(modules, name), "dir");
     }
     await writeFile(join(temporary, "package.json"), JSON.stringify({ private: true, type: "module" }));
     const names = JSON.parse(await readFile(new URL("./historical-exports.json", import.meta.url), "utf8"));
-    const baselineNames = JSON.parse(await readFile(new URL("./exports-603c207.json", import.meta.url), "utf8"));
-    assert.equal(baselineNames.length, 131);
+    const baselineNames = JSON.parse(await readFile(new URL("./exports-6deb7fc.json", import.meta.url), "utf8"));
+    assert.equal(baselineNames.length, 137);
     const comboboxNames = ["ComboboxRoot", "ComboboxSearch", "ComboboxList", "ComboboxItem", "ComboboxGroup", "ComboboxEmpty"];
     const previewNames = ["FilePreviewStage", "FilePreviewToolbar", "FilePreviewStatus", "FilePreviewDialog", "ImagePreview", "TextPreview", "DelimitedPreview"];
     for (const sheet of ["vic-ui.css", "components.css", "ui/styles.css"]) {
       const css = await readFile(join(temporary, "package/dist", sheet), "utf8");
-      for (const name of ["ui-preview-stage", "ui-preview-dialog", "ui-preview-image", "ui-preview-text", "ui-preview-table", "ui-combobox-search", "ui-combobox-list", "ui-combobox-item"]) assert.ok(css.includes(name), `${sheet} contains ${name}`);
+      for (const name of ["ui-preview-docx", "ui-preview-office", "ui-preview-media", "ui-preview-stage", "ui-preview-dialog", "ui-preview-image", "ui-preview-text", "ui-preview-table", "ui-combobox-search", "ui-combobox-list", "ui-combobox-item"]) assert.ok(css.includes(name), `${sheet} contains ${name}`);
     }
-    const runtime = `import * as Vic from "vic-ui";
+    const runtime = `try { import.meta.resolve("docx-preview"); throw new Error("Optional dependency unexpectedly installed in fixture"); } catch (error) { if (error.code !== "ERR_MODULE_NOT_FOUND") throw error; }
+      import * as Vic from "vic-ui";
       import * as UI from "vic-ui/ui"; import * as Icons from "vic-ui/icons";
+      import { AudioPreview, VideoPreview } from "vic-ui/preview/media";
+      import { XlsxPreview, PptxPreview } from "vic-ui/preview/office";
+      import { DocxPreview } from "vic-ui/preview/docx";
+      if (![AudioPreview, VideoPreview, XlsxPreview, PptxPreview, DocxPreview].every(value => typeof value === "function")) throw new Error("Missing optional previews");
+      if (Object.keys(Vic).length !== 137) throw new Error("Root export count changed");
       const missing = ${JSON.stringify([...baselineNames, ...names, ...previewNames, ...comboboxNames])}.filter(name => !(name in Vic));
       if (missing.length) throw new Error("Missing historical exports: " + missing.join(", "));
       if (!UI.Button || !Icons.ArchiveIcon) throw new Error("Broken secondary entry point");`;

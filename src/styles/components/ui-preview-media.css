@@ -1,0 +1,26 @@
+@layer components.parts {
+  .ui-preview-media { min-width: 0; width: 100%; }
+  .ui-preview-media:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+  .ui-preview-media-player { position: relative; min-width: 0; }
+  .ui-preview-media-player > .ui-preview-status { position: absolute; inset: 0; }
+  .ui-preview-media-player[data-loading] > :is(audio, video) { visibility: hidden; }
+  .ui-preview-audio { padding: 1rem; }
+  .ui-preview-audio .ui-preview-status, .ui-preview-audio .ui-preview-media-player { min-height: 8rem; }
+  .ui-preview-audio-element { display: block; width: 100%; min-width: 0; margin-block: 2rem; }
+  .ui-preview-video .ui-preview-status { min-height: 16rem; }
+  .ui-preview-video-element {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 16rem;
+    max-height: 70dvh;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background: var(--bg-tint);
+  }
+  .ui-preview-media :is(audio, video):focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+  @media (max-width: 480px) {
+    .ui-preview-audio { padding: 0.5rem; }
+    .ui-preview-video-element { min-height: 12rem; }
+  }
+}

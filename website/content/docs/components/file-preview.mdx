@@ -1,6 +1,6 @@
 ---
 title: "File preview"
-description: "Local image, text and delimited-data previews, a shared file stage and full-screen navigation."
+description: "Local file previews, optional Office and media renderers, and shared full-screen navigation."
 ---
 
 ## Usage
@@ -40,7 +40,7 @@ The examples above use local synthetic files. Their download links contain those
 | `TextPreview` | Bounded UTF-8 text with line numbers and a truncation notice. |
 | `DelimitedPreview` | Bounded CSV or TSV in a scrollable table. |
 
-This increment does not include PDF, DOCX, XLSX, PPTX, Markdown, audio or video renderers. Text that contains markup remains text. There is no automatic renderer selection or file conversion.
+Optional subpaths add DOCX, stored XLSX cells, extracted PPTX text and native audio/video. PDF and Markdown renderers are not included. Text that contains markup remains text. The host chooses the renderer; there is no automatic classification or file conversion.
 
 ## Supply stable local input
 
@@ -110,6 +110,73 @@ The viewer provides zoom in, zoom out and fit controls. Pointer dragging pans a 
 
 All three renderers accept `className` and `onError(error: Error)`. `name` supplies an accessible file name for text and table previews. These are preview components, not document editors.
 
+## Optional Office and media previews
+
+These entries use the same ready-input boundary and shared styles. They are separate from the root bundle and do not load a renderer until your application imports it.
+
+```tsx
+import { AudioPreview, VideoPreview } from "vic-ui/preview/media";
+import { XlsxPreview, PptxPreview } from "vic-ui/preview/office";
+
+<AudioPreview input={audioBlob} title="Interview recording" />
+<VideoPreview input={videoBytes} mimeType="video/webm" title="Product walkthrough" />
+<XlsxPreview input={workbookBlob} title="Quarterly measurements" maxRows={250} />
+<PptxPreview input={slidesBlob} title="Planning presentation" maxSlides={20} />
+```
+
+All five optional components require `input` and an accessible `title`. They accept `className`, `maxBytes` and `onError(error: Error)`. Limits can be lowered, never raised. Conversion and decoding errors provide a local Try again control; it retries the supplied bytes, not the host's network request. Media size/type refusals require a different input instead of offering a retry.
+
+`AudioPreview` and `VideoPreview` use native browser controls, metadata loading and no autoplay. `mimeType` can describe byte arrays; a Blob's own type is used when no override is supplied. Missing MIME metadata permits native decoding. Supported codecs depend on the browser. Each player is stopped and its library-created object URL revoked when replaced or unmounted. The host must permit `blob:` in its `media-src` policy. A 64 MiB encoded-input cap is checked before making a copy or URL; this does not bound the browser decoder's memory or recording duration. There is no streaming URL, transcoding or custom player API.
+
+`XlsxPreview` displays stored cell values, worksheet tabs and row/column labels. Formula cached values remain text; formulas are not recalculated. Dates and number formatting are not reproduced. `maxRows`, `maxColumns` and `maxSheets` can reduce the displayed content, with a visible notice. Legacy `.xls` files are not supported.
+
+`PptxPreview` displays slide text in presentation order, with an explicit extracted-text label. It does not reproduce slide design, pictures, animations or embedded media. `maxSlides` reduces the displayed slide count. Legacy `.ppt` files are not supported.
+
+### DOCX
+
+Install the optional renderer dependency only when using DOCX:
+
+```sh
+npm install docx-preview@0.4.1
+```
+
+Use a lazy import to keep the renderer out of the initial application path:
+
+```tsx
+import { lazy, Suspense } from "react";
+import { FilePreviewStatus } from "vic-ui";
+
+const DocxPreview = lazy(() => import("vic-ui/preview/docx").then(module => ({
+  default: module.DocxPreview,
+})));
+
+<Suspense fallback={<FilePreviewStatus status="loading" message="Preparing document preview." />}>
+  <DocxPreview input={documentBlob} title="Project brief" />
+</Suspense>
+```
+
+DOCX uses `docx-preview` after checking and rebuilding the input archive. Rendering happens in an inert document; the sanitized result is shown in an empty-sandbox `srcdoc` iframe with a restrictive content policy. Hyperlinks are disabled. The frame fits its container and scrolls internally; resizing recreates its view. Host CSP must permit this frame and its embedded `data:` raster images. DOCX rendering is a preview, not an editing or Word-layout-fidelity contract.
+
+Supported embedded images are bounded PNG and JPEG files, validated with `createImageBitmap`. Legacy VML, SVG drawings, embedded HTML, OLE objects, macros, external resources and unsupported images are refused. Embedded fonts, comments and tracked-change rendering are disabled. Legacy `.doc` files are not supported. Office archive decoding requires `DecompressionStream("deflate-raw")` for compressed entries; browsers without it receive an error instead of a partial success.
+
+### Office budgets
+
+Office input is rejected before parsing when a hard budget is exceeded. Lower display limits produce a labeled partial preview; they do not bypass parser budgets.
+
+| Boundary | Hard limit |
+| --- | --- |
+| Every Office file | 10 MiB encoded, 512 ZIP entries, 8 MiB per expanded part, 32 MiB expanded total |
+| Each XML part | 4 MiB, 100,000 elements, depth 128; DTDs and entities refused |
+| XLSX parser | 32 worksheets, 50,000 stored cells, 20,000 shared strings, 1,000,000 characters each for shared strings and rendered cell text |
+| XLSX displayed content | 1,000 rows and 60 columns per worksheet |
+| PPTX parser | 100 slides, 10,000 paragraphs, 500,000 text characters |
+| DOCX parser | 8 MiB total XML, 100,000 total elements, 1,000,000 text characters, 10,000 table cells |
+| DOCX output | Conservative 100-page work bound, 50,000 nodes, 8,388,608 HTML code units, 524,288 style code units |
+| DOCX relationships/numbering | 2,048 relationships; 128 numbering definitions, 256 instances, unique levels 0 through 8, 512 expanded levels, 8,192 characters per level and 262,144 weighted expanded characters |
+| DOCX images | 100 PNG/JPEG files and placements, 2 MiB each and 4 MiB total encoded; 4 million pixels each and 8 million total, including repeated placements |
+
+These bounds limit library work. They do not replace the host's file acceptance policy. Unsupported or encrypted archives, unsafe paths, inconsistent lengths, invalid CRCs and oversized expansion are refused. XLSX/PPTX individual text fragments are capped at 16,384 characters. DOCX table spans are capped at 100. The main part must be `word/document.xml`; relationship-selected parser parts must already have passed XML validation. Header, footer and note image work is checked using a conservative page/reference bound before conversion, so complex documents can be refused before reaching 100 actual pages. Downloading the original file remains a host action.
+
 ## Full-screen navigation
 
 ```tsx
@@ -158,4 +225,4 @@ Use `title` to override a state's default heading. `onRetry` adds a working Try 
 
 The shared stage, full-screen boundary and image interactions were extracted from the verified V-Client source pin `2f2713d8744373455d6be2953af26f68ecb37f6f`, then adapted to Vic's existing controls and tokens. See the repository's third-party notices for provenance. Text and CSV parsing adapt the same pin's TextView and TableView implementations, with stricter input/output budgets and stale-read cleanup.
 
-These are additive root exports. Existing components and the `vic-ui/ui` API remain available; the preview components do not require a migration of existing surfaces.
+The core preview exports remain available at the root. Optional Office/media subpaths adapt the same verified source pin and preserve all 137 existing root exports. DOCX alone uses the optional dependency described above; existing components and the `vic-ui/ui` API remain available.
