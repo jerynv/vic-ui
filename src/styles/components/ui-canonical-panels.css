@@ -1,0 +1,681 @@
+/* Canonical panels, mode choice and settings dialog from V-Client 555625f4.
+   Source layout retained; tokens and dialog class namespace adapted for Vic. */
+
+@layer components.parts {
+
+  .ui-panel {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--bg-panel, var(--field-fill));
+
+    border-radius: var(--radius-panel);
+    corner-shape: squircle;
+
+    --field-fill: var(--bg-on-panel, var(--bg-recessed));
+    --field-fill-hover: var(--bg-on-panel-hover, var(--bg-recessed));
+
+    --fg-subtle: var(--fg-subtle-on-fill, var(--fg));
+  }
+
+  .ui-panel .ui-field-box {
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .ui-panel .ui-field-box:is(:hover, [data-open]):not([data-disabled]):not(:focus-within) {
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--fg-strong) 30%, transparent);
+  }
+
+  .ui-panel .ui-field-box:focus-within {
+    box-shadow: inset 0 0 0 1px var(--fg-strong);
+  }
+
+  .ui-panel-text {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.625rem 0.875rem 0.5rem;
+  }
+
+  .ui-panel-text-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+  }
+
+  .ui-panel>*+* {
+    box-shadow: inset 0 1px 0 var(--line);
+  }
+
+  .ui-panel-head {
+    margin: 1.5rem 0 0.5rem;
+    font-size: var(--text-ui);
+    font-weight: 600;
+    color: var(--fg-subtle);
+  }
+
+  .ui-panel-head-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .ui-panel-head-words {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+  }
+
+  .ui-panel-head-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block: -0.5rem;
+  }
+
+  .ui-panel-text>.ui-field:has(> .ui-textarea-box) {
+    margin-inline: -.5rem
+  }
+
+  .ui-panel-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding: 0 0.875rem;
+  }
+
+  .ui-panel-label {
+    flex: 0 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+  }
+
+  .ui-panel-label-stack {
+    display: grid;
+    padding-block: 0.5rem;
+  }
+
+  .ui-panel-label-swap {
+    display: grid;
+  }
+
+  .ui-panel-label-swap>* {
+    grid-area: 1 / 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ui-panel-label-swap[data-error]>.ui-panel-label-words {
+    visibility: hidden;
+  }
+
+  .ui-panel-note {
+    display: grid;
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+  }
+
+  .ui-panel-note>* {
+    grid-area: 1 / 1;
+  }
+
+  .ui-panel-note[data-error]>.ui-panel-note-words {
+    visibility: hidden;
+  }
+
+  .ui-panel-note-error {
+    color: var(--tone-danger-ink);
+  }
+
+  .ui-panel-value {
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--text-read);
+    color: var(--fg-strong);
+    border-radius: var(--radius-mark);
+  }
+
+  .ui-panel-value:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-panel-control {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    max-width: 100%;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .ui-panel-control:is(:last-child):has(> .ui-field),
+  .ui-panel-control:is(:last-child):has(> .ui-button),
+  .ui-panel-control:is(:last-child):has(> .ui-switch)
+
+    {
+    margin-right: -0.5rem;
+  }
+
+  .ui-panel-item:has(> .ui-button:is(:last-child)),
+  .ui-panel-item:has(.ui-panel-end > .ui-button:is(:last-child))
+  {
+    padding-right: 0.5rem
+  }
+
+  .ui-panel-link:has(> .ui-org-mark:is(:first-child)) {
+    padding-left: 0.5rem;
+  }
+
+  .ui-panel-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.75rem;
+    padding: 0.375rem .875rem .375rem 0.875rem;
+  }
+
+  .ui-panel-words {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--text-read);
+    color: var(--fg-strong);
+  }
+
+  .ui-panel-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ui-panel-link {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+    margin: -0.375rem -0.875rem;
+    padding: 0.375rem 0.875rem;
+    min-height: 2.75rem;
+    border-radius: var(--radius-control);
+    color: var(--fg-subtle);
+    text-decoration: none;
+    transition: background-color 120ms;
+  }
+
+  .ui-panel-link:hover {
+    background: var(--field-fill-hover);
+  }
+
+  .ui-panel-link:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-panel-block {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0.75rem 0.875rem;
+  }
+
+  .ui-panel-block-label {
+    margin: 0;
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+  }
+
+  .ui-actions {
+    display: grid;
+    gap: 0.125rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ui-action {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: none;
+    font: inherit;
+    font-size: var(--text-read);
+    color: var(--fg-strong);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 120ms;
+  }
+
+  .ui-action:hover:not(:disabled, [aria-disabled="true"]) {
+    background: var(--field-fill);
+  }
+
+  .ui-action:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .ui-action-danger {
+    color: var(--tone-danger-ink);
+  }
+
+  .ui-action-danger:hover:not(:disabled, [aria-disabled="true"]) {
+    background: var(--tone-danger-tint);
+  }
+}
+@layer components.parts {
+
+  /* How the app looks, chosen from pictures of it (`ModeChoice`): three windows in a row, each its
+     name under it, the chosen one ringed in ink. Colour is state's second carrier: the ring and the
+     name's weight never change size, only the ring's colour does. */
+  .ui-mode-choice {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    max-width: 30rem;
+  }
+
+  .ui-mode-option {
+    display: grid;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .ui-mode-picture {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-control);
+    overflow: hidden;
+    box-shadow: 0 0 0 1px var(--line);
+    transition: box-shadow 150ms ease;
+  }
+
+  .ui-mode-option:hover .ui-mode-picture {
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--fg-strong) 35%, transparent);
+  }
+
+  .ui-mode-option[data-chosen] .ui-mode-picture {
+    box-shadow:
+      0 0 0 1px var(--fg-strong),
+      0 0 0 3px color-mix(in oklab, var(--fg-strong) 18%, transparent);
+  }
+
+  .ui-mode-option:has(:focus-visible) .ui-mode-picture {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .ui-mode-name {
+    font-size: var(--text-ui);
+    color: var(--fg-subtle);
+    transition: color 150ms ease;
+  }
+
+  .ui-mode-option[data-chosen] .ui-mode-name {
+    color: var(--fg-strong);
+  }
+
+  /* The window: the app's own ground, its rail in the rail's colour, a heading and three lines, all
+     from the tokens of the mode it is set to. */
+  .ui-mode-window {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 28% 1fr;
+    background: var(--bg-canvas);
+  }
+
+  /* The tokens are `light-dark()`, which follows the element's own scheme, so each window states it. */
+  .ui-mode-window[data-mode="light"] {
+    color-scheme: light;
+  }
+
+  .ui-mode-window[data-mode="dark"] {
+    color-scheme: dark;
+  }
+
+  .ui-mode-rail {
+    display: grid;
+    align-content: start;
+    gap: 9%;
+    padding: 14% 12%;
+    background: var(--bg-base);
+    box-shadow: inset -1px 0 0 var(--line);
+  }
+
+  .ui-mode-rail i,
+  .ui-mode-page i,
+  .ui-mode-page b {
+    display: block;
+    height: 0.3rem;
+    border-radius: var(--radius-round);
+    background: color-mix(in oklab, var(--fg-subtle) 45%, transparent);
+  }
+
+  .ui-mode-rail i:first-child {
+    background: var(--fg-strong);
+  }
+
+  .ui-mode-page {
+    display: grid;
+    align-content: start;
+    gap: 0.4rem;
+    padding: 12% 12%;
+  }
+
+  .ui-mode-page b {
+    width: 55%;
+    height: 0.45rem;
+    margin-bottom: 0.2rem;
+    background: var(--fg-strong);
+  }
+
+  .ui-mode-page i:nth-child(3) {
+    width: 85%;
+  }
+
+  .ui-mode-page i:nth-child(4) {
+    width: 65%;
+  }
+
+  /* Matching the device: the dark window over the light one, from the corner down, so both show. */
+  .ui-mode-half {
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@layer components.parts {
+
+  .ui-dialog.ui-settings-dialog {
+    width: min(42rem, calc(100vw - 2rem));
+  }
+
+  .ui-settings-dialog-form {
+    display: grid;
+
+    grid-template-columns: fit-content(13rem) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .ui-settings-dialog > .ui-dialog-frame > .ui-dialog-head {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    padding: 0;
+  }
+
+  .ui-settings-dialog-rail {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 0.375rem;
+    padding: 1rem 0.5rem 0.75rem;
+    background: var(--bg-elevated);
+    box-shadow: inset -1px 0 0 var(--line);
+  }
+
+  .ui-settings-dialog-head {
+    display: grid;
+    gap: 0.125rem;
+    padding: 0 0.5rem 0.5rem;
+  }
+
+  .ui-settings-dialog-eyebrow {
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    color: var(--fg-subtle);
+  }
+
+  .ui-settings-dialog-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--fg-strong);
+  }
+
+  .ui-settings-dialog-sections {
+    display: grid;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align-content: start;
+  }
+
+  .ui-settings-dialog-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 1.75rem;
+    padding: 0.25rem 0.5rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 120ms ease;
+  }
+
+  .ui-settings-dialog-section:hover {
+    background: var(--field-fill);
+  }
+
+  .ui-settings-dialog-section[aria-current] {
+    background: var(--field-fill);
+    color: var(--fg-strong);
+  }
+
+  .ui-settings-dialog-section:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-settings-dialog-section-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--fg-subtle);
+  }
+
+  .ui-settings-dialog-section-icon > svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .ui-settings-dialog-section[aria-current] .ui-settings-dialog-section-icon {
+    color: var(--fg-strong);
+  }
+
+  .ui-settings-dialog-section-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .ui-settings-dialog-section-state {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--fg-subtle);
+  }
+
+  .ui-settings-dialog-section-state > [class*="tone-"] {
+    display: inline-flex;
+    color: var(--tone-ink);
+  }
+
+  .ui-settings-dialog-count {
+    font-size: var(--text-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-subtle);
+  }
+
+  .ui-settings-dialog-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--radius-round);
+    background: var(--fg-strong);
+  }
+
+  .ui-settings-dialog-room {
+    height: max(14rem, var(--settings-dialog-room, 14rem));
+    max-height: 28rem;
+    overflow: hidden;
+    transition: height 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .ui-settings-dialog-room[data-scrolls] {
+    overflow-y: auto;
+  }
+
+  .ui-settings-dialog-room-inner {
+    display: grid;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-settings-dialog-room,
+    .ui-settings-dialog-pane,
+    .ui-settings-dialog-pane[data-away] {
+      transition: none;
+    }
+  }
+
+  .ui-settings-dialog-pane {
+    display: grid;
+    grid-area: 1 / 1;
+
+    align-self: start;
+    align-content: start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+    min-width: 0;
+    transition: opacity 150ms ease;
+  }
+
+  .ui-settings-dialog-pane[data-away] {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 150ms ease, visibility 0s 150ms;
+  }
+
+  .ui-settings-dialog-room[data-scrolls] .ui-settings-dialog-pane[data-away] {
+    max-height: 0;
+    overflow: hidden;
+    transition: none;
+  }
+
+  .ui-settings-dialog-pane-body {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .ui-settings-dialog-foot {
+    grid-column: 1 / -1;
+  }
+
+  .ui-settings-dialog-changes {
+    flex: 1 1 12rem;
+    min-width: 0;
+    margin-right: auto;
+    font-size: var(--text-ui);
+    line-height: 1.4;
+    color: var(--fg-subtle);
+  }
+
+  @media (max-width: 639px) {
+    .ui-settings-dialog-form {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .ui-settings-dialog-rail {
+      grid-template-rows: auto auto;
+      padding: 1rem 1rem 0.75rem;
+      box-shadow: inset 0 -1px 0 var(--line);
+    }
+
+    .ui-settings-dialog-head {
+      padding: 0 0 0.75rem;
+    }
+
+    .ui-settings-dialog-sections {
+      grid-auto-flow: column;
+      grid-auto-columns: max-content;
+      gap: 0.375rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .ui-settings-dialog-section {
+      align-items: center;
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-round);
+      background: var(--field-fill);
+    }
+
+    .ui-settings-dialog-section[aria-current] {
+      background: var(--bg-contrast);
+      color: var(--fg-inverse);
+    }
+
+    .ui-settings-dialog-section[aria-current] .ui-settings-dialog-section-icon {
+      color: inherit;
+    }
+
+    .ui-settings-dialog-pane {
+      padding: 1rem;
+    }
+  }
+
+}
+
+@layer components.parts {
+  .ui-panel-mono { font-family: var(--font-code); }
+  .ui-action:is(:disabled, [aria-disabled="true"]) { opacity: 0.55; cursor: not-allowed; }
+}

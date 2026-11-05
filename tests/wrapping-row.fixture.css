@@ -1,0 +1,29 @@
+main { width: min(100%, 50rem); margin: 0 auto; padding: 2rem; display: grid; gap: 1rem; }
+main h1 { font-size: 1.5rem; font-weight: 600; }
+main h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+main section { min-width: 0; margin-top: 0.5rem; }
+main p { color: var(--fg-subtle); }
+.fixture-meta { font-size: var(--text-meta); }
+.fixture-subtle { color: var(--fg-subtle); }
+[data-reference] .fixture-subtle { color: var(--color-text-subtle); }
+.fixture-bone { display: block; width: min(11rem, 100%); height: 0.75rem; margin-block: 0.2rem; background: var(--bone); border-radius: var(--radius-mark); }
+.fixture-bone.small { width: min(7rem, 70%); height: 0.5rem; }
+.fixture-glyph { width: 0.75rem; flex: none; }
+#busy > .fixture-bone { width: 10rem; }
+#unlayered { padding-inline: 2rem; }
+#plain-list { margin-top: 1rem; }
+#panel-direct { margin-top: 1rem; }
+[data-patterns] { display: grid; gap: 0.5rem; }
+@layer utilities {
+  .fixture-words { min-width: 0; flex: 1; }
+  .block { display: block; }
+  .items-center { align-items: center; }
+  .items-start { align-items: flex-start; }
+  .flex-wrap { flex-wrap: wrap; }
+  .w-full { width: 100%; }
+  .text-left { text-align: left; }
+  .py-small { padding-block: 0.25rem; }
+  .px-large { padding-inline: 1.75rem; }
+  @media (max-width: 639px) { .responsive-words > .fixture-words { flex-basis: 100%; } }
+}
+@media (max-width: 600px) { main { padding: 1rem; } }

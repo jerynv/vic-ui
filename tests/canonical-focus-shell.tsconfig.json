@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["canonical-focus-shell.fixture.tsx", "../src/components/Focus.tsx", "../src/components/Providers.tsx", "../src/components/FormSteps.tsx", "../site/src/examples/focus", "../site/src/examples/providers", "../site/src/examples/form-steps"]
+}

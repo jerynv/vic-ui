@@ -46,3 +46,19 @@ const items = [
 See the [full upstream guide](https://base-ui.com/react/components/select) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/select.mdx), under the MIT license.
+
+## Root Select: compact and inline choices
+
+```tsx
+import { Select } from "vic-ui";
+
+<Select aria-label="Urgency" lead="Urgency" size="xs" reserve
+  value={urgency} onValueChange={setUrgency}
+  items={{ normal: "Normal", soon: "Soon", urgent: "Urgent" }} />
+<Select aria-label="Visibility" look="text" value={visibility}
+  onValueChange={setVisibility} items={{ private: "Private", shared: "Shared" }} />
+```
+
+These props belong to `Select` from `vic-ui`. `lead` places a short name before the selected value. `reserve` keeps room for the longest choice. `look="text"` draws words and a caret without the field box; its popup measures its choices. `size="xs"` supplies the thin control height, and existing `sm`, default sizing and Surface options remain available.
+
+The selected value stays controlled. Arrows/Home/End move the active choice, Enter/Space selects, typing performs type-ahead, and Escape/Tab closes the list. `aria-describedby` is preserved alongside hint/error and disabled-reason descriptions.

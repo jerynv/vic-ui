@@ -2,6 +2,7 @@
 export const componentAliases: Record<string, string> = {
   "avatar-stack": "avatar",
   "command-palette": "command",
+  "code-field": "input-otp",
   menu: "dropdown-menu",
   notice: "alert",
   radio: "radio-group",

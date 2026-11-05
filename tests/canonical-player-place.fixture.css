@@ -1,0 +1,6 @@
+main { width: min(100%, 48rem); padding: 2rem; margin-inline: auto; display: grid; gap: 2rem; }
+main h1 { font-size: 1.5rem; font-weight: 600; }
+main section { min-width: 0; display: grid; gap: 1rem; }
+main section > button, main > button { justify-self: start; }
+.fixture-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+@media (max-width: 600px) { main { padding: 1rem; } }

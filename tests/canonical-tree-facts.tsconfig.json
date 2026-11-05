@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["canonical-tree-facts.fixture.tsx", "../site/src/examples/facts/*.tsx", "../site/src/examples/tree/*.tsx"]
+}

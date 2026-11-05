@@ -141,6 +141,18 @@ export function Combobox(props: ComboboxProps) {
     if (query !== "") type("");
     props.onOpenChange?.(false);
   };
+  // A reason keeps a disabled input focusable. Close its transient editor even
+  // when there is no blur, so stale top-layer options cannot cover other controls.
+  useEffect(() => {
+    if (!off || !open) return;
+    setOpen(false);
+    if (query !== "") {
+      if (props.query === undefined) setOwn("");
+      props.onQueryChange?.("");
+    }
+    props.onOpenChange?.(false);
+  }, [off, open, query, props.query, props.onQueryChange, props.onOpenChange]);
+
   const choose = (option: Option | undefined) => {
     if (!option || option.disabled || off) return;
     if (props.values !== undefined) {

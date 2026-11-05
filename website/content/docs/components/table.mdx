@@ -46,3 +46,27 @@ import {
 See the [full upstream guide](https://ui.shadcn.com/docs/components/base/table) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/table.mdx), under the MIT license.
+
+## Root Table: roster rows and independent cells
+
+```tsx
+import { Table, Cell, type TableColumn } from "vic-ui";
+
+const columns: TableColumn[] = [
+  { key: "name", label: "Name" },
+  { key: "owner", label: "Owner", wide: true },
+];
+
+<Table aria-label="Reports" look="roster" columns={columns} rows={reports}
+  rowKey={report => report.id}
+  cell={(report, column) => <Cell strong={column.key === "name"}>
+    {column.key === "name" ? report.name : report.owner}
+  </Cell>}
+/>
+```
+
+The root Table accepts row and column data. `look="roster"` draws fixed, compact rows on the page surface. A column with `wide:true` is hidden at phone widths up to 640px. Sorting and row selection remain host callbacks; existing `after`, `currentKey`, `rowProps`, `tableProps` and `tableRef` remain available.
+
+The scroller measures whether the columns fit. Without a height cap, fitting content uses the page scroll and sticky header. Overflowing content, or an explicit `height`, creates a named keyboard-accessible scroll region. Give the table an `aria-label` describing its contents.
+
+`Cell` accepts `mark`, `strong`, `quiet`, `title` and children. Supplying `onPress` makes the cell an independent button; its click does not activate the surrounding row. Optional `tip` describes that action. Cells are also usable in list rows.

@@ -1,0 +1,24 @@
+---
+title: "Form steps"
+description: "Controlled progress through reached form steps."
+---
+
+## Usage
+
+```tsx
+import { FormSteps } from "vic-ui";
+
+<FormSteps
+  steps={[
+    { value: "details", label: "Details", description: "Add a name." },
+    { value: "review", label: "Review" },
+  ]}
+  current={step}
+  reached={reached}
+  onChoose={setStep}
+/>
+```
+
+`current` and the `ReadonlySet` supplied as `reached` are controlled by the host. Choosing a reached step calls `onChoose`; unreached or globally `disabled` steps remain focusable for their descriptions but cannot select. Validation, saving, reaching new steps and reset policy belong to the host.
+
+Each step has a unique string `value`, `label`, optional `description` and optional `marker`. A marker such as `"2.1"` draws a branch step. The current step shows its label, earlier positions show completion, and Motion animates position without scaling the circles. Reduced motion removes those transitions.

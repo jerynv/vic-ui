@@ -1,0 +1,4 @@
+body { margin: 0; background: var(--bg-canvas); color: var(--fg); }
+main { display: grid; gap: 20px; max-width: 800px; margin: auto; padding: 24px; }
+h1 { font-size: 1.5rem; }
+.button-examples { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }

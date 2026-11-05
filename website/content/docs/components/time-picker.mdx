@@ -1,0 +1,19 @@
+---
+title: "Time picker"
+description: "Hour and minute segments with an exact HH:MM value."
+---
+
+## Usage
+
+```tsx
+import { TimePicker } from "vic-ui";
+
+<TimePicker label="Opens at" value={time} onValueChange={setTime}
+  min="06:00" max="22:00" none="No set time" name="opening" />
+```
+
+`value` is an exact 24-hour `HH:MM` string, or `""`. Invalid strings display empty. `min` and `max` are inclusive bounds within one day; invalid or reversed bounds block Done. No timezone, date conversion or overnight wrap is implied.
+
+The popup uses React Aria hour and minute segments. Editing changes a local draft; Done requests a controlled value. Partial or out-of-range drafts cannot commit. `none` adds an explicit clear action that requests `""`; it remains available when bounds are invalid. The host accepts or declines changes.
+
+Optional `name` submits the normalized value through a hidden input. `label`, `hint`, `error`, `id`, `aria-label`, `aria-describedby`, `size="sm"`, `disabled` and `disabledReason` provide field semantics. [Time field](/docs/components/time-field) is the suggestion-based alternative using integer minutes.

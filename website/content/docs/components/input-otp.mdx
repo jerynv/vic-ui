@@ -41,3 +41,19 @@ import {
 See the [full upstream guide](https://input-otp.rodz.dev) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/input-otp.mdx), under the MIT license.
+
+## Root CodeField: six fixed digits
+
+```tsx
+import { useState } from "react";
+import { CodeField } from "vic-ui";
+
+function VerificationCode() {
+  const [code, setCode] = useState("");
+  return <CodeField label="Verification code" value={code} onChange={setCode} />;
+}
+```
+
+`CodeField` is the ready-made root API: one native text input, six fixed digit cells, numeric input mode, one-time-code autocomplete and a six-character limit. Formatted clipboard text is normalized before truncation, so `12 34-56` becomes `123456`; selection replacement keeps surrounding digits.
+
+Required props are `label`, controlled `value` and `onChange(value)`. Optional `autoFocus`, `error` and `disabled` support the form state. The host owns verification and submission. CodeField does not expose configurable length, slots, name or ref; use the composable InputOTP API above when those composition needs apply. The two APIs use isolated cell classes and share this documentation family.

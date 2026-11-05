@@ -1,6 +1,17 @@
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { CheckIcon } from "../icons/icons";
 import { useBlocked } from "./reason";
+import { reasonOf } from "./held";
+
+/** The checkbox square inside a row that is already the control, without a nested input. */
+export function CheckMark(props: { checked: boolean; className?: string }) {
+  return (
+    <span className={props.className ? `ui-check-box ${props.className}` : "ui-check-box"} aria-hidden="true">
+      <span className="ui-check-face" data-checked={props.checked ? "" : undefined} />
+      <CheckIcon size={13} className="ui-check-tick" aria-hidden="true" />
+    </span>
+  );
+}
 
 /**
  * A box to tick, with its words beside it: a native checkbox inside its label, so pressing
@@ -30,6 +41,7 @@ export const Checkbox = forwardRef<HTMLInputElement, Omit<InputHTMLAttributes<HT
           }}
           {...rest}
           {...held.props}
+          aria-describedby={[rest["aria-describedby"], reasonOf(held.props)["aria-describedby"]].filter(Boolean).join(" ") || undefined}
         />
         <CheckIcon size={13} className="ui-check-tick" aria-hidden="true" />
       </span>

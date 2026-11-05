@@ -1,0 +1,286 @@
+{
+  "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+  "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+  "licenseScope": "User-authorized canonical first-party source transfer; no upstream MIT or root repository license grant established; no license is added.",
+  "verifiedPack": "/tmp/vic-ui-wrapping-source-d44c231f",
+  "exactCopies": [
+    {
+      "path": "source/web/src/ui/WrappingRow.tsx",
+      "bytes": 898,
+      "sha256": "bc3f8cd349047e3f48dfdccdbb09de49787cb68b14c46a0e875dccd63c908f8b",
+      "provenance": {
+        "archivePath": "source/web/src/ui/WrappingRow.tsx",
+        "sourcePath": "web/src/ui/WrappingRow.tsx",
+        "role": "canonical primitive",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "bc3f8cd349047e3f48dfdccdbb09de49787cb68b14c46a0e875dccd63c908f8b",
+        "bytes": 898,
+        "gitBlob": "b397e681588f57dfc3abf049aeb715af736d9d1d",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "b397e681588f57dfc3abf049aeb715af736d9d1d",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": false,
+        "baseSha256": null,
+        "baseGitBlob": null
+      },
+      "target": "src/components/WrappingRow.tsx"
+    },
+    {
+      "path": "reference/web/src/icons/chevron-right.svg",
+      "bytes": 222,
+      "sha256": "1f4b18742cfa05b0697ad14889620d55dc2607c3e2fcc1e741fa57871c1b0d16",
+      "provenance": {
+        "archivePath": "reference/web/src/icons/chevron-right.svg",
+        "sourcePath": "web/src/icons/chevron-right.svg",
+        "role": "existing console CSS mask asset reference",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "1f4b18742cfa05b0697ad14889620d55dc2607c3e2fcc1e741fa57871c1b0d16",
+        "bytes": 222,
+        "gitBlob": "57c1930a6e7a8179ce70fd1f2dfe421d04da56bd",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "57c1930a6e7a8179ce70fd1f2dfe421d04da56bd",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": true,
+        "baseSha256": "1f4b18742cfa05b0697ad14889620d55dc2607c3e2fcc1e741fa57871c1b0d16",
+        "baseGitBlob": "57c1930a6e7a8179ce70fd1f2dfe421d04da56bd"
+      },
+      "target": "src/styles/assets/wrapping-row-chevron-right.svg"
+    }
+  ],
+  "styleSources": [
+    {
+      "path": "source/web/src/styles/components/rows.css",
+      "bytes": 3428,
+      "sha256": "d3940c78b026cbf7df06d1865fab43f1d9d5d4e643804ae4a9487af839c4a05a",
+      "provenance": {
+        "archivePath": "source/web/src/styles/components/rows.css",
+        "sourcePath": "web/src/styles/components/rows.css",
+        "role": "exact component stylesheet; contains other row families",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "d3940c78b026cbf7df06d1865fab43f1d9d5d4e643804ae4a9487af839c4a05a",
+        "bytes": 3428,
+        "gitBlob": "a0dfa65fc6ee6fec381e7ee3cf3119262c995061",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "a0dfa65fc6ee6fec381e7ee3cf3119262c995061",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": true,
+        "baseSha256": "bbf172d4a1cafd148ee2b11976a97dd92bfa2f6e6854a4be420833bccf8dcac8",
+        "baseGitBlob": "d85bd17c8c20bdbc848a4b2f8faf3d10ed905568"
+      }
+    },
+    {
+      "path": "source/web/src/styles/console/frame.css",
+      "bytes": 11642,
+      "sha256": "4e7fb11c09ef36ead5f2762dabac9a21a3ca19d9d9db143c61656a524794865a",
+      "provenance": {
+        "archivePath": "source/web/src/styles/console/frame.css",
+        "sourcePath": "web/src/styles/console/frame.css",
+        "role": "unchanged console adaptation reference",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "4e7fb11c09ef36ead5f2762dabac9a21a3ca19d9d9db143c61656a524794865a",
+        "bytes": 11642,
+        "gitBlob": "c895f80c9235ff91d3515c6c712c001e4c939720",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "c895f80c9235ff91d3515c6c712c001e4c939720",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": true,
+        "baseSha256": "4e7fb11c09ef36ead5f2762dabac9a21a3ca19d9d9db143c61656a524794865a",
+        "baseGitBlob": "c895f80c9235ff91d3515c6c712c001e4c939720"
+      }
+    },
+    {
+      "path": "source/web/src/styles/unlayered.css",
+      "bytes": 21413,
+      "sha256": "7131dde4de3b68d5df3ec65667f9b1d40c5dbac0da068713890d66c75fe7e889",
+      "provenance": {
+        "archivePath": "source/web/src/styles/unlayered.css",
+        "sourcePath": "web/src/styles/unlayered.css",
+        "role": "exact shared stylesheet reference; port the relevant row rules deliberately",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "7131dde4de3b68d5df3ec65667f9b1d40c5dbac0da068713890d66c75fe7e889",
+        "bytes": 21413,
+        "gitBlob": "6ae345de1ab1bb8d55e52f37d1f06a6e17ab8da3",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "6ae345de1ab1bb8d55e52f37d1f06a6e17ab8da3",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": true,
+        "baseSha256": "1f9609d44ca88336c4a5d5ae6dbf5fc2c24958556a867fcaf77a1177bb9cbc31",
+        "baseGitBlob": "ba87c2e8281b77cf27866456ff4893961f4793fd"
+      }
+    },
+    {
+      "path": "reference/web/src/styles/tokens.css",
+      "bytes": 29325,
+      "sha256": "b5c965c683ef02012dec42f29718e1c93eea3835d3e5f7a0161e6ba3fdba295c",
+      "provenance": {
+        "archivePath": "reference/web/src/styles/tokens.css",
+        "sourcePath": "web/src/styles/tokens.css",
+        "role": "complete token reference; includes unrelated palette/type definitions",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "b5c965c683ef02012dec42f29718e1c93eea3835d3e5f7a0161e6ba3fdba295c",
+        "bytes": 29325,
+        "gitBlob": "79cc638f00e8af600d68748feef98573d0ebfec1",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "79cc638f00e8af600d68748feef98573d0ebfec1",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": true,
+        "baseSha256": "b5c965c683ef02012dec42f29718e1c93eea3835d3e5f7a0161e6ba3fdba295c",
+        "baseGitBlob": "79cc638f00e8af600d68748feef98573d0ebfec1"
+      }
+    },
+    {
+      "path": "reference/web/src/styles/base.css",
+      "bytes": 4325,
+      "sha256": "5a73a8e93429fc82ba38e0b6db83ca13d1e48f3c59a40a7dc10f83dd0396af84",
+      "provenance": {
+        "archivePath": "reference/web/src/styles/base.css",
+        "sourcePath": "web/src/styles/base.css",
+        "role": "global native focus and reset reference; includes unrelated base rules",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "5a73a8e93429fc82ba38e0b6db83ca13d1e48f3c59a40a7dc10f83dd0396af84",
+        "bytes": 4325,
+        "gitBlob": "13d04fc741b4038b6239e410cd54bd0a2eae180a",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "13d04fc741b4038b6239e410cd54bd0a2eae180a",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": true,
+        "baseSha256": "5a73a8e93429fc82ba38e0b6db83ca13d1e48f3c59a40a7dc10f83dd0396af84",
+        "baseGitBlob": "13d04fc741b4038b6239e410cd54bd0a2eae180a"
+      }
+    },
+    {
+      "path": "reference/web/src/styles.css",
+      "bytes": 7095,
+      "sha256": "99cbf98202d17944fc8932fc75e584810192abad612cf6d63810b432df1dab35",
+      "provenance": {
+        "archivePath": "reference/web/src/styles.css",
+        "sourcePath": "web/src/styles.css",
+        "role": "cascade/import-order reference; not a standalone import entrypoint for this bundle",
+        "sourceCommit": "d44c231f4638029697c436fda6e1ed4ff6957b93",
+        "sha256": "99cbf98202d17944fc8932fc75e584810192abad612cf6d63810b432df1dab35",
+        "bytes": 7095,
+        "gitBlob": "276bbb865466fc4a066b6f17b6c7ad18310e0f40",
+        "originalExtractionCommit": "826ecbd00bb10e8546187b4dfe6506531369f5b6",
+        "originalExtractionGitBlob": "276bbb865466fc4a066b6f17b6c7ad18310e0f40",
+        "matchesOriginalExtraction": true,
+        "baseCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+        "basePresent": true,
+        "baseSha256": "99cbf98202d17944fc8932fc75e584810192abad612cf6d63810b432df1dab35",
+        "baseGitBlob": "276bbb865466fc4a066b6f17b6c7ad18310e0f40"
+      }
+    }
+  ],
+  "tokenMappings": {
+    "--type-ui-size": "--text-ui",
+    "--color-text-subtle": "--fg-subtle",
+    "--color-text-subtle-on-fill": "--fg-subtle-on-fill",
+    "--color-control-fill": "--field-fill",
+    "--color-surface-raised": "--surface-lifted",
+    "--elevation-edge": "--edge",
+    "--color-border-default": "--line"
+  },
+  "styleScope": "Exact row and hover/focus blocks from rows.css; five relevant console/frame.css rules; unlayered vertical padding and reduced motion. Same radius tokens; Vic global focus ring already matches. No app sheet import.",
+  "referenceCss": "tests/wrapping-row.reference.css preserves selected original declarations and original palette token values; only asset URL relocated. Browser compares original hit-row DOM against new wrapper, using common Vic base/fonts and identical fixture content. Test removes all row rules from the built base sheet on the reference page before applying selected source rules, preventing contamination after parent integration.",
+  "consumerSites": [
+    {
+      "sourcePath": "source/web/src/admin/Billing.tsx",
+      "line": 105,
+      "opening": "<WrappingRow as=\"li\" key={`${one.orgId}${one.startsOn}`} className=\"flex-wrap items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Bookings.tsx",
+      "line": 259,
+      "opening": "<WrappingRow as=\"button\" type=\"button\" className=\"w-full items-center text-left\" onClick={() => props.onPick(b)}>"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Bookings.tsx",
+      "line": 365,
+      "opening": "<WrappingRow as=\"li\" className=\"flex-wrap items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/ChangeTerms.tsx",
+      "line": 74,
+      "opening": "<WrappingRow as=\"li\" className=\"flex-wrap items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/ChangeTerms.tsx",
+      "line": 267,
+      "opening": "<WrappingRow as=\"li\" key={one.who} className=\"flex-wrap items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Content.tsx",
+      "line": 65,
+      "opening": "<WrappingRow>"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Content.tsx",
+      "line": 108,
+      "opening": "<WrappingRow><BoneText w=\"30%\" /></WrappingRow>"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Content.tsx",
+      "line": 128,
+      "opening": "<WrappingRow as={Link} to={`/organizations/${props.orgId}/content/${AREA_PATHS[area]}`} className=\"no-underline items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Content.tsx",
+      "line": 184,
+      "opening": "<WrappingRow className=\"items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Content.tsx",
+      "line": 240,
+      "opening": "<WrappingRow as={Link} to={`/organizations/${id}/content/requests/${one.number}`} className=\"no-underline items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Content.tsx",
+      "line": 397,
+      "opening": "<WrappingRow as={Link} to={`/organizations/${id}/content/channels/${one.id}`} className=\"no-underline items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Content.tsx",
+      "line": 475,
+      "opening": "<WrappingRow as=\"li\" key={one.id} className=\"items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Features.tsx",
+      "line": 359,
+      "opening": "<WrappingRow as=\"li\" key={org.id} className=\"items-start\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/Lead.tsx",
+      "line": 252,
+      "opening": "<WrappingRow as=\"li\" className=\"flex-wrap items-center\">"
+    },
+    {
+      "sourcePath": "source/web/src/admin/OrganizationBilling.tsx",
+      "line": 279,
+      "opening": "<WrappingRow as=\"li\" key={one.id} id={`agreement-${one.id}`} className={named === `agreement-${one.id}` ? \"row-named flex-wrap items-center\" : \"flex-wrap items-center\"}>"
+    },
+    {
+      "sourcePath": "source/web/src/components/Bones.tsx",
+      "line": 97,
+      "opening": "<WrappingRow>"
+    },
+    {
+      "sourcePath": "source/web/src/components/Skeleton.tsx",
+      "line": 96,
+      "opening": "<WrappingRow>"
+    }
+  ],
+  "adaptations": [
+    "No component adaptation; exact source bytes. CSS token names mapped to equal Vic values. Chevron URL relocated to dedicated asset. Existing console-frame scope retained by parent approval; unrelated page-in link typography omitted."
+  ],
+  "limits": [
+    "Portable 17-site shape fixtures do not exercise application loaders, permissions, routes, mutations or real customer data.",
+    "Source authorizes first-party transfer; no upstream MIT or SVG license grant established.",
+    "Parent owns packed export/type/asset checks."
+  ]
+}

@@ -1,0 +1,71 @@
+/* Canonical WrappingRow / hit-row, transferred from V-Client d44c231f.
+   Native element, wrapping and alignment remain the consumer's choice. */
+@layer components.parts {
+  .ui-wrapping-row,
+  .hit-row {
+    display: flex;
+    gap: 0.875rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: var(--radius-row);
+    color: inherit;
+    font-size: var(--text-ui);
+    transition: background-color 200ms ease;
+  }
+
+  .ui-wrapping-row:hover,
+  .ui-wrapping-row:focus-visible,
+  .hit-row:hover,
+  .hit-row:focus-visible {
+    --fg-subtle: var(--fg-subtle-on-fill);
+    background: var(--field-fill);
+  }
+}
+
+/* Existing source opt-in, preserved rather than inferred from every list in an app.
+   The wrapper belongs to the consumer; WrappingRow does not create it. */
+@layer components.console {
+  .console-frame ul:is(:has(> li > .hit-row), :has(> li.hit-row)) {
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    background: var(--surface-lifted);
+    box-shadow: var(--edge);
+  }
+
+  .console-frame ul:is(:has(> li > .hit-row), :has(> li.hit-row)) > li + li {
+    border-top: 1px solid var(--line);
+  }
+
+  .console-frame ul:is(:has(> li > .hit-row), :has(> li.hit-row)) .hit-row {
+    border-radius: 0;
+    padding-inline: 1rem;
+  }
+
+  .console-frame a.hit-row::after {
+    content: "";
+    flex: none;
+    align-self: center;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--fg-subtle);
+    mask: url("../assets/wrapping-row-chevron-right.svg") center / contain no-repeat;
+  }
+
+  .console-frame .hit-row:not(a, button):hover {
+    background: none;
+  }
+}
+
+/* Deliberately unlayered: the canonical vertical rhythm outranks padding utilities.
+   Horizontal padding and all wrapping/alignment remain available to the consumer. */
+.ui-wrapping-row,
+.hit-row {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-wrapping-row,
+  .hit-row {
+    transition: none;
+  }
+}

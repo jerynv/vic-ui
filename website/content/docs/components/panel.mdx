@@ -1,0 +1,34 @@
+---
+title: "Panel"
+description: "Canonical field rows, linked items, text controls and action lists."
+---
+
+## Usage
+
+```tsx
+import {
+  Panel, PanelHead, PanelField, PanelItem, PanelBlock, PanelText,
+  Actions, Action,
+} from "vic-ui";
+
+<>
+  <PanelHead>Workspace</PanelHead>
+  <Panel as="dl">
+    <PanelField label="Name">Field notes</PanelField>
+    <PanelField label="Visibility" note="Available to invited people">Private</PanelField>
+  </Panel>
+  <Panel as="ul">
+    <PanelItem to="/reports" end="3 reports">Reports</PanelItem>
+  </Panel>
+</>
+```
+
+`Panel` renders a `div` by default, or a semantic `dl`/`ul` through `as`. Use `PanelField` inside a description list and `PanelItem` inside a list. `PanelHead` accepts heading content and optional `actions`; `PanelBlock` holds larger content with an optional label and note.
+
+`PanelField` accepts a label, note, error and optional `control` layout. `PanelItem` offers `mark`, `end`, `action` and `after` slots, `to` or `href` navigation, and optional `mono` text. Internal navigation uses the host's Vic LinkProvider.
+
+`PanelText` composes the root Textarea: controlled `value`/`onValueChange`, `label`, placeholder, error, length limit, count and growing content. `onCommit` runs on blur; the host owns persistence.
+
+## Actions
+
+`Actions` groups `Action` rows. Each action accepts an `icon`, children, optional `to`/`href` or `onClick`, plus disabled state, pointer-enter and focus callbacks. Navigation takes precedence when a destination is supplied. Disabled actions cannot activate; disabled links leave sequential focus. These components perform no account or permission operations.

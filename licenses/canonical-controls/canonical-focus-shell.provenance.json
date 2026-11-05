@@ -1,0 +1,57 @@
+{
+  "sourceCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+  "sourceManifestSha256": "5dde52fef1a29f82944da3a9f463949340920ed4977b448904a5043af11eef37",
+  "authorization": "Owner-authorized first-party transfer; no upstream MIT grant asserted. Provider drawings are exact source bytes, not a new trademark or license grant.",
+  "files": [
+    {
+      "sourcePath": "web/src/ui/Focus.tsx",
+      "gitBlob": "a4ab0c0704c0f427cdf2ced6ad551fbc0f531f7c",
+      "sha256": "3019e048ebbb56121bcaac26681e8ec121749fab695bf947b5d5b68944a98d2a",
+      "bytes": 11272
+    },
+    {
+      "sourcePath": "web/src/ui/Providers.tsx",
+      "gitBlob": "98a85373b1f8910934106523a4163010860aab72",
+      "sha256": "d9675c7da629afa7a4e5baf0de4d1d3853d23bf2bf487109d543fe315d0122a5",
+      "bytes": 6773
+    },
+    {
+      "sourcePath": "web/src/ui/FormSteps.tsx",
+      "gitBlob": "d41d148c3717a389336cc617e4cd30ecd58bc221",
+      "sha256": "cbd98bb876d60fdc05ca31c85541c4e2c82ca86748c8dcb41606388659f2d24e",
+      "bytes": 2364
+    },
+    {
+      "sourcePath": "web/src/components/BrandMarks.tsx",
+      "gitBlob": "875d7868e065c12767f19ce4dbbb863021215e8f",
+      "sha256": "60ff2d264cb4890aff796b5dad682904e426f06ce9ece95270edbf626c53c486",
+      "bytes": 3940
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-focus.css",
+      "gitBlob": "c2b88e51bfbd750db0862e639f168475c2a3ace8",
+      "sha256": "0eff07255228228fbef175430a2e98b8b0c48e3ef73db45cda79d6fe7cd3f6e8",
+      "bytes": 18083
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-display.css",
+      "gitBlob": "17b0fe6ba41c91424ad6a56426983d45f460946b",
+      "sha256": "d7e734bdd139ed286e7f7a4fd49b231aec575381d63bc78f8b6b7c885fd765f4",
+      "bytes": 39340
+    }
+  ],
+  "dependencyAdaptation": {
+    "motion": {
+      "sourceVersion": "12.43.0",
+      "installedVersion": "14.9.1",
+      "reason": "Existing Vic installed version promoted by parent to runtime dependency; faithful source Motion APIs verified in browser and typechecks."
+    }
+  },
+  "adaptations": [
+    "Vic Link and existing icons/logo helpers replace application imports.",
+    "Host brand, appearance, artwork, document title and remembered-height keys replace app policy. No Grain shader bundled.",
+    "Portable ProviderKind literals and callbacks replace DB AuthProvider, POST endpoints, Apple advice, countdown, pageshow policy and automatic submission.",
+    "Provider notice retains mounted grid/inert geometry, with controlled focus target and cancellable two-frame focus restoration.",
+    "Semantic Vic tokens and isolated description class replace source token names and Tailwind block utility."
+  ]
+}

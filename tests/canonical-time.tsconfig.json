@@ -1,0 +1,4 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["canonical-time.fixture.tsx", "../site/src/examples/time-field/**/*.tsx", "../site/src/examples/time-picker/**/*.tsx"]
+}

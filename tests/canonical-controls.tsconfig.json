@@ -1,0 +1,1 @@
+{"extends":"../tsconfig.json","include":["../src","canonical-controls.fixture.tsx","canonical-data.fixture.tsx","canonical-pickers.fixture.tsx"]}

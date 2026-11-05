@@ -49,3 +49,15 @@ For a consumer that already has theme tokens, map `--button-accent: var(--ph-acc
 See the [full upstream guide](https://ui.shadcn.com/docs/components/base/button) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/button.mdx), under the MIT license.
+
+## Root Button: compact and glass looks
+
+```tsx
+import { Button, ButtonLink } from "vic-ui";
+
+<Button look="line" size="xs">Edit</Button>
+<Button look="glass">Open details</Button>
+<ButtonLink to="/reports" look="line" size="xs">Reports</ButtonLink>
+```
+
+The root API supports `look="ink"|"line"|"glass"|"quiet"|"link"` and `size="xs"|"md"|"lg"`. Its default remains the textured ink button. Glass and compact sizing are explicit options; they do not replace existing defaults or the accent contract above. `disabledReason` is combined with a supplied `aria-describedby`, preserving host descriptions.

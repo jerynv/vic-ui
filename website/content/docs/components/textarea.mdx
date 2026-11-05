@@ -20,3 +20,16 @@ import { Textarea } from "vic-ui/ui"
 See the [full upstream guide](https://ui.shadcn.com/docs/components/base/textarea) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/textarea.mdx), under the MIT license.
+
+## Root Textarea: optional count
+
+```tsx
+import { Textarea } from "vic-ui";
+
+<Textarea label="Short description" value={description} onValueChange={setDescription}
+  placeholder="What belongs here?" maxLength={180} count={false} />
+```
+
+The root Textarea shows a count when `maxLength` is supplied. `count={false}` hides the count and its count announcement while retaining the native length limit and any hint. With the count enabled, a polite live region reports the count at 90% of the limit and above.
+
+Controlled `value`/`onValueChange`, native `onChange`, growing rows, placeholder and existing Surface choices remain available. A supplied `aria-invalid` is preserved when no error prop overrides it, and host descriptions are combined with hint/error/disabled-reason descriptions.

@@ -14,3 +14,17 @@ Use the exported composition shown in the source tab. Its props are included in 
 See the [full upstream guide](https://ui.shadcn.com/docs/components/base/date-picker) for additional variants and primitive props. This package uses shadcn's Base UI edition.
 
 Example and usage adapted from [shadcn/ui](https://github.com/shadcn-ui/ui/blob/8a35366/apps/v4/content/docs/components/base/date-picker.mdx), under the MIT license.
+
+## Root DatePicker: calendar dates and clearing
+
+```tsx
+import { DatePicker } from "vic-ui";
+
+<DatePicker aria-label="Due date" lead="Due" size="xs"
+  value={due} onValueChange={setDue} today="2026-11-05"
+  none="No due date" />
+```
+
+The root DatePicker controls one calendar date as `YYYY-MM-DD`, not an instant or a range. The host may supply `today` for the day in its own timezone; otherwise the browser's local day is used. `none` adds a clear choice that requests the empty string. Tab and Shift+Tab move between that choice and the month grid.
+
+`lead` places words before the date and uses the Select caret. `look="text"` removes the field box; `size="xs"` provides the thin control height. Existing `min`, `max`, `format`, `name`, label/error descriptions and Surface choices remain. The host owns date policy and accepts changes; the component performs no timezone conversion.

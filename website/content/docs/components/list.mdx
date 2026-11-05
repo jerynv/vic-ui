@@ -2,3 +2,16 @@
 title: "Rows"
 description: "Groups of rows of one line at one height, each lit only where pressing it goes somewhere, and an empty group said in one quiet line."
 ---
+
+## Action rows
+
+```tsx
+import { RowButton } from "vic-ui";
+import { PlusIcon } from "vic-ui/icons";
+
+<RowButton icon={<PlusIcon size={16} />} onClick={openCreate}>New collection</RowButton>
+```
+
+`RowButton` is an action alongside the existing linked `Row`. Supply either an `icon` for a raised mark tile or a `face` for a round image slot, plus children. Native button attributes pass through; the default type is button. Disabled state uses native semantics. Place a RowButton in an `li` when composing it inside `Rows`, which renders a list.
+
+`Row` continues to support linked words, descriptions, metadata, independent end actions and an after slot. The host owns all navigation and action callbacks.

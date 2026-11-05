@@ -1,0 +1,18 @@
+---
+title: "Focus lines"
+description: "Guidance, quiet actions and closing copy around a form."
+---
+
+## Usage
+
+```tsx
+import { FocusLine, FocusQuiet, FocusFoot, Button } from "vic-ui";
+
+<>
+  <FocusLine>Enter the six-digit code sent to your address.</FocusLine>
+  <FocusQuiet><Button look="quiet">Use another address</Button></FocusQuiet>
+  <FocusFoot>Ask your workspace owner if you need help.</FocusFoot>
+</>
+```
+
+`FocusLine` and `FocusFoot` accept native paragraph attributes. `FocusQuiet` renders a div with native HTML attributes; when given `action`, it renders a POST form. The host supplies and handles that action. The components arrange copy and actions without sending codes or implementing authentication.

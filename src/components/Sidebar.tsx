@@ -336,6 +336,7 @@ export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>
     className: join("ui-sidebar-button", className),
     "data-sidebar": "menu-button",
     "data-active": active ? "true" : undefined,
+    "aria-current": (own["aria-current"] as HTMLAttributes<HTMLElement>["aria-current"]) ?? (active ? "page" as const : undefined),
     "aria-describedby": tip.has ? join(own["aria-describedby"] as string | undefined, tip.id) : (own["aria-describedby"] as string | undefined),
   };
   const face = (

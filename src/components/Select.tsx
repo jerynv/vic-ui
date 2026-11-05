@@ -5,6 +5,7 @@ import { CheckIcon, ChevronDownIcon } from "../icons/icons";
 import { textOf, toOptions, type Items } from "./items";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
 import { useBlocked } from "./reason";
+import { reasonOf, unlessHeld } from "./held";
 
 /**
  * A choice from a list, drawn by the page rather than the browser, so it looks the same in
@@ -17,7 +18,9 @@ import { useBlocked } from "./reason";
  * the list, Enter or Space chooses, Escape and Tab close it, and typing a letter jumps to the
  * first choice that starts with what was typed. `items` is any shape `toOptions` reads;
  * `placeholder` is what the field says while nothing is chosen. A `name` posts the value with
- * its form.
+ * its form. `look="text"` draws it as its words and a small caret with no box, filled only on
+ * hover and while open, for a choice set inside a line (a time, who sees something), as Google
+ * Calendar's event editor sets its times; its list is as wide as its longest choice.
  */
 export function Select(props: {
   label?: ReactNode;
@@ -26,6 +29,10 @@ export function Select(props: {
   value: string;
   onValueChange?: (value: string) => void;
   placeholder?: string;
+  /** What the choice is, inside the field before its value ("Urgency"), where a row of controls has no room for a label over it. */
+  lead?: ReactNode;
+  /** Keep the longest choice's width while a request changes state. */
+  reserve?: boolean;
   hint?: ReactNode;
   error?: ReactNode;
   disabled?: boolean;
@@ -33,14 +40,19 @@ export function Select(props: {
   disabledReason?: string | undefined;
   name?: string;
   id?: string;
-  size?: "sm";
+  /** `sm` the dense size, `xs` the thin one (`--size-control-height-xs`). */
+  size?: "sm" | "xs";
   surface?: SurfaceStyle;
+  "aria-describedby"?: string;
+  /** `text`: the words and a caret, no box, for a choice inside a line. */
+  look?: "field" | "text";
   className?: string;
 }) {
   const made = useId();
   const field = props.id ?? made;
   const list = `${field}-list`;
-  const said = describedBy(field, props.error, props.hint);
+  const said = [describedBy(field, props.error, props.hint), props["aria-describedby"]].filter(Boolean).join(" ") || undefined;
+  const text = props.look === "text";
   const pairs = toOptions(props.items);
   const chosen = pairs.findIndex((one) => one.value === props.value);
   const [open, setOpen] = useState(false);
@@ -57,13 +69,21 @@ export function Select(props: {
   const close = () => setOpen(false);
   const choose = (at: number) => {
     const pair = pairs[at];
-    if (!pair || pair.disabled) return;
+    if (props.disabled || !pair || pair.disabled) return;
     if (pair.value !== props.value) props.onValueChange?.(pair.value);
     close();
   };
 
   // Into the top layer and onto the field, kept there while the page scrolls or resizes, as every list is.
-  useAnchored(open, () => trigger.current?.parentElement ?? null, pop, { matchWidth: true });
+  useAnchored(open, () => trigger.current?.parentElement ?? null, pop, { matchWidth: !text });
+
+  // An open editor must not be stranded when its owner disables the field.
+  useEffect(() => {
+    if (!props.disabled || !open) return;
+    const inside = pop.current?.contains(document.activeElement);
+    setOpen(false);
+    if (inside && props.disabledReason) trigger.current?.focus();
+  }, [props.disabled, props.disabledReason, open]);
 
   // The active choice is kept in view as the arrows move through a long list.
   useEffect(() => {
@@ -132,7 +152,8 @@ export function Select(props: {
     }
   };
 
-  const classes = ["ui-field", props.size === "sm" ? "ui-field-sm" : "", props.className ?? ""].filter(Boolean).join(" ");
+  // The text look is no field: none of a field's rules (a dialog's full width among them) reach it.
+  const classes = [text ? "ui-field-text" : "ui-field", props.size === "sm" ? "ui-field-sm" : props.size === "xs" ? "ui-field-sm ui-field-xs" : "", props.className ?? ""].filter(Boolean).join(" ");
   return (
     <div data-ui-surface={props.surface} className={classes}>
       <FieldHead field={field} label={props.label} labelId={`${field}-label`} error={props.error} />
@@ -148,21 +169,31 @@ export function Select(props: {
           aria-controls={list}
           aria-activedescendant={open && active >= 0 ? `${list}-${active}` : undefined}
           aria-invalid={props.error ? true : undefined}
-          aria-describedby={said}
           {...held.props}
+          aria-describedby={[said, reasonOf(held.props)["aria-describedby"]].filter(Boolean).join(" ") || undefined}
           data-empty={chosen < 0 ? "" : undefined}
-          onClick={() => (open ? close() : show(Math.max(chosen, 0)))}
-          onKeyDown={keyed}
+          onClick={unlessHeld(props.disabled, reasonOf(held.props).onClick, () => (open ? close() : show(Math.max(chosen, 0))))}
+          onKeyDown={unlessHeld(props.disabled, reasonOf(held.props).onKeyDown, keyed)}
         >
-          {chosen >= 0 && pairs[chosen]!.start ? <span className="ui-start">{pairs[chosen]!.start}</span> : null}
-          <span className="ui-select-words">{chosen >= 0 ? pairs[chosen]!.label : (props.placeholder ?? "")}</span>
+          {props.lead ? <span className="ui-select-lead">{props.lead}</span> : null}
+          {chosen >= 0 && pairs[chosen]!.start ? <span className="ui-start">{pairs[chosen]!.start}</span> : props.reserve && pairs.some((option) => option.start) ? <span className="ui-start" aria-hidden="true" /> : null}
+          <span className="ui-select-words" data-reserve={props.reserve ? "" : undefined}>
+            {props.reserve ? <span>{chosen >= 0 ? pairs[chosen]!.label : (props.placeholder ?? "")}</span> : chosen >= 0 ? pairs[chosen]!.label : (props.placeholder ?? "")}
+            {props.reserve
+              ? pairs.map((option) => (
+                  <span key={option.value} className="ui-select-reserve" aria-hidden="true">
+                    {option.label}
+                  </span>
+                ))
+              : null}
+          </span>
         </button>
-        <ChevronDownIcon size={16} className="ui-select-caret" aria-hidden="true" />
+        <ChevronDownIcon size={text ? 14 : 16} className="ui-select-caret" aria-hidden="true" />
         {held.node}
         {props.name ? <input type="hidden" name={props.name} value={props.value} /> : null}
       </div>
       {open ? (
-        <div ref={pop} id={list} role="listbox" popover="manual" className="ui-menu" aria-labelledby={props.label ? `${field}-label` : undefined} aria-label={props.label ? undefined : props["aria-label"]}>
+        <div ref={pop} id={list} role="listbox" popover="manual" className={props.size === "xs" ? "ui-menu ui-menu-xs" : "ui-menu"} aria-labelledby={props.label ? `${field}-label` : undefined} aria-label={props.label ? undefined : props["aria-label"]}>
           {pairs.map((option, at) => (
             <Fragment key={option.value}>
               {option.group !== undefined && (at === 0 || pairs[at - 1]!.group !== option.group) ? (

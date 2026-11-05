@@ -31,7 +31,13 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(server.resolvedUrls.local[0]);
     for (const mode of ["light", "dark"]) {
-      await page.evaluate(mode => { document.documentElement.dataset.mode = mode; }, mode);
+      await page.evaluate(async mode => {
+        document.documentElement.dataset.mode = mode;
+        // Compare settled paints; an in-flight transition serializes the same
+        // neutral colour as oklab rather than its final oklch token.
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        await Promise.all(document.getAnimations().filter(animation => animation instanceof CSSTransition).map(animation => animation.finished.catch(() => {})));
+      }, mode);
       for (const part of ["button", "line", "card", "field", "switch", "badge", "check"]) {
         const styles = await page.evaluate(part => {
           const original = document.querySelector(`#original-${part}`);
@@ -46,7 +52,13 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
       }
     }
     for (const mode of ["light", "dark"]) {
-      await page.evaluate(mode => { document.documentElement.dataset.mode = mode; }, mode);
+      await page.evaluate(async mode => {
+        document.documentElement.dataset.mode = mode;
+        // Compare settled paints; an in-flight transition serializes the same
+        // neutral colour as oklab rather than its final oklch token.
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        await Promise.all(document.getAnimations().filter(animation => animation instanceof CSSTransition).map(animation => animation.finished.catch(() => {})));
+      }, mode);
       const styles = await page.locator("#surface-tests").evaluate(root => {
         const read = e => ({ fill: getComputedStyle(e).backgroundColor, edge: getComputedStyle(e).boxShadow, height: e.getBoundingClientRect().height });
         return ["flat", "bordered"].map(surface => ({

@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import { Link } from "./Link";
 import type { Icon } from "../icons/icons";
 import type { Hue } from "./hue";
@@ -89,5 +89,28 @@ export function Row(props: {
       </div>
       {props.after}
     </li>
+  );
+}
+
+/**
+ * A row that acts rather than opens a place: its mark and its words at one line, the whole row
+ * the button, in the column of places a conversation or a request sits beside (making a
+ * channel, finding the rest of a section, showing more, a person to message). `icon` is drawn
+ * on a raised tile that reads on any row's fill; `face` is a person's face, drawn round in the
+ * same room. Its words are the quiet ink, stepping up under the pointer.
+ */
+export function RowButton(props: Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & ({ icon: ReactNode; face?: undefined } | { face: ReactNode; icon?: undefined }) & { children: ReactNode }) {
+  const { icon, face, children, className, type = "button", ...rest } = props;
+  return (
+    <button type={type} className={className ? `ui-row-button ${className}` : "ui-row-button"} {...rest}>
+      {face ? (
+        <span className="ui-row-button-face">{face}</span>
+      ) : (
+        <span className="ui-row-button-tile" aria-hidden="true">
+          {icon}
+        </span>
+      )}
+      <span className="ui-row-button-words">{children}</span>
+    </button>
   );
 }

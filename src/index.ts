@@ -32,8 +32,8 @@ export { Menu, type MenuAction, type MenuItem, type MenuTriggerProps } from "./c
 export { Popover, atPoint, useAnchored, usePressAway, LIST_MOST, LIST_LEAST, type Anchor, type PopoverTriggerProps } from "./components/Popover";
 export { Tooltip, useReason, useTip, TIP_DELAY_MS } from "./components/Tooltip";
 export { Tabs, type TabOption } from "./components/Tabs";
-export { Table, type TableColumn, type TableSort } from "./components/Table";
-export { Row, RowGroup, Rows, RowsMore } from "./components/List";
+export { Table, Cell, type TableColumn, type TableSort } from "./components/Table";
+export { RowButton, Row, RowGroup, Rows, RowsMore } from "./components/List";
 export { Pagination, CursorPagination, rangeWords } from "./components/Pagination";
 export { Spinner } from "./components/Spinner";
 export { Progress } from "./components/Progress";
@@ -86,3 +86,21 @@ export { DelimitedPreview, type DelimitedPreviewProps } from "./components/previ
 
 export { Slider, type SliderProps } from "./components/Slider";
 export { SettingsLayout, SettingsSection, SettingsGroup, SettingsRow, type SettingsLayoutProps, type SettingsSectionProps, type SettingsGroupProps, type SettingsRowProps } from "./components/Settings";
+
+export { Facts, type Fact } from "./components/Facts";
+export { Tree, treePathTo, type TreeItem } from "./components/Tree";
+export { Panel, PanelHead, PanelField, PanelItem, PanelBlock, PanelText, Actions, Action } from "./components/Panel";
+export { ModeChoice, type ModeChoiceValue } from "./components/ModeChoice";
+export { SettingsDialog, SettingsPane, type SettingsPaneSection } from "./components/SettingsDialog";
+export { PaneViews, PaneView } from "./components/PaneViews";
+export { Grow } from "./components/Grow";
+export { FocusLine, FocusQuiet, FocusFoot } from "./components/FocusLines";
+export { CodeField } from "./components/CodeField";
+export { FocusLayout, FocusHead, FocusMark, type FocusLayoutProps, type FocusStep, type FocusBack, type FocusPlace, type FocusPulse } from "./components/Focus";
+export { ProviderButtons, ProviderChoice, type ProviderKind, type ProviderButtonsProps, type ProviderChoiceProps } from "./components/Providers";
+export { FormSteps } from "./components/FormSteps";
+export { Player } from "./components/Player";
+export { PlacePicker, placeWords, type PlaceSpace, type PlaceProject, type PlaceValue } from "./components/PlacePicker";
+export { TimeField, type TimeFieldProps } from "./components/TimeField";
+export { TimePicker, type TimePickerProps } from "./components/TimePicker";
+export { WrappingRow, type WrappingRowProps } from "./components/WrappingRow";

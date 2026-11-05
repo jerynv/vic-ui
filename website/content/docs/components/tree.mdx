@@ -1,0 +1,28 @@
+---
+title: "Tree"
+description: "Expandable branches with controlled selection and keyboard navigation."
+---
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { Tree, treePathTo, type TreeItem } from "vic-ui";
+
+const items: TreeItem[] = [{
+  id: "reports", label: "Reports",
+  children: [{ id: "weekly", label: "Weekly report" }],
+}];
+
+function ReportTree() {
+  const [value, setValue] = useState<string | null>("weekly");
+  return <Tree items={items} value={value} onValueChange={setValue}
+    aria-label="Reports" />;
+}
+```
+
+Use unique, non-empty IDs. Items accept `label`, optional `icon`, quiet trailing `end`, `children` and a plain `text` string for type-ahead when the label is not a string. Keep labels and trailing content free of nested interactive controls.
+
+Arrow keys move through visible rows or open and close branches; Home/End reach the first and last row. Type-ahead finds labels; Enter/Space requests selection. The host owns the selected value, while expansion and roving focus are internal. Selecting a nested value reveals its ancestors.
+
+`treePathTo(items, id)` returns ancestor IDs from outermost to nearest, excluding the item. Missing or null IDs return an empty array. This tree has no disabled-item or virtualization API.

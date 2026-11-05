@@ -1,0 +1,20 @@
+---
+title: "Mode choice"
+description: "Native radio choices for system, light and dark appearance."
+---
+
+## Usage
+
+```tsx
+import { useState } from "react";
+import { ModeChoice, type ModeChoiceValue } from "vic-ui";
+
+function AppearanceChoice() {
+  const [mode, setMode] = useState<ModeChoiceValue>("system");
+  return <ModeChoice value={mode} onChange={setMode} aria-label="Appearance" />;
+}
+```
+
+The controlled `value` is `"system"`, `"light"` or `"dark"`. Use `onChange`, not `onValueChange`. Optional `labels` can replace individual mode names with React content. Native radios support pointer and keyboard selection.
+
+The miniature previews show their own light and dark colors in either page theme. Choosing a value only calls the host; applying the theme and storing the preference remain host responsibilities.

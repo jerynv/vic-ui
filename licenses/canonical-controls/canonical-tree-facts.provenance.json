@@ -1,0 +1,63 @@
+{
+  "sourcePin": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+  "authorization": "Owner-authorized first-party transfer; no upstream MIT grant asserted.",
+  "sources": [
+    {
+      "path": "web/src/ui/Facts.tsx",
+      "gitBlob": "a313e84892c232241912f3211c616d0d2666cac1",
+      "sha256": "f834f12bd27e8d1155981e3f00bd7affb643f9c5f73866d3f205db17f99899d7",
+      "bytes": 1265
+    },
+    {
+      "path": "web/src/ui/Tree.tsx",
+      "gitBlob": "8fffb5fa9b537c0cf54c9fed7aaa133b3eaff3bd",
+      "sha256": "e58a748372dfd8bd85a7d0b6da643872923159825734cb9f812c024003ba994d",
+      "bytes": 6840
+    },
+    {
+      "path": "web/src/ui/treePath.ts",
+      "gitBlob": "b4b8520645ce581e32e6d7f03770bd0dcca9d696",
+      "sha256": "f8660af3e8085bce1b0cbc9081adfe8a7b3dc5887b802aa8205284a3027cd77d",
+      "bytes": 1042
+    },
+    {
+      "path": "web/src/styles/components/ui-data.css",
+      "gitBlob": "467a10eae2c73ccc44b2aa4bd5993e9bbd73e583",
+      "sha256": "91606f87e1642e449cc652694e064dff2aae08e89c5fcedd26d78abfd6a63cf3",
+      "bytes": 19932
+    },
+    {
+      "path": "web/src/styles/components/ui-display.css",
+      "gitBlob": "17b0fe6ba41c91424ad6a56426983d45f460946b",
+      "sha256": "d7e734bdd139ed286e7f7a4fd49b231aec575381d63bc78f8b6b7c885fd765f4",
+      "bytes": 39340
+    }
+  ],
+  "mapping": [
+    {
+      "source": "web/src/ui/Facts.tsx",
+      "target": "src/components/Facts.tsx",
+      "adaptation": "None; exact bytes."
+    },
+    {
+      "source": "web/src/ui/treePath.ts",
+      "target": "src/components/treePath.ts",
+      "adaptation": "None; exact bytes."
+    },
+    {
+      "source": "web/src/ui/Tree.tsx",
+      "target": "src/components/Tree.tsx",
+      "adaptation": "Owned icon import; JSON ancestor-state key replaces delimiter serialization so opaque IDs containing | work."
+    },
+    {
+      "source": "web/src/styles/components/ui-data.css:5-101",
+      "target": "src/styles/components/ui-canonical-tree-facts.css",
+      "adaptation": "Tree rules only; existing Vic token names, parent-provided --fg-subtle-on-fill with --fg fallback."
+    },
+    {
+      "source": "web/src/styles/components/ui-display.css:1309-1347",
+      "target": "src/styles/components/ui-canonical-tree-facts.css",
+      "adaptation": "Facts rules only; existing Vic token names."
+    }
+  ]
+}

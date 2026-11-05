@@ -1,0 +1,63 @@
+{
+  "sourcePin": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+  "authorization": "Owner-authorized first-party transfer; no upstream MIT grant asserted.",
+  "sources": [
+    {
+      "path": "web/src/ui/PlacePicker.tsx",
+      "gitBlob": "d3236b2ca855035ef544dfeadb15a6632ba234d8",
+      "sha256": "cda71b6c7e655db4136fbaf87c713286ebf499b29bc04b6396b3027393f3ea0e",
+      "bytes": 11679
+    },
+    {
+      "path": "web/src/ui/Player.tsx",
+      "gitBlob": "9d3c040a70a8a17f1fba8c9bcf890013024b787e",
+      "sha256": "986b1f4861cd15d0f6fe18d183dfc450df131c4bbc5e21de8fa0b892b2b90c99",
+      "bytes": 1299
+    },
+    {
+      "path": "web/src/styles/components/ui-display.css",
+      "gitBlob": "17b0fe6ba41c91424ad6a56426983d45f460946b",
+      "sha256": "d7e734bdd139ed286e7f7a4fd49b231aec575381d63bc78f8b6b7c885fd765f4",
+      "bytes": 39340
+    },
+    {
+      "path": "web/src/styles/components/ui-inputs.css",
+      "gitBlob": "26b5acc9beff47ebbb80361f88d2170226dfc131",
+      "sha256": "5b68155eaca3ef749d2411be9834ba23399c2a98a8b1845a60ff9e9d69de8282",
+      "bytes": 17056
+    },
+    {
+      "path": "web/src/styles/components/ui.css",
+      "gitBlob": "94ca7a45313bef6296c19455aa344bac28bc3c35",
+      "sha256": "a097b15d04f20b46f5764a9a93c1b16084c19c0afff9d1797f4195da846d63ed",
+      "bytes": 36028
+    }
+  ],
+  "mapping": [
+    {
+      "source": "web/src/ui/Player.tsx",
+      "target": "src/components/Player.tsx",
+      "adaptation": "None; exact source bytes."
+    },
+    {
+      "source": "web/src/ui/PlacePicker.tsx",
+      "target": "src/components/PlacePicker.tsx",
+      "adaptation": "Owned SVG import; native disabled and reason wiring; close/reset when disabled; trigger focus after selection; search focus after internal navigation."
+    },
+    {
+      "source": "web/src/styles/components/ui-display.css:1351-1365",
+      "target": "src/styles/components/ui-canonical-player-place.css",
+      "adaptation": "Player rules only, mapped to Vic tokens."
+    },
+    {
+      "source": "web/src/styles/components/ui-inputs.css:185-189,205-358,642-672",
+      "target": "src/styles/components/ui-canonical-player-place.css",
+      "adaptation": "PlacePicker rules and scoped thin-size fallback; mapped to Vic tokens."
+    },
+    {
+      "source": "web/src/styles/components/ui.css:583-591",
+      "target": "src/styles/components/ui-canonical-player-place.css",
+      "adaptation": "Scoped PlacePicker select-lead fallback until parent shared Select integration."
+    }
+  ]
+}

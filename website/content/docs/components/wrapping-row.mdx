@@ -1,0 +1,22 @@
+---
+title: "Wrapping row"
+description: "Polymorphic wrapping content with native props and independent actions."
+---
+
+## Usage
+
+```tsx
+import { WrappingRow, Button } from "vic-ui";
+
+<WrappingRow as="div" className="report-row">
+  <div>
+    <a href="/reports/weekly">Weekly report</a>
+    <p>Delivery status and the next review date.</p>
+  </div>
+  <Button look="quiet">Download</Button>
+</WrappingRow>
+```
+
+`WrappingRow` defaults to a div. `as` accepts a native element or an injected link component, preserving that element's props, children and ref. It adds `ui-wrapping-row hit-row` classes and no wrapper, default role, tabIndex or button type. Supply `type="button"` when rendering a button inside a form.
+
+The host owns the content layout and activation semantics. Keep independent actions as siblings inside a non-interactive row; do not put a button inside a link or another button. The existing `console-frame` wrapper opts into canonical panel, hairline, inset, link-chevron and passive-hover rules. It is not a new permission or router API.

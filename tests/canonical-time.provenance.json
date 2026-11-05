@@ -1,0 +1,67 @@
+{
+  "sourceCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+  "authorization": "User-authorized source transfer; no V-Client MIT grant inferred.",
+  "sourceManifestSha256": "5dde52fef1a29f82944da3a9f463949340920ed4977b448904a5043af11eef37",
+  "sourceFiles": [
+    {
+      "sourcePath": "web/src/ui/TimeField.tsx",
+      "gitBlob": "c781a0aaf9c0fbefb8fb680011765211f26159b5",
+      "sha256": "ac17d5f651f578d96e19d2bbfcdb17c585922d4040be267d67de6509f24c46da",
+      "bytes": 2618
+    },
+    {
+      "sourcePath": "web/src/ui/TimePicker.tsx",
+      "gitBlob": "3cece67a350cf0b07c806692d57f001ae40c7116",
+      "sha256": "ee8efda6eaab9dcdf5707436e3b7f95961bed7e73cba983064d0b57294b12d85",
+      "bytes": 5536
+    },
+    {
+      "sourcePath": "web/src/lib/calendarGrid.ts",
+      "gitBlob": "305193706818bc5c19376dd97d69f3883f7bbec4",
+      "sha256": "bf77ff77f3cdbf7528d29d35706e4d0c5de50aef155c2ee34998725ca7da2bb5",
+      "bytes": 8115
+    },
+    {
+      "sourcePath": "web/src/lib/timePicker.ts",
+      "gitBlob": "3dc329db5566d2d3c49b2a53e03f8001c9260a39",
+      "sha256": "73df138982fc464efa8c831bd4ea2b570f9e71b5db8aba7283d5219b11ba79a5",
+      "bytes": 634
+    },
+    {
+      "sourcePath": "src/lib/call-limits.ts",
+      "gitBlob": "a202f01fba85bc5a6d5e37e8fc79b64b7ed62167",
+      "sha256": "d95299f7ce248b960bab961c1960253987d5dc97ffb602867983c660d178e984",
+      "bytes": 5372
+    },
+    {
+      "sourcePath": "web/src/ui/held.ts",
+      "gitBlob": "420a79c61ae9319aca36bfe450e3122b2fc97063",
+      "sha256": "d3fd85f4887ae2681873fe951358cc7e7e8a1b8d0b39a5b02764dff9863fd570",
+      "bytes": 955
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-inputs.css",
+      "gitBlob": "26b5acc9beff47ebbb80361f88d2170226dfc131",
+      "sha256": "5b68155eaca3ef749d2411be9834ba23399c2a98a8b1845a60ff9e9d69de8282",
+      "bytes": 17056
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-overlays.css",
+      "gitBlob": "df4012b87bc1bf61c67805251a7ed510e6e44cdc",
+      "sha256": "f715fb43ad2216a7b8d76a6ed901b771818fce0da92cb72b8626644b603a7dfd",
+      "bytes": 24687
+    }
+  ],
+  "dependencies": {
+    "react-aria-components": "1.22.1",
+    "@internationalized/date": "3.12.4"
+  },
+  "ports": {
+    "src/components/TimeField.tsx": "Canonical TimeField; finite structural min/max and host durationLabel; preserve off-step choice on blank reopen. Includes after/end fields.",
+    "src/components/TimePicker.tsx": "Canonical TimePicker; structural min/max, composed descriptions, disabled-transition close and explicit line Done appearance.",
+    "src/components/time-support/clock.ts": "Only clockOf/readClock/timesFor/TIME_STEP from calendarGrid; only generic durationWords from call-limits. No calendar/business constants/imports.",
+    "src/components/time-support/timePicker.ts": "Exact canonical parseTime wire conversion helper.",
+    "src/styles/components/ui-canonical-time.css": "Only ui-time-* style rules, mapped to Vic semantic tokens.",
+    "src/components/Combobox.tsx": "Existing Vic hosted Combobox: close/reset transient query when disabled without relying on blur, preserving focused reason input and selected values."
+  }
+}

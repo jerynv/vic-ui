@@ -1,0 +1,28 @@
+---
+title: "Providers"
+description: "Provider choice controls with host-owned account operations and notices."
+---
+
+## Usage
+
+```tsx
+import { ProviderButtons, ProviderChoice, type ProviderKind } from "vic-ui";
+
+<ProviderButtons providers={["google", "apple", "microsoft"]}
+  verb="Continue with" onChoose={chooseProvider} />
+```
+
+`ProviderKind` is `"google"`, `"apple"` or `"microsoft"`. Buttons render the source provider marks, use type=button and call `onChoose`. Optional `disabled` blocks selection. `inline={{}}` uses compact marks and existing secondary-button sizing; the source-compatible optional `inline.size` field does not independently change sizing.
+
+## Controlled notice
+
+```tsx
+<ProviderChoice providers={["google", "apple"]} verb="Continue with"
+  onChoose={chooseProvider} showNotice={noticeOpen}
+  notice={confirmation} noticeFocusRef={confirmationButton}
+  noticeLabel="Before continuing" />
+```
+
+The host controls when a notice opens and supplies its content. Both panels stay mounted in one grid cell to reserve height; inactive content is hidden and inert. Opening focuses `noticeFocusRef`, or the notice container when no ref is supplied. Closing restores the last connected, enabled provider button. Pending focus work is cancelled on controlled changes and unmount.
+
+`separator` defaults to `"or"`; pass null to omit it. Empty providers render nothing. These controls do not submit forms, start authentication, persist accounts, show provider-specific advice or run countdowns. Those operations remain in the host.

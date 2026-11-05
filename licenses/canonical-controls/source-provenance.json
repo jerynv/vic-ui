@@ -1,0 +1,919 @@
+{
+  "sourceCommit": "555625f40a51741b1b7050f579afbdb2b54fccb6",
+  "archiveSha256": "bef2cc4d4e64ca362314fdb89dafc89540709e648e4ed50656f3e5de6bd46b2b",
+  "manifestSha256": "5dde52fef1a29f82944da3a9f463949340920ed4977b448904a5043af11eef37",
+  "authorization": "Owner-authorized first-party transfer. No V-Client MIT grant is asserted.",
+  "scope": "Selected additive canonical components and source rules. Listed styles are references, not wholesale imports. Same-name exports are not a behavior-parity claim.",
+  "inputFiles": [
+    {
+      "sourcePath": "web/src/components/BrandMarks.tsx",
+      "gitBlob": "875d7868e065c12767f19ce4dbbb863021215e8f",
+      "sha256": "60ff2d264cb4890aff796b5dad682904e426f06ce9ece95270edbf626c53c486",
+      "bytes": 3940
+    },
+    {
+      "sourcePath": "web/src/lib/calendarGrid.ts",
+      "gitBlob": "305193706818bc5c19376dd97d69f3883f7bbec4",
+      "sha256": "bf77ff77f3cdbf7528d29d35706e4d0c5de50aef155c2ee34998725ca7da2bb5",
+      "bytes": 8115
+    },
+    {
+      "sourcePath": "web/src/lib/timePicker.ts",
+      "gitBlob": "3dc329db5566d2d3c49b2a53e03f8001c9260a39",
+      "sha256": "73df138982fc464efa8c831bd4ea2b570f9e71b5db8aba7283d5219b11ba79a5",
+      "bytes": 634
+    },
+    {
+      "sourcePath": "web/src/styles/app/calendar.css",
+      "gitBlob": "07459d7d69960c2abc7f7306cb8019d7dd800650",
+      "sha256": "c59d0d219d69a3b9bb0bf5b18684f3a1fd108a0f60153c14de2f7c15959611a3",
+      "bytes": 60344
+    },
+    {
+      "sourcePath": "web/src/styles/app/call-chat.css",
+      "gitBlob": "2e5ba2f4fbdbc887ed3089fdf28f79eed778eca7",
+      "sha256": "87e61d429b58f195cb35daf8b1c2e5ba449797f517f18a71efd3b64e918923c6",
+      "bytes": 2904
+    },
+    {
+      "sourcePath": "web/src/styles/app/calls.css",
+      "gitBlob": "556c03b09b8388e01c8a08cfca9c6161884fbb99",
+      "sha256": "5603ff26338efdf77f21b626a5a694203a7826fcf45b05b582735aba126ef5e5",
+      "bytes": 36354
+    },
+    {
+      "sourcePath": "web/src/styles/app/chart.css",
+      "gitBlob": "a462b51b38e3744babecd91afdf36e0314885ee5",
+      "sha256": "09a21576586afd8dc2a75e1b3f20eccae37e2c1f0ea593909062d58e2f596930",
+      "bytes": 10334
+    },
+    {
+      "sourcePath": "web/src/styles/app/chat.css",
+      "gitBlob": "8930b4c0b95064f648d17f9d5f9ac2d02e0bc7f7",
+      "sha256": "3ce90cc1de60067e34aaa8bcd9c2058ff381b60ef035109c9ea5fb73e63ddb63",
+      "bytes": 28603
+    },
+    {
+      "sourcePath": "web/src/styles/app/documents.css",
+      "gitBlob": "3995d8c808e9b4236b3c22eeab0f2d76dfc54403",
+      "sha256": "5f9075a026934412412ef20d7edf3a2d4ac7b8d3936b72f3b3993d36c698d027",
+      "bytes": 11135
+    },
+    {
+      "sourcePath": "web/src/styles/app/getting-started.css",
+      "gitBlob": "f885c214f9873cec56b4f4efd9b012345d4d0a52",
+      "sha256": "8ec2fe93eb6a9438d1fcbf30c07e2fc167d3b826144b75301852748cf6fa0194",
+      "bytes": 741
+    },
+    {
+      "sourcePath": "web/src/styles/app/home.css",
+      "gitBlob": "3cf186a73ec9892384ec9f621b363557b1ab64ec",
+      "sha256": "fc86452a57da927741f5b40ebac518bf85481bc2a8363e0d35ab522622665523",
+      "bytes": 4118
+    },
+    {
+      "sourcePath": "web/src/styles/app/people.css",
+      "gitBlob": "286b73d412d1ac06efe2f900162b75f2d34defa2",
+      "sha256": "03615e1588b3b0c3fc7a49bf668f45af2b2482a7ac6eac2c9626bbbbb2718ab3",
+      "bytes": 3979
+    },
+    {
+      "sourcePath": "web/src/styles/app/places.css",
+      "gitBlob": "ceb894f4314c584d22ba7ebc67e78fada87e61ab",
+      "sha256": "87a788639b79af32143e9806e0049218fe889155d1f6ade24e14dcc25ff09929",
+      "bytes": 10334
+    },
+    {
+      "sourcePath": "web/src/styles/app/record.css",
+      "gitBlob": "a50a8b46ba2094cebab561de6c549a74023206b4",
+      "sha256": "f73e31ac6b79f0ef25bd9ff34473795dc0ca0c8c9a3b815103b4d4841769ef6f",
+      "bytes": 3425
+    },
+    {
+      "sourcePath": "web/src/styles/app/recordings.css",
+      "gitBlob": "4eb5bd4bee892c8b0e94b58c3fcf9ff398ce68ab",
+      "sha256": "7c4e2d2cdb14f4cbee4a29ddcbf103d4ca89935f81bed6368553996833cfcfdc",
+      "bytes": 4271
+    },
+    {
+      "sourcePath": "web/src/styles/app/requests.css",
+      "gitBlob": "20553af65aa0d4c47b79fedd29bf1be00fabe2a0",
+      "sha256": "68f37430936948917a2435ccbbed7fc9890d0f2d3e28d885db72f0ad7ce74d9a",
+      "bytes": 35515
+    },
+    {
+      "sourcePath": "web/src/styles/app/rules.css",
+      "gitBlob": "d7471ae4d9398e074c8303bab73cacf46ac5d51b",
+      "sha256": "37122aafa1a7b1f5574a6383656e2afadd06ed1ad3c1ee8c243e783da72d1d7e",
+      "bytes": 2445
+    },
+    {
+      "sourcePath": "web/src/styles/app/settings.css",
+      "gitBlob": "16545bd7119a262e0e2a0928afd7943de0a8c51e",
+      "sha256": "83d565b6a4eb3c44bf58357cd299e36728ab8abed964b4122f3d53b5ba6f8d31",
+      "bytes": 8371
+    },
+    {
+      "sourcePath": "web/src/styles/app/viewers.css",
+      "gitBlob": "ca30d7a20c7e08ada1518a6f79fee6c75cd7197f",
+      "sha256": "1ca2edbc449c4248d4a603c770ef87a37e2364161022961faf91e78c3a1f31bb",
+      "bytes": 18829
+    },
+    {
+      "sourcePath": "web/src/styles/auth.css",
+      "gitBlob": "a1ac4a942b0c869b1d2316ffd0696c23a2ce16bd",
+      "sha256": "19399124220893df69b36e64fd2720cef853c25507dfaac85c33aba254cff37a",
+      "bytes": 4462
+    },
+    {
+      "sourcePath": "web/src/styles/base.css",
+      "gitBlob": "13d04fc741b4038b6239e410cd54bd0a2eae180a",
+      "sha256": "5a73a8e93429fc82ba38e0b6db83ca13d1e48f3c59a40a7dc10f83dd0396af84",
+      "bytes": 4325
+    },
+    {
+      "sourcePath": "web/src/styles/components/faces.css",
+      "gitBlob": "471eea8806ca4c405e140f4a74873d39bbf013b7",
+      "sha256": "ed55507fdace61916fcadbf6fe5090e9e8d6c7dedd7113fd64e4d51b72c58f04",
+      "bytes": 4225
+    },
+    {
+      "sourcePath": "web/src/styles/components/head.css",
+      "gitBlob": "d2ae99e7cb8d651fea1e48bdb5b6dd40808d8798",
+      "sha256": "e46a5bd3e6bf74520c93dbbb9c0aabededa67279fbe4467ef4ab35c10af928d0",
+      "bytes": 3129
+    },
+    {
+      "sourcePath": "web/src/styles/components/modal.css",
+      "gitBlob": "c4b056b142699e584aa00521bf7b2aa437eda852",
+      "sha256": "62f18fd0ee4ff5816f829d041b906f4bdaec79580fa9e1ca62d08102a4d2c69b",
+      "bytes": 1094
+    },
+    {
+      "sourcePath": "web/src/styles/components/operation.css",
+      "gitBlob": "5ddbe2da13b809b1d851771ad248e6a3461ea46c",
+      "sha256": "bba6db364ce9e7210ebdb9a52aa436856fef11e9ff3726f152a2d608102c5474",
+      "bytes": 9955
+    },
+    {
+      "sourcePath": "web/src/styles/components/paintings.css",
+      "gitBlob": "54c3aa5d1b47c9f0e6bd4e94b26655918764f94e",
+      "sha256": "3371599a71a2748e3ae81d786f7a40d827b8cb5a4cb6cf7697efce8fb8ef5852",
+      "bytes": 828
+    },
+    {
+      "sourcePath": "web/src/styles/components/prose.css",
+      "gitBlob": "51298908b8808f088915969d3d9eb52c050bea46",
+      "sha256": "02935dd08667c214b55550d24ad4d30469edc5b262d7dd3554f8b2764112a509",
+      "bytes": 2238
+    },
+    {
+      "sourcePath": "web/src/styles/components/rows.css",
+      "gitBlob": "d85bd17c8c20bdbc848a4b2f8faf3d10ed905568",
+      "sha256": "bbf172d4a1cafd148ee2b11976a97dd92bfa2f6e6854a4be420833bccf8dcac8",
+      "bytes": 3348
+    },
+    {
+      "sourcePath": "web/src/styles/components/skeleton.css",
+      "gitBlob": "a773cd9367a2ff388d2175dc128fc87ac52dbacc",
+      "sha256": "8b336138dffc526355a04237e746b1939675031d59f7493ecf3ff76dcee95b7b",
+      "bytes": 2345
+    },
+    {
+      "sourcePath": "web/src/styles/components/tour.css",
+      "gitBlob": "38e07ade611800a6c7608c86c8e3af17a2199827",
+      "sha256": "16ac6904306837ad5fda9e7762c4b3862f49094432e6148eae7736cb08020289",
+      "bytes": 4737
+    },
+    {
+      "sourcePath": "web/src/styles/components/type.css",
+      "gitBlob": "96503d9719ffb584b62ddc10aca860366ab9cdc4",
+      "sha256": "24ad0370fc2bf41a122b6fe52ee0c11626f39ba7878a99b597ef9499cf849391",
+      "bytes": 6365
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-data.css",
+      "gitBlob": "467a10eae2c73ccc44b2aa4bd5993e9bbd73e583",
+      "sha256": "91606f87e1642e449cc652694e064dff2aae08e89c5fcedd26d78abfd6a63cf3",
+      "bytes": 19932
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-display.css",
+      "gitBlob": "17b0fe6ba41c91424ad6a56426983d45f460946b",
+      "sha256": "d7e734bdd139ed286e7f7a4fd49b231aec575381d63bc78f8b6b7c885fd765f4",
+      "bytes": 39340
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-feedback.css",
+      "gitBlob": "2cca05ccb3a11966471bd45661e8cbc4d76c4791",
+      "sha256": "9d9a90dd58a075beee349bdf39cd148ecf9f1c71d6573a4046eaa1a2b5c4291b",
+      "bytes": 6445
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-focus.css",
+      "gitBlob": "c2b88e51bfbd750db0862e639f168475c2a3ace8",
+      "sha256": "0eff07255228228fbef175430a2e98b8b0c48e3ef73db45cda79d6fe7cd3f6e8",
+      "bytes": 18083
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-inputs.css",
+      "gitBlob": "26b5acc9beff47ebbb80361f88d2170226dfc131",
+      "sha256": "5b68155eaca3ef749d2411be9834ba23399c2a98a8b1845a60ff9e9d69de8282",
+      "bytes": 17056
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-mode.css",
+      "gitBlob": "7de3f10c0899bb12cffef17612bd901143267cd1",
+      "sha256": "3253705233840ce07c2cd412839af23b44ad1ba6fbaf5128921cfc07fafd18d8",
+      "bytes": 3081
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-overlays.css",
+      "gitBlob": "df4012b87bc1bf61c67805251a7ed510e6e44cdc",
+      "sha256": "f715fb43ad2216a7b8d76a6ed901b771818fce0da92cb72b8626644b603a7dfd",
+      "bytes": 24687
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-panel.css",
+      "gitBlob": "62af25d7edf4ed2fc1cab224abb832440df1b370",
+      "sha256": "a070f62d220c9f3431f44cb7096fdc3c86e0a85042ee1bc15cc2019b1886720f",
+      "bytes": 7759
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-sidebar.css",
+      "gitBlob": "438eed16348c681c1f4db2bc8a470a9319fa1a27",
+      "sha256": "fa6bc479b38d61385da92dca33023f4af72d661a5e29fe917568d4ff669e92fd",
+      "bytes": 9563
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui-timeline.css",
+      "gitBlob": "7a6cddea0cfe0346b0f8f5a56e7cb8aa7a56aaee",
+      "sha256": "3fec7b5b2476a24007991e01aa7ddf4328cf829f771b2e017086406e11ff31c8",
+      "bytes": 14068
+    },
+    {
+      "sourcePath": "web/src/styles/components/ui.css",
+      "gitBlob": "94ca7a45313bef6296c19455aa344bac28bc3c35",
+      "sha256": "a097b15d04f20b46f5764a9a93c1b16084c19c0afff9d1797f4195da846d63ed",
+      "bytes": 36028
+    },
+    {
+      "sourcePath": "web/src/styles/console/calendar.css",
+      "gitBlob": "32b67606046d2804d6fa0255246389d33023b019",
+      "sha256": "dab902f0de62083af381f9314004948d2e2011285276c371e78f778af09b7ad3",
+      "bytes": 12246
+    },
+    {
+      "sourcePath": "web/src/styles/console/frame.css",
+      "gitBlob": "c895f80c9235ff91d3515c6c712c001e4c939720",
+      "sha256": "4e7fb11c09ef36ead5f2762dabac9a21a3ca19d9d9db143c61656a524794865a",
+      "bytes": 11642
+    },
+    {
+      "sourcePath": "web/src/styles/frame.css",
+      "gitBlob": "f333bb097d005aa1cec41cfecf7ff3cdb332b521",
+      "sha256": "239c199d8d0c0bbc9d1711bb488233a8ab4836e2f43c85371ea6087afbde3b96",
+      "bytes": 3952
+    },
+    {
+      "sourcePath": "web/src/styles/kumo-bridge.css",
+      "gitBlob": "f1e219e2419d661a6d205450213c124ad038f273",
+      "sha256": "654b8fbffd061bca52eb8c72219c27f8e88d3a48b4a923257180dc4d81a1c125",
+      "bytes": 8589
+    },
+    {
+      "sourcePath": "web/src/styles/tokens.css",
+      "gitBlob": "79cc638f00e8af600d68748feef98573d0ebfec1",
+      "sha256": "b5c965c683ef02012dec42f29718e1c93eea3835d3e5f7a0161e6ba3fdba295c",
+      "bytes": 29325
+    },
+    {
+      "sourcePath": "web/src/styles/trial-ground.css",
+      "gitBlob": "45379caaa40fb43ad79b1fee0b27a29e78e2f603",
+      "sha256": "06ab921f96412398d0f8ad05201b0567827f6ea0f973d9aa0d0dab5fa2c42078",
+      "bytes": 690
+    },
+    {
+      "sourcePath": "web/src/styles/unlayered.css",
+      "gitBlob": "ba87c2e8281b77cf27866456ff4893961f4793fd",
+      "sha256": "1f9609d44ca88336c4a5d5ae6dbf5fc2c24958556a867fcaf77a1177bb9cbc31",
+      "bytes": 21375
+    },
+    {
+      "sourcePath": "web/src/ui/Button.tsx",
+      "gitBlob": "1abe56ee3ff57829824fde9139dc2c30643b2459",
+      "sha256": "656ddeb3a97586f297d3ff46c87ef398374bea8fb344f3f5dac5159d49dd8cd3",
+      "bytes": 4949
+    },
+    {
+      "sourcePath": "web/src/ui/Checkbox.tsx",
+      "gitBlob": "8d520d09488e34e9427f2d443d9e2293226a8da3",
+      "sha256": "66c0a19cbe1199438950ec073d01264f76e4bfde411a91153f5a16d7332ed01e",
+      "bytes": 2447
+    },
+    {
+      "sourcePath": "web/src/ui/Choice.tsx",
+      "gitBlob": "fd51ebe90c9908082abd08670a5f84e065e9ef45",
+      "sha256": "9e21bafc81cde93403541a085da0790e89fbfd42d28c7c14298d7e21b9c47b98",
+      "bytes": 1198
+    },
+    {
+      "sourcePath": "web/src/ui/CodeField.tsx",
+      "gitBlob": "d4de76d6c169c57bfa953fd967ca896868c7c839",
+      "sha256": "7d0de9e98019d785b9d38197aa9b1ab7748f079997414b8da111140301c8c5aa",
+      "bytes": 2596
+    },
+    {
+      "sourcePath": "web/src/ui/DatePicker.tsx",
+      "gitBlob": "3bd6e6f1f1f1d8096b26ae118dbffffad76186c7",
+      "sha256": "d78476e76d5091a163f11f31957906103d677ce1fcf0d1a4fc5a1529d30fe139",
+      "bytes": 15368
+    },
+    {
+      "sourcePath": "web/src/ui/Dialog.tsx",
+      "gitBlob": "08a57ab25a8f592a8ad44d2d9f22e66bd66fd31e",
+      "sha256": "0a9107c5ffbce9d30200122fac0526c8945228457ad19109f161e13d3f133584",
+      "bytes": 5034
+    },
+    {
+      "sourcePath": "web/src/ui/Facts.tsx",
+      "gitBlob": "a313e84892c232241912f3211c616d0d2666cac1",
+      "sha256": "f834f12bd27e8d1155981e3f00bd7affb643f9c5f73866d3f205db17f99899d7",
+      "bytes": 1265
+    },
+    {
+      "sourcePath": "web/src/ui/Focus.tsx",
+      "gitBlob": "a4ab0c0704c0f427cdf2ced6ad551fbc0f531f7c",
+      "sha256": "3019e048ebbb56121bcaac26681e8ec121749fab695bf947b5d5b68944a98d2a",
+      "bytes": 11272
+    },
+    {
+      "sourcePath": "web/src/ui/FocusLines.tsx",
+      "gitBlob": "fad34f3bab58c4e2ab17397375492c441e35cdc2",
+      "sha256": "d49863ecf43e6f9f0a1ded0f8187df655bee1366545202d2f81ec0d618985e80",
+      "bytes": 1438
+    },
+    {
+      "sourcePath": "web/src/ui/FormSteps.tsx",
+      "gitBlob": "d41d148c3717a389336cc617e4cd30ecd58bc221",
+      "sha256": "cbd98bb876d60fdc05ca31c85541c4e2c82ca86748c8dcb41606388659f2d24e",
+      "bytes": 2364
+    },
+    {
+      "sourcePath": "web/src/ui/Grow.tsx",
+      "gitBlob": "388340b9a500af42f539b5a36ab95ef3054732de",
+      "sha256": "5bd40112f760592033c352334f8bf93de9f89af5b327791bad69f1c63cb23d35",
+      "bytes": 1537
+    },
+    {
+      "sourcePath": "web/src/ui/List.tsx",
+      "gitBlob": "2a1c9d94b08b61926bca2e31bc68438fbda8e2ec",
+      "sha256": "5441c7e9a41d1c9d9a1027bdb75b696b5bde49b7b753c2a8476d7c389cd66e0f",
+      "bytes": 4993
+    },
+    {
+      "sourcePath": "web/src/ui/ModeChoice.tsx",
+      "gitBlob": "fe7e7af7c069fda996cee3882f1f3e7ce5e150a7",
+      "sha256": "c0136a2b333a1c4e63db03a84e6d644c2be0c30adb84da7aa4111dfe4dc2fb2e",
+      "bytes": 2396
+    },
+    {
+      "sourcePath": "web/src/ui/NumberField.tsx",
+      "gitBlob": "ad96395bc4fad3754b828615348e84c4c8369439",
+      "sha256": "5648def8c95b85b555459901deeabab63333625e4c953034ee53bf4d827a183c",
+      "bytes": 3290
+    },
+    {
+      "sourcePath": "web/src/ui/PaneViews.tsx",
+      "gitBlob": "13baf34fefe1c9fe205440ade43cdda41669118d",
+      "sha256": "e9cd43db3eff43a3cecfbf9255517466407457b8ff502031085d1acd4b06d34b",
+      "bytes": 1254
+    },
+    {
+      "sourcePath": "web/src/ui/Panel.tsx",
+      "gitBlob": "b63224b4996e6082de69830434fc7af7f6f25d1c",
+      "sha256": "c2174d32c29663a083f7a0713e357f66f507eb735d26f648078eb59aeaa056fc",
+      "bytes": 9353
+    },
+    {
+      "sourcePath": "web/src/ui/PlacePicker.tsx",
+      "gitBlob": "d3236b2ca855035ef544dfeadb15a6632ba234d8",
+      "sha256": "cda71b6c7e655db4136fbaf87c713286ebf499b29bc04b6396b3027393f3ea0e",
+      "bytes": 11679
+    },
+    {
+      "sourcePath": "web/src/ui/Player.tsx",
+      "gitBlob": "9d3c040a70a8a17f1fba8c9bcf890013024b787e",
+      "sha256": "986b1f4861cd15d0f6fe18d183dfc450df131c4bbc5e21de8fa0b892b2b90c99",
+      "bytes": 1299
+    },
+    {
+      "sourcePath": "web/src/ui/Providers.tsx",
+      "gitBlob": "98a85373b1f8910934106523a4163010860aab72",
+      "sha256": "d9675c7da629afa7a4e5baf0de4d1d3853d23bf2bf487109d543fe315d0122a5",
+      "bytes": 6773
+    },
+    {
+      "sourcePath": "web/src/ui/SearchField.tsx",
+      "gitBlob": "627622fa2e1be6945c869ab94e46e3a0da11fdd1",
+      "sha256": "66d82fbbab8fa6ba829a30e1d6be7125fa15f32aa573cfbdfcafb25f9d5eb2ff",
+      "bytes": 4022
+    },
+    {
+      "sourcePath": "web/src/ui/Select.tsx",
+      "gitBlob": "eb29c4f774937a5f6affd852d678123ad92c6c3f",
+      "sha256": "2ce9ea129cd45ad91a3ad55863c974bf87731eef217f2249a6c2c1fccf093261",
+      "bytes": 10678
+    },
+    {
+      "sourcePath": "web/src/ui/Settings.tsx",
+      "gitBlob": "b35866a60bd50f253e3bd5a02da4345c61aa4a5f",
+      "sha256": "1d7a862e926a7b5249d88bd1585bbbeccd35993e3b06fc045ce8de4a94c57a49",
+      "bytes": 6660
+    },
+    {
+      "sourcePath": "web/src/ui/Sidebar.tsx",
+      "gitBlob": "50bc33a3c107c8b9f345315588b94f16c4c56a3c",
+      "sha256": "bf01522c78d96c98d10767ad272ef2a152c76885cc1f5d25c191a6c871629396",
+      "bytes": 17066
+    },
+    {
+      "sourcePath": "web/src/ui/Switch.tsx",
+      "gitBlob": "b5fd6582217c3acc0c8aae145ff80d9d6da5f05a",
+      "sha256": "e204f0631cabb0e6a4f6a538adc590d4e6793626b2708e576e9d457a7f276515",
+      "bytes": 1233
+    },
+    {
+      "sourcePath": "web/src/ui/Table.tsx",
+      "gitBlob": "451f01e5e14a528b8576f4d3a76a403e146e06fd",
+      "sha256": "eee040bbedfa2c2539a22f81d4e56b618f45b8e7b53de01cbd281c8cdbb5f3d7",
+      "bytes": 9690
+    },
+    {
+      "sourcePath": "web/src/ui/TextField.tsx",
+      "gitBlob": "462cc3b84c36e8a7aea97ea3826a65ec425e7c19",
+      "sha256": "1f6e1f7c093a72a51061851e88235a518396b287522f231b2335fdb7801c3a42",
+      "bytes": 3213
+    },
+    {
+      "sourcePath": "web/src/ui/Textarea.tsx",
+      "gitBlob": "2d158678be0184f4e4ab214285adbbcd4f42f64c",
+      "sha256": "ca3dd0a53388a60f0f939c10c755a512506ba41e3e680a31e640694fd31f0260",
+      "bytes": 5323
+    },
+    {
+      "sourcePath": "web/src/ui/TimeField.tsx",
+      "gitBlob": "c781a0aaf9c0fbefb8fb680011765211f26159b5",
+      "sha256": "ac17d5f651f578d96e19d2bbfcdb17c585922d4040be267d67de6509f24c46da",
+      "bytes": 2618
+    },
+    {
+      "sourcePath": "web/src/ui/TimePicker.tsx",
+      "gitBlob": "3cece67a350cf0b07c806692d57f001ae40c7116",
+      "sha256": "ee8efda6eaab9dcdf5707436e3b7f95961bed7e73cba983064d0b57294b12d85",
+      "bytes": 5536
+    },
+    {
+      "sourcePath": "web/src/ui/Tree.tsx",
+      "gitBlob": "8fffb5fa9b537c0cf54c9fed7aaa133b3eaff3bd",
+      "sha256": "e58a748372dfd8bd85a7d0b6da643872923159825734cb9f812c024003ba994d",
+      "bytes": 6840
+    },
+    {
+      "sourcePath": "web/src/ui/held.ts",
+      "gitBlob": "420a79c61ae9319aca36bfe450e3122b2fc97063",
+      "sha256": "d3fd85f4887ae2681873fe951358cc7e7e8a1b8d0b39a5b02764dff9863fd570",
+      "bytes": 955
+    },
+    {
+      "sourcePath": "web/src/ui/treePath.ts",
+      "gitBlob": "b4b8520645ce581e32e6d7f03770bd0dcca9d696",
+      "sha256": "f8660af3e8085bce1b0cbc9081adfe8a7b3dc5887b802aa8205284a3027cd77d",
+      "bytes": 1042
+    },
+    {
+      "sourcePath": "web/src/ui/Combobox.tsx",
+      "gitBlob": "6b8bdd041df504b430059f323d65e306e2b60468",
+      "sha256": "afdc1bcbf91ad56941e7028d57f04045a7e16746ef6db99f9945237c4a86696a",
+      "bytes": 17620
+    }
+  ],
+  "coverage": [
+    {
+      "name": "Tree",
+      "typeOnly": false,
+      "module": "./Tree",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "treePathTo",
+      "typeOnly": false,
+      "module": "./Tree",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "TreeItem",
+      "typeOnly": true,
+      "module": "./Tree",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Cell",
+      "typeOnly": false,
+      "module": "./Table",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Facts",
+      "typeOnly": false,
+      "module": "./Facts",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Fact",
+      "typeOnly": true,
+      "module": "./Facts",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Action",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Actions",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Panel",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PanelBlock",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PanelField",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PanelHead",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PanelItem",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PanelText",
+      "typeOnly": false,
+      "module": "./Panel",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "ModeChoice",
+      "typeOnly": false,
+      "module": "./ModeChoice",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "ModeChoiceValue",
+      "typeOnly": true,
+      "module": "./ModeChoice",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Player",
+      "typeOnly": false,
+      "module": "./Player",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "RowButton",
+      "typeOnly": false,
+      "module": "./List",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "TimeField",
+      "typeOnly": false,
+      "module": "./TimeField",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "TimePicker",
+      "typeOnly": false,
+      "module": "./TimePicker",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PaneViews",
+      "typeOnly": false,
+      "module": "./PaneViews",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PaneView",
+      "typeOnly": false,
+      "module": "./PaneViews",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FormSteps",
+      "typeOnly": false,
+      "module": "./FormSteps",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "Grow",
+      "typeOnly": false,
+      "module": "./Grow",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FocusLayout",
+      "typeOnly": false,
+      "module": "./Focus",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FocusHead",
+      "typeOnly": false,
+      "module": "./Focus",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FocusMark",
+      "typeOnly": false,
+      "module": "./Focus",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FocusStep",
+      "typeOnly": true,
+      "module": "./Focus",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FocusLine",
+      "typeOnly": false,
+      "module": "./FocusLines",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FocusQuiet",
+      "typeOnly": false,
+      "module": "./FocusLines",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "FocusFoot",
+      "typeOnly": false,
+      "module": "./FocusLines",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "useTab",
+      "typeOnly": false,
+      "module": "./tab",
+      "disposition": "host-owned document title/router policy; not exported"
+    },
+    {
+      "name": "CodeField",
+      "typeOnly": false,
+      "module": "./CodeField",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "ProviderButtons",
+      "typeOnly": false,
+      "module": "./Providers",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "ProviderChoice",
+      "typeOnly": false,
+      "module": "./Providers",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "SettingsDialog",
+      "typeOnly": false,
+      "module": "./Settings",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "SettingsPane",
+      "typeOnly": false,
+      "module": "./Settings",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PlacePicker",
+      "typeOnly": false,
+      "module": "./PlacePicker",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "placeWords",
+      "typeOnly": false,
+      "module": "./PlacePicker",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PlaceValue",
+      "typeOnly": true,
+      "module": "./PlacePicker",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PlaceSpace",
+      "typeOnly": true,
+      "module": "./PlacePicker",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    },
+    {
+      "name": "PlaceProject",
+      "typeOnly": true,
+      "module": "./PlacePicker",
+      "disposition": "implemented portable API; focused behavior and strict packed usage passed"
+    }
+  ],
+  "preservedRuntimeExports": [
+    "Accordion",
+    "AccordionItem",
+    "ActionBar",
+    "ActionBarRule",
+    "Announcement",
+    "AvatarStack",
+    "Badge",
+    "Button",
+    "ButtonLink",
+    "Card",
+    "CautionButton",
+    "Checkbox",
+    "Choice",
+    "ChoiceCards",
+    "Combobox",
+    "ComboboxEmpty",
+    "ComboboxGroup",
+    "ComboboxItem",
+    "ComboboxList",
+    "ComboboxRoot",
+    "ComboboxSearch",
+    "CommandPalette",
+    "Count",
+    "CursorPagination",
+    "DangerButton",
+    "DangerButtonLink",
+    "DatePicker",
+    "DelimitedPreview",
+    "Dialog",
+    "DialogActions",
+    "DialogHeading",
+    "DialogSurface",
+    "Disclosure",
+    "EMOJI_GROUPS",
+    "EmojiPicker",
+    "Empty",
+    "EmptyArt",
+    "EmptyLine",
+    "FieldHead",
+    "FieldHint",
+    "FileButton",
+    "FileCard",
+    "FileChip",
+    "FileGrid",
+    "FilePreviewDialog",
+    "FilePreviewStage",
+    "FilePreviewStatus",
+    "FilePreviewToolbar",
+    "FileTile",
+    "Flow",
+    "FootProblem",
+    "HUES",
+    "HeadCount",
+    "IconButton",
+    "IconButtonLink",
+    "ImagePreview",
+    "Input",
+    "Kbd",
+    "LIST_LEAST",
+    "LIST_MOST",
+    "Link",
+    "LinkProvider",
+    "MEDIA_TALL",
+    "MEDIA_WIDE",
+    "MediaGrid",
+    "Menu",
+    "MenuSurface",
+    "MonthGrid",
+    "NativeSelect",
+    "Notice",
+    "NumberField",
+    "OrgMark",
+    "Pagination",
+    "Popover",
+    "PopoverSurface",
+    "Problem",
+    "Progress",
+    "Radio",
+    "RadioGroup",
+    "Reaction",
+    "Reactions",
+    "Row",
+    "RowGroup",
+    "Rows",
+    "RowsMore",
+    "SHORT_ERROR",
+    "ScrollArea",
+    "SearchField",
+    "Select",
+    "SelectField",
+    "SettingsGroup",
+    "SettingsLayout",
+    "SettingsRow",
+    "SettingsSection",
+    "Sidebar",
+    "SidebarContent",
+    "SidebarFooter",
+    "SidebarGroup",
+    "SidebarGroupLabel",
+    "SidebarHeader",
+    "SidebarMenu",
+    "SidebarMenuBadge",
+    "SidebarMenuButton",
+    "SidebarMenuItem",
+    "SidebarProvider",
+    "Skeleton",
+    "Slider",
+    "SlidingView",
+    "SlidingViews",
+    "Spinner",
+    "Surface",
+    "Switch",
+    "TIP_DELAY_MS",
+    "Table",
+    "TableOfContents",
+    "Tabs",
+    "TextField",
+    "TextPreview",
+    "Textarea",
+    "TextareaControl",
+    "TimelineDivider",
+    "Toaster",
+    "Tooltip",
+    "TooltipSurface",
+    "Trail",
+    "TypedConfirm",
+    "atPoint",
+    "describedBy",
+    "hueFor",
+    "isShortError",
+    "rangeWords",
+    "textOf",
+    "toOptions",
+    "toast",
+    "toneClass",
+    "typedFirst",
+    "useAnchored",
+    "useLogo",
+    "usePressAway",
+    "useReason",
+    "useSidebar",
+    "useTip"
+  ],
+  "adaptations": [
+    "Keep Vic ink Button default and accent/round/surface behavior; add explicit glass/xs/line usage.",
+    "Keep SlidingViews; PaneViews is separately mounted, hidden and inert.",
+    "Keep SettingsSection runtime; canonical descriptor is SettingsPaneSection<V>.",
+    "Host supplies Focus brand, artwork, appearance, title and provider policy; no automatic submission or app useTab.",
+    "Time APIs use structural wall-clock bounds; no application calendar policy or session loader.",
+    "Player is a native host-URL control; ready-input preview subpaths remain separate.",
+    "WrappingRow uses a separately pinned d44c231f source manifest.",
+    "TimeField retains valid off-step end selections on reopen. Its hosted Combobox closes and clears transient query when disabled, including reason-enabled inputs that retain focus."
+  ],
+  "verification": {
+    "runtimeExports": 177,
+    "historicalExportsPreserved": 142,
+    "strictBundler": "passed, skipLibCheck:false",
+    "strictNodeNext": "passed, skipLibCheck:false",
+    "libraryChecks": 107,
+    "productionWebsiteChecks": 9,
+    "independentReview": "two P2 TimeField findings reproduced and fixed with parent regressions; no independent recheck claimed",
+    "browserScope": "Chromium; no physical-device, Firefox/WebKit or assistive-technology session claim"
+  }
+}

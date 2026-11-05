@@ -31,7 +31,7 @@ export const SearchField = forwardRef<
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
   const held = why.held;
-  const said = describedBy(field, error, hint, why.describedBy);
+  const said = [describedBy(field, error, hint, why.describedBy), rest["aria-describedby"]].filter(Boolean).join(" ") || undefined;
   const own = useRef<HTMLInputElement | null>(null);
   const join = useCallback(
     (node: HTMLInputElement | null) => {
@@ -62,7 +62,7 @@ export const SearchField = forwardRef<
           disabled={held ? undefined : disabled}
           readOnly={held || rest.readOnly}
           aria-disabled={held ? true : undefined}
-          aria-invalid={error ? true : undefined}
+          aria-invalid={error ? true : rest["aria-invalid"]}
           aria-describedby={said}
           onChange={(event) => {
             if (!held) onValueChange(event.target.value);

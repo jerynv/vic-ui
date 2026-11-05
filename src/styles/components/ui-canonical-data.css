@@ -1,0 +1,157 @@
+@layer components.parts {
+  /* Canonical overflow behavior: fitting tables retain page-level sticky headings. */
+  .ui-table-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+  .ui-table-scroll[data-fits]:not([data-height]) { overflow: visible; }
+  .ui-table-scroll:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  /* A column that is only drawn where there is room: on a phone its column, its head and its
+     cells all go, so the columns left take the width. */
+  @media (width < 640px) {
+    .ui-table [data-wide] {
+      display: none;
+    }
+  }
+
+  /* A roster (`look="roster"`): the product's list of things on its own page, as People and
+     Documents draw theirs, on the page's ground, at the working size, every row one height,
+     the cells quiet and the row's lead strong. */
+  .ui-table-scroll[data-look="roster"] {
+    --ui-table-ground: var(--bg-canvas);
+  }
+
+  [data-look="roster"] .ui-table {
+    table-layout: fixed;
+    font-size: var(--text-ui);
+  }
+
+  [data-look="roster"] .ui-table td {
+    height: 2.5rem;
+    padding-block: 0.25rem;
+    color: var(--fg-subtle);
+    white-space: nowrap;
+  }
+
+  /* A cell's mark and words (`Cell`): one line, the words cut short, the mark never shrunk. */
+  .ui-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .ui-cell[data-quiet] {
+    color: var(--fg-subtle);
+  }
+
+  .ui-cell[data-strong] {
+    font-weight: 500;
+    color: var(--fg-strong);
+  }
+
+  /* A cell pressed on its own (`onPress`): the row's words until pointed at, then a fill. */
+  .ui-cell-press {
+    max-width: 100%;
+    margin-inline: -0.25rem;
+    padding: 0.125rem 0.25rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: none;
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 140ms;
+  }
+
+  .ui-cell-press:hover {
+    color: var(--fg-strong);
+    background: var(--field-fill);
+  }
+
+  .ui-cell-press:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 0;
+  }
+
+  .ui-cell-mark {
+    display: grid;
+    flex: none;
+    place-items: center;
+    color: var(--fg-subtle);
+  }
+
+  .ui-cell-words {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .ui-row-button {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.625rem;
+    width: 100%;
+    padding: 0.3125rem 0.5rem;
+    border: 0;
+    border-radius: var(--radius-row);
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    color: var(--fg);
+    cursor: pointer;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease;
+  }
+
+  .ui-row-button:hover {
+    --fg-subtle: var(--fg-subtle-on-fill);
+    background: var(--field-fill);
+  }
+
+  .ui-row-button:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .ui-row-button-tile,
+  .ui-row-button-face {
+    display: grid;
+    width: 1.75rem;
+    height: 1.75rem;
+    place-items: center;
+  }
+
+  /* An icon's mark: its glyph on a raised tile, which reads on any row's fill. */
+  .ui-row-button-tile {
+    border-radius: var(--radius-row);
+    background: var(--bg-base);
+    box-shadow: inset 0 0 0 1px var(--line);
+    color: var(--fg-subtle);
+  }
+
+  /* A person's mark is their face, and a face is round. */
+  .ui-row-button-face > * {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-round);
+  }
+
+  .ui-row-button-words {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+    font-size: var(--text-ui);
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--fg-subtle);
+    transition: color 140ms ease;
+  }
+
+  .ui-row-button:hover .ui-row-button-words {
+    color: var(--fg-strong);
+  }
+
+}
