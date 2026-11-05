@@ -10,7 +10,7 @@ export default function VicExamples({ name }: { name: string }) {
   return <div className="not-prose space-y-6">
     <CodeSnippet code={`import { ${piece.exports.join(", ")} } from "vic-ui";`} filename="Import" />
     <p className="text-sm"><a className="underline underline-offset-4" href={`https://github.com/jerynv/vic-ui/blob/main/src/components/${piece.file}`}>Props and component source</a></p>
-    {examplesOf(piece.id).map(({ key, title, note, Demo, code }) => <section key={key} className="space-y-3">
+    {examplesOf(piece.id).map(({ key, title, note, Demo, code }) => <section key={key} data-vic-example={key} className="space-y-3">
       <h3 className="text-lg font-medium">{title}</h3>{note && <p className="text-sm text-muted-foreground">{note}</p>}
       <Tabs defaultValue="preview"><TabsList variant="line"><TabsTrigger value="preview">Preview</TabsTrigger><TabsTrigger value="source">Source</TabsTrigger></TabsList>
         <TabsContent value="preview" className="vic-preview min-w-0 overflow-auto rounded-(--radius-panel) border bg-card p-6"><Demo /></TabsContent>

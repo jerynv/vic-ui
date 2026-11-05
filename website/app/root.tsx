@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, Link, isRouteErrorResponse } from "react-router";
 import { RootProvider } from "fumadocs-ui/provider/react-router";
 import { Button, Toaster, TooltipProvider } from "vic-ui/ui";
@@ -5,11 +6,13 @@ import type { Route } from "./+types/root";
 import SearchDialog from "./components/search";
 import "./app.css";
 
+const LocalReview = import.meta.env.DEV ? lazy(() => import("./components/local-review")) : null;
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return <html lang="en" suppressHydrationWarning>
     <head><meta charSet="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><Meta /><Links /></head>
     <body><RootProvider theme={{ storageKey: "vic-ui:mode" }} search={{ SearchDialog }}>
-      <TooltipProvider>{children}<Toaster /></TooltipProvider>
+      <TooltipProvider>{children}<Toaster />{LocalReview && <Suspense fallback={null}><LocalReview /></Suspense>}</TooltipProvider>
     </RootProvider><ScrollRestoration /><Scripts /></body>
   </html>;
 }

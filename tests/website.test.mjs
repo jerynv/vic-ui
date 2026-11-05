@@ -17,6 +17,7 @@ test("marketing uses working library components and links to the full catalogue"
     await page.goto(server.resolvedUrls.local[0]);
     await page.getByRole("heading", { name: "Good interfaces start here.", level: 1 }).waitFor();
     assert.equal(await page.locator('[aria-label="Component directory"] a').count(), 91);
+    assert.equal(await page.locator("[data-agentation-portal], [data-feedback-toolbar]").count(), 0, "review tools are excluded from production");
     await page.getByLabel("Workspace name", { exact: true }).fill("Field Notes");
     await page.getByRole("switch", { name: "Open to your team" }).click();
     await page.getByText("Only people you invite can join.", { exact: true }).waitFor();
