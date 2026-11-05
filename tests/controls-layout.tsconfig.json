@@ -1,0 +1,7 @@
+{
+  "extends": "../tsconfig.json",
+  "include": [
+    "controls-layout.fixture.tsx",
+    "../site/src/examples/settings/1-controls.tsx"
+  ]
+}

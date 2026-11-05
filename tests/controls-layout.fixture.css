@@ -1,0 +1,9 @@
+.fixture-main { max-width: 1120px; padding: 2rem; margin-inline: auto; }
+.fixture-main h1 { font-size: 1.5rem; font-weight: 600; margin-block-end: 0.5rem; }
+.fixture-main > p { margin-block-end: 2rem; color: var(--fg-subtle); }
+.fixture-main output { color: var(--fg-subtle); font-size: var(--text-ui); font-variant-numeric: tabular-nums; }
+.fixture-main textarea { inline-size: 100%; border: 1px solid var(--line); border-radius: var(--radius-field); padding: 0.5rem; }
+.fixture-main .ui-settings-navigation a { padding: 0.5rem; border-radius: var(--radius-row); text-underline-offset: 0.2em; }
+.fixture-main .ui-settings-navigation a[aria-current] { background: var(--bg-tint); }
+[data-narrow] .fixture-main { max-width: 380px; }
+@media (max-width: 600px) { .fixture-main { padding: 1rem; } }
