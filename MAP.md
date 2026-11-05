@@ -1,5 +1,13 @@
 # vic-ui: the map
 
+## Active docs cleanup
+
+Worktree `/Users/jeryn/.t3/worktrees/vic-ui/t3-c2cc92d0`, branch `fix/catalogue-navigation`, baseline `85a3c33`; the original checkout is owned by another agent.
+Requested outcomes: one discoverable entry per component family, no repeated usage/example sections, and alphabetical component navigation. Acceptance: inspect rendered navigation/directory labels for order and uniqueness; exercise canonical pages and old URLs; keep both exported APIs usable and examples reachable. Public API removal is outside this cleanup.
+Implemented seven canonical alias mappings, alphabetical display-name sorting in Fumadocs and the directory, a single active API view, removal of repeated Setup blocks, and distinct icon-browser/guide labels. Read-only audit `/root/catalogue_audit` completed. Targeted browser checks pass for 84 unique sorted sidebar entries, all seven aliases, API switching/reload, search-index uniqueness, alias directory search and mobile navigation. API selection is local page state, with composable heading links opening their view.
+Static routing diagnosis: trailing-slash React Router navigation requested unbuilt `/<page>/_.data`; changing Fumadocs tree URLs also broke its active-folder matching. Resolved by keeping native tree URLs and using a full alias redirect to the canonical document directory. Both exported APIs and old prerendered paths remain available.
+All acceptance checks pass: seven website tests cover both catalogues at desktop/mobile widths; the extended family test also preserves query/hash bookmarks and finds Input by TextField in documentation search. Typechecks, design/dash checks, eight library tests, the local-review test and the reference build pass. Logs are `/tmp/vic-catalogue-{website,test,review,library}.log`. Implementation and verification are complete; next: commit and deliver. No owner decisions pending.
+
 ## Documentation website
 
 `website/` ports Fumadocs' React Router SPA template. MDX lives in `website/content/docs`;
@@ -7,7 +15,7 @@ the static search index and each document are prerendered. `npm run dev:website`
 `npm run build:website` emits `website/build/client`. The `dev:site` and `build:site`
 commands now target this website. GitHub Pages runs library and browser tests before deployment.
 The shared website theme control and live examples import the actual `vic-ui/ui` API.
-All 47 vic catalogue entries have first-class component pages. The 66 composable families share those pages where applicable, with their examples under the keyboard-accessible Composable API disclosure.
+84 canonical family pages cover the 47 vic catalogue entries and 66 composable families. `component-families.ts` maps alternate names to one page; old URLs render the canonical document and navigate to it after hydration. Aliases are excluded before Fumadocs builds navigation and search. Shared families use a Ready-made/Composable tab selector with one active example/usage view. Both the sidebar and marketing directory sort by display name; the reference shell sorts within its categories.
 Rows support an optional description beneath the title; the file-list example demonstrates independent save actions.
 Avatar is a single-person primitive; AvatarStack is the overlapping group composition.
 `website/upstream.json` records the imported demos. The original catalogue reuses

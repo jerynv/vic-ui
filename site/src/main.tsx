@@ -64,7 +64,7 @@ function Nav(props: { route: string }) {
     const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return words.length === 0 ? ENTRIES : ENTRIES.filter((entry) => words.every((word) => entry.words.toLowerCase().includes(word)));
   }, [query]);
-  const groups = ["Foundations", ...GROUPS].map((group) => ({ group, entries: found.filter((entry) => entry.group === group) })).filter((one) => one.entries.length > 0);
+  const groups = ["Foundations", ...GROUPS].map((group) => ({ group, entries: found.filter((entry) => entry.group === group).sort((a, b) => a.name.localeCompare(b.name, "en", { sensitivity: "base" })) })).filter((one) => one.entries.length > 0);
 
   // Every move closes the phone's sheet, so the page keeps its whole width.
   useEffect(() => {

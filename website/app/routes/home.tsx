@@ -58,7 +58,7 @@ function ComponentShelf() {
 const starter = 'import "vic-ui/ui/styles.css";\nimport { Button } from "vic-ui";\n\nexport function SaveButton() {\n  return <Button>Save changes</Button>;\n}';
 export default function Home() {
   const [query, setQuery] = useState("");
-  const components = catalogue.filter(component => component.name.toLowerCase().includes(query.toLowerCase()));
+  const components = catalogue.filter(component => component.search.replace(/[\s-]/g, "").includes(query.toLowerCase().replace(/[\s-]/g, "")));
   return <HomeLayout {...baseOptions()}>
     <title>vic/ui · Good interfaces start here.</title><meta name="description" content="Textured controls, considered states, and an owned SVG catalogue. React components with source you can read." />
     <main className="marketing">
