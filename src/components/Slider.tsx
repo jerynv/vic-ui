@@ -37,20 +37,30 @@ function nearestStep(count: number) {
   return Math.round(count + Number.EPSILON * Math.max(1, Math.abs(count)));
 }
 
+// Native range inputs sanitize to min + n * step. Apply the same policy before
+// rendering or notifying the host so ARIA, callbacks and FormData agree.
+function snap(value: number, min: number, max: number, step: number) {
+  const intervals = (max - min) / step;
+  const last = Math.floor(intervals + Number.EPSILON * Math.max(1, Math.abs(intervals)));
+  const index = Math.min(last, Math.max(0, nearestStep((value - min) / step)));
+  return Number((min + index * step).toFixed(Math.min(100, Math.max(precision(min), precision(step)))));
+}
+
 /** One horizontal numeric value. The ref reaches Base UI's focusable range input. */
 export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider({
   value, defaultValue, onValueChange, onValueCommitted, min = 0, max = 100, step = 1,
   largeStep = step * 10, disabled = false, name, form, label, hint, valueText, trackStyle,
   trackPress = "step", dir, className, "aria-label": ariaLabel, "aria-labelledby": labelledBy,
-  "aria-describedby": describedBy, onPointerDownCapture, ...rest
+  "aria-describedby": describedBy, onPointerDownCapture, onTouchStartCapture, ...rest
 }, ref) {
   const inheritedDirection = useDirection();
   const direction = dir ?? inheritedDirection;
   const made = useId();
   const thumb = useRef<HTMLDivElement>(null);
   const [ownValue, setOwnValue] = useState(defaultValue ?? min);
-  const current = Math.min(max, Math.max(min, value ?? ownValue));
-  function change(next: number) {
+  const current = snap(value ?? ownValue, min, max, step);
+  function change(requested: number) {
+    const next = snap(requested, min, max, step);
     if (disabled || next === current) return;
     if (value === undefined) setOwnValue(next);
     onValueChange?.(next);
@@ -66,7 +76,15 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
         disabled={disabled} name={name} form={form}
         thumbAlignment="edge"
         onValueChange={change}
-        onValueCommitted={(next) => onValueCommitted?.(next)}
+        onValueCommitted={(next) => onValueCommitted?.(snap(next, min, max, step))}
+        onTouchStartCapture={(event) => {
+          onTouchStartCapture?.(event);
+          if (event.defaultPrevented || disabled || trackPress !== "step") return;
+          const control = event.currentTarget.querySelector(".ui-slider-control");
+          // Base UI also has a native touchstart listener. The pointer press above
+          // already stepped; do not let its companion touch event start a jump.
+          if (control?.contains(event.target as Node) && !thumb.current?.contains(event.target as Node)) event.stopPropagation();
+        }}
         onPointerDownCapture={(event) => {
           onPointerDownCapture?.(event);
           if (event.defaultPrevented || disabled || trackPress === "jump" || event.button !== 0 || !event.isPrimary) return;
@@ -83,8 +101,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
           const target = min + fraction * (max - min);
           const by = (max - min) / step <= 25 ? step : Math.max(step, nearestStep((max - min) / 20 / step) * step);
           const toward = Math.abs(target - current) <= by ? target : current + Math.sign(target - current) * by;
-          const snapped = min + nearestStep((toward - min) / step) * step;
-          const next = Math.min(max, Math.max(min, Number(snapped.toFixed(Math.min(100, Math.max(precision(min), precision(step)))))));
+          const next = snap(toward, min, max, step);
           change(next);
           if (next !== current) onValueCommitted?.(next);
           thumb.current?.querySelector("input")?.focus({ preventScroll: true });

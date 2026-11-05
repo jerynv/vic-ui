@@ -10,7 +10,8 @@ import "../src/styles/components/ui-slider.css";
 import "../src/styles/components/ui-settings.css";
 import "./controls-layout.fixture.css";
 
-declare global { interface Window { observer: { mounts: number; unmounts: number; active: number; received: number }; } }
+declare global { interface Window { touchCommits: number[]; observer: { mounts: number; unmounts: number; active: number; received: number }; } }
+window.touchCommits = [];
 window.observer = { mounts: 0, unmounts: 0, active: 0, received: 0 };
 function ConversationObservers() {
   const { isMobile, state } = useSidebar();
@@ -39,6 +40,16 @@ function SidebarExample() {
     <SidebarMain />
   </SidebarProvider>;
 }
+function GridExample() {
+  const [changed, setChanged] = useState<number | null>(null);
+  const [committed, setCommitted] = useState<number | null>(null);
+  return <form id="grid-form">
+    <Slider label="Uneven maximum" name="uneven" defaultValue={6} min={0} max={10} step={3} valueText={v => `${v} units`} onValueChange={setChanged} onValueCommitted={setCommitted} />
+    <Slider label="Off-grid initial" name="initial" defaultValue={32} step={5} />
+    <Slider label="Off-grid controlled" name="controlled" value={32} step={5} />
+    <output data-testid="grid-change">{changed}</output><output data-testid="grid-commit">{committed}</output>
+  </form>;
+}
 function ControlsExample() {
   const [value, setValue] = useState(50);
   const [committed, setCommitted] = useState(50);
@@ -53,7 +64,7 @@ function ControlsExample() {
       <SettingsSection id="appearance" title="Appearance" description="Adjust the reading experience." actions={<Button look="quiet" onClick={() => setDisabled(!disabled)}>Toggle disabled</Button>}>
         <SettingsGroup title="Reading" description="Changes apply as you adjust each control.">
           <SettingsRow label="Text size" labelId="text-size" description="Use arrows for small changes or Page Up and Page Down for larger ones." descriptionId="size-description">
-            <Slider ref={sliderRef} aria-labelledby="text-size" aria-describedby="size-description" value={value} onValueChange={setValue} onValueCommitted={setCommitted} min={0} max={100} step={5} valueText={(v) => `${v} percent`} name="text-size" />
+            <Slider ref={sliderRef} aria-labelledby="text-size" aria-describedby="size-description" value={value} onValueChange={setValue} onValueCommitted={next => { setCommitted(next); window.touchCommits.push(next); }} min={0} max={100} step={5} valueText={(v) => `${v} percent`} name="text-size" />
             <output data-testid="value">{value}%</output><output className="sr-only" data-testid="committed">{committed}</output>
           </SettingsRow>
           <SettingsRow label="Line spacing" labelId="line-spacing" description="An uncontrolled fractional value.">
@@ -83,7 +94,7 @@ function ControlsExample() {
 const query = new URLSearchParams(location.search);
 document.documentElement.dataset.mode = query.get("theme") ?? "light";
 if (query.has("narrow")) document.documentElement.dataset.narrow = "";
-createRoot(document.getElementById("root")!).render(query.has("sidebar") ? <SidebarExample /> : query.has("standalone") ? <form id="preferences">
+createRoot(document.getElementById("root")!).render(query.has("sidebar") ? <SidebarExample /> : query.has("grid") ? <GridExample /> : query.has("standalone") ? <form id="preferences">
   <p id="external-hint">External description.</p>
   <Slider label="Offset" hint="One tenth per step." aria-describedby="external-hint" min={-1.5} max={1.5} step={0.1} name="offset" valueText="Offset units" />
   <DirectionProvider direction="rtl"><Slider aria-label="Inherited direction" defaultValue={50} /></DirectionProvider>

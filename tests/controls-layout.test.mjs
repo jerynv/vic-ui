@@ -166,10 +166,11 @@ test("SidebarProvider sibling observer persists while mobile presentation unmoun
     for (const close of ["escape", "button", "backdrop"]) {
       await toggle.click(); await dialog.waitFor(); await observer();
       assert.equal(await page.getByRole("textbox", { name: "Background" }).count(), 0);
-      for (let i = 0; i < 6; i++) {
-        await page.keyboard.press(i % 2 ? "Shift+Tab" : "Tab");
-        await page.waitForFunction(() => document.querySelector('[role="dialog"]')?.contains(document.activeElement));
-      }
+      await page.getByRole("button", { name: "Close navigation" }).focus();
+      await page.keyboard.press("Tab");
+      await page.waitForFunction(() => document.activeElement.textContent === "First page");
+      await page.keyboard.press("Shift+Tab");
+      await page.waitForFunction(() => document.activeElement.getAttribute("aria-label") === "Close navigation");
       if (close === "escape") await page.keyboard.press("Escape");
       if (close === "button") await page.getByRole("button", { name: "Close navigation" }).click();
       if (close === "backdrop") await page.locator(".ui-sidebar-backdrop").click({ position: { x: 350, y: 100 } });
@@ -207,5 +208,76 @@ test("visible slider labels, composed descriptions, negative decimals and inheri
     await inherited.focus();
     await page.keyboard.press("ArrowRight"); await value(inherited, 49);
     await track(page, "Inherited direction", 0); await value(inherited, 54);
+  } finally { await browser.close(); await server.close(); }
+});
+
+test("touch track presses step once while thumb drags and jump mode remain native", { timeout: 45000 }, async () => {
+  const server = await startFixture();
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 600, height: 900 }, hasTouch: true, isMobile: true });
+    const errors = []; page.on("pageerror", error => errors.push(error.message));
+    const session = await page.context().newCDPSession(page);
+    await page.goto(server.resolvedUrls.local[0]);
+    const size = page.getByRole("slider", { name: "Text size", exact: true });
+    async function box(slider) {
+      await slider.scrollIntoViewIfNeeded();
+      return slider.locator("xpath=../..").boundingBox();
+    }
+    let control = await box(size);
+    await page.touchscreen.tap(control.x + control.width - 12, control.y + control.height / 2);
+    await value(size, 55);
+    assert.deepEqual(await page.evaluate(() => window.touchCommits), [55]);
+    // An actual emulated touch stream beginning on the track must not start a drag.
+    control = await box(size);
+    const y = control.y + control.height / 2;
+    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: control.x + control.width - 12, y }] });
+    await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: control.x + 12, y }] });
+    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await value(size, 60);
+    assert.deepEqual(await page.evaluate(() => window.touchCommits), [55, 60]);
+    // A stream beginning on the thumb still drags normally.
+    const thumb = await size.boundingBox();
+    const x = thumb.x + thumb.width / 2;
+    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x, y }] });
+    for (let step = 1; step <= 5; step++) await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x + (control.x + 12 - x) * step / 5, y }] });
+    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await value(size, 0);
+    assert.equal((await page.evaluate(() => window.touchCommits)).at(-1), 0);
+    const jump = page.getByRole("slider", { name: "Jump to position", exact: true });
+    control = await box(jump);
+    await page.touchscreen.tap(control.x + 12 + (control.width - 24) * 0.8, control.y + control.height / 2);
+    await value(jump, 80);
+    const disabled = page.getByRole("slider", { name: "Unavailable control", exact: true });
+    control = await box(disabled);
+    await page.touchscreen.tap(control.x + control.width - 12, control.y + control.height / 2);
+    await value(disabled, 40);
+    assert.deepEqual(errors, []);
+  } finally { await browser.close(); await server.close(); }
+});
+
+test("off-grid values agree across callbacks, ARIA and native form submission", { timeout: 30000 }, async () => {
+  const server = await startFixture();
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    await page.goto(`${server.resolvedUrls.local[0]}?grid`);
+    const uneven = page.getByRole("slider", { name: "Uneven maximum", exact: true });
+    await uneven.waitFor();
+    for (const label of ["Off-grid initial", "Off-grid controlled"]) {
+      const input = page.getByRole("slider", { name: label, exact: true });
+      await value(input, 30);
+      assert.equal(await input.getAttribute("aria-valuenow"), "30");
+    }
+    await uneven.focus();
+    for (const [key, expected] of [["End", 9], ["ArrowLeft", 6], ["Home", 0], ["ArrowRight", 3]]) {
+      await page.keyboard.press(key);
+      await value(uneven, expected);
+      assert.equal(await uneven.getAttribute("aria-valuenow"), String(expected));
+      assert.equal(await uneven.getAttribute("aria-valuetext"), `${expected} units`);
+      assert.equal(await page.locator('[data-testid="grid-change"]').textContent(), String(expected));
+      assert.equal(await page.locator('[data-testid="grid-commit"]').textContent(), String(expected));
+      assert.deepEqual(await page.evaluate(() => Object.fromEntries(new FormData(document.getElementById("grid-form")))), { uneven: String(expected), initial: "30", controlled: "30" });
+    }
   } finally { await browser.close(); await server.close(); }
 });

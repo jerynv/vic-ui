@@ -12,7 +12,7 @@ One horizontal numeric value, using the installed `@base-ui/react/slider`. No ne
 | `defaultValue` | `number` | Initial uncontrolled value; defaults to `min`. |
 | `onValueChange` | `(value: number) => void` | Numeric change requests from keyboard, pointer or input. |
 | `onValueCommitted` | `(value: number) => void` | Completed keyboard change, drag release or stepped press. This reports the requested value; a controlled host still decides whether to accept it. |
-| `min`, `max`, `step` | `number` | `0`, `100`, `1`; finite numbers, `max > min`, `step > 0`. Prefer a range evenly divisible by `step`. |
+| `min`, `max`, `step` | `number` | `0`, `100`, `1`; finite numbers, `max > min`, `step > 0`. Values snap to the nearest step anchored at `min`, capped at the largest valid step below `max`. |
 | `largeStep` | `number` | `10 * step`; Page Up/Down and Shift+Arrow increment. Use a multiple of `step`. |
 | `disabled` | `boolean` | `false`; excludes the native range input from keyboard navigation and ignores pointer changes. |
 | `label`, `hint` | `ReactNode` | Optional visible text; generated IDs name/describe the input. |
@@ -27,7 +27,7 @@ One horizontal numeric value, using the installed `@base-ui/react/slider`. No ne
 
 `id` is the outer wrapper ID, not an input label target. In a `SettingsRow`, pass a stable `labelId` / `descriptionId` and match them with Slider's `aria-labelledby` / `aria-describedby`. For native fields, use `SettingsRow.htmlFor` instead.
 
-Base UI retains arrow/Home/End/Page navigation, pointer dragging, hidden native range input, focus and RTL thumb positioning. A track press advances one step toward the pointer when the range has at most 25 intervals. Denser ranges advance by the nearest whole step to one twentieth of the range, stopping at the pointer's snapped value. Repeated presses keep stepping; only dragging the thumb follows the pointer continuously in this mode. Presses focus the input for subsequent keyboard use. Values clamp to the bounds; fractional steps are rounded at the precision of `min` and `step`.
+Base UI retains arrow/Home/End/Page navigation, pointer dragging, hidden native range input, focus and RTL thumb positioning. A track press advances one step toward the pointer when the range has at most 25 intervals. Denser ranges advance by the nearest whole step to one twentieth of the range, stopping at the pointer's snapped value. Repeated presses keep stepping; only dragging the thumb follows the pointer continuously in this mode. Presses focus the input for subsequent keyboard use. Initial and controlled values, change/commit callbacks, ARIA and native form values use the same step grid. For `min=0 max=10 step=3`, End selects 9. Fractional steps are rounded at the precision of `min` and `step`. Touch track presses suppress the companion native touch-start jump while thumb dragging and jump mode retain Base UI behavior.
 
 The track is 4px high. The thumb's visible circle is 14px, outlined in strong foreground; its transparent pointer box is at least 24px. Thumb edges stay inside the control at both bounds. Hover/press change fill without resizing. Keyboard focus rings the target. Disabled opacity is the library's 0.55. All default paint and corners use existing Vic tokens.
 
