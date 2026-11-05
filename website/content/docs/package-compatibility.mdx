@@ -1,0 +1,36 @@
+---
+title: Package compatibility
+description: Preserved root controls and TypeScript support for installed packages.
+---
+
+The root `vic-ui` entry point retains all 123 runtime exports from `f156af1`. The packed-package regression test checks that historical export list, alongside the `vic-ui/ui` and `vic-ui/icons` entry points.
+
+## Native controls
+
+These imports retain their original props, native behavior and refs:
+
+```tsx
+import "vic-ui/styles.css";
+import { Radio, NativeSelect, Disclosure, Skeleton, Input, TextareaControl } from "vic-ui";
+```
+
+| Export | Contract |
+| --- | --- |
+| Radio | Native radio input props; group choices with the same `name`. |
+| NativeSelect | Native select props and ordinary `option` children. |
+| Input | Native input props for caller-owned labels and compound layouts. |
+| TextareaControl | Native textarea props, selection and resizing. |
+| Disclosure | Native `details` props plus a required `summary`; works without JavaScript. |
+| Skeleton | Decorative `div` props; always hidden from assistive technology. Announce loading on the containing region. |
+
+Label native fields through `label` elements or accessible naming props. Input, TextareaControl and NativeSelect also inherit the current [flat or bordered Surface scope](/docs/theming). Their default appearance remains the original field treatment.
+
+The seven [shared surface exports](/docs/surfaces) are also preserved, including the native root ScrollArea. The composable controls from `vic-ui/ui` remain available separately. Restored exports are documented within these guides so the component directory stays grouped by family.
+
+## TypeScript resolution
+
+The installed package supports both `moduleResolution: "bundler"` with `module: "ESNext"` and `moduleResolution: "NodeNext"` with `module: "NodeNext"`. NodeNext consumers should use an ESM project, such as a package with `"type": "module"`.
+
+Declaration imports include explicit `.js` paths, which TypeScript resolves to the corresponding declaration files. The packed-package test compiles a consumer in both modes with `strict: true` and `skipLibCheck: false`. It also checks rejected props, so broken imports cannot silently erase component types.
+
+Use `vic-ui`, `vic-ui/ui`, and `vic-ui/icons` for imports. Internal declaration paths are implementation details, not additional runtime entry points. Existing complete stylesheet imports remain supported; `vic-ui/ui/styles.css` includes the native control styles too.

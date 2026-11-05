@@ -8,7 +8,21 @@ import { Input } from "./input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
 
-export const dataTableFeatures = tableFeatures({
+// Keep emitted types on our declared React Table dependency instead of exposing
+// inferred imports from its transitive table-core package.
+type DataTableFeatures = {
+  columnFilteringFeature: typeof columnFilteringFeature;
+  columnVisibilityFeature: typeof columnVisibilityFeature;
+  rowPaginationFeature: typeof rowPaginationFeature;
+  rowSelectionFeature: typeof rowSelectionFeature;
+  rowSortingFeature: typeof rowSortingFeature;
+  filteredRowModel: ReturnType<typeof createFilteredRowModel>;
+  paginatedRowModel: ReturnType<typeof createPaginatedRowModel>;
+  sortedRowModel: ReturnType<typeof createSortedRowModel>;
+  filterFns: { includesString: typeof filterFn_includesString };
+  sortFns: { alphanumeric: typeof sortFn_alphanumeric; basic: typeof sortFn_basic; datetime: typeof sortFn_datetime; text: typeof sortFn_text };
+};
+export const dataTableFeatures: DataTableFeatures = tableFeatures({
   columnFilteringFeature, columnVisibilityFeature, rowPaginationFeature, rowSelectionFeature, rowSortingFeature,
   filteredRowModel: createFilteredRowModel(), paginatedRowModel: createPaginatedRowModel(), sortedRowModel: createSortedRowModel(),
   filterFns: { includesString: filterFn_includesString },

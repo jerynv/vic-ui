@@ -1,13 +1,13 @@
 # vic-ui: the map
 
-## Consumer compatibility fix
+## Complete consumer compatibility
 
-Worktree `/Users/jeryn/.t3/worktrees/vic-ui/t3-c2cc92d0`, branch `fix/round-buttons-surfaces`, baseline `1db3239`. Phaethon and the original Vic checkout are owned by other workers and remain untouched.
-Requested outcomes: quiet/ghost, line and ink round buttons retain circular rim/face geometry at rest, hover and press; restore the seven shared surface exports from `f156af1` with their original contract. Acceptance: exercise both shipped stylesheets and both themes with native/composable buttons and links; verify root imports, asChild props/ref behavior, native scrolling and emitted types; document imports and behavioral ownership.
-Implemented the round selector correction and restored all seven surface exports, with `Surfaces.tsx` identical to `f156af1`. Added the Shared surfaces guide covering styling/controller ownership, `asChild` precedence and native scrolling. Worker `/root/restore_surfaces` completed; parent integrated and inspected its changes.
-Verification passed: the baseline reproduced 12px quiet-button corners, then the round matrix passed across all looks, both APIs, links, sizes, themes and both packaged stylesheets. All ten library tests (including surface hydration, focus/Escape, refs/events and wheel scrolling), seven website tests, the local-review test, both typechecks, design/dash checks and builds pass. The optional design detector reported only an unchanged easing at `ui.css:740`. Code acceptance criteria are complete; release is tracked by the PR for this branch and its Pages deployment. Logs: `/tmp/vic-round-{before,after}.log` and `/tmp/vic-compat-{build,library,website,review}.log`. Other root exports removed since `f156af1` are outside this seven-surface restoration; no claim of full historical API compatibility.
+Worktree `/Users/jeryn/.t3/worktrees/vic-ui/t3-c2cc92d0`, branch `fix/complete-consumer-compat`, baseline `6f6c564`; Phaethon and the original checkout remain untouched. Requested outcomes: restore Radio, NativeSelect, Disclosure, Skeleton, Input and TextareaControl, and fix NodeNext declaration resolution.
+Worker `/root/restore_native_controls` restored the original component modules and required styles, adapting field tokens to current Surface scopes. Its behavior test passes. Parent added a declaration-path replacer through the existing tsc-alias build, plus explicit Data Table feature types that avoid undeclared transitive type imports. No new dependencies.
+Acceptance evidence: a packed archive exposes all 123 historical root runtime exports and compiles a consumer under Bundler and NodeNext with strict checking and skipLibCheck disabled. Negative prop checks ensure imports retain real component types. The first packed check exposed table-core type leakage; explicit types through the declared React Table dependency fixed it. The new guide documents imports, native behavior and supported resolution modes.
+All 20 integrated tests pass (12 library/package, seven website, one local review), as do both typechecks, design/dash checks, the native CSS detector, and both site builds. Code acceptance criteria are complete; release is tracked by the PR for this branch. `VIC_UI_PACKAGE_OUT` lets the packed regression test retain its verified tarball for handoff. Logs: `/tmp/vic-complete-{build,package,tests,website,review}.log` and `/tmp/vic-native-controls-test.log`. Parent owns release integration; worker finished. No pending owner decisions.
 
-The previous catalogue cleanup is complete and deployed in PR #22 (`1db3239`): 84 alphabetical family entries, one active API usage view, preserved aliases, all local/CI checks passed.
+Prior work is merged: PR #22 (`1db3239`) consolidated and alphabetized the catalogue; PR #23 (`6f6c564`) fixed round buttons and restored seven shared surface exports. Both passed CI and deployed.
 
 ## Documentation website
 
