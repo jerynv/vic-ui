@@ -41,9 +41,17 @@ function SidebarExample() {
   </SidebarProvider>;
 }
 function GridExample() {
+  const sectionHeading = useRef<HTMLHeadingElement>(null);
+  const groupHeading = useRef<HTMLHeadingElement>(null);
   const [changed, setChanged] = useState<number | null>(null);
   const [committed, setCommitted] = useState<number | null>(null);
   return <form id="grid-form">
+    <SettingsSection title="Focusable section" titleId="section-title" headingLevel={3} headingProps={{ id: "ignored-title", tabIndex: -1, ref: sectionHeading, className: "host-heading" }}>
+      <button type="button" onClick={() => sectionHeading.current?.focus()}>Go to section</button>
+      <SettingsGroup title="Focusable group" headingProps={{ id: "group-title", tabIndex: -1, ref: groupHeading }}>
+        <button type="button" onClick={() => groupHeading.current?.focus()}>Go to group</button>
+      </SettingsGroup>
+    </SettingsSection>
     <Slider label="Uneven maximum" name="uneven" defaultValue={6} min={0} max={10} step={3} valueText={v => `${v} units`} onValueChange={setChanged} onValueCommitted={setCommitted} />
     <Slider label="Off-grid initial" name="initial" defaultValue={32} step={5} />
     <Slider label="Off-grid controlled" name="controlled" value={32} step={5} />

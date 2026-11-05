@@ -1,4 +1,4 @@
-import { forwardRef, useId, type HTMLAttributes, type ReactNode } from "react";
+import { forwardRef, useId, type HTMLAttributes, type ComponentPropsWithRef, type ReactNode } from "react";
 
 const join = (...names: (string | undefined | false)[]) => names.filter(Boolean).join(" ");
 type DivProps = HTMLAttributes<HTMLDivElement>;
@@ -8,15 +8,17 @@ type HeadingProps = Omit<DivProps, "title"> & {
   description?: ReactNode;
   actions?: ReactNode;
   headingLevel?: 2 | 3 | 4 | undefined;
+  /** Native heading attributes/ref; titleId takes precedence over headingProps.id. */
+  headingProps?: Omit<ComponentPropsWithRef<"h2">, "children" | "dangerouslySetInnerHTML"> | undefined;
 };
 export type SettingsSectionProps = HeadingProps;
 export type SettingsGroupProps = HeadingProps & { surface?: "flat" | "bordered" };
 
-function Heading({ title, titleId, description, actions, headingLevel = 2 }: Pick<HeadingProps, "title" | "titleId" | "description" | "actions" | "headingLevel">) {
+function Heading({ title, titleId, description, actions, headingLevel = 2, headingProps }: Pick<HeadingProps, "title" | "titleId" | "description" | "actions" | "headingLevel" | "headingProps">) {
   const Tag = headingLevel === 4 ? "h4" : headingLevel === 3 ? "h3" : "h2";
   return <div className="ui-settings-heading">
     <div className="ui-settings-heading-words">
-      <Tag id={titleId} className="ui-settings-title">{title}</Tag>
+      <Tag {...headingProps} id={titleId ?? headingProps?.id} className={join("ui-settings-title", headingProps?.className)}>{title}</Tag>
       {description != null && <div className="ui-settings-description">{description}</div>}
     </div>
     {actions != null && <div className="ui-settings-actions">{actions}</div>}
@@ -24,17 +26,17 @@ function Heading({ title, titleId, description, actions, headingLevel = 2 }: Pic
 }
 
 /** A titled section; headings provide structure without adding a landmark per group. */
-export const SettingsSection = forwardRef<HTMLDivElement, SettingsSectionProps>(function SettingsSection({ title, titleId, description, actions, headingLevel, className, children, ...rest }, ref) {
+export const SettingsSection = forwardRef<HTMLDivElement, SettingsSectionProps>(function SettingsSection({ title, titleId, description, actions, headingLevel, headingProps, className, children, ...rest }, ref) {
   return <div {...rest} ref={ref} className={join("ui-settings-section", className)}>
-    <Heading {...{ title, titleId, description, actions, headingLevel }} />
+    <Heading {...{ title, titleId, description, actions, headingLevel, headingProps }} />
     {children}
   </div>;
 });
 
 /** Related rows with an optional border, without introducing a card or a shadow. */
-export const SettingsGroup = forwardRef<HTMLDivElement, SettingsGroupProps>(function SettingsGroup({ title, titleId, description, actions, headingLevel = 3, surface = "bordered", className, children, ...rest }, ref) {
+export const SettingsGroup = forwardRef<HTMLDivElement, SettingsGroupProps>(function SettingsGroup({ title, titleId, description, actions, headingLevel = 3, headingProps, surface = "bordered", className, children, ...rest }, ref) {
   return <div {...rest} ref={ref} className={join("ui-settings-group", className)} data-surface={surface}>
-    <Heading {...{ title, titleId, description, actions, headingLevel }} />
+    <Heading {...{ title, titleId, description, actions, headingLevel, headingProps }} />
     <div className="ui-settings-group-body">{children}</div>
   </div>;
 });

@@ -264,6 +264,14 @@ test("off-grid values agree across callbacks, ARIA and native form submission", 
     await page.goto(`${server.resolvedUrls.local[0]}?grid`);
     const uneven = page.getByRole("slider", { name: "Uneven maximum", exact: true });
     await uneven.waitFor();
+    await page.getByRole("button", { name: "Go to section" }).click();
+    const section = page.getByRole("heading", { name: "Focusable section", level: 3 });
+    assert.equal(await section.getAttribute("id"), "section-title");
+    assert.ok(await section.evaluate(el => el === document.activeElement && el.classList.contains("ui-settings-title") && el.classList.contains("host-heading")));
+    await page.getByRole("button", { name: "Go to group" }).click();
+    const group = page.getByRole("heading", { name: "Focusable group", level: 3 });
+    assert.equal(await group.getAttribute("id"), "group-title");
+    assert.ok(await group.evaluate(el => el === document.activeElement));
     for (const label of ["Off-grid initial", "Off-grid controlled"]) {
       const input = page.getByRole("slider", { name: label, exact: true });
       await value(input, 30);
