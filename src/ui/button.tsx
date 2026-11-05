@@ -5,6 +5,7 @@ import { Button as VicButton } from "../components/Button";
 // The composable API uses vic's actual textured button, including its rim and face.
 const buttonVariants = cva("ui-button group/button", {
   variants: {
+    tone: { accent: "ui-button-accent" },
     variant: { default: "ui-button-ink", outline: "ui-button-line", secondary: "ui-button-line", ghost: "ui-button-quiet", destructive: "ui-button-ink ui-button-danger", link: "ui-button-link" },
     size: { default: "", md: "", xs: "", sm: "", lg: "ui-button-lg", icon: "ui-button-square", "icon-xs": "ui-button-square", "icon-sm": "ui-button-square", "icon-lg": "ui-button-square ui-button-lg" },
   },

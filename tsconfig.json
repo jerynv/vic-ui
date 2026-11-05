@@ -28,6 +28,7 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
+      "vic-ui/ui": ["./src/ui/index.ts"],
       "vic-ui": [
         "./src/index.ts"
       ],

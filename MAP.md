@@ -112,6 +112,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `look` | `"ink" \| "line" \| "quiet" \| "link"` | `"ink"` | Which look. |
+| `tone` | `"accent"` | none | On `ink`, derives the rim and face states from `--button-accent`, with explicit `--button-on-accent` words. Also supported by ButtonLink and the composable default Button. |
 | `size` | `"md" \| "lg"` | `"md"` | `md` is `--control-h-sm` (2rem); `lg` is `--control-h` (2.25rem), a form's commit. |
 | `full` | `boolean` | `false` | Full width. |
 | `square` | `boolean` | `false` | An icon alone, as wide as the button is tall; its words go in `aria-label`. |
@@ -129,6 +130,7 @@ States, as `ui.css` implements them:
 - Hover: `ink` face moves to `--ink-face-top-hover` / `--ink-face-bottom-hover`; `line` face fills `--field-fill-hover`; `quiet` words go `--fg-strong` and underline (offset 3px).
 - Press (`:active`): `ink` face `--ink-face-top-press` / `--ink-face-bottom-press`; `line` face `--field-fill`. Nothing moves; the face darkens.
 - `line` with `aria-pressed="true"` takes the ink rim and face (a held toggle).
+- Accent is local to the filled control; semantic danger/caution rules win. It adapts the existing semantic color-mix treatment but retains two distinct stops when pressed. The five-hue example and `accent-button.test.mjs` cover both APIs, both themes and higher-contrast lightness values.
 - `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (160ms).
 - Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over 300ms `ease-in-out`.
 - Focus: `:focus-visible` outline 2px `--focus`, offset 2px (keyboard only).

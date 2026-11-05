@@ -19,6 +19,29 @@ import { Button } from "vic-ui/ui"
 
 Follow [Getting started](/docs) to install the package and its compiled stylesheet. This preview renders the actual `vic-ui/ui` exports.
 
+## Custom accent
+
+Both APIs support `tone="accent"` on a filled button: `Button` from `vic-ui` uses `look="ink"`; `Button` from `vic-ui/ui` uses `variant="default"`. `ButtonLink` and `buttonVariants({ tone: "accent" })` support the same treatment. The live Custom accent example above compares both APIs in both themes, including higher-contrast colors.
+
+```css
+.brand-actions {
+  --button-accent: light-dark(oklch(.5 .075 240), oklch(.74 .075 240));
+  --button-on-accent: light-dark(oklch(.97 0 0), oklch(.205 0 0));
+}
+```
+
+```tsx
+<div className="brand-actions">
+  <Button tone="accent">Check and save</Button>
+</div>
+```
+
+Set both tokens on the button or an ancestor. `--button-accent` is the base color; `--button-on-accent` is the explicit text and spinner color. Vic derives the edge, rim and distinct face stops for rest, hover and press. Choose a foreground with sufficient contrast against all face states; arbitrary color pairs are not automatically corrected. The example's five hues are tested at 4.5:1 or greater in every enabled state.
+
+Without `tone="accent"`, the monochrome treatment stays unchanged. Outline, secondary, quiet and link looks keep their existing appearance. Danger, caution and the composable destructive variant take precedence over the accent. Busy, disabled and keyboard focus behavior stay the same.
+
+For a consumer that already has theme tokens, map `--button-accent: var(--ph-accent)` and `--button-on-accent: var(--ph-ink-inverse)`, then use `tone={customAccent ? "accent" : undefined}` on its primary Button wrapper. Remove overrides of `--ink-face-*`, `--ink-rim-*` and `--ink-words`; supplying identical face stops bypasses the texture. No separate hover token is needed.
+
 ## API reference
 
 See the [full upstream guide](https://ui.shadcn.com/docs/components/base/button) for additional variants and primitive props. This package uses shadcn's Base UI edition.
