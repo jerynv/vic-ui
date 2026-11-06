@@ -12,8 +12,8 @@
    * After Cult UI's Texture Button: the button is the rim, a hairline edge round a gradient one
    * pixel deep. The face follows that corner minus the rim's actual inset. Each gradient's
    * stops are registered properties (below, outside the layers), so a hover or a press eases
-   * from one gradient to the next over 300ms instead of jumping, which a gradient left as an
-   * image cannot do. Nothing moves on a press: the face darkens.
+   * from one gradient to the next over `--motion-slow` instead of jumping, which a gradient
+   * left as an image cannot do. Nothing moves on a press: the face darkens.
    */
   .ui-button {
     --ui-button-radius: var(--ui-button-context-radius, var(--radius-button));

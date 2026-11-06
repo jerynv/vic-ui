@@ -35,8 +35,9 @@
   --motion-slow: 300ms;
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-track: cubic-bezier(0.4, 0, 0.2, 1);
-  /* Deprecated, removed in 1.0: the old name for an arrival curve, now `--ease-out`. */
-  --ease-out-expo: var(--ease-out);
+  /* Deprecated, removed in 1.0: the old arrival curve, kept at its own value for anything that
+     still reads it. The library's pieces read `--ease-out` instead. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Reduced motion, in one place: every duration is zero, so nothing slides, folds or fades and

@@ -110,8 +110,11 @@
   /* Kept beside the zeroed tokens: a `duration-*` utility is a literal Tailwind writes into the
      rule, which no token reaches. Animations are cut to zero, as the tokens cut them, so a
      slide never paints its first frame and a loop stands still; transitions keep a hair of
-     time so anything waiting on `transitionend` still hears it. */
+     time so anything waiting on `transitionend` still hears it. The `scroll-fade` utilities
+     are left out: their animations run on the scroll, not the clock, and a zero duration
+     would leave the edge fade standing at its start whatever the scroll. */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0.01ms !important; }
+    *, *::before, *::after { transition-duration: 0.01ms !important; }
+    *:not([class*="scroll-fade"]), *::before, *::after { animation-duration: 0s !important; }
   }
 }

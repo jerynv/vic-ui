@@ -45,6 +45,8 @@ test("every transition and animation reads the motion tokens", () => {
 test("reduced motion is zeroed in one place, and pieces only stop their loops", () => {
   const tokens = read("src/styles/tokens.css");
   for (const name of ["--motion-fast", "--motion-base", "--motion-slow", "--ease-out", "--ease-track", "--ease-out-expo"]) assert.match(tokens, new RegExp(`${name}:`), name);
+  assert.match(tokens, /--ease-out-expo: cubic-bezier\(0\.16, 1, 0\.3, 1\);/, "the deprecated curve keeps its own value");
+  for (const file of sheets.filter((file) => !file.endsWith("tokens.css"))) assert.doesNotMatch(read(file), /--ease-out-expo/, `${file} reads the deprecated curve`);
   assert.match(tokens, /@media \(prefers-reduced-motion: reduce\) \{\s*:root \{\s*--motion-fast: 0s;\s*--motion-base: 0s;\s*--motion-slow: 0s;\s*\}\s*\}/);
   const queries = [];
   for (const file of sheets.filter((file) => !file.endsWith("tokens.css"))) {
@@ -134,6 +136,19 @@ test("the tokens set every piece's motion, reduced motion zeroes them, and the t
       await page.locator(".ui-toast").waitFor({ state: "detached" });
       if (reducedMotion === "reduce") assert.ok(Date.now() - started < 1000, "a still system drops the toast at once");
 
+      // The leave is timed on the toast, so motion set on the Toaster alone still holds it.
+      await page.evaluate(() => {
+        document.documentElement.style.setProperty("--motion-fast", "0s");
+        document.querySelector(".ui-toaster").style.setProperty("--motion-fast", "900ms");
+      });
+      await page.evaluate(() => window.motionFixture.toast("Saved", { id: "scoped", duration: 0 }));
+      await page.locator(".ui-toast").waitFor();
+      await page.evaluate(() => window.motionFixture.toast.dismiss("scoped"));
+      await page.waitForTimeout(400);
+      assert.equal(await page.locator(".ui-toast").count(), 1, "still leaving after 400ms of the Toaster's 900ms leave");
+      await page.locator(".ui-toast").waitFor({ state: "detached" });
+      await page.evaluate(() => document.querySelector(".ui-toaster").style.removeProperty("--motion-fast"));
+
       // A slower system is not cut short: the toast stays while it leaves.
       await page.evaluate(() => document.documentElement.style.setProperty("--motion-fast", "900ms"));
       await page.evaluate(() => window.motionFixture.toast("Saved", { id: "two", duration: 0 }));
@@ -146,4 +161,45 @@ test("the tokens set every piece's motion, reduced motion zeroes them, and the t
       await page.close();
     }
   } finally { await browser?.close(); await server.close(); }
+});
+
+test("under reduced motion a scroll fade still follows the scroll", { timeout: 60000 }, async () => {
+  const css = readFileSync("dist/ui/styles.css", "utf8");
+  const browser = await chromium.launch({ headless: true });
+  try {
+    for (const reducedMotion of ["no-preference", "reduce"]) {
+      const page = await browser.newPage({ reducedMotion });
+      page.setDefaultTimeout(10000);
+      await page.setContent(`<html><head><style>${css}</style></head><body>
+        <div id="list" class="data-wrap:scroll-fade-y" data-wrap style="height: 200px; overflow-y: auto"><div style="height: 2000px"></div></div>
+        <div style="height: 200px"><div id="probe" style="transition-property: none"></div></div>
+        <div id="sheet" class="data-open:animate-in" data-open style="--tw-duration: 300ms">Sheet</div></body></html>`);
+      // The fade's edges are lengths against the list's height; a probe as tall as the list
+      // turns each into pixels, and does not ease its own height into them.
+      await page.evaluate(() => {
+        window.fade = (edge) => {
+          const probe = document.getElementById("probe");
+          probe.style.height = getComputedStyle(document.getElementById("list")).getPropertyValue(`--scroll-fade-${edge}`);
+          return probe.getBoundingClientRect().height;
+        };
+      });
+      const fade = () => page.evaluate(() => ({ top: window.fade("t"), bottom: window.fade("b") }));
+      // A scroll timeline takes a frame to attach.
+      await page.waitForFunction(() => window.fade("b") > 0);
+      const atTop = await fade();
+      assert.equal(atTop.top, 0, `${reducedMotion}: no fade above at the top`);
+      assert.ok(atTop.bottom > 0, `${reducedMotion}: a fade below at the top`);
+      await page.evaluate(() => { document.getElementById("list").scrollTop = 900; });
+      await page.waitForFunction(() => window.fade("t") > 0);
+      const middle = await fade();
+      assert.ok(middle.top > 0 && middle.bottom > 0, `${reducedMotion}: fades at both edges in the middle`);
+      await page.evaluate(() => { const list = document.getElementById("list"); list.scrollTop = list.scrollHeight; });
+      await page.waitForFunction(() => window.fade("b") === 0);
+      assert.ok((await fade()).top > 0, `${reducedMotion}: a fade above at the end`);
+      // A clock animation is still cut to nothing, so a sheet never paints its first frame.
+      const sheet = await page.evaluate(() => getComputedStyle(document.getElementById("sheet")).animationDuration);
+      assert.equal(sheet, reducedMotion === "reduce" ? "0s" : "0.3s");
+      await page.close();
+    }
+  } finally { await browser.close(); }
 });

@@ -28,17 +28,35 @@ interface Shown extends ToastOptions {
 }
 
 const MOST = 4;
-/** How long a toast takes to leave: the stylesheet's `--motion-fast`, read from the root so a
- * slower system is not cut short and a still one (reduced motion) drops it at once. 160 when
- * there is no page or no token to read. */
-function leaveMs(): number {
-  if (typeof document === "undefined") return 160;
-  const value = getComputedStyle(document.documentElement).getPropertyValue("--motion-fast").trim();
-  const amount = parseFloat(value);
-  if (!Number.isFinite(amount)) return 160;
-  if (value.endsWith("ms")) return amount;
-  return value.endsWith("s") ? amount * 1000 : 160;
+/** Seconds or milliseconds, as a computed time is written, in milliseconds; NaN for anything else. */
+function toMs(value: string): number {
+  const match = /^(-?[\d.]+)(ms|s)$/.exec(value.trim());
+  if (!match) return Number.NaN;
+  return match[2] === "ms" ? Number(match[1]) : Number(match[1]) * 1000;
 }
+
+/**
+ * How long a toast takes to leave: the longest of the transitions it is actually drawn with
+ * once it is leaving (`--motion-fast` as resolved on the toast, so a section or a system that
+ * sets its own is not cut short, and a still one, reduced motion, drops it at once). A toast
+ * not drawn yet goes by the `--motion-fast` its Toaster would hand it; with no Toaster there is
+ * nothing to wait for.
+ */
+function leaveMs(node: HTMLElement | null): number {
+  if (typeof document === "undefined") return 0;
+  if (node) {
+    const style = getComputedStyle(node);
+    const durations = style.transitionDuration.split(",").map(toMs);
+    const delays = style.transitionDelay.split(",").map(toMs);
+    const ends = durations.map((duration, at) => duration + (delays[at % delays.length] || 0));
+    return Math.max(0, ...ends.filter(Number.isFinite));
+  }
+  const region = document.querySelector<HTMLElement>(".ui-toaster");
+  if (!region) return 0;
+  const amount = toMs(getComputedStyle(region).getPropertyValue("--motion-fast"));
+  return Number.isFinite(amount) ? Math.max(0, amount) : 160;
+}
+
 let shown: Shown[] = [];
 let made = 0;
 const listeners = new Set<() => void>();
@@ -56,10 +74,20 @@ export function toast(message: ReactNode, options: ToastOptions = {}): string {
   return id;
 }
 
+/** The toasts the Toaster has drawn, by id, so a leave is timed on the element itself. */
+const drawn = new Map<string, HTMLElement>();
+
+/** Takes a leaving toast out of the list; one put up again under its id meanwhile stays. */
+function drop(id: string) {
+  if (!shown.some((one) => one.id === id && one.leaving)) return;
+  set(shown.filter((one) => one.id !== id || !one.leaving));
+}
+
 toast.dismiss = (id: string) => {
   if (!shown.some((one) => one.id === id && !one.leaving)) return;
   set(shown.map((one) => (one.id === id ? { ...one, leaving: true } : one)));
-  setTimeout(() => set(shown.filter((one) => one.id !== id || !one.leaving)), leaveMs());
+  // A drawn toast times its own leave once it carries `data-leaving` (see `Toast`).
+  if (!drawn.has(id)) setTimeout(() => drop(id), leaveMs(null));
 };
 
 const subscribe = (listen: () => void) => {
@@ -75,6 +103,7 @@ function Toast(props: { one: Shown }) {
   const left = useRef(duration);
   const since = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const node = useRef<HTMLDivElement>(null);
 
   const run = () => {
     if (duration <= 0 || timer.current) return;
@@ -96,9 +125,26 @@ function Toast(props: { one: Shown }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [one.stamp, duration]);
 
+  useLayoutEffect(() => {
+    const element = node.current;
+    if (!element) return;
+    drawn.set(one.id, element);
+    return () => {
+      if (drawn.get(one.id) === element) drawn.delete(one.id);
+    };
+  }, [one.id]);
+
+  // Leaving, it is drawn with its leave transition, so that is the time it is given.
+  useEffect(() => {
+    if (!one.leaving) return;
+    const wait = setTimeout(() => drop(one.id), leaveMs(node.current));
+    return () => clearTimeout(wait);
+  }, [one.leaving, one.id]);
+
   const Icon = one.tone ? ICONS[one.tone] : null;
   return (
     <div
+      ref={node}
       role="status"
       className="ui-toast"
       data-tone={one.tone}

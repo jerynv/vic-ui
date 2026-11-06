@@ -91,6 +91,20 @@ When the reader asks for reduced motion, vic-ui sets the three durations to `0s`
 
 The tokens inherit, so a section can set its own. In the shadcn catalogue, Tailwind's default transition and tw-animate-css's `animate-in`, `animate-out`, accordion and collapsible read the same tokens; a `duration-*` utility is a literal and does not.
 
+`vic-ui/styles.css` declares its tokens outside any cascade layer, and Tailwind v4 has its own `--ease-out` (`cubic-bezier(0, 0, 0.2, 1)`) in its `theme` layer. If your app loads `vic-ui/styles.css` next to its own Tailwind build, the unlayered vic-ui value wins, so the app's `ease-out` utility takes vic-ui's curve. To keep Tailwind's curve for your utilities, give it another name in your theme, or set it back for everything, vic-ui's pieces included:
+
+```css
+/* Tailwind's curve under its own name: write ease-tw-out */
+@theme {
+  --ease-tw-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Or Tailwind's curve everywhere, unlayered and after vic-ui/styles.css */
+:root {
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+```
+
 ## Flat and bordered surfaces
 
 Use one shared style for a form, card, or page. Both styles keep the same sizes, behavior, validation and action buttons. Flat fields use a soft fill; bordered fields use a clear outline. Cards keep their surface with or without an edge.
