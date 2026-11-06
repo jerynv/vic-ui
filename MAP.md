@@ -1169,7 +1169,7 @@ Keys: ArrowRight and ArrowLeft move and choose as they go (wrapping, skipping di
 
 States:
 
-- Track: inline flex, height `--control-h` (`sm`: `--control-h-sm`), padding 2px, radius `--radius-field`, `--field-fill`, scrolls sideways with no scrollbar.
+- Track: inline flex, height `--control-h` (`sm`: `--control-h-sm`), padding 2px, radius `--radius-field`, `--field-fill`, at most 100% wide, scrolls sideways with no scrollbar. The composable `Tabs` root is `min-width: 0`, so a grid or flex parent never widens to every tab. A flex item of yours that holds the row needs `min-width: 0` too, as CSS asks of any scroller in a flex row.
 - Indicator, accent (`tone="accent"`): the track sets `--ink-face-top` to `--accent` mixed with white 4%, `--ink-face-bottom` with black 10%, `--ink-rim-edge` with black 22%, and `--ink-words` to `--accent-on`, which hold 5.8:1 in both modes.
 - Indicator: `linear-gradient(var(--ink-face-top), var(--ink-face-bottom))` with a `0 0 0 1px var(--ink-rim-edge)` ring, radius `calc(var(--radius-field) - 2px)`, measured onto the chosen tab (and again on any resize); the first placing is drawn where it lands, every move after eases `translate` and `width` over `--motion-base` `--ease-track`.
 - Tab: padding `0 0.75rem`, `--text-ui` weight `--weight-ui`, `--fg-subtle`. Hover (not chosen, not disabled): `--fg-strong` on `--field-fill-hover`. Press: `--bone`. Chosen: `--ink-words`. Focus: outline 2px `--focus`, offset 2px. Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
