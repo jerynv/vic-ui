@@ -43,7 +43,8 @@ function Buttons({ onTrigger, ...props }: ProviderButtonsProps & { onTrigger?: (
       onTrigger?.(pressed); props.onChoose?.(one);
       if (!action) return;
       const go = () => {
-        if (!pressed.isConnected) return;
+        // Held for a while, the button may have gone or been disabled since, on its own or by a fieldset.
+        if (!pressed.isConnected || pressed.matches(":disabled")) return;
         props.onLeave?.();
         pressed.form?.requestSubmit(pressed);
       };

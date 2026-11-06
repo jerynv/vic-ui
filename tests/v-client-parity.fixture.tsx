@@ -49,6 +49,9 @@ function Fields() {
       <Combobox id="who" look="bare" aria-label="Who or where" items={people} values={many} onValuesChange={setMany} placeholder="Add" />
       <Combobox id="thin" size="xs" aria-label="Thin" items={people} value={one} onValueChange={setOne} placeholder="Thin" lead={<MagnifyingGlassIcon size={14} aria-hidden="true" />} />
       <Combobox id="dense" size="sm" aria-label="Dense" items={people} value={null} placeholder="Dense" />
+      <div style={{ width: 240 }}>
+        <Combobox id="thin-many" size="xs" aria-label="Thin several" items={people} values={["ada", "grace", "alan"]} onValuesChange={() => {}} placeholder="Add" />
+      </div>
       <Combobox id="forwarded" aria-label="Forwarded" items={people} value={null} size={undefined} look={undefined} lead={undefined} placeholder={undefined} disabledReason={undefined} />
       <ChoiceCards size="sm" className="compact-cards" legend="What should they submit?" name="kind" value={kind} onChange={setKind} items={[
         { value: "none", label: "No submission" },
@@ -68,9 +71,9 @@ function Providers() {
       <div id="posting">
         <ProviderButtons providers={["google", "apple"]} verb="Continue with" action={(one) => `/auth/${one}/start`} onChoose={(one) => events.push(`choose ${one}`)} onLeave={() => events.push("leave")} />
       </div>
-      <div id="holding">
+      <fieldset id="holding" disabled={held}>
         <ProviderButtons providers={["apple"]} verb="Hold" action={(one) => `/hold/${one}`} hold={(one, go) => { events.push(`hold ${one}`); window.parity.go = go; return true; }} />
-      </div>
+      </fieldset>
       <div id="disabled">
         <ProviderButtons providers={["microsoft"]} verb="Off" action={(one) => `/off/${one}`} disabled />
       </div>

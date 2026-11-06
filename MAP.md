@@ -941,7 +941,7 @@ States:
 - List: as `Select`'s (`ui-menu`, offset 6, flip, shift, min width of the box, max height `min(LIST_MOST, max(LIST_LEAST, availableHeight))`px, and with `steady` that height fixed). Active row `data-active`; press on a row `--fill-press`; chosen rows end in a tick; group headings `--text-meta` weight 600 `--fg-subtle`; empty and foot `--text-ui` `--fg-subtle`, the foot under `1px solid light-dark(oklch(0 0 0 / 0.06), oklch(1 0 0 / 0.08))`.
 - Disabled and held: as `Textarea`.
 - `look="bare"` (`ui-combo-bare`): the box transparent at rest, on hover and open, with no edge; several chosen drop the box's inline padding, the input's inline padding is 0.25rem, and with nothing chosen the words start at the box's edge.
-- `size="xs"`: box `--control-h-xs`, input `--text-meta` with padding `0 0.5rem`, a leading option mark 1rem, `ui-combo-start` margin 0.5rem.
+- `size="xs"`: one choice, a box of `--control-h-xs`; several, a box that grows a row at a time from min height `--control-h-xs` (padding and gap 0.125rem), its chips and input `calc(var(--control-h-xs) - 0.25rem)` tall, chips at `--text-meta` with a 1rem x. Input `--text-meta` with padding `0 0.5rem`, a leading option mark 1rem, `ui-combo-start` margin 0.5rem.
 - Lead: `--fg-subtle`, `--fg-strong` while the field has focus (160ms); margin-left 0.625rem, the input after it padded 0.4rem.
 
 Tokens: the field tokens, the list tokens, `--control-h-xs`, `--surface-lifted`, `--radius-row`, `--radius-mark`, `--text-meta`, `--control-h`, `--control-h-sm`.
@@ -2160,9 +2160,9 @@ Sign-in provider buttons with the source's marks (`ProviderKind`: `"google" | "a
 | `providers` | `readonly ProviderKind[]` | required | In order. `ProviderChoice` draws nothing when empty. |
 | `verb` | `string` | required | Before the provider's name: "Continue with". |
 | `onChoose` | `(provider) => void` | none | Told the provider pressed. Without `action` it is required, and each button is `type="button"`. |
-| `action` | `(provider) => string` | none | Each provider becomes a `type="submit"` button in its own `<form method="post" action={action(provider)}>` (`ui-provider-form`, `display: contents`), sent by `requestSubmit` with the button as submitter. Required when `onChoose` is not given. |
+| `action` | `(provider) => string` | none | Each provider becomes a `type="submit"` button in its own `<form method="post" action={action(provider)}>` (`ui-provider-form`, `display: contents`), sent by `requestSubmit` with the button as submitter. Required when `onChoose` is not given. Never place them inside another `<form>`: forms cannot nest, so the browser drops the inner ones and the buttons submit the outer form. |
 | `onLeave` | `() => void` | none | With `action`: run just before a form is sent. |
-| `hold` | `(provider, go) => boolean` | none | With `action`: returning true holds the press back; calling `go` later sends that form (nothing when the button has gone). |
+| `hold` | `(provider, go) => boolean` | none | With `action`: returning true holds the press back; calling `go` later sends that form (nothing when the button has gone or is disabled, by itself or by a fieldset). |
 | `inline` | `{ size?: "sm" } \| undefined` | none | Compact marks (14px) and the plain secondary button. |
 | `disabled` | `boolean \| undefined` | `false` | Nothing is chosen or sent. A disabled fieldset around them does the same natively. |
 
@@ -2184,9 +2184,9 @@ One `FocusLayout` above a page whose code or data is still on its way, so the si
 | `back` | `FocusBack \| undefined` | none | As `FocusLayout`. |
 | every other `FocusLayout` prop | | | Passed on: `brand`, `org`, `renderArt`, `renderAppearance`, `width`, `tone` and the rest. |
 
-`useFocusFrame(words: FocusFrameWords): boolean` names the frame it is drawn in before the frame paints (a layout effect, skipping identical words) and returns `true`; outside a frame it returns `false` and the page draws its own `FocusLayout`. The way back's press is always the one the page last drew. `FocusFrameWords` is `{ title, tab?, steps?, back? }`.
+`useFocusFrame(words: FocusFrameWords): boolean` names the frame it is drawn in before the frame paints (a layout effect, skipping identical words) and returns `true`; outside a frame it returns `false` and the page draws its own `FocusLayout`. The way back's press is always the one the page last drew. When the page unmounts while the frame stays (a lazy next page still loading), the frame draws its own words again; a page mounted in its place names it in the same commit. `FocusFrameWords` is `{ title, tab?, steps?, back? }`.
 
-`FocusLayout` takes `tab?: string`: the document's title while it is drawn, the previous one restored after. The library adds no product name; pass the whole title.
+`FocusLayout` takes `tab?: string`: the document's title while it is drawn, the previous one restored after, unless the title has changed since (a newer one is left alone). The library adds no product name; pass the whole title.
 
 Source: `Focus.tsx`. CSS: as `FocusLayout` (`ui-canonical-focus-shell.css`).
 

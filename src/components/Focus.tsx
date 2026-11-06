@@ -77,14 +77,17 @@ export function FocusMark(props: { name: string; slug?: string; logo?: string | 
   </span>;
 }
 
-/** The document's title while a screen is drawn, and the one before it once it is gone. */
+/**
+ * The document's title while a screen is drawn, and the one before it once it is gone, unless
+ * something has named the document since: a newer title is left as it is.
+ */
 function useTab(tab: string | undefined): void {
   useEffect(() => {
     if (!tab) return;
     const was = document.title;
     document.title = tab;
     return () => {
-      document.title = was;
+      if (document.title === tab) document.title = was;
     };
   }, [tab]);
 }
@@ -125,7 +128,7 @@ export function FocusFrame({ title, tab, steps, back, children, ...layout }: Foc
 /**
  * Names the `FocusFrame` this page is drawn in, before the frame paints; true when there is one,
  * and false when the page has to draw its own `FocusLayout`. The way back's press is always the
- * one the page last drew.
+ * one the page last drew; once the page is gone the frame draws its own words again.
  */
 export function useFocusFrame(words: FocusFrameWords): boolean {
   const setNamed = useContext(FrameSetter);
@@ -137,5 +140,9 @@ export function useFocusFrame(words: FocusFrameWords): boolean {
     const next: FocusFrameWords = { ...words, back };
     setNamed((last) => (last && sameWords(last, next) ? last : next));
   });
+  // Gone, the page hands the frame back its own words, so a page still loading after it never
+  // shows the last one's title, steps or way back. A page drawn in its place names it again in
+  // the same commit, after this.
+  useLayoutEffect(() => () => setNamed?.(null), [setNamed]);
   return setNamed !== null;
 }

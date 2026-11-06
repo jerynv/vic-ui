@@ -132,6 +132,9 @@ test("v-client parity: provider forms post to their action, hold and leave", { t
     await page.locator("#hold-fieldset").click();
     await page.getByRole("button", { name: "Sign in with Microsoft" }).click({ force: true });
     assert.deepEqual(await events(), []);
+    // A press held earlier sends nothing once its fieldset is disabled.
+    await page.evaluate(() => window.parity.go());
+    assert.deepEqual(await events(), []);
     assert.deepEqual(errors, []);
   } finally { await browser.close(); await server.close(); }
 });
@@ -189,4 +192,56 @@ test("v-client parity: unlessHeld runs the control's own handler only while it i
     const props = { "aria-describedby": "why" };
     assert.equal(reasonOf(props), props);
   } finally { await server.close(); }
+});
+
+test("v-client parity: a thin combobox with several chosen grows to hold its wrapped chips", { timeout: 60000 }, async (t) => {
+  const server = await startFixture(), browser = await chromium.launch();
+  try {
+    for (const sheet of ["vic", "ui"]) await t.test(sheet, async () => {
+      const page = await browser.newPage({ viewport: { width: 1100, height: 1400 }, reducedMotion: "reduce" });
+      page.setDefaultTimeout(6000);
+      await page.goto(`${server.resolvedUrls.local[0]}?sheet=${sheet}`, { waitUntil: "networkidle" });
+      const geometry = await page.locator("#thin-many").evaluate((input) => {
+        const frame = input.closest(".ui-combo-box"), outer = frame.getBoundingClientRect();
+        const parts = [...frame.querySelectorAll(".ui-combo-chip"), input].map((el) => el.getBoundingClientRect());
+        return { classes: input.closest(".ui-field").className, many: frame.hasAttribute("data-many"), height: outer.height,
+          rows: new Set(parts.map((r) => Math.round(r.top))).size, chips: parts.slice(0, -1).map((r) => r.height),
+          inside: parts.every((r) => r.top >= outer.top - 0.5 && r.bottom <= outer.bottom + 0.5) };
+      });
+      assert.ok(geometry.classes.includes("ui-field-xs") && geometry.many);
+      assert.ok(geometry.rows >= 2, `the chips wrap (${geometry.rows} rows)`);
+      assert.ok(geometry.inside, `every chip and the input sit inside the box (${JSON.stringify(geometry)})`);
+      assert.ok(geometry.height > 24, "the box grew past one thin row");
+      for (const height of geometry.chips) assert.equal(height, 20, "a thin chip is the thin height less its inset");
+      // A single thin field keeps its fixed thin height.
+      assert.equal(await page.locator("#thin").evaluate((el) => el.closest(".ui-field-box").getBoundingClientRect().height), 24);
+      await page.close();
+    });
+  } finally { await browser.close(); await server.close(); }
+});
+
+test("v-client parity: a frame forgets a page that has gone and leaves a newer document title alone", { timeout: 60000 }, async () => {
+  const server = await startFixture(), browser = await chromium.launch();
+  try {
+    const page = await browser.newPage();
+    page.setDefaultTimeout(6000);
+    const errors = []; page.on("pageerror", (e) => errors.push(e.message));
+    await page.goto(`${server.resolvedUrls.local[0]}?part=frames`, { waitUntil: "networkidle" });
+    await page.evaluate(() => window.parity.showPage(true));
+    await page.locator("#page-body").waitFor();
+    assert.equal(await page.locator(".ui-focus-title").textContent(), "Your details");
+    assert.equal(await page.getByRole("link", { name: "Back" }).count(), 1);
+    // The page goes (a lazy next page still loading) while the frame stays mounted.
+    await page.evaluate(() => window.parity.showPage(false));
+    await page.locator("#loading").waitFor();
+    assert.equal(await page.locator(".ui-focus-title").textContent(), "Book a demo", "the frame's own title again");
+    assert.equal(await page.title(), "Book a demo", "the frame's own tab again");
+    assert.deepEqual(await page.locator(".ui-focus-steps li").evaluateAll((all) => all.map((li) => [li.textContent, li.getAttribute("data-at")])), [["Pick a time", "now"], ["Your details", "next"]]);
+    assert.equal(await page.getByRole("link", { name: "Back" }).count(), 0, "no way back the gone page drew");
+    // A title the host set after the frame's is not overwritten when the frame goes.
+    await page.evaluate(() => { document.title = "Host changed"; window.parity.showFrame("none"); });
+    await page.locator(".ui-focus").waitFor({ state: "detached" });
+    assert.equal(await page.title(), "Host changed");
+    assert.deepEqual(errors, []);
+  } finally { await browser.close(); await server.close(); }
 });
