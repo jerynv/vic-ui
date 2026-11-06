@@ -19,8 +19,8 @@
     background: var(--surface-lifted);
   }
   .ui-preview-heading, .ui-preview-header > .ui-preview-name { flex: 1; min-width: 8rem; }
-  .ui-preview-name { margin: 0; font-size: var(--text-ui); font-weight: var(--weight-ui); color: var(--fg-strong); overflow-wrap: anywhere; }
-  .ui-preview-description { margin: 0; font-size: var(--text-meta); line-height: 1.5; color: var(--fg-subtle); overflow-wrap: anywhere; }
+  .ui-preview-name { margin: 0; font-size: var(--text-ui); letter-spacing: var(--track-ui); font-weight: var(--weight-ui); color: var(--fg-strong); overflow-wrap: anywhere; }
+  .ui-preview-description { margin: 0; font-size: var(--text-meta); letter-spacing: var(--track-meta); line-height: 1.5; color: var(--fg-subtle); overflow-wrap: anywhere; }
   .ui-preview-body { min-width: 0; }
   .ui-preview-toolbar, .ui-preview-actions, .ui-preview-status-actions {
     display: flex;
@@ -41,7 +41,7 @@
     text-align: center;
   }
   .ui-preview-status > [role] { display: grid; justify-items: center; gap: 0.5rem; max-width: 36rem; }
-  .ui-preview-status-title { margin: 0; font-size: var(--text-read); font-weight: var(--weight-ui); color: var(--fg-strong); }
+  .ui-preview-status-title { margin: 0; font-size: var(--text-read); letter-spacing: var(--track-read); font-weight: var(--weight-ui); color: var(--fg-strong); }
   .ui-preview-dialog {
     position: fixed;
     inset: 0;
@@ -63,7 +63,7 @@
   .ui-preview-dialog-content > :is(.ui-preview-image, .ui-preview-text, .ui-preview-table-scroll) { flex: 1; min-height: 0; max-height: none; }
   .ui-preview-dialog-content .ui-preview-image-viewport { height: auto; }
   .ui-preview-navigation { display: flex; justify-content: center; gap: 1rem; padding: 0.5rem; border-top: 1px solid var(--line); }
-  .ui-preview-count { font-size: var(--text-meta); font-variant-numeric: tabular-nums; color: var(--fg-subtle); white-space: nowrap; }
+  .ui-preview-count { font-size: var(--text-meta); letter-spacing: var(--track-meta); font-variant-numeric: tabular-nums; color: var(--fg-subtle); white-space: nowrap; }
   @media (max-width: 480px) {
     .ui-preview-header { padding: 0.5rem 0.75rem; }
     .ui-preview-status { padding: 1.25rem; }

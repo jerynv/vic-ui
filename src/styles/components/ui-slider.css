@@ -4,7 +4,7 @@
   .ui-slider-track { position: relative; inline-size: 100%; block-size: 4px; overflow: hidden; border-radius: var(--radius-round); background: var(--fg-subtle); }
   .ui-slider-fill { block-size: 100%; background: var(--fg-strong); border-radius: inherit; }
   .ui-slider-thumb { display: grid; place-items: center; inline-size: max(24px, 1.5rem); block-size: max(24px, 1.5rem); border-radius: var(--radius-round); cursor: grab; }
-  .ui-slider-thumb-visual { inline-size: 14px; block-size: 14px; border: 1px solid var(--fg-strong); border-radius: var(--radius-round); background: var(--surface-lifted); pointer-events: none; transition: background 160ms; }
+  .ui-slider-thumb-visual { inline-size: 14px; block-size: 14px; border: 1px solid var(--fg-strong); border-radius: var(--radius-round); background: var(--surface-lifted); pointer-events: none; transition: background var(--motion-fast) var(--ease-out); }
   .ui-slider-thumb:hover .ui-slider-thumb-visual { background: var(--bg-tint); }
   .ui-slider-thumb:active { cursor: grabbing; }
   .ui-slider-thumb:active .ui-slider-thumb-visual { background: var(--bg-recessed); }
@@ -12,6 +12,5 @@
   .ui-slider[data-disabled] { opacity: 0.55; }
   .ui-slider[data-disabled] .ui-slider-control, .ui-slider[data-disabled] .ui-slider-thumb { cursor: not-allowed; }
   .ui-slider[data-disabled] .ui-slider-thumb-visual { background: var(--surface-lifted); }
-  .ui-slider-hint { font-size: var(--text-meta); line-height: 1.4; color: var(--fg-subtle); overflow-wrap: anywhere; }
-  @media (prefers-reduced-motion: reduce) { .ui-slider-thumb-visual { transition: none; } }
+  .ui-slider-hint { font-size: var(--text-meta); letter-spacing: var(--track-meta); line-height: 1.4; color: var(--fg-subtle); overflow-wrap: anywhere; }
 }

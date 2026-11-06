@@ -1,4 +1,5 @@
 import { createContext, useContext, type AnchorHTMLAttributes, type ComponentType, type ReactNode, type Ref } from "react";
+import { assertOneReact } from "./dev";
 
 /**
  * What a piece draws for a link to a page of the consumer's own app (`to`): a plain `<a href>`
@@ -25,6 +26,7 @@ export function LinkProvider(props: { component: LinkComponent; children: ReactN
 
 /** The link the nearest `LinkProvider` supplies, or a plain anchor. */
 export function Link(props: LinkProps) {
+  assertOneReact();
   const Component = useContext(LinkContext);
   return <Component {...props} />;
 }

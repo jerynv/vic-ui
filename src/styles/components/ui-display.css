@@ -19,6 +19,7 @@
     padding: 0 0.4375rem;
     border-radius: var(--radius-round);
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     font-weight: 600;
     line-height: 1;
     white-space: nowrap;
@@ -26,18 +27,14 @@
     box-shadow: inset 0 0 0 1px var(--tone-edge, var(--line));
   }
 
-  /* Its words, cut with an ellipsis where its row gives it less room than they need. Written
-     from lower-case data ("owner", "you lead it"), the first letter is raised and the rest reads
-     as a phrase; a flex container has no first letter, so the words are an item of their own. */
+  /* Its words, cut with an ellipsis where its row gives it less room than they need. They are
+     drawn as written: capitalisation is the author's, so data words ("script", "file") stay
+     as they are. */
   .ui-badge-words {
     min-width: 0;
     overflow: hidden;
     line-height: 1.35;
     text-overflow: ellipsis;
-  }
-
-  .ui-badge-words::first-letter {
-    text-transform: uppercase;
   }
 
   /* Asks for a hand now: filled in its tone's ink, or in ink where it has none. */
@@ -90,6 +87,7 @@
     padding: 0 0.3125rem;
     border-radius: var(--radius-round);
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     line-height: 1;
@@ -108,6 +106,7 @@
   /* How many a heading holds: a quiet number after its words, in the heading's weight. */
   .ui-head-count {
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     font-variant-numeric: tabular-nums;
     color: var(--fg-subtle);
   }
@@ -118,6 +117,7 @@
   .ui-problem {
     margin: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--tone-danger-ink);
   }
 
@@ -134,6 +134,7 @@
     border-radius: var(--radius-field);
     background: var(--tone-tint, var(--field-fill));
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.45;
     color: var(--fg-strong);
   }
@@ -209,7 +210,7 @@
     background: none;
     color: inherit;
     cursor: pointer;
-    transition: background-color 120ms;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-notice-dismiss:hover {
@@ -233,6 +234,7 @@
     min-width: 0;
     border-radius: var(--radius-panel);
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg);
   }
 
@@ -272,6 +274,7 @@
   .ui-card-title {
     margin: 0;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     font-weight: 600;
     line-height: 1.35;
     color: var(--fg-strong);
@@ -352,13 +355,14 @@
     background: none;
     font: inherit;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: var(--weight-ui);
     text-align: left;
     color: var(--fg-strong);
     cursor: pointer;
     transition:
-      background-color 150ms ease-out,
-      color 150ms ease-out;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-accordion-trigger:hover:not(:disabled, [aria-disabled="true"]) {
@@ -387,7 +391,7 @@
   .ui-accordion-chevron {
     flex: none;
     color: var(--fg-subtle);
-    transition: transform 220ms var(--ease-out-expo);
+    transition: transform var(--motion-base) var(--ease-out);
   }
 
   .ui-accordion-item[data-open] .ui-accordion-chevron {
@@ -398,7 +402,7 @@
   .ui-accordion-panel {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 220ms var(--ease-out-expo);
+    transition: grid-template-rows var(--motion-base) var(--ease-out);
   }
 
   .ui-accordion-item[data-open] .ui-accordion-panel {
@@ -413,15 +417,9 @@
   .ui-accordion-content {
     padding: 0.125rem 0 0.75rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.5;
     color: var(--fg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ui-accordion-panel,
-    .ui-accordion-chevron {
-      transition: none;
-    }
   }
 
   /* ---- a stack of faces ----------------------------------------------------------- */
@@ -489,6 +487,7 @@
     border-radius: var(--radius-mark);
     font-family: var(--font-sans);
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     font-weight: var(--weight-ui);
     line-height: 1;
     color: var(--fg-subtle);
@@ -510,6 +509,7 @@
     padding: 0 0.625rem 0 0.1875rem;
     border-radius: var(--radius-round);
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: var(--weight-ui);
     line-height: 1;
     text-decoration: none;
@@ -517,8 +517,8 @@
     background: var(--surface-lifted);
     box-shadow: var(--edge);
     transition:
-      box-shadow 200ms ease-out,
-      background-color 200ms ease-out;
+      box-shadow var(--motion-base) var(--ease-out),
+      background-color var(--motion-base) var(--ease-out);
   }
 
   .ui-announcement:not(:has(.ui-announcement-tag)) {
@@ -547,6 +547,7 @@
     padding: 0 0.5rem;
     border-radius: var(--radius-round);
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     font-weight: 600;
     color: var(--fg-strong);
     background: var(--field-fill);
@@ -555,6 +556,12 @@
   .ui-announcement-tag[data-hue] {
     color: var(--hue-ink);
     background: var(--hue);
+  }
+
+  /* The tag in the accent (`tone="accent"`), filled as a "New" pill is; it outranks a hue. */
+  .ui-announcement-tag[data-tone="accent"] {
+    color: var(--accent-on);
+    background: var(--accent);
   }
 
   .ui-announcement-words {
@@ -567,7 +574,7 @@
   .ui-announcement-arrow {
     flex: none;
     color: var(--fg-subtle);
-    transition: color 200ms ease-out;
+    transition: color var(--motion-base) var(--ease-out);
   }
 
   .ui-announcement:hover .ui-announcement-arrow {
@@ -584,6 +591,7 @@
     margin: 0;
     padding: 0.25rem 0.5rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.25rem;
     color: var(--fg-subtle);
   }
@@ -621,7 +629,7 @@
     border-radius: var(--radius-row);
     color: var(--hue-ink, var(--fg-subtle));
     background: var(--hue, var(--field-fill));
-    transition: translate 240ms var(--ease-track, ease);
+    transition: translate var(--motion-base) var(--ease-track);
   }
 
   .ui-empty-mark > svg {
@@ -632,6 +640,7 @@
   .ui-empty-title {
     margin: 0;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     font-weight: 600;
     color: var(--fg-strong);
     text-wrap: balance;
@@ -644,6 +653,7 @@
     min-height: calc(2 * 1.5 * var(--text-ui));
     margin: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.5;
     color: var(--fg-subtle);
     text-wrap: balance;
@@ -651,6 +661,7 @@
 
   .ui-empty[data-size="card"] .ui-empty-title {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   .ui-empty-actions {
@@ -692,8 +703,8 @@
     scale: 0.88 1;
     transform-origin: left center;
     transition:
-      scale 600ms var(--ease-out-expo, ease),
-      background-color 300ms ease;
+      scale calc(var(--motion-slow) * 2) var(--ease-out),
+      background-color var(--motion-slow) var(--ease-out);
   }
 
   .ui-empty-bar-soft {
@@ -706,7 +717,7 @@
     height: 1.5rem;
     border-radius: var(--radius-row);
     background: var(--field-fill);
-    transition: background-color 300ms ease;
+    transition: background-color var(--motion-slow) var(--ease-out);
   }
 
   .ui-empty-art-mark[data-mark="face"] {
@@ -871,15 +882,15 @@
   }
 
   .ui-empty-art > :nth-child(2) .ui-empty-bar {
-    transition-delay: 60ms;
+    transition-delay: calc(var(--motion-fast) * 0.4);
   }
 
   .ui-empty-art > :nth-child(3) .ui-empty-bar {
-    transition-delay: 120ms;
+    transition-delay: calc(var(--motion-fast) * 0.8);
   }
 
   .ui-empty-art > :nth-child(n + 4) .ui-empty-bar {
-    transition-delay: 180ms;
+    transition-delay: calc(var(--motion-fast) * 1.2);
   }
 
   .ui-empty:is(:hover, :focus-within) .ui-empty-art > :first-child .ui-empty-art-mark,
@@ -896,13 +907,6 @@
     background: var(--hue-ink, var(--fg-subtle));
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .ui-empty-bar,
-    .ui-empty-art-mark {
-      transition: none;
-    }
-  }
-
   /* A well that takes files: a dashed edge, and two sheets behind the mark that fan out and
      lift it while something is held over it. */
   .ui-empty[data-drop] {
@@ -910,8 +914,8 @@
     border: 1px dashed var(--line);
     border-radius: var(--radius-panel);
     transition:
-      border-color 200ms ease,
-      background-color 200ms ease;
+      border-color var(--motion-base) var(--ease-out),
+      background-color var(--motion-base) var(--ease-out);
   }
 
   .ui-empty[data-drop] .ui-empty-mark::before,
@@ -924,7 +928,7 @@
     background: inherit;
     box-shadow: 0 0 0 1px var(--hue-ink, var(--line));
     opacity: 0.35;
-    transition: rotate 240ms var(--ease-track, ease), translate 240ms var(--ease-track, ease);
+    transition: rotate var(--motion-base) var(--ease-track), translate var(--motion-base) var(--ease-track);
   }
 
   .ui-empty[data-drop] .ui-empty-mark {
@@ -960,14 +964,6 @@
     translate: 0.875rem 0.25rem;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .ui-empty-mark,
-    .ui-empty[data-drop] .ui-empty-mark::before,
-    .ui-empty[data-drop] .ui-empty-mark::after {
-      transition: none;
-    }
-  }
-
   /* ---- a table of contents -------------------------------------------------------- */
 
   /* Entries over one track, the one open marked by a bar that slides along it. */
@@ -994,6 +990,7 @@
     margin: 0;
     padding: 0.125rem 0 0.125rem 1rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: var(--weight-ui);
     line-height: 1.25rem;
     color: var(--fg-subtle);
@@ -1005,13 +1002,14 @@
     padding: 0.125rem 0 0.125rem 1rem;
     border-radius: 0 var(--radius-row) var(--radius-row) 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: 400;
     line-height: 1.25rem;
     color: var(--fg-subtle);
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
-    transition: color 150ms var(--ease-track), background-color 150ms var(--ease-track);
+    transition: color var(--motion-fast) var(--ease-track), background-color var(--motion-fast) var(--ease-track);
   }
 
   .ui-toc-heading + .ui-toc-list .ui-toc-entry {
@@ -1047,15 +1045,8 @@
 
   .ui-toc-bar[data-ready] {
     transition:
-      top 180ms var(--ease-track),
-      bottom 180ms var(--ease-track);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ui-toc-entry,
-    .ui-toc-bar[data-ready] {
-      transition: none;
-    }
+      top var(--motion-base) var(--ease-track),
+      bottom var(--motion-base) var(--ease-track);
   }
 }
 
@@ -1256,7 +1247,7 @@
     flex-shrink: 0;
     width: 100%;
     min-height: 0;
-    transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform var(--motion-base) var(--ease-track);
   }
 
   .ui-sliding-view {
@@ -1269,12 +1260,6 @@
 
   .ui-sliding-view[aria-hidden="true"] {
     pointer-events: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ui-sliding-track {
-      transition: none;
-    }
   }
 }
 
@@ -1295,6 +1280,7 @@
     overflow: hidden;
     border-radius: var(--radius-row);
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--fg);
     background: var(--surface-lifted);
     box-shadow: 0 0 0 1px var(--line);
@@ -1386,7 +1372,7 @@
     position: absolute;
     inset: 0 auto 0 0;
     background: var(--ink-face-bottom);
-    transition: width 300ms var(--ease-track);
+    transition: width var(--motion-slow) var(--ease-track);
   }
 
   .ui-file-chip-bar[data-unknown] > span {
@@ -1394,6 +1380,8 @@
     animation: ui-progress-sweep 1.4s var(--ease-track) infinite;
   }
 
+  /* Not a duration: the unknown bar's sweep is a loop, so under reduced motion it becomes a
+     still, half-strength stretch instead. */
   @media (prefers-reduced-motion: reduce) {
     .ui-file-chip-bar[data-unknown] > span {
       width: 100%;

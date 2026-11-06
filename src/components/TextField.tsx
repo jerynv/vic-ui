@@ -2,6 +2,7 @@ import type { SurfaceStyle } from "./Surface";
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { describedBy, FieldHead, FieldHint } from "./FieldHead";
 import { useFieldReason } from "./reason";
+import { assertOneReact } from "./dev";
 
 /**
  * The library's field: a label, a native input, and what is fixed at its end (`suffix`, the
@@ -16,6 +17,7 @@ export const TextField = forwardRef<
   HTMLInputElement,
   Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> & { label?: ReactNode; "aria-label"?: string; suffix?: ReactNode; prefix?: ReactNode; hint?: ReactNode; error?: ReactNode; size?: "sm"; surface?: SurfaceStyle; disabledReason?: string | undefined }
 >(function TextField({ label, suffix, prefix, hint, error, size, surface, className, id, disabled, disabledReason, onFocus, onBlur, onKeyDown, ...rest }, ref) {
+  assertOneReact();
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);

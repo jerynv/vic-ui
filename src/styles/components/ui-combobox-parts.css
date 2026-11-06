@@ -13,11 +13,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 32px;
-    padding: 4px 8px;
+    min-height: calc(var(--menu-item-h) - 2px);
+    padding: calc(4px + (var(--menu-item-h) - 2.125rem) / 2) 8px;
     border-radius: var(--radius-row);
     color: var(--fg);
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: var(--text-ui--line-height);
     font-weight: 400;
     cursor: default;
@@ -30,6 +31,7 @@
     padding: 8px;
     color: var(--fg-subtle);
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     line-height: var(--text-meta--line-height);
   }
   .ui-combobox-empty:empty { padding: 0; }

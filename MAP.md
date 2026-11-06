@@ -1,57 +1,37 @@
 # vic-ui: the map
 
-## Canonical controls source sync (active)
+## Optional Office and media previews
 
-Owner-authorized additive source sync from V-Client555625f4 is tracked in [docs/tasks/canonical-controls-sync.md](docs/tasks/canonical-controls-sync.md). Historical extraction and current parity are distinct; preview transfers do not close controls coverage. Preserve released142 root exports and all existing defaults. Implementation isolated on feat/canonical-controls-sync.
+Five optional exports outside the root: `AudioPreview` and `VideoPreview` at `vic-ui/preview/media`, `XlsxPreview` and `PptxPreview` at `vic-ui/preview/office`, `DocxPreview` at `vic-ui/preview/docx`. All require ready Blob/Uint8Array input and a title; the host keeps loading, authorisation, classification and downloads. `DocxPreview` alone needs the exact optional peer `docx-preview` 0.4.1.
 
-## Optional Office/media release
-
-Owned isolated branch `feat/office-media-previews` in `t3-c2cc92d0`, baseline `6deb7fc`. Five additive optional exports: AudioPreview/VideoPreview at `vic-ui/preview/media`, XlsxPreview/PptxPreview at `vic-ui/preview/office`, DocxPreview at `vic-ui/preview/docx`. All require ready Blob/Uint8Array input and title; host retains loading/auth/classification/downloads. Root137 exports unchanged. DOCX alone needs exact optional peer docx-preview0.4.1. No Phaethon/shared checkout edits. Provenance is authorized first-party V-Client pin2f2713d8, with all116 source-pack payload hashes reverified; no invented upstream MIT grant.
-
-Behavior: native media64MiB encoded; Office10MiB encoded/512ZIPparts/8MiB each/32MiB expanded; XML4MiB per part/100k nodes/depth128. XLSX stored values only, bounded sheets/cells/text/display; PPTX extracted text only. DOCX validates/rebuilds ZIP, renders into inert nodes then sanitized sandboxed srcdoc; PNG/JPEG only, budgeted input/output/images and repeated header/footer/note placement before conversion. Additional DOCX limits and supported restrictions are in the File preview guide and /tmp/vic-office-release-api.md. Other root controls/core previews unchanged.
-
-Verification before final freeze: real rendering/playback, focus/retry/stale-input/URL/bitmap/observer cleanup, both themes/styles, all8 website checks, local-review test, both typechecks, design/dashes/reference build/detector passed. npm test passed actual packed strict Bundler/NodeNext skipLibCheck:false with root137 and optional subpaths loadable without DOCX installed, plus24 behavioral checks. Independent review found3 DOCX precursor gaps; fixes now reject relationship-selected non-XML, bounded numbering expansion, and repeated-header work BEFORE dependency/bitmap/FileReader conversion. Eight exact regressions and ordinary list/five-page-header success cases pass. Parent directly inspected matching dependency relationship/numbering/page paths. Delegated bounded recheck task05562e3a failed BEFORE execution with provider safety filter “possible cybersecurity risk”; no independent recheck success claimed or retry attempted. Initial report /tmp/vic-office-independent-review.txt. Final focused suite and final package+24 behavioral/8 website/1 local-review checks pass, both typechecks/design/dashes/reference build pass. A documentation range dash was corrected after the dash check identified it. All native preview workers completed. Final retained artifact destination /tmp/vic-ui-office.kfXWHM; commit/source and archive metadata recorded outside the tarball.
-
-Released b0a29e2c83622487d6b6b126e26ac90ad573c122 (#29); source5d0ff52f tree identical. Retained archive /tmp/vic-ui-office.kfXWHM/vic-ui-0.1.0.tgz SHA256069fdb0eca38a5206e27a6df9eeceb8d73b29395c45d1a3078c7050087b6dd91,220 files/668425bytes. API/manifest/checks beside archive. Delivered same artifact to Phaethon and V-Client owners; neither application upgraded by this thread. Main CI42005789672 and Pages deployment passed. Logs /tmp/vic-office-*.log. No npm publication. Existing release authorization carries.
-
-## Slider/settings release and docs readiness
-
-Owned branch feat/slider-settings-release in t3-c2cc92d0 based on released b0a29e2. Cherry-picked isolated implementation74a690a and parent fixesbeee6fd/94d4d70 (new branch equivalents9b11f8e/caf5abb/242f3a9). Source worktree t3-dff18547 remains clean/preserved. Five new root exports: Slider, SettingsLayout, SettingsSection, SettingsGroup, SettingsRow; expected142 total preserving prior137 and all optional previews. No dependency added. Sidebar/Radio runtime unchanged.
-
-Independent review found touch stepped presses also triggered native touchstart jump and off-grid callback/form discrepancies. Parent fixes suppress only the companion track touch path and normalize every value channel to the min-anchored step grid. Seven source tests pass including real emulated touch tap/move/drag/jump/disabled, value/ARIA/FormData consistency, and Sidebar observer persistence with explicit focus-boundary wrapping. Actual installed BaseUI1.9.0; source note corrected. New user-requested headingProps supports native heading attributes/ref/tabIndex, with titleId precedence; host focus tests pass. Consumer owner received contract, no package upgrade claimed.
-
-Integrated root exports/CSS imports and strict packed consumer assertions; fixtures use built package/styles across native/composable sheets. Canonical Slider ready/composable family and new Settings page/examples bring the alphabetical catalogue to86 pages. All9 focused built checks pass, including both sheets/themes, heading focus, touch, form consistency and Sidebar lifecycle. Earlier composable-sheet test failures came from sampling layout before the global reduced-motion transition settled; assertions now wait for finished transitions/stable bounds, with no unrelated stylesheet changes. Light desktop and dark mobile docs screenshots inspected. Both typechecks, design/dashes, reference build, all9 website checks and local review pass. Final npm test passes: actual packed strict Bundler/NodeNext and142 exports plus33 behavioral checks. With9 website checks and1 local review,44 checks pass. Logs /tmp/vic-controls-final-tests.log and /tmp/vic-controls-*.log. Released7de0c2c (#30), tree-identical to tested36c3305. Archive /tmp/vic-ui-settings.hvwtXn/vic-ui-0.1.0.tgz SHA2562788b337e419101cf4944994b815752a88cc488edc7ec32fa2e11a26524089ce includes222 files/678554bytes and142 root exports. API/manifest/checks beside archive; delivered to Phaethon and Nclusive, no consumer edits/adoption claim. Main CI42009112876 passed library checks but failed new docs focus assertion; deployment skipped. Reproduced by delaying lazy example JavaScript: prerendered Go to button accepted a click before its handler attached. The docs example now disables its buttons/sliders until hydration, with a gated-asset regression before the normal focus flow. This follow-up does not change library source/API or require an archive replacement. Gated-asset regression now passes before and after hydration, as do website build/types and design/dash checks. Its initial prehydration slider-role assertion waited indefinitely because the server-rendered thumb is hidden until layout; native input.disabled establishes the correct prehydration state without requiring an accessible thumb before initialization. All9 website checks pass together after the fix (/tmp/vic-settings-readiness-website.log). Next release the scoped docs correction and confirm CI/deployment. No active delegates or manual fixture servers.
+Behavior: native media64MiB encoded; Office10MiB encoded/512ZIPparts/8MiB each/32MiB expanded; XML4MiB per part/100k nodes/depth128. XLSX stored values only, bounded sheets/cells/text/display; PPTX extracted text only. DOCX validates/rebuilds ZIP, renders into inert nodes then sanitized sandboxed srcdoc; PNG/JPEG only, budgeted input/output/images and repeated header/footer/note placement before conversion. Additional DOCX limits and supported restrictions are in the File preview guide.
 
 ## Inline combobox composition
 
-Six additive root primitives (`ComboboxRoot`, `ComboboxSearch`, `ComboboxList`, `ComboboxItem`, `ComboboxGroup`, `ComboboxEmpty`) support a pinned search, inline list, provider rail and footer. Root controls query, selected string key and open state; the host supplies visible options in rendered order and retains filtering, catalogue data, permissions and popup ownership. Existing root and `vic-ui/ui` Combobox APIs remain intact. All 131 exports from `603c207` are preserved; there are now 137 runtime root exports and no new dependencies.
+Six root primitives (`ComboboxRoot`, `ComboboxSearch`, `ComboboxList`, `ComboboxItem`, `ComboboxGroup`, `ComboboxEmpty`) support a pinned search, inline list, provider rail and footer. Root controls query, selected string key and open state; the host supplies visible options in rendered order and retains filtering, catalogue data, permissions and popup ownership.
 
 Arrow keys skip disabled rows and clamp at the ends; Home/End traverse the open list, Enter selects and Escape requests closing. Modified keys and IME composition remain native. Input focus uses stable, safely encoded active-descendant IDs; filtering, provider replacement and reorder cannot retain an absent option. Tab reaches the external rail/footer because the scrollable list is explicitly outside tab order. Scrolling reveals the active row inside its own list after reorder/refocus without moving the surrounding page. Root or search-level disabled states and read-only search prevent both keyboard and pointer selection. Controlled state can decline requests, and selection/closing preserve the query.
 
-The existing Combobox family contains live light/dark examples with a 44px provider rail, pinned search, 32px normal-weight rows and independent footer. T3 layout reference: `7f6f47b27b44456f1c8214d3b566b375c09f629e` (MIT). Application loaders and account logic were not copied. Installed Base UI was evaluated: its permanently expanded inline state and Home/End caret behavior cannot implement this controller contract through public APIs.
-
-Validation covers SSR hydration, both stylesheet entries/themes, keyboard/pointer/IME, dynamic item identity, disabled/read-only changes, controlled refusal, empty results, focus/scroll recovery, mobile overflow and the old Combobox. Strict packed Bundler/NodeNext declarations use `skipLibCheck:false`, check all 131 prior exports and compile the new API. All three stylesheet outputs contain the new styles. Library/package, seven website and local review checks pass, as do both typechecks, design/dash checks and reference build. Independent review found the leaf restriction mismatch; controller-level guards and regressions resolve it. No Phaethon edits or changes to released preview/control behavior.
+The existing Combobox family contains live light/dark examples with a 44px provider rail, pinned search, normal-weight rows at least 2px under `--menu-item-h` (32px at the default density) and independent footer. Installed Base UI was evaluated: its permanently expanded inline state and Home/End caret behavior cannot implement this controller contract through public APIs.
 
 ## Portable file previews
 
-Seven additive root exports adapt the verified V-Client source: FilePreviewStage, FilePreviewToolbar, FilePreviewStatus, FilePreviewDialog, ImagePreview, TextPreview and DelimitedPreview. These render browser-decodable images, plain UTF-8 text and CSV/TSV. No PDF/DOCX/XLSX/PPTX/Markdown/media renderer or new dependency is included. Inputs are ready Blob/Uint8Array values; host applications retain fetch, permissions, classification and download actions. No Phaethon/V-Client source edits are part of this increment.
+Seven root exports: FilePreviewStage, FilePreviewToolbar, FilePreviewStatus, FilePreviewDialog, ImagePreview, TextPreview and DelimitedPreview. These render browser-decodable images, plain UTF-8 text and CSV/TSV. No PDF/DOCX/XLSX/PPTX/Markdown/media renderer is included in them. Inputs are ready Blob/Uint8Array values; host applications retain fetch, permissions, classification and download actions.
 
 Image input is capped at 20 MiB before copying or URL creation; the host still owns accepted image dimensions/formats and the browser owns decoding memory. Text is capped at 512 KiB/20,000 lines; delimited data at 1 MiB/1,000 total rows/60 columns. Callers can lower limits. Byte-cut CSV omits incomplete final records. Text/HTML/formula-looking cells remain inert. Local image URLs are revoked on replacement/unmount; stale text reads are ignored and retries actually reset conversion state.
 
-The native dialog restores the opener or explicit return target, wraps Tab including editing hosts, respects nested dialog Escape, and preserves renderer arrow keys. Navigation keys apply to the outer content container; replacing focused file content restores container focus. Docs provide real image/text/CSV previews, download/full-screen actions and light/dark loading/retry/unsupported examples. The 85-page catalogue remains alphabetical.
+The native dialog restores the opener or explicit return target, wraps Tab including editing hosts, respects nested dialog Escape, and preserves renderer arrow keys. Navigation keys apply to the outer content container; replacing focused file content restores container focus. Docs provide real image/text/CSV previews, download/full-screen actions and light/dark loading/retry/unsupported examples.
 
-Source pin `2f2713d8744373455d6be2953af26f68ecb37f6f`; source archive SHA256 `35835c7112e44ec753719ff760612a36776cedb44fb3b8b35094f34ebe677906`; manifest SHA256 `751334183baaec3949e3972d2af9312eb798e54431ec0a59b1adb51e3465eb80`. All 116 payloads were independently checked. Provenance records authorized first-party transfer, not an invented upstream MIT license; only pinned main source was adapted.
+## Slider and settings layouts
 
-Validation: 26 package/control/website/review checks pass, both typechecks, design/dash checks and reference build pass. Website count assertions were updated from 84 to 85 for the new family. All 123 historical exports plus seven preview exports and strict packed Bundler/NodeNext declarations are checked; all three component stylesheet outputs contain preview styles. Real desktop/mobile previews exercised zoom/fit, navigation, focus return, text/CSV display, retry and unsupported actions. Independent review findings on CSV arrow keys, lost focus, contenteditable Tab order and nested Escape were fixed with integration regressions. No new Impeccable detector findings.
-
-Previous control release: `ed35c656c274a3c43261d79a11a0d003588062d2` (#26), all 21 checks and Pages deployment passed. Tested archive `/tmp/vic-ui-controls.dyx6Rs/vic-ui-0.1.0.tgz`, SHA256 `3e3b6d466ec00c430e73d3452b4c9c5bba999f83d5656aa84b248cb0783feb41`. Phaethon owner received the archive/API and CI confirmation; downstream adoption remains their responsibility. Switch supports `look="flat" | "rimmed"`; button faces use concentric inset-derived radii.
+`Slider`, `SettingsLayout`, `SettingsSection`, `SettingsGroup` and `SettingsRow` are root exports. Slider takes scalar or range values on a min-anchored step grid, keeps its value, ARIA and form data in step, and suppresses the native touch jump for stepped presses. A settings section's `headingProps` passes native heading attributes, a ref and `tabIndex` to its heading, with `titleId` taking precedence.
 
 ## Documentation website
 
 `website/` ports Fumadocs' React Router SPA template. MDX lives in `website/content/docs`;
 the static search index and each document are prerendered. `npm run dev:website` starts it;
 `npm run build:website` emits `website/build/client`. The `dev:site` and `build:site`
-commands now target this website. GitHub Pages runs library and browser tests before deployment.
+commands target this website. GitHub Pages runs library and browser tests before deployment.
 The shared website theme control and live examples import the actual `vic-ui/ui` API.
 86 canonical family pages cover the 50 vic catalogue entries and 66 composable families. `component-families.ts` maps alternate names to one page; old URLs render the canonical document and navigate to it after hydration. Aliases are excluded before Fumadocs builds navigation and search. Shared families use a Ready-made/Composable tab selector with one active example/usage view. Both the sidebar and marketing directory sort by display name; the reference shell sorts within its categories.
 Rows support an optional description beneath the title; the file-list example demonstrates independent save actions.
@@ -136,11 +116,13 @@ From `web/src/ui/README.md`:
 - **Controlled, one value.** A piece that holds a choice takes `value` and gives `onValueChange(value)`; one that is on or off takes `checked` and gives `onCheckedChange(checked)`. A native piece still passes `onChange` and every other native attribute through.
 - **Lists are `Items`**: a record of value to words, pairs in order, or `Option`s. Every list-shaped piece reads them through `toOptions`.
 - **Labelled the same way.** A field has `label` (or `aria-label`) and `hint` on its own line under the box. A short `error` (up to `SHORT_ERROR`, 56 characters) takes the label's place in the danger ink (`FieldHead`); a longer refusal is a `Notice` with `onDismiss` at the top of the form. `name` posts the value with its form, through a hidden input where the piece is not a native control.
-- **Sizes.** `size="sm"` is the dense size (`--control-h-sm`, 2rem); the default is `--control-h` (2.25rem). Inside the product the dense size is the norm; the way in uses the default. The one exception is `Button`, whose default is already the dense height and whose `lg` is `--control-h`.
+- **Sizes.** `size="sm"` is the dense size (`--control-h-sm`, 2rem); the default is `--control-h` (2.25rem). Inside the product the dense size is the norm; the way in uses the default. The one exception is `Button`, whose default is already the dense height and whose `lg` is `--control-h`. Both heights come from the [density](#density) (`data-density` on the root or on a section), so `size="sm"` is always a step under whatever the density sets.
 - **Classes.** Every class starts `ui-`. `className` is for placement only, never to restyle a piece.
 - **Floating.** Anything that floats opens in the top layer (`popover="manual"`), positioned by `@floating-ui/dom` with `strategy: "fixed"`, on `.ui-menu`'s surface.
 - **States.** Every interactive piece has an eased hover, a press and a focus ring, and no state changes the weight or size of its words. A disabled piece is dimmed to 0.55 with a `not-allowed` pointer; one that takes `disabledReason` stays focusable and says the reason on hover and focus.
 - **Colour** comes only from the tokens; the hues reach a piece through `data-hue`.
+- **One React.** React and React DOM are peer dependencies only. On import, vic-ui records the React it imported on `globalThis[Symbol.for("vic-ui.react")]` (its version and its `Component` class); a second copy of vic-ui that brings a different React logs an error naming both versions. `Button`, `TextField` and `Link` check at the top of their render that the React rendering them is the one vic-ui imported, and throw an error saying two copies are loaded rather than failing on a null hook. Both live in `dev.ts`, run in every build, and are covered by `tests/one-react.test.mjs`. README's Vite setup adds `resolve.dedupe`.
+- **Development checks** read `isDev()` in `dev.ts`: `process.env.NODE_ENV !== "production"`, which the library build leaves as written for the app's bundler to replace. Where nothing replaces it and there is no `process`, the checks stay quiet.
 
 Two internal helpers in `reason.ts` carry the disabled-with-reason behaviour. They are not exported from `index.ts`:
 
@@ -158,7 +140,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `look` | `"ink" \| "line" \| "quiet" \| "link"` | `"ink"` | Which look. |
-| `tone` | `"accent"` | none | On `ink`, derives the rim and face states from `--button-accent`, with explicit `--button-on-accent` words. Also supported by ButtonLink and the composable default Button. |
+| `tone` | `"accent"` | none | On `ink`, fills the button in the accent: the rim and face states are mixed from `--button-accent` (falling back to `--accent`) and the words are `--button-on-accent` (falling back to `--accent-on`). A look, not a state. Also supported by ButtonLink and the composable default Button. |
 | `size` | `"md" \| "lg"` | `"md"` | `md` is `--control-h-sm` (2rem); `lg` is `--control-h` (2.25rem), a form's commit. |
 | `full` | `boolean` | `false` | Full width. |
 | `square` | `boolean` | `false` | An icon alone, as wide as the button is tall; its words go in `aria-label`. |
@@ -166,6 +148,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 | `icon` | `ReactNode` | none | Drawn before the words inside the face. |
 | `busy` | `boolean` | `false` | Held and `aria-busy` while it lasts; a spinner stands where its icon was, or over its words where it has none, the words kept in place unseen, so its width does not change. |
 | `disabledReason` | `string \| undefined` | none | With `disabled`, keeps it focusable and says why on hover and focus. |
+| `allowSecond` | `boolean` | `false` | Leaves this button out of the development check for one ink button per `main` landmark (see below). Not passed to the DOM. |
 | `type` | button type | `"button"` | Native type. |
 | `ref` | `Ref<HTMLButtonElement>` | none | Forwarded. |
 | native attributes | `ButtonHTMLAttributes` | | Passed through. |
@@ -176,9 +159,10 @@ States, as `ui.css` implements them:
 - Hover: `ink` face moves to `--ink-face-top-hover` / `--ink-face-bottom-hover`; `line` face fills `--field-fill-hover`; `quiet` words go `--fg-strong` and underline (offset 3px).
 - Press (`:active`): `ink` face `--ink-face-top-press` / `--ink-face-bottom-press`; `line` face `--field-fill`. Nothing moves; the face darkens.
 - `line` with `aria-pressed="true"` takes the ink rim and face (a held toggle).
+- Accent (`ui-button-accent` on `ink`): rim edge `--button-accent` mixed with black 22%, rim top with white 30%, rim bottom with black 12%; face top with white 4%, bottom with black 10%; hover white 6% / white 2%; press black 12% / black 4%; words `--button-on-accent`. The words hold 5.8:1 on every face stop in both modes with the default accent (`colour-contrast.test.mjs`). Set `--button-accent` and `--button-on-accent` on a part of the page to give its buttons another colour without moving `--accent`; set `--accent` on a part of the page and its buttons follow it. Neither button token is declared on the root, so either works at any depth.
 - Accent is local to the filled control; semantic danger/caution rules win. It adapts the existing semantic color-mix treatment but retains two distinct stops when pressed. The five-hue example and `accent-button.test.mjs` cover both APIs, both themes and higher-contrast lightness values.
-- `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (160ms).
-- Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over 300ms `ease-in-out`.
+- `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (`--motion-fast`).
+- Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over `--motion-slow` `--ease-track`.
 - Focus: `:focus-visible` outline 2px `--focus`, offset 2px (keyboard only).
 - Disabled (`:disabled` or `aria-disabled="true"`): opacity 0.55, `cursor: not-allowed`, no hover or press.
 - Busy (`aria-busy`): held as disabled is. With no icon, the face is `position: relative`, the words (`ui-button-busy-words`) are `opacity: 0` and the spinner (`ui-button-busy-mark`) is laid over them (`position: absolute; inset: 0; margin: auto`).
@@ -186,12 +170,14 @@ States, as `ui.css` implements them:
 - The rim's gradient is painted from the outer edge (`background-origin: border-box`), so it does not repeat under the border as a sliver along the top of a tall button.
 - Type: `--text-ui` (13px), weight `--weight-ui`, line height 1, no wrap; `lg` uses `--text-read` (14px).
 - Face padding `0 0.875rem` (`lg`: `0 1rem`, `square`: 0), gap 0.5rem, radius `calc(var(--radius-button) - 2px)`.
+- One ink button: in a development build (`process.env.NODE_ENV` not `"production"`, see `dev.ts`), when a second `look="ink"` button mounts inside the same `main` landmark (`<main>` or `role="main"`), the console warns once for that landmark, naming both buttons by their words. A button inside a `dialog`, `role="dialog"`, `role="alertdialog"` or a popover is not counted, nor one outside every `main`, nor one passed `allowSecond`. `DangerButton`, `CautionButton`, an `IconButton` with `look="ink"` and the composable `vic-ui/ui` Button with `variant="default"` or `"destructive"` draw through `Button` and are counted; the composable Button passes `allowSecond` on. A production build says nothing. `tests/one-ink.test.mjs` covers both builds.
+- Size: no state changes the button's box. `tests/state-size.test.mjs` measures every look at every size at rest, hovered, focused, pressed and disabled (with and without a reason), in both modes.
 
-Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
+Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`, `--button-accent`, `--button-on-accent`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
 
-CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`, `ui-button-busy-words`, `ui-button-busy-mark`. The four `@property` rules sit outside the layer at the end of the buttons block.
+CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-accent`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`, `ui-button-busy-words`, `ui-button-busy-mark`. The four `@property` rules sit outside the layer at the end of the buttons block.
 
-Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`; `Spinner`.
+Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`; `Spinner`; `dev.ts` (`useOneInk`, `assertOneReact`).
 
 ### ButtonLink
 
@@ -261,7 +247,7 @@ States:
 
 - Rest: 1.125rem square, radius `--radius-mark`, fill `--field-fill`, inset ring `1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14))`.
 - Hover (unchecked, enabled): `--field-fill-hover`.
-- Checked: fill and ring `--ink-face-bottom`; the tick (`CheckIcon` at 13px, stroke width 3, colour `--ink-words`) fades in (140ms) and scales from 0.6 to 1 (160ms `cubic-bezier(0.2, 0.8, 0.2, 1.4)`).
+- Checked: fill and ring `--ink-face-bottom`; the tick (`CheckIcon` at 13px, stroke width 3, colour `--ink-words`) fades in (`--motion-fast`) and scales from 0.6 to 1 (`--motion-fast`, on the library's one overshooting curve, `cubic-bezier(0.2, 0.8, 0.2, 1.4)`).
 - Focus: outline 2px `--focus`, offset 2px, keyboard only.
 - Disabled or `aria-disabled`: box opacity 0.55, `not-allowed`; the words go `--fg-subtle` and `not-allowed`.
 - Words: `--text-ui`, line height 1.45, `--fg`.
@@ -287,7 +273,7 @@ States:
 
 - Rest: rim edge transparent; rim and face `--field-fill`; words `--fg`; height `--control-h`; `--text-read`, weight 400; face padding `0 0.625rem`.
 - Hover (not chosen): rim and face `--field-fill-hover`.
-- Chosen (`aria-pressed="true"`): the ink rim and face and `--ink-words`. The change eases through the registered stops (300ms).
+- Chosen (`aria-pressed="true"`): the ink rim and face and `--ink-words`. The change eases through the registered stops (`--motion-slow`).
 - Focus and disabled: as `Button` (it carries `ui-button`).
 
 Tokens: `--field-fill`, `--field-fill-hover`, `--fg`, `--control-h`, `--text-read`, the `--ink-*` rim, face and words tokens, plus `Button`'s base tokens.
@@ -456,10 +442,10 @@ States:
 
 - Dot rest: 1.125rem circle, `--field-fill`, inset ring `1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14))`.
 - Dot hover (unchecked): `--field-fill-hover`.
-- Checked: fill `--ink-words`, inset ring `0.3125rem` of `--ink-face-bottom`, eased (box-shadow 180ms `cubic-bezier(0.2, 0.8, 0.2, 1)`).
+- Checked: fill `--ink-words`, inset ring `0.3125rem` of `--ink-face-bottom`, eased (box-shadow `--motion-base` `--ease-out`).
 - Focus: outline 2px `--focus`, offset 2px.
 - Disabled: dot opacity 0.55, `not-allowed`; label `not-allowed`, words `--fg-subtle`. Without a `reason` the radio is natively disabled. With one (`useFieldReason`) it is `aria-disabled`, stays in the arrows' reach, choosing it does nothing, and the reason hangs from its row on pointer rest and when the keys reach it.
-- Card look: padding 0.75rem, radius `--radius-field`, `--field-fill`; hover `--field-fill-hover`; chosen ring `inset 0 0 0 1.5px var(--ink-face-bottom)`; transitions 150ms `--ease-track`, none under reduced motion.
+- Card look: padding 0.75rem, radius `--radius-field`, `--field-fill`; hover `--field-fill-hover`; chosen ring `inset 0 0 0 1.5px var(--ink-face-bottom)`; transitions `--motion-fast` `--ease-track`.
 - Words: `--text-read`, `--fg-strong`; hint `--text-ui`, `--fg-subtle`.
 
 Tokens: `--text-read`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--field-fill`, `--field-fill-hover`, `--ink-words`, `--ink-face-bottom`, `--focus`, `--radius-field`, `--ease-track`.
@@ -495,7 +481,7 @@ States:
 
 - Box: as `TextField` (fill `--field-fill`, hover `--field-fill-hover`, error ring `inset 0 0 0 1px var(--tone-danger-ink)`).
 - Empty (`data-empty`): words `--fg-subtle`.
-- Open (`data-open`): box `--field-fill-hover`; the caret (`ChevronDownIcon` 16px, `--fg-subtle`) rotates 180deg over 160ms.
+- Open (`data-open`): box `--field-fill-hover`; the caret (`ChevronDownIcon` 16px, `--fg-subtle`) rotates 180deg over `--motion-fast`.
 - Dense (`size="sm"`): the box keeps `padding-right: 2.25rem` (`.ui-field-sm .ui-select`), the room its caret stands in, so a long choice ends before the caret.
 - Disabled (`data-disabled`): box opacity 0.55, hover stays `--field-fill`; trigger `not-allowed`.
 - Focus: the trigger is a button, so the keyboard reaching it draws a ring on the box, `0 0 0 2px var(--focus)` (with the error ring kept inside it); a pointer press draws none. In the source it drew nothing, a defect fixed in vic-ui.
@@ -528,19 +514,21 @@ Something on or off, said at once: a native button with the switch role, a track
 | `checked` | `boolean` | required | On or off (`aria-checked`). |
 | `onCheckedChange` | `(checked: boolean) => void` | none | Handed the new state on a press. |
 | `disabledReason` | `string \| undefined` | none | Keeps it focusable and says why. |
+| `look` | `"flat" \| "rimmed"` | `"rimmed"` | `flat` drops the track's inset rim (`ui-switch-flat`). |
+| `tone` | `"accent" \| undefined` | none | When on, the track fills with `--accent` rather than ink (`ui-switch-accent`). A look, not a state. The composable `Switch` takes it too. |
 | `type` | button type | `"button"` | Native type. |
 | native attributes | `ButtonHTMLAttributes` less `onChange` | | Its name is `aria-label` or the words beside it. |
 
 States:
 
 - Off: 2.25rem by 1.375rem track, padding 0.1875rem, radius `--radius-round`, `--field-fill`, inset ring `1px light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1))`. Hover: `--field-fill-hover`.
-- On: track `--ink-face-bottom`; hover `--ink-face-top`. The knob (1rem circle, `--surface-lifted`, `--shadow-raise`) translates 0.875rem over 220ms `cubic-bezier(0.2, 0.8, 0.2, 1)`. Track colour eases 200ms.
+- On: track `--ink-face-bottom`; hover `--ink-face-top`. With `tone="accent"` those two are `--accent` and `--accent` mixed 14% toward `--bg-canvas`, so the track is the accent and moves toward the canvas under the pointer; off, it is the same as any switch. The knob (1rem circle, `--surface-lifted`, `--shadow-raise`) translates 0.875rem over `--motion-base` `--ease-out`. Track colour eases over `--motion-base`.
 - Focus: outline 2px `--focus`, offset 2px.
 - Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
 
-Tokens: `--radius-round`, `--field-fill`, `--field-fill-hover`, `--ink-face-bottom`, `--ink-face-top`, `--focus`, `--surface-lifted`, `--shadow-raise`.
+Tokens: `--radius-round`, `--field-fill`, `--field-fill-hover`, `--ink-face-bottom`, `--ink-face-top`, `--accent`, `--bg-canvas`, `--focus`, `--surface-lifted`, `--shadow-raise`.
 
-CSS: `ui.css`. Classes `ui-switch`, `ui-switch-knob`.
+CSS: `ui.css`. Classes `ui-switch`, `ui-switch-knob`, `ui-switch-accent`; `ui-switch-variants.css` (`ui-switch-flat`).
 
 Dependencies: `useBlocked`.
 
@@ -564,15 +552,15 @@ A label, a native input, and what is fixed at its start or end (a currency sign,
 
 States:
 
-- Box: height `--control-h` (`sm`: `--control-h-sm`), radius `--radius-field`, fill `--field-fill`, no border; box-shadow and background ease 120ms.
+- Box: height `--control-h` (`sm`: `--control-h-sm`), radius `--radius-field`, fill `--field-fill`, no border; box-shadow and background ease over `--motion-fast`.
 - Hover (not focused, not disabled): `--field-fill-hover`.
 - Focus: nothing is drawn; the caret shows it (`outline: none` on the input).
 - Error (`data-invalid`): `inset 0 0 0 1px var(--tone-danger-ink)`; `aria-invalid`; the error takes the label's place (see `FieldHead`).
 - Disabled (`:has(:disabled)`): box opacity 0.55, `not-allowed`, no hover.
-- Input: padding `0 0.75rem` (`sm`: `0 0.625rem`, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
+- Input: padding `0 var(--field-pad-x)` (0.75rem at the default density; `sm`: `0 calc(var(--field-pad-x) - 0.125rem)`, 0.625rem at the default density, and its prefix and suffix the same, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
 - Disabled for a reason (`disabledReason`, `useFieldReason`): the input is `readOnly` and `aria-disabled` rather than disabled, the box carries `data-disabled`, and the reason hangs from the box on pointer rest and focus.
 
-Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
+Tokens: `--control-h`, `--control-h-sm`, `--field-pad-x`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
 
 CSS: `ui.css` (`ui-field`, `ui-field-sm`, `ui-field-head`, `ui-field-label`, `ui-field-error`, `ui-field-box`, `ui-field-input`, `ui-field-suffix`, `ui-field-hint`) and `ui-inputs.css` (`ui-field-prefix`, and the `sm` sizes of the input, prefix and suffix).
 
@@ -629,12 +617,12 @@ One section of an `Accordion`: `title` is its head (a button with `aria-expanded
 
 States:
 
-- Head: min height `--control-h-sm`, margin `0.125rem -0.5rem`, padding `0.375rem 0.5rem`, radius `--radius-row`, `--text-ui` weight `--weight-ui`, `--fg-strong`. Hover `--field-fill`; press `--field-fill-hover` (150ms ease-out). Focus outline 2px `--focus`, offset 2px. Disabled opacity 0.55, `not-allowed`.
-- Open (`data-open`): the chevron (`ChevronDownIcon` 15px, `--fg-subtle`) rotates 180deg; the panel's grid rows ease from `0fr` to `1fr` over 220ms `--ease-out-expo`. A closed panel is `inert`. No transitions under reduced motion.
+- Head: min height `--control-h-sm`, margin `0.125rem -0.5rem`, padding `0.375rem 0.5rem`, radius `--radius-row`, `--text-ui` weight `--weight-ui`, `--fg-strong`. Hover `--field-fill`; press `--field-fill-hover` (`--motion-fast` `--ease-out`). Focus outline 2px `--focus`, offset 2px. Disabled opacity 0.55, `not-allowed`.
+- Open (`data-open`): the chevron (`ChevronDownIcon` 15px, `--fg-subtle`) rotates 180deg; the panel's grid rows ease from `0fr` to `1fr` over `--motion-base` `--ease-out`. A closed panel is `inert`.
 - Items after the first have a top rule `1px solid var(--line)`.
 - Content: padding `0.125rem 0 0.75rem`, `--text-ui`, line height 1.5, `--fg`.
 
-Tokens: `--line`, `--control-h-sm`, `--radius-row`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`, `--focus`, `--ease-out-expo`.
+Tokens: `--line`, `--control-h-sm`, `--radius-row`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`, `--focus`, `--motion-fast`, `--motion-base`, `--ease-out`.
 
 CSS: `ui-display.css`. Classes `ui-accordion`, `ui-accordion-item`, `ui-accordion-head`, `ui-accordion-trigger`, `ui-accordion-title`, `ui-accordion-chevron`, `ui-accordion-panel`, `ui-accordion-clip`, `ui-accordion-content`.
 
@@ -650,18 +638,19 @@ The small pill a front page leads with: a tag, the words and an arrow, the whole
 | `to` | `string` | none | A page of the app. |
 | `href` | `string` | none | Any other address. |
 | `hue` | `Hue` | none | Colours the tag; without it the tag is the field's fill. |
+| `tone` | `"accent" \| undefined` | none | Fills the tag in the accent (`--accent-on` on `--accent`), as a "New" pill is; it outranks `hue`. A look, not a state. |
 | `className` | `string` | none | Placement. |
 | `children` | `ReactNode` | required | The words. |
 
 States:
 
 - Rest: height 1.75rem, radius `--radius-round`, `--text-ui` weight `--weight-ui`, `--fg-strong` on `--surface-lifted`, `--edge`. Padding `0 0.625rem 0 0.1875rem` (`0.625rem` on the left without a tag).
-- Hover: the arrow (`ArrowRightIcon` 13px) goes from `--fg-subtle` to `--fg-strong` (200ms).
+- Hover: the arrow (`ArrowRightIcon` 13px) goes from `--fg-subtle` to `--fg-strong` (`--motion-base`).
 - Press: `--field-fill` with a `0 0 0 1px var(--line)` ring.
 - Focus: outline 2px `--focus`, offset 2px.
-- Tag: 1.375rem tall, `--text-tag` weight 600, `--fg-strong` on `--field-fill`; with `data-hue`, `--hue-ink` on `--hue`.
+- Tag: 1.375rem tall, `--text-tag` weight 600, `--fg-strong` on `--field-fill`; with `data-hue`, `--hue-ink` on `--hue`; with `data-tone="accent"`, `--accent-on` on `--accent`.
 
-Tokens: `--radius-round`, `--text-ui`, `--text-tag`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--edge`, `--field-fill`, `--line`, `--focus`, `--hue`, `--hue-ink`.
+Tokens: `--radius-round`, `--text-ui`, `--text-tag`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--edge`, `--field-fill`, `--line`, `--focus`, `--hue`, `--hue-ink`, `--accent`, `--accent-on`.
 
 CSS: `ui-display.css`. Classes `ui-announcement`, `ui-announcement-tag`, `ui-announcement-words`, `ui-announcement-arrow`. Needs the `[data-hue]` rules.
 
@@ -697,7 +686,7 @@ A state said in a word or two. Hairline in its tone is a standing state; `solid`
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `tone` | `Tone` | none (neutral) | `danger`, `caution`, `settled`, `moving` or `neutral`. |
+| `tone` | `ToneOrAccent` | none (neutral) | `danger`, `caution`, `settled`, `moving` or `neutral`, or `accent`: the brand accent as a look ("New", "Beta"), which says no state. |
 | `solid` | `boolean` | `false` | Filled in the tone's ink (or ink with no tone). |
 | `soft` | `boolean` | `false` | The tone's ink on its tint, no ring (`--fg-strong` on `--fill-chosen` with no tone). `solid` outranks it. |
 | `dot` | `boolean` | `false` | A 0.375rem dot in `currentColor` leads the words. |
@@ -706,11 +695,11 @@ A state said in a word or two. Hairline in its tone is a standing state; `solid`
 | `children` | `ReactNode` | required | The words. |
 | native attributes | `HTMLAttributes<HTMLSpanElement>` | | Passed through. |
 
-States: none interactive. Hairline: height 1.25rem, max width 100%, padding `0 0.4375rem`, radius `--radius-round`, `--text-tag` weight 600, words `var(--tone-ink, var(--fg-strong))`, inset ring `1px var(--tone-edge, var(--line))`. Solid: words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`, no ring. The badge clears `--tone-ink`, `--tone-edge` and `--tone-fill-on` on itself first, so a badge inside a toned notice is not toned by accident. The words are an item of their own (`ui-badge-words`, line height 1.35), cut with an ellipsis where the row gives less room, their first letter uppercased by `::first-letter`.
+States: none interactive. Hairline: height 1.25rem, max width 100%, padding `0 0.4375rem`, radius `--radius-round`, `--text-tag` weight 600, words `var(--tone-ink, var(--fg-strong))`, inset ring `1px var(--tone-edge, var(--line))`. Solid: words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`, no ring. The badge clears `--tone-ink`, `--tone-edge` and `--tone-fill-on` on itself first, so a badge inside a toned notice is not toned by accident. The words are an item of their own (`ui-badge-words`, line height 1.35), cut with an ellipsis where the row gives less room, drawn as written: capitalisation is the author's (there is no `::first-letter` uppercase, so a data word such as "script" stays as it is).
 
 Tokens: `--tone-ink`, `--tone-edge`, `--tone-fill-on` (set by `.tone-*`), `--fg-strong`, `--line`, `--ink-words`, `--ink-face-bottom`, `--radius-row`, `--radius-round`, `--text-tag`.
 
-CSS: `ui-display.css` (`ui-badge`, `ui-badge-words`, `ui-badge-solid`, `ui-badge-soft`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`).
+CSS: `ui-display.css` (`ui-badge`, `ui-badge-words`, `ui-badge-solid`, `ui-badge-soft`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`, `tone-accent`).
 
 Dependencies: `toneClass`.
 
@@ -723,7 +712,7 @@ How many are waiting somewhere, as a number on a filled ground (an unread count)
 | `value` | `number` | required | The number. |
 | `label` | `string` | required | What a screen reader hears ("3 unread"). |
 | `max` | `number` | `99` | Past it, reads `max+`. |
-| `tone` | `Tone` | none | Fills in that tone's ink. |
+| `tone` | `ToneOrAccent` | none | Fills in that tone's ink; `accent` fills in `--accent-ink` with `--accent-on` words, a look rather than a state. |
 | `soft` | `boolean` | `false` | The tone's ink on its tint instead of a fill (`ui-count-soft`). |
 | `className` | `string` | none | Placement. |
 
@@ -748,7 +737,7 @@ CSS: `ui-display.css` (`ui-head-count`).
 
 ### toneClass, Tone
 
-Not components. `Tone` is `"danger" | "caution" | "settled" | "moving" | "neutral"`. `toneClass(tone)` returns `` `tone-${tone}` `` for the four tones and `""` for `neutral` or none; the class hands a part `--tone-ink`, `--tone-tint`, `--tone-edge` and `--tone-fill-on` (`tokens.css`).
+Not components. `Tone` is `"danger" | "caution" | "settled" | "moving" | "neutral"`. `ToneOrAccent` is `Tone | "accent"`, taken by the pieces that may be drawn in the accent (Badge, Count); pieces that say a state (Notice, Toast) keep `Tone`, because the accent is a look and never a fifth tone. `toneClass(tone)` returns `` `tone-${tone}` `` for the four tones and `accent`, and `""` for `neutral` or none; the class hands a part `--tone-ink`, `--tone-tint`, `--tone-edge` and `--tone-fill-on` (`tokens.css`). `tone-accent` sets them to `--accent-ink`, `--accent-tint`, `--accent-edge` and `--accent-on`.
 
 ### Card
 
@@ -856,9 +845,9 @@ Words over several lines, in the box `TextField` draws. Optionally grows with it
 
 States:
 
-- Box: height auto, stretches; textarea padding `0.5rem 0.75rem` (`sm`: `0.375rem 0.625rem`), line height 1.5, `resize: vertical` (none with `grow`).
+- Box: height auto, stretches; textarea padding `0.5rem var(--field-pad-x)` (`sm`: `0.375rem calc(var(--field-pad-x) - 0.125rem)`), line height 1.5, `resize: vertical` (none with `grow`).
 - Hover, error and disabled: as `TextField`; disabled or held also sets `data-disabled` on the box (opacity 0.55, `not-allowed`, hover stays `--field-fill`). A held field that takes focus draws `0 0 0 2px var(--focus)` round the box.
-- Count: `--text-ui`, tabular, `--fg-subtle`; at the limit (`data-full`) `--tone-caution-ink` (160ms). The foot line keeps `calc(var(--text-ui) * 1.45)` height.
+- Count: `--text-ui`, tabular, `--fg-subtle`; at the limit (`data-full`) `--tone-caution-ink` (`--motion-fast`). The foot line keeps `calc(var(--text-ui) * 1.45)` height.
 
 Tokens: the field tokens, `--tone-caution-ink`, `--focus`.
 
@@ -940,7 +929,7 @@ A search: the field's box with a glass at its start and, once it has words, a cl
 
 States:
 
-- Glass: `MagnifyingGlassIcon` 16px (`sm` 14px), margin-left 0.75rem (`sm` 0.625rem), `--fg-subtle`; `--fg-strong` while the box has focus (160ms).
+- Glass: `MagnifyingGlassIcon` 16px (`sm` 14px), margin-left `--field-pad-x` (`sm` 0.125rem less), `--fg-subtle`; `--fg-strong` while the box has focus (`--motion-fast`).
 - Clear: shown while it has words and is not disabled or held; 1.5rem square (`sm` 1.375rem), radius `--radius-row`, `--fg-subtle`; hover `--fill-chosen` and `--fg-strong`; press `--fill-press`; focus outline 2px `--focus`, offset 2px. Icon `XIcon` 14px (`sm` 13px). A press empties it and puts the focus back.
 - The browser's own cancel button and decoration are hidden.
 - Box, error, disabled and held: as `Textarea`.
@@ -1003,13 +992,13 @@ A dialog on the browser's own `<dialog>`, opened with `showModal`, so it sits in
 
 States:
 
-- Up: `--surface-lifted`, radius `--radius-panel`, `--shadow-float`, max height `calc(100dvh - 2rem)`, scrolls inside; enters with `ui-dialog-in` (opacity 0 and scale 0.98, 200ms `cubic-bezier(0.2, 0.8, 0.2, 1)`, `backwards`).
-- Veil: `light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62))` with `blur(3px)`, fading in 200ms.
+- Up: `--surface-lifted`, radius `--radius-panel`, `--shadow-float`, max height `calc(100dvh - 2rem)`, scrolls inside; enters with `ui-dialog-in` (opacity 0 and scale 0.98, `--motion-base` `--ease-out`, `backwards`).
+- Veil: `light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62))` with `blur(3px)`, fading in over `--motion-base`.
 - Focus: the dialog itself draws no outline.
-- Head padding `1.25rem 1.25rem 0`; title `--font-display` 700 at 1.25rem, line height 1.15, letter spacing -0.02em, balanced, `--fg-strong`; description `--text-read`, line height 1.5, max 46ch, `--fg-subtle`.
+- Head padding `1.25rem 1.25rem 0`; title `--font-display` 700 at `--text-title` (1.25rem), line height `--text-title--line-height` (1.2), letter spacing `--track-title` (-0.02em), balanced, `--fg-strong`; description `--text-read`, line height 1.5, max 46ch, `--fg-subtle`.
 - Body: grid gap 1rem, padding `1rem 1.25rem 1.25rem`. Foot: flex end, gap 0.5rem, padding `0.75rem 1.25rem`, top rule `1px solid var(--line)`, ground `--fill-faint`; directly under the head it has 1.25rem above.
 - Problem: `--text-ui`, line height 1.4, `--tone-danger-ink`, `role="alert"`.
-- Below 640px: full width, max height 88dvh, at the bottom, top corners `--radius-panel`, entering with `ui-sheet-in` (from `translate: 0 100%`, 260ms).
+- Below 640px: full width, max height 88dvh, at the bottom, top corners `--radius-panel`, entering with `ui-sheet-in` (from `translate: 0 100%`, `--motion-base`).
 - Reduced motion: no entrance animation.
 
 Tokens: `--surface-lifted`, `--radius-panel`, `--shadow-float`, `--fg`, `--fg-strong`, `--fg-subtle`, `--font-display`, `--text-read`, `--text-ui`, `--line`, `--tone-danger-ink`.
@@ -1059,7 +1048,7 @@ A click from the keys (Enter or Space, `detail === 0`) opens on the first action
 States:
 
 - Surface: `ui-menu` (see below) plus min width 11rem, max width `min(20rem, calc(100vw - 1rem))`; no outline on the menu or its items.
-- Item: min height 2.125rem, padding `0.4rem 0.65rem`, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `--fill-hover`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `--fill-press`. Background eases 120ms.
+- Item: min height `--menu-item-h` (2.125rem at the default density), padding `0.4rem 0.65rem` with the block padding moving by half of what the density adds or takes, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `--fill-hover`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `--fill-press`. Background eases over `--motion-fast`.
 - Danger: words and icon `--tone-danger-ink`; active ground `--tone-danger-tint`.
 - Disabled with no reason: opacity 0.55, `not-allowed`, passed over by the keys.
 - Disabled with a reason: still reached by the keys; active ground `--fill-faint`; the reason shows in a tooltip to the right while it is active.
@@ -1069,7 +1058,7 @@ States:
 - Control row (`data-control`): `cursor: default`; the control sits at the end with `margin-block: -0.25rem`, so the row keeps its height.
 - Head: flex, gap 0.625rem, padding `0.4rem 0.65rem 0.5rem`, margin-bottom 0.3rem, a bottom rule `1px solid var(--line)`, `--fg-strong`.
 
-Tokens: `--radius-float`, `--surface-lifted`, `--shadow-float`, `--fg`, `--fg-strong`, `--fg-subtle`, `--text-read`, `--text-meta`, `--tone-danger-ink`, `--tone-danger-tint`, `--line`.
+Tokens: `--menu-item-h`, `--radius-float`, `--surface-lifted`, `--shadow-float`, `--fg`, `--fg-strong`, `--fg-subtle`, `--text-read`, `--text-meta`, `--tone-danger-ink`, `--tone-danger-tint`, `--line`.
 
 CSS: `ui.css` (`ui-menu`, `ui-menu-item`, `ui-menu-words`, `ui-menu-hint`, `ui-menu-end`, `ui-menu-control`, `ui-menu-head`, keyframes `ui-menu-in`) and `ui-overlays.css` (`ui-menu-actions`, `ui-menu-icon`, `ui-menu-rule`, `ui-menu-section`, `ui-menu-label`). Note that `.ui-menu-group` is also styled in `ui-inputs.css` as a combobox's heading (padding, `--text-meta`, weight 600, `--fg-subtle`), and in the source a menu's group wrapper carried that class too, so a grouped menu's rows were inset 0.65rem and inherited weight 600. That was a defect in the source at `e7221f50`, since fixed there too. A menu's section is `.ui-menu-section`, with the same `margin-top: 0.3rem` after a section or an item, and `.ui-menu-group` stays the list's heading alone.
 
@@ -1139,7 +1128,7 @@ A word or two in ink beside a control: shown after the pointer rests or at once 
 | `placement` | `Placement` | `"top"` | Its side. |
 | `delay` | `number` | `TIP_DELAY_MS` (500) | Rest before it shows. |
 
-States: once one tooltip has shown, the next shows at once for 400ms after it hides ("warm"). Placed with gap 6 and no height cap. Surface: width `max-content`, max `min(18rem, calc(100vw - 16px))`, padding `0.3rem 0.6rem`, radius `--radius-float`, `--text-meta` weight `--weight-ui`, line height 1.35, `--fg-inverse` on `--bg-contrast`, `--shadow-raise`, `pointer-events: none`, fading in 120ms (none under reduced motion). The tooltip element is `aria-hidden`; a hidden span with the same words carries the `aria-describedby` id.
+States: once one tooltip has shown, the next shows at once for 400ms after it hides ("warm"). Placed with gap 6 and no height cap. Surface: width `max-content`, max `min(18rem, calc(100vw - 16px))`, padding `0.3rem 0.6rem`, radius `--radius-float`, `--text-meta` weight `--weight-ui`, line height 1.35, `--fg-inverse` on `--bg-contrast`, `--shadow-raise`, `pointer-events: none`, fading in over `--motion-fast`. The tooltip element is `aria-hidden`; a hidden span with the same words carries the `aria-describedby` id.
 
 Tokens: `--radius-float`, `--text-meta`, `--fg-inverse`, `--bg-contrast`, `--shadow-raise`.
 
@@ -1171,6 +1160,7 @@ The one switcher between views: a row of tabs on the field's fill with an ink in
 | `aria-label` | `string` | none | The row's name. |
 | `idPrefix` | `string` | `useId()` | Each tab is `${idPrefix}-${value}`; with it given, each controls `${idPrefix}-${value}-panel`. |
 | `size` | `"sm"` | none | The dense height. |
+| `tone` | `"accent" \| undefined` | none | The indicator in the accent and the chosen tab's words in `--accent-on` (`ui-tabs-accent`). A look, not a state. |
 | `className` | `string` | none | Placement. |
 
 `TabOption` is `Option` plus `count?: number | string` (after the words, tabular, two digits wide), `disabledReason?: string` (stays focusable and says why), `to?: string` (drawn as a link through `LinkProvider`; chosen from the keys, it is followed) and `apart?: boolean` (a hairline before it, starting a second group).
@@ -1180,14 +1170,15 @@ Keys: ArrowRight and ArrowLeft move and choose as they go (wrapping, skipping di
 States:
 
 - Track: inline flex, height `--control-h` (`sm`: `--control-h-sm`), padding 2px, radius `--radius-field`, `--field-fill`, scrolls sideways with no scrollbar.
-- Indicator: `linear-gradient(var(--ink-face-top), var(--ink-face-bottom))` with a `0 0 0 1px var(--ink-rim-edge)` ring, radius `calc(var(--radius-field) - 2px)`, measured onto the chosen tab (and again on any resize); the first placing is drawn where it lands, every move after eases `translate` and `width` over 240ms `--ease-track` (none under reduced motion).
+- Indicator, accent (`tone="accent"`): the track sets `--ink-face-top` to `--accent` mixed with white 4%, `--ink-face-bottom` with black 10%, `--ink-rim-edge` with black 22%, and `--ink-words` to `--accent-on`, which hold 5.8:1 in both modes.
+- Indicator: `linear-gradient(var(--ink-face-top), var(--ink-face-bottom))` with a `0 0 0 1px var(--ink-rim-edge)` ring, radius `calc(var(--radius-field) - 2px)`, measured onto the chosen tab (and again on any resize); the first placing is drawn where it lands, every move after eases `translate` and `width` over `--motion-base` `--ease-track`.
 - Tab: padding `0 0.75rem`, `--text-ui` weight `--weight-ui`, `--fg-subtle`. Hover (not chosen, not disabled): `--fg-strong` on `--field-fill-hover`. Press: `--bone`. Chosen: `--ink-words`. Focus: outline 2px `--focus`, offset 2px. Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
 - Rule: 1px by 1rem, `--line`, margin 0.25rem each side.
 - Count: min width 2ch, `--text-tag`, tabular, opacity 0.65.
 
-Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--ink-face-top`, `--ink-face-bottom`, `--ink-rim-edge`, `--ink-words`, `--ease-track`, `--text-ui`, `--text-tag`, `--fg-subtle`, `--fg-strong`, `--bone`, `--focus`, `--line`.
+Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--ink-face-top`, `--ink-face-bottom`, `--ink-rim-edge`, `--ink-words`, `--accent`, `--accent-on`, `--ease-track`, `--text-ui`, `--text-tag`, `--fg-subtle`, `--fg-strong`, `--bone`, `--focus`, `--line`.
 
-CSS: `ui-data.css`. Classes `ui-tabs`, `ui-tabs-sm`, `ui-tabs-mark`, `ui-tab`, `ui-tabs-rule`, `ui-tab-count`.
+CSS: `ui-data.css`. Classes `ui-tabs`, `ui-tabs-sm`, `ui-tabs-accent`, `ui-tabs-mark`, `ui-tab`, `ui-tabs-rule`, `ui-tab-count`.
 
 Dependencies: `toOptions`, `useReason`, the provider's link.
 
@@ -1223,14 +1214,15 @@ The one table: dense rows, a head pinned to the top of its scroller, every numbe
 States:
 
 - Scroller: `--ui-table-ground: var(--bg-base)`, `overflow-x: clip`; with a height, `overflow: auto`.
-- Cells: padding `0.5rem 0.75rem`, bottom rule `1px solid var(--line-soft)`, `--text-read`, `--fg`; `data-align` end and center.
-- Head: sticky at top, padding-block 0.4rem, `--text-ui` weight 600, `--fg-subtle` on `--ui-table-ground`, rule `--line`.
+- Cells: padding `var(--cell-pad-y) 0.75rem` (0.5rem at the default density), bottom rule `1px solid var(--line-soft)`, `--text-read`, `--fg`; `data-align` end and center.
+- Head: sticky at top, padding-block `calc(var(--cell-pad-y) - 0.1rem)` (0.4rem), `--text-ui` weight 600, `--fg-subtle` on `--ui-table-ground`, rule `--line`.
 - Sort button: radius `--radius-row`; hover `--fg-strong` on `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset 2px; sorted `--fg-strong`. Its arrow (`ArrowDownIcon` 12px) always holds its room: opacity 0, 0.4 on hover, 1 when sorted; ascending rotates 180deg.
-- Pressable row: `cursor: pointer`; hover `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset -2px. Current row `--field-fill-hover`. Background eases 160ms.
+- Pressable row: `cursor: pointer`; hover `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset -2px. Current row `--field-fill-hover`. Background eases over `--motion-fast`.
 - After: a row of its own (`ui-table-after`) with one cell spanning the columns, no top padding, and the row above it loses its rule, so the two read as one.
 - Empty: padding-block 2rem, centred, `--fg-subtle`.
+- Roster (`look="roster"`): `--text-ui`, ground `--bg-canvas`, body cells `--fg-subtle` at one height, `calc(2.5rem + (var(--cell-pad-y) - 0.5rem) * 2)` (2.5rem at the default density), padding-block 0.25rem.
 
-Tokens: `--bg-base`, `--line-soft`, `--line`, `--text-read`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
+Tokens: `--cell-pad-y`, `--bg-base`, `--bg-canvas`, `--line-soft`, `--line`, `--text-read`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
 
 CSS: `ui-data.css`. Classes `ui-table-scroll`, `ui-table`, `ui-table-sort`, `ui-table-sort-mark`, `ui-table-after`, `ui-table-empty`. There is no toolbar piece: filters above a table are the page's own row of fields.
 
@@ -1271,10 +1263,10 @@ Groups of rows with an optional secondary `description` (`List.tsx`): a group's 
 States:
 
 - Head: height 2rem, `--text-ui`; mark `var(--hue-ink, var(--fg-subtle))`; title weight 600 `--fg-strong`; count tabular `--fg-subtle`; more `--fg-subtle`, `--fg-strong` on hover, focus outline 2px `--focus`. Head and rows hang 0.5rem past the column, so the words line up with what is above them.
-- Row: minimum height 2.75rem, padding 0.625rem 0.5rem, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
+- Row: minimum height `--row-h` (2.75rem at the default density), padding 0.625rem 0.5rem with the block padding moving by half of what the density adds or takes, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
 - Under 640px: a place that is not a link goes, and when goes from a row with an action.
 
-Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--hue-ink`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
+Tokens: `--row-h`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--hue-ink`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
 
 CSS: `ui-data.css`. Classes `ui-list`, `ui-list-head`, `ui-list-mark`, `ui-list-mark-room`, `ui-list-title`, `ui-list-count`, `ui-list-more`, `ui-list-more-link`, `ui-list-rows`, `ui-list-row`, `ui-list-row-mark`, `ui-list-row-words`, `ui-list-row-link`, `ui-list-row-place`, `ui-list-row-when`, `ui-list-row-end`, `ui-list-face`.
 
@@ -1355,23 +1347,23 @@ How far something has got: its words, how far in words, and a bar under them. Le
 | `value` | `number` | none | How far; without it the bar sweeps. |
 | `max` | `number` | `100` | The end. |
 | `valueText` | `string` | the rounded percentage | The words for how far ("3 of 8 files"). |
-| `tone` | `"danger" \| "caution" \| "settled" \| "moving"` | none | Colours the bar; the words still say the state. |
+| `tone` | `"danger" \| "caution" \| "settled" \| "moving" \| "accent"` | none | Colours the bar; the words still say the state. `accent` draws it in `--accent`, a look that says no state. |
 | `size` | `"sm"` | none | A 0.25rem track rather than 0.375rem. |
 | `className` | `string` | none | Placement. |
 
 States:
 
 - Head: `--text-ui`; label weight 600 `--fg-strong`, clipped; value tabular `--fg-subtle`.
-- Track: radius `--radius-round`, `--field-fill`. Fill: `--progress-fill` (default `--ink-face-bottom`, or the tone's ink), width eases 300ms `--ease-track`.
+- Track: radius `--radius-round`, `--field-fill`. Fill: `--progress-fill` (default `--ink-face-bottom`, the tone's ink, or `--accent`), width eases over `--motion-slow` `--ease-track`.
 - Unknown (`data-unknown`): a 35% stretch sweeps with `ui-progress-sweep` (1.4s `--ease-track`, infinite, from `translate: -100% 0` to `300% 0`). Still under reduced motion.
 
-Tokens: `--ink-face-bottom`, `--tone-danger-ink`, `--tone-caution-ink`, `--tone-settled-ink`, `--tone-moving-ink`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--radius-round`, `--field-fill`, `--ease-track`.
+Tokens: `--ink-face-bottom`, `--tone-danger-ink`, `--tone-caution-ink`, `--tone-settled-ink`, `--tone-moving-ink`, `--accent`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--radius-round`, `--field-fill`, `--ease-track`.
 
 CSS: `ui-feedback.css`. Classes `ui-progress`, `ui-progress-sm`, `ui-progress-head`, `ui-progress-label`, `ui-progress-value`, `ui-progress-track`, `ui-progress-fill`; keyframes `ui-progress-sweep`.
 
 ### toast
 
-`toast(message, options?)` puts a toast up from anywhere and returns its id; `toast.dismiss(id)` takes it down (160ms leave). At most 4 stand; putting one up under an existing id replaces it and restarts its time.
+`toast(message, options?)` puts a toast up from anywhere and returns its id; `toast.dismiss(id)` takes it down (a `--motion-fast` leave, timed on the toast's own computed transition so a slower system or section is not cut short). At most 4 stand; putting one up under an existing id replaces it and restarts its time.
 
 `ToastOptions`:
 
@@ -1394,10 +1386,10 @@ Props: none.
 States:
 
 - Stack: fixed at the bottom right, inset `auto 1rem 1rem auto`, width `min(24rem, calc(100vw - 2rem))`, gap 0.5rem, passes the pointer; below 640px it spans `1rem` from each side. Shown only while open.
-- Toast, plain: `--ink-words` on `--ink-face-bottom`, radius `--radius-float`, `--shadow-float`, `--text-read`, padding `0.625rem 0.5rem 0.625rem 0.875rem`; enters with `ui-toast-in` (from opacity 0 and 8px down, 200ms).
+- Toast, plain: `--ink-words` on `--ink-face-bottom`, radius `--radius-float`, `--shadow-float`, `--text-read`, padding `0.625rem 0.5rem 0.625rem 0.875rem`; enters with `ui-toast-in` (from opacity 0 and 8px down, `--motion-base`).
 - Toast, toned: `--fg-strong` on the tone's tint, its icon in the tone's ink (danger and caution `FlagIcon`, settled `CheckCircleIcon`, moving `ClockIcon`, 16px).
 - Hover or focus inside holds its time (at least 1000ms remain when it runs again).
-- Leaving: opacity 0 and 4px down over 160ms.
+- Leaving: opacity 0 and 4px down over `--motion-fast`.
 - Action: underlined (offset 3px), `--text-ui` weight 600, 1.75rem tall, radius `--radius-row`. Close: 1.75rem square, `XIcon` 14px, quieter words. Hover `--toast-press`; press mixes 10% words into it; focus outline 2px `--focus`, offset 2px.
 - Reduced motion: no entrance and no leaving transition.
 
@@ -1421,7 +1413,7 @@ The line above every field: its label and, in the same grid cell, the short erro
 States:
 
 - Label: `--text-ui` weight 600, line height 1.45, `--fg-strong`.
-- Error arriving (`data-error`): the label fades (160ms) and slides down 45% (220ms `cubic-bezier(0.2, 0.7, 0.2, 1)`); the error slides in from 45% above with `ui-field-error-in` (220ms, `backwards`), weight 600, one line with an ellipsis, `--tone-danger-ink`, passing the pointer to the label. The last words are kept so they leave with `ui-field-error-out` (180ms) rather than vanish.
+- Error arriving (`data-error`): the label fades (`--motion-fast`) and slides down 45% (`--motion-base` `--ease-out`); the error slides in from 45% above with `ui-field-error-in` (`--motion-base`, `backwards`), weight 600, one line with an ellipsis, `--tone-danger-ink`, passing the pointer to the label. The last words are kept so they leave with `ui-field-error-out` (`--motion-base`) rather than vanish.
 - Reduced motion: no transition, animation or transform.
 
 Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
@@ -1470,10 +1462,10 @@ States:
 - Tile: 2.25rem, radius `--radius-row`, `var(--hue-ink, var(--fg-subtle))` on `var(--hue, var(--field-fill))`, icon 1.125rem.
 - Title `--text-read` weight 600 `--fg-strong`; line `--text-ui`, line height 1.5, `--fg-subtle`, always two lines tall; actions gap 0.5rem, 0.75rem above.
 - Preview: one height (7.125rem; `card` 5rem), masked to fade toward its foot; bars `--line` and `--line-hairline`, marks `--field-fill`, scaled to 0.88 at rest.
-- Hover or focus within: bars draw out to full length (600ms `--ease-out-expo`, staggered 60, 120, 180ms); the first item's mark takes `--hue` and its bar `--hue-ink`. Still under reduced motion.
+- Hover or focus within: bars draw out to full length (twice `--motion-slow`, `--ease-out`, staggered by 0.4, 0.8 and 1.2 times `--motion-fast`); the first item's mark takes `--hue` and its bar `--hue-ink`. Still under reduced motion.
 - Drop well: `1px dashed var(--line)`, radius `--radius-panel`; two sheets behind the tile at plus and minus 12deg. Dropping: border `var(--hue-ink, var(--fg-strong))`, ground `color-mix(in oklab, var(--hue, var(--field-fill)) 40%, transparent)`, the tile lifts 0.25rem and the sheets fan to 22deg.
 
-Tokens: `--head-h` (the page header's height, `calc(2.5rem - 1px)`, declared in vic-ui's `tokens.css`; in the source it was the app's `frame.css`), `--radius-row`, `--radius-round`, `--radius-mark`, `--radius-panel`, `--hue`, `--hue-ink`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--text-read`, `--text-ui`, `--line`, `--line-hairline`, `--ease-out-expo`, `--ease-track`.
+Tokens: `--head-h` (the page header's height, `calc(2.5rem - 1px)`, declared in vic-ui's `tokens.css`; in the source it was the app's `frame.css`), `--radius-row`, `--radius-round`, `--radius-mark`, `--radius-panel`, `--hue`, `--hue-ink`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--text-read`, `--text-ui`, `--line`, `--line-hairline`, `--motion-fast`, `--motion-base`, `--motion-slow`, `--ease-out`, `--ease-track`.
 
 CSS: `ui-display.css`. Classes `ui-empty`, `ui-empty-mark`, `ui-empty-title`, `ui-empty-line`, `ui-empty-actions` and the preview's `ui-empty-art`, `ui-empty-art-row`, `ui-empty-art-mark`, `ui-empty-art-words`, `ui-empty-art-pill`, `ui-empty-art-head`, `ui-empty-art-cells`, `ui-empty-art-card`, `ui-empty-art-lane`, `ui-empty-art-node`, `ui-empty-art-root`, `ui-empty-art-branch`, `ui-empty-art-level`, `ui-empty-art-turn`, `ui-empty-bar`, `ui-empty-bar-soft`. Needs the `[data-hue]` rules.
 
@@ -1610,7 +1602,7 @@ States:
 - Grid surface: `ui-menu` with padding 0.5rem, placed `bottom-start`, not height-capped, placed again as the month changes. Always six weeks, so it keeps one height.
 - Head: month and year `--text-ui` weight 600, tabular, `--fg-strong`, `aria-live`; steps 1.75rem (`ChevronRightIcon` 15px, the back one turned 180deg), held at the bounds (opacity 0.55, `not-allowed`).
 - Weekday heads: two letters, 1.5rem tall, `--text-tag` weight 400, `--fg-subtle`.
-- Day: 2rem square, radius `--radius-row`, `--text-ui`, tabular, `--fg`. Hover (not chosen) `--field-fill-hover`; press `--field-fill`; focus outline 2px `--focus`, offset 2px. Outside the month `--fg-subtle`. Today: ring `inset 0 0 0 1px var(--fg-subtle)`. Chosen: `--ink-words` on `--ink-face-bottom`. Out of bounds (`aria-disabled`): opacity 0.55, `not-allowed`, no hover. Transitions 140ms. No state changes the type.
+- Day: 2rem square, radius `--radius-row`, `--text-ui`, tabular, `--fg`. Hover (not chosen) `--field-fill-hover`; press `--field-fill`; focus outline 2px `--focus`, offset 2px. Outside the month `--fg-subtle`. Today: ring `inset 0 0 0 1px var(--fg-subtle)`. Chosen: `--ink-words` on `--ink-face-bottom`. Out of bounds (`aria-disabled`): opacity 0.55, `not-allowed`, no hover. Transitions `--motion-fast`. No state changes the type.
 
 Focus on the field: the trigger is a button and draws the keyboard's ring on its box, as `Select`'s does (fixed in vic-ui; the source drew none).
 
@@ -1655,8 +1647,8 @@ States:
 
 - Track: left border `2px solid var(--line-soft)`, gap 0.5rem.
 - Heading: `--text-ui` weight `--weight-ui`, line height 1.25rem, `--fg-subtle`, padding-left 1rem.
-- Entry: `--text-ui` weight 400, `--fg-subtle`, padding-left 1rem (1.75rem under a heading), one line with an ellipsis, right corners `--radius-row`. Hover `--fg` on `--field-fill`; press `--field-fill-hover`; current (`aria-current="page"`) `--fg-strong`; focus outline 2px `--focus`, offset 2px. Colour and ground ease 150ms `--ease-track`.
-- Bar: 2px, round, `--brand`, set by its top and bottom so each end eases on its own (180ms `--ease-track`) once it has been placed. Still under reduced motion.
+- Entry: `--text-ui` weight 400, `--fg-subtle`, padding-left 1rem (1.75rem under a heading), one line with an ellipsis, right corners `--radius-row`. Hover `--fg` on `--field-fill`; press `--field-fill-hover`; current (`aria-current="page"`) `--fg-strong`; focus outline 2px `--focus`, offset 2px. Colour and ground ease over `--motion-fast` `--ease-track`.
+- Bar: 2px, round, `--brand`, set by its top and bottom so each end eases on its own (`--motion-base` `--ease-track`) once it has been placed. Still under reduced motion.
 
 Tokens: `--line-soft`, `--text-ui`, `--fg-subtle`, `--fg`, `--fg-strong`, `--radius-row`, `--radius-round`, `--field-fill`, `--field-fill-hover`, `--focus`, `--brand`, `--ease-track`.
 
@@ -1678,7 +1670,7 @@ An icon alone that acts: a square `Button` whose words are its accessible name a
 | `disabledReason` | `string \| undefined` | none | Says the reason in place of its words. |
 | every other `Button` prop but `square`, `children`, `icon`, `aria-label` | | | `size`, `onClick`, `aria-pressed` and the rest. |
 
-States (`quiet`): height `--control-h-sm` (`lg`: `--control-h`), square, radius `--radius-button`, `--fg`. Hover `--fg-strong` on `--field-fill-hover`, no underline. Press, `aria-pressed="true"`, or an open popup trigger (`aria-haspopup` with `aria-expanded="true"`): `--fg-strong` on `--field-fill`. Background and colour ease 160ms. Focus and disabled as `Button`. `line` and `ink` looks as `Button`.
+States (`quiet`): height `--control-h-sm` (`lg`: `--control-h`), square, radius `--radius-button`, `--fg`. Hover `--fg-strong` on `--field-fill-hover`, no underline. Press, `aria-pressed="true"`, or an open popup trigger (`aria-haspopup` with `aria-expanded="true"`): `--fg-strong` on `--field-fill`. Background and colour ease over `--motion-fast`. Focus and disabled as `Button`. `line` and `ink` looks as `Button`.
 
 Tokens: `Button`'s, chiefly `--control-h-sm`, `--control-h`, `--radius-button`, `--fg`, `--fg-strong`, `--field-fill`, `--field-fill-hover`.
 
@@ -1714,7 +1706,7 @@ Two or more surfaces sharing one pane, the one named by `active` in view and the
 | `children` | `ReactNode` | required | `SlidingView`s. |
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 
-States: the track translates by `-100%` per view over 220ms `cubic-bezier(0.4, 0, 0.2, 1)`; in place under reduced motion. The pane is `overflow: clip`, never scrolled.
+States: the track translates by `-100%` per view over `--motion-base` `--ease-track`; in place under reduced motion. The pane is `overflow: clip`, never scrolled.
 
 CSS: `ui-display.css`. Classes `ui-sliding`, `ui-sliding-track`.
 
@@ -1746,12 +1738,12 @@ Holds the sidebar's state and draws the row it sits in with the page: a flex row
 | `collapsible` | `"icon" \| "offcanvas" \| "none"` | `"icon"` | Folds to its marks, goes away, or never folds. |
 | `mobileBreakpoint` | `number` | `768` | Below this width in pixels it is a sheet; `0` never. |
 | `contained` | `boolean` | `false` | The sheet and backdrop cover the container, not the window. |
-| `size` | `"sm" \| "md"` | `"md"` | The rail's density: `sm` sets `--sidebar-row-height` to 1.75rem and every heading without its own `size` a step smaller (`data-size="sm"` on the wrapper). |
+| `size` | `"sm" \| "md"` | none: the density's | The rail's own density, which outranks the page's and sets `data-size` on the wrapper. `sm` sets `--sidebar-row-height` to 1.75rem and every heading without its own `size` a step smaller: the rail `data-density="compact"` draws, kept to the rail. `md` holds `--sidebar-row-height` at 2rem and headings at `--text-meta`, under any density. Without it the rail follows the density around it (2rem by default; compact 1.75rem, comfortable 2.25rem). A row's or a heading's own `size` outranks all three. |
 | `className` | `string` | none | On the wrapper. |
 | `style` | `CSSProperties` | none | On the wrapper. |
 | `children` | `ReactNode` | required | The `Sidebar` and the page. |
 
-The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: 250ms`, `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-row-height: 2rem` (1.75rem under `size="sm"`), `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). Not contained, it is at least `100svh` tall.
+The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: var(--motion-base)`, `--sidebar-easing: var(--ease-track)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). From the [density](#density): `--sidebar-row-height` (2rem; compact 1.75rem, comfortable 2.25rem), `--sidebar-label-text` (`--text-meta`; compact `--text-tag`) and `--sidebar-label-pad` (`0.25rem 0.375rem`; compact `0.125rem 0.1875rem`, comfortable `0.375rem 0.5rem`); `size="sm"` sets the compact three on the wrapper and `size="md"` the default three. Not contained, it is at least `100svh` tall.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-wrapper`, `ui-sidebar-window`.
 
@@ -1797,7 +1789,7 @@ The middle of the rail, which scrolls: its edges fade only where there is more t
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 | `ref` | `Ref<HTMLDivElement>` | none | Forwarded. |
 
-States: the viewport hides the native scrollbar, pads 0.5rem inline, and masks its top and bottom with `min(24px, var(--scroll-area-overflow-y-start / -end, 24px))`, which the component writes as it scrolls. The bar is 6px, at least 24px tall, round, `--line`; its track fades in over 150ms.
+States: the viewport hides the native scrollbar, pads 0.5rem inline, and masks its top and bottom with `min(24px, var(--scroll-area-overflow-y-start / -end, 24px))`, which the component writes as it scrolls. The bar is 6px, at least 24px tall, round, `--line`; its track fades in over `--motion-fast`.
 
 Tokens: `--line`, `--radius-round`; local `--scroll-area-overflow-y-start`, `--scroll-area-overflow-y-end`.
 
@@ -1816,12 +1808,12 @@ A group's heading, which folds into a rule as the rail folds (none above the fir
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `children` | `ReactNode` | | The heading. |
-| `size` | `"sm" \| "md"` | the provider's | `sm` is denser: `--text-tag`, padding-block `0.125rem 0.1875rem`. `md` keeps the full size in a dense rail. Sets `data-size`. |
+| `size` | `"sm" \| "md"` | the provider's, else the density's | `sm` is denser: `--text-tag`, padding-block `0.125rem 0.1875rem`. `md` keeps the full size in a dense rail or a compact density. Sets `data-size`, which sets `--sidebar-label-text` and `--sidebar-label-pad` on the heading. |
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 
-States: words `--text-meta` weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem` (`sm`, or under a dense provider without a `size` of its own: `--text-tag` and `0.125rem 0.5rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (160ms); the first group's label keeps no margin and no rule. In a sheet it does not transition.
+States: words `var(--sidebar-label-text)` (`--text-meta`) weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg-subtle`, padding-inline 0.5rem and padding-block `var(--sidebar-label-pad)` (`0.25rem 0.375rem`; `sm`, under a dense provider or under `data-density="compact"` without a `size` of its own: `--text-tag` and `0.125rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (`--motion-fast`); the first group's label keeps no margin and no rule. In a sheet it does not transition.
 
-Tokens: `--text-meta`, `--fg-subtle`, `--line`, `--sidebar-animation-duration`, `--sidebar-easing`.
+Tokens: `--sidebar-label-text`, `--sidebar-label-pad`, `--text-meta`, `--text-tag`, `--fg-subtle`, `--line`, `--sidebar-animation-duration`, `--sidebar-easing`.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-group-label`, `ui-sidebar-group-fold`, `ui-sidebar-group-words`.
 
@@ -1847,7 +1839,7 @@ A place: a link by `href` (through `LinkProvider` for a path of the app beginnin
 | `active` | `boolean` | `false` | The place you are in (`data-active="true"`). |
 | `tooltip` | `ReactNode` | none | Said beside the mark (to the right) while the rail is folded. |
 | `dot` | `string \| undefined` | none | A dot on the mark while folded; the words are for a screen reader. |
-| `size` | `"sm" \| "md" \| "lg"` | the provider's | The row's height: 1.75rem, 2rem or 2.5rem, outranking the provider's `--sidebar-row-height`. Sets `data-size`. |
+| `size` | `"sm" \| "md" \| "lg"` | the provider's, else the density's | The row's height: 1.75rem, 2rem or 2.5rem, outranking the provider's or the density's `--sidebar-row-height`. Sets `data-size`. |
 | `count` | `{ value: number; label: string; tone?: Tone; max?: number }` | none | A soft `Count` at the row's end while open (in a `ui-sidebar-badge`), the dot on the mark while folded; `label` is said in either, once. Nothing at 0. An explicit `dot` outranks the count's words. |
 | `href` | `string` | none | Makes it a link. |
 | `children` | `ReactNode` | none | The words. |
@@ -1863,9 +1855,9 @@ States:
 - Active: `--field-fill-hover`, `--fg-strong`, icon `--fg-strong`.
 - Focus: outline 2px `--focus`, offset -2px.
 - Dot: 0.3125rem, round, `--bg-contrast`, top right of the mark, shown only while folded.
-- Ground and colour ease 140ms. No weight change.
+- Ground and colour ease over `--motion-fast`. No weight change.
 
-Tokens: `--radius-row`, `--radius-round`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--focus`, `--bg-contrast`.
+Tokens: `--sidebar-row-height`, `--radius-row`, `--radius-round`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--focus`, `--bg-contrast`.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-button`, `ui-sidebar-face`, `ui-sidebar-mark`, `ui-sidebar-words`, `ui-sidebar-word`, `ui-sidebar-dot`. Uses `sr-only`.
 
@@ -1958,7 +1950,7 @@ A file on its way somewhere, as a small card: a picture or icon, its name cut to
 | `removeLabel` | `string` | `` `Take ${name} off` `` | The remove button's name. |
 | `className` | `string` | none | Placement. |
 
-States: radius `--radius-row`, `--text-meta`, `--fg` on `--surface-lifted` with a `0 0 0 1px var(--line)` ring; thumb 1.375rem (card 2.25rem) on `--field-fill`; name `--fg-strong`; size tabular `--fg-subtle`. Remove: a quiet `IconButton` 1.375rem tall (`XIcon` 14px). Sending: a 2px bar of `--line` with an `--ink-face-bottom` fill easing its width (300ms `--ease-track`); unknown progress sweeps with `ui-progress-sweep`, and under reduced motion is a still bar at opacity 0.5.
+States: radius `--radius-row`, `--text-meta`, `--fg` on `--surface-lifted` with a `0 0 0 1px var(--line)` ring; thumb 1.375rem (card 2.25rem) on `--field-fill`; name `--fg-strong`; size tabular `--fg-subtle`. Remove: a quiet `IconButton` 1.375rem tall (`XIcon` 14px). Sending: a 2px bar of `--line` with an `--ink-face-bottom` fill easing its width (`--motion-slow` `--ease-track`); unknown progress sweeps with `ui-progress-sweep`, and under reduced motion is a still bar at opacity 0.5.
 
 Tokens: `--radius-row`, `--text-meta`, `--fg`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--line`, `--field-fill`, `--ink-face-bottom`, `--ease-track`.
 
@@ -1977,7 +1969,7 @@ Pictures and films sent beside words: one at its own shape within 28rem by 20rem
 
 `MediaItem` is `{ key; kind: "image" | "video"; src; alt; width: number | null; height: number | null; onOpen?: () => void }`. `MEDIA_WIDE` is 448 and `MEDIA_TALL` is 320 (pixels). A single box is its own shape scaled into those bounds (at least 64px wide); unknown shape is 16rem at 4:3 for a picture and 448px at 16:9 for a film. A film's address gets `#t=0.1` for a poster frame.
 
-States: tile radius `--radius-row` (inside a grid `--radius-mark`, the grid's outer corners `--radius-row`) on `--bg-recessed`, with an edge `inset 0 0 0 1px var(--line-soft)` laid over the picture. With `onOpen` the tile is a button (`zoom-in`); hover darkens the picture (`brightness(0.94)`, 150ms); focus outline 2px `--focus`, offset 2px. A picture or film that fails says so in words ("This picture could not be shown.", "This film could not be played here.") at `--text-meta` `--fg-subtle`. The `+n` cover is `--text-lead` weight 600 white on `oklch(0 0 0 / 0.45)`; a film's ground is `oklch(0 0 0)`.
+States: tile radius `--radius-row` (inside a grid `--radius-mark`, the grid's outer corners `--radius-row`) on `--bg-recessed`, with an edge `inset 0 0 0 1px var(--line-soft)` laid over the picture. With `onOpen` the tile is a button (`zoom-in`); hover darkens the picture (`brightness(0.94)`, `--motion-fast`); focus outline 2px `--focus`, offset 2px. A picture or film that fails says so in words ("This picture could not be shown.", "This film could not be played here.") at `--text-meta` `--fg-subtle`. The `+n` cover is `--text-lead` weight 600 white on `oklch(0 0 0 / 0.45)`; a film's ground is `oklch(0 0 0)`.
 
 Tokens: `--radius-row`, `--radius-mark`, `--bg-recessed`, `--line-soft`, `--focus`, `--text-meta`, `--text-lead`, `--fg-subtle`.
 
@@ -1998,7 +1990,7 @@ A file that is not drawn in place: its mark, its name, what it is and how large,
 | `pending` | `boolean` | `false` | Quieter (opacity 0.55) and inert. |
 | `className` | `string` | none | Placement. |
 
-States: width `min(100%, 20rem)`, radius `--radius-row`, `--field-fill`, hover `--field-fill-hover` (150ms). Focus on the open area: outline 2px `--focus`, offset 2px. Mark 2rem on `--surface-lifted` with a `--line-soft` ring; name `--text-ui` weight 600 `--fg-strong`; meta `--text-meta` tabular `--fg-subtle`. Preview ground `--bg-recessed`; a canvas in it is white with radius `--radius-mark`. Download: a quiet square `ButtonLink` (`DownloadSimpleIcon` 16px) with a "Download" tooltip.
+States: width `min(100%, 20rem)`, radius `--radius-row`, `--field-fill`, hover `--field-fill-hover` (`--motion-fast`). Focus on the open area: outline 2px `--focus`, offset 2px. Mark 2rem on `--surface-lifted` with a `--line-soft` ring; name `--text-ui` weight 600 `--fg-strong`; meta `--text-meta` tabular `--fg-subtle`. Preview ground `--bg-recessed`; a canvas in it is white with radius `--radius-mark`. Download: a quiet square `ButtonLink` (`DownloadSimpleIcon` 16px) with a "Download" tooltip.
 
 Tokens: `--radius-row`, `--radius-mark`, `--field-fill`, `--field-fill-hover`, `--focus`, `--surface-lifted`, `--line-soft`, `--text-ui`, `--text-meta`, `--fg-strong`, `--fg-subtle`, `--bg-recessed`, `--control-h-sm`.
 
@@ -2072,7 +2064,7 @@ Something said back to a message, as a small pill: its mark and how many. Its wo
 | `onPress` | `() => void` | required | Say it or take it back. |
 | `tip` | `ReactNode` | `label` | What the tooltip says ("Seen by Ana and you"). |
 
-States: 1.375rem tall, radius `--radius-round`, `--text-tag` weight `--weight-ui`, `--fg-subtle` on `--field-fill`. Hover `--fg` on `--field-fill-hover`. Press: ring `inset 0 0 0 1px var(--fg-subtle)`. Pressed: `--fg-strong` on `--surface-lifted`, ring `inset 0 0 0 1px var(--fg-strong)`. Focus outline 2px `--focus`, offset 2px. Count tabular. Eases 150ms.
+States: 1.375rem tall, radius `--radius-round`, `--text-tag` weight `--weight-ui`, `--fg-subtle` on `--field-fill`. Hover `--fg` on `--field-fill-hover`. Press: ring `inset 0 0 0 1px var(--fg-subtle)`. Pressed: `--fg-strong` on `--surface-lifted`, ring `inset 0 0 0 1px var(--fg-strong)`. Focus outline 2px `--focus`, offset 2px. Count tabular. Eases over `--motion-fast`.
 
 Tokens: `--radius-round`, `--text-tag`, `--fg-subtle`, `--fg`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--surface-lifted`, `--focus`.
 
@@ -2097,7 +2089,7 @@ A compact pill of dense icon buttons on the floating surface, laid over the corn
 | `role` | `"toolbar" \| "group"` | `"toolbar"` | Its role. |
 | `className` | `string` | none | Placement. |
 
-States: padding 0.125rem, radius `--radius-row`, `--surface-lifted`, `--shadow-raise`, fading in 120ms (none under reduced motion). Square buttons inside are 1.625rem with radius `calc(var(--radius-row) - 0.125rem)`, icons 15px, `--fg-subtle` (hover `--fg-strong`); a button with words is 1.625rem at `--text-meta`.
+States: padding 0.125rem, radius `--radius-row`, `--surface-lifted`, `--shadow-raise`, fading in over `--motion-fast`. Square buttons inside are 1.625rem with radius `calc(var(--radius-row) - 0.125rem)`, icons 15px, `--fg-subtle` (hover `--fg-strong`); a button with words is 1.625rem at `--text-meta`.
 
 Tokens: `--radius-row`, `--surface-lifted`, `--shadow-raise`, `--fg-subtle`, `--fg-strong`, `--text-meta`.
 
@@ -2140,7 +2132,7 @@ A list of headline measures (`section` named by `label`, holding a `dl`), in col
 | `bare` | `boolean` | `false` | No rules above and below (`data-bare`). Inside a `Card` the rules are dropped already. |
 | native attributes | `HTMLAttributes<HTMLElement>` | | Passed through. |
 
-States: none. Between two `--line` rules with 1rem padding (none when bare or in a card). Label `--text-meta` `--fg-subtle`; value `calc(var(--text-lead) * 1.5)` weight 600, tabular, `--fg-strong`; description `--text-meta` `--fg-subtle`; action 0.5rem below. In a recessed card `--fg-subtle` is remapped to `--fg-subtle-on-fill`, which holds its contrast on the fill.
+States: none. Between two `--line` rules with 1rem padding (none when bare or in a card). Label `--text-meta` `--fg-subtle`; value `calc(var(--text-lead) * 1.5)` weight 600, tracking `--track-title` (-0.02em), tabular, `--fg-strong`; description `--text-meta` `--fg-subtle`; action 0.5rem below. In a recessed card `--fg-subtle` is remapped to `--fg-subtle-on-fill`, which holds its contrast on the fill.
 
 CSS: classes `ui-metric-summary`, `ui-metric-summary-item`, `ui-metric-summary-value`, `ui-metric-summary-description`, `ui-metric-summary-action`.
 
@@ -2162,7 +2154,7 @@ CSS: classes `ui-trace-waterfall`, `ui-trace-waterfall-row`, `ui-trace-waterfall
 
 ## Tokens
 
-All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are listed as their light and dark values. The colour tokens and the scales are declared on `:root, [data-mode]` (unlayered), so a section set to the other mode reads them in its own. The type scale, the font tokens and the easings are in Tailwind's `@theme` block.
+All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are listed as their light and dark values. The colour tokens and the scales are declared on `:root, [data-mode]` (unlayered), so a section set to the other mode reads them in its own; the heights the density sets are on `:root, [data-density]` instead (see [Density](#density)). The type scale, the font tokens and the easings are in Tailwind's `@theme` block.
 
 **The defaults are a starting point.** These values are vic-ui's own interpretation, not a spec a consuming app has to match. An app sets its own brand in one theme stylesheet, imported after vic-ui's and outside any `@layer`, overriding tokens on `:root, [data-mode]` (colours as `light-dark()` pairs) and the font tokens on `:root`, while keeping the `color-scheme` declarations below. Token names, component props and `ui-` class names are the stable contract; the look changes through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the focus ring, disabled says why, state carries a word, nothing moves, and every tone ink stays at or above 5.8:1 on the canvas, the panel and its own tint in both modes (see [Contrast, measured](#contrast-measured)).
 
@@ -2194,16 +2186,24 @@ All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are 
 
 ### Surfaces
 
+The surface stack, bottom to top. A surface on the page carries an edge and no shadow; only what floats over it casts one ([Elevation](#elevation)).
+
+| Token | Light | Dark | What sits on it | Edge or shadow |
+| --- | --- | --- | --- | --- |
+| `--bg-frame` | `oklch(0.962 0 0)` | `oklch(0.09 0 0)` | An application window: the ground round a product's chrome, a step under the canvas, so a frame can be set without moving every canvas-coloured thing. | None. |
+| `--bg-canvas` | `oklch(0.9875 0 0)` | `oklch(0.1 0 0)` | The page (`body`). | None. |
+| `--bg-base` | `oklch(1 0 0)` | `oklch(0.17 0 0)` | The rail, a table's ground, a panel on the page. | `--edge`. |
+| `--bg-tint` | `oklch(0.97 0 0)` | `oklch(0.269 0 0)` | A tinted ground. | None. |
+| `--bg-recessed` | `oklch(0.965 0 0)` | `oklch(0.15 0 0)` | Sunk: previews, a preview well, the sheet's backdrop. | None. |
+| `--surface-lifted` | `oklch(1 0 0)` | `oklch(0.1913 0 0)` | Anything that sits on top: cards, chips; menus and dialogs over the page. | `--edge` on the page; `--shadow-float` when it floats. |
+| `--bg-contrast` | `oklch(0.12 0 0)` | `oklch(0.985 0 0)` | Tooltips, the rail's dot. | `--shadow-raise`. |
+
+Beside the stack:
+
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--bg-canvas` | `oklch(0.9875 0 0)` | `oklch(0.1 0 0)` | The page (`body`). |
-| `--bg-base` | `oklch(1 0 0)` | `oklch(0.17 0 0)` | The rail, a table's ground. |
-| `--bg-tint` | `oklch(0.97 0 0)` | `oklch(0.269 0 0)` | A tinted ground. |
-| `--bg-recessed` | `oklch(0.965 0 0)` | `oklch(0.15 0 0)` | Sunk: previews, the sheet's backdrop. |
-| `--bg-contrast` | `oklch(0.12 0 0)` | `oklch(0.985 0 0)` | Tooltips, the rail's dot. |
 | `--bg-control` | `oklch(1 0 0)` | `oklch(0.205 0 0)` | A control's ground. |
-| `--bg-elevated` | `oklch(0.98 0 0)` | `oklch(0.12 0 0)` | Kept for compatibility; sinks in dark, so lifted things use the next token. |
-| `--surface-lifted` | `oklch(1 0 0)` | `oklch(0.1913 0 0)` | Anything that sits on top: cards, menus, dialogs, chips. |
+| `--bg-elevated` | `oklch(0.98 0 0)` | `oklch(0.12 0 0)` | **Deprecated, removed in 0.4.** It sinks in dark rather than lifting: use `--surface-lifted` for what sits on top and `--bg-recessed` for what sinks. The settings dialog's rail still reads it until then. |
 
 ### Fields
 
@@ -2298,6 +2298,34 @@ Each hue is a block (pale on light, deep on dark) and an ink dark enough for wor
 
 The hue inks equal the tone inks they share a colour with: sky is moving, sage is settled, butter is caution, clay is danger.
 
+### Accent (look)
+
+One brand colour for a look, never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone, says no state and is not moving (a navy ink; this is a clear blue). The class `tone-accent` hands a part `--tone-ink: var(--accent-ink)`, `--tone-tint: var(--accent-tint)`, `--tone-edge: var(--accent-edge)` and `--tone-fill-on: var(--accent-on)`. `tone="accent"` is taken by Badge, Count, Switch, Progress, Tabs (the indicator), Button and Announcement (the tag).
+
+| Token | Light | Dark | For |
+| --- | --- | --- | --- |
+| `--accent` | `oklch(0.48 0.19 262)` | `oklch(0.76 0.12 258)` | The fill: a switch's track, a bar, a filled button, a tag. |
+| `--accent-on` | `oklch(1 0 0)` | `oklch(0.1448 0 0)` | Words on the fill and on the ink. |
+| `--accent-ink` | `oklch(0.46 0.17 262)` | `oklch(0.8 0.1 258)` | Words and lines in the accent on the page; a solid badge's and a count's fill. |
+| `--accent-tint` | `oklch(0.935 0.03 262)` | `oklch(0.275 0.065 262)` | A pale ground (`soft`). |
+| `--accent-edge` | `oklch(0.46 0.17 262 / 0.45)` | `oklch(0.8 0.1 258 / 0.45)` | An outline (a hairline badge). |
+| `--button-accent` | unset, read as `var(--button-accent, var(--accent))` | same | The filled button's accent; set it on a part of the page to give its buttons another colour. |
+| `--button-on-accent` | unset, read as `var(--button-on-accent, var(--accent-on))` | same | The words on it. |
+
+`--accent` is not shadcn's hover grey: the composable sheet's `--color-accent` (`bg-accent`) reads `--fill-hover`, so set `--fill-hover`, not `--accent`, to change that hover (see the 0.2 notes in [CHANGELOG.md](CHANGELOG.md)).
+
+### Art
+
+Four hues and a grain for what is drawn rather than read. Used only inside thumbnails, banners and illustrations; no control reads them, and they carry no words, so they have no contrast floor.
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `--art-1` | `oklch(0.9 0.06 25)` | `oklch(0.32 0.08 25)` |
+| `--art-2` | `oklch(0.93 0.07 85)` | `oklch(0.34 0.07 75)` |
+| `--art-3` | `oklch(0.9 0.05 185)` | `oklch(0.32 0.06 190)` |
+| `--art-4` | `oklch(0.88 0.06 285)` | `oklch(0.3 0.09 285)` |
+| `--art-grain` | `0.08` | same: the alpha of a dot overlay that keeps a gradient from reading as flat vector. |
+
 ### Radius scale
 
 | Token | Value | Tier |
@@ -2329,6 +2357,32 @@ A nested corner stays concentric by subtracting its inset: `calc(var(--radius-bu
 | `--control-h` | `2.25rem` | The default: fields, tabs, choices, `Button size="lg"`. The way in uses it. |
 | `--control-h-sm` | `2rem` | The dense height: `Button`'s default, `size="sm"` fields and tabs, pager buttons, icon buttons. The norm inside the product. |
 
+Both are set by the density below, so they are declared on `:root, [data-density]` rather than with the colours.
+
+### Density
+
+One setting moves every height a piece is drawn at together. Set `data-density` on the root or on any section, as `data-mode` is: `compact`, `default` (or no attribute) or `comfortable`. The tokens are declared on `:root, [data-density]` apart from the colours, so a section set to the other mode keeps the density around it, and a section set back to `default` inside a compact one draws at the default again. `size="sm"` on a piece stays a local step under whatever the density sets (a small field reads `--control-h-sm`, which the density moves too). Nothing in a piece changes its height by state, and the density is not a state: it is set once, for a page or a part of one.
+
+| Token | Compact | Default | Comfortable | Read by |
+| --- | --- | --- | --- | --- |
+| `--control-h` | `2rem` | `2.25rem` | `2.5rem` | Fields, tabs, choices, `Button size="lg"`, every piece of the control height. |
+| `--control-h-sm` | `1.75rem` | `2rem` | `2.25rem` | `Button`, `size="sm"` fields and tabs, icon buttons, pager buttons. |
+| `--row-h` | `2.25rem` | `2.75rem` | `3.25rem` | A list's `Row` at its least; its block padding moves by half the difference from 2.75rem. |
+| `--cell-pad-y` | `0.3125rem` | `0.5rem` | `0.75rem` | A `Table`'s cells above and below; its head takes 0.1rem less, and a roster's cells grow by twice the difference from 0.5rem. |
+| `--menu-item-h` | `1.75rem` | `2.125rem` | `2.5rem` | A `Menu`'s, a `Select`'s and a `Combobox`'s item at its least; its block padding moves by half the difference from 2.125rem. The inline `ComboboxItem` sits 2px under it, and a `PlacePicker`'s rows are drawn at it. |
+| `--field-pad-x` | `0.625rem` | `0.75rem` | `0.875rem` | The room either side of a field's words, its prefix, its suffix, a select's caret, a search's glass, a textarea and the native input and select. `size="sm"` takes 0.125rem less (0.625rem at the default). |
+| `--sidebar-row-height` | `1.75rem` | `2rem` | `2.25rem` | The sidebar's rows. `SidebarProvider size="sm"` sets 1.75rem and `size="md"` 2rem on the rail alone, whatever the density; a row's own `size` outranks either. |
+| `--sidebar-label-text` | `--text-tag` | `--text-meta` | `--text-meta` | A sidebar group's heading. |
+| `--sidebar-label-pad` | `0.125rem 0.1875rem` | `0.25rem 0.375rem` | `0.375rem 0.5rem` | Above and below a sidebar group's heading. |
+
+`SidebarProvider size="sm"` and `data-density="compact"` draw the same rail (rows 1.75rem, headings at `--text-tag`); the prop keeps it to the rail, the attribute moves the page beside it too. `tests/density-type.test.mjs` measures every row of this table in each step, a section set to the other mode inside a compact one, and the two dense rails against each other.
+
+```html
+<html data-density="compact">
+  <section data-density="comfortable">A form on the way in, a step roomier.</section>
+</html>
+```
+
 ### Type scale
 
 The working scale (everything that is not a statement). Nothing drawn is smaller than 11px.
@@ -2342,6 +2396,25 @@ Two weight tokens sit with the faces on `:root`. `--weight-ui: 500` is the inter
 | `--text-ui` | `0.8125rem` (13px) | `1.45` |
 | `--text-read` | `0.875rem` (14px) | `1.55` |
 | `--text-lead` | `1rem` (16px) | `1.4` |
+| `--text-title` | `1.25rem` (20px) | `1.2` |
+| `--text-statement` | `2rem` (32px) | `1.12` |
+
+`--text-title` is a headline in the product, set at 500 to 700: a dialog's title (`ui-dialog-title`, 700), the name a screen on the way in is under (`ui-focus-name`, 600). `--text-statement` is the one sentence a screen on the way in is about (`ui-focus-title`, 400). Each line height is its own token, `--text-title--line-height` and `--text-statement--line-height`, as the working sizes' are.
+
+Letter spacing is a token per size, on `:root`, read beside the size wherever a piece sets it (`letter-spacing: var(--track-ui)` next to `font-size: var(--text-ui)`, and `--track-read` next to `--field-text`). The working sizes sit at the face's own spacing; the headlines draw a little closer. A state never changes any of them.
+
+| Token | Value | Read with |
+| --- | --- | --- |
+| `--track-tag` | `0em` | `--text-tag` |
+| `--track-meta` | `0em` | `--text-meta` |
+| `--track-ui` | `0em` | `--text-ui` |
+| `--track-read` | `0em` | `--text-read`, `--field-text` |
+| `--track-lead` | `0em` | `--text-lead` |
+| `--track-title` | `-0.02em` | `--text-title`, and the settings dialog's 0.9375rem title |
+| `--track-statement` | `-0.01em` | `--text-statement`, and the 1.5rem line under it (`ui-focus-when`) |
+| `--track-display` | `-0.035em` | The website's display headlines, above a statement: the marketing headings and the icon page's title; the marketing hero takes `calc(var(--track-display) - 0.02em)` |
+
+The one `letter-spacing` in the library that is not a token is the one-time code's hidden input (`ui-code-field-input`, 2.5rem), which spreads its transparent digits one to a cell and is not type. On the website, the marketing page's monospace eyebrow and hero caption (`marketing.css`, 0.12em and 0.08em) are spaced labels set apart from the scale.
 
 Also declared in the same block, for older and longer-form text:
 
@@ -2363,22 +2436,44 @@ Font tokens:
 
 | Token | Value |
 | --- | --- |
-| `--font-sans` | `"Cal Sans UI", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` |
+| `--font-sans-fallback` | `"Cal Sans UI Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` (the metrics-matched fallback face, then the device's; see [Fonts](#fonts)) |
+| `--font-sans` | `"Cal Sans UI", var(--font-sans-fallback)` |
 | `--default-font-family` | `var(--font-sans)` |
-| `--font-display` | `"Cal Sans UI", ui-sans-serif, system-ui, sans-serif` |
+| `--font-display` | `"Cal Sans UI", var(--font-sans-fallback)` |
 | `--font-mark` | `var(--font-sans)` (eyebrows, numerals, times, code labels; one face) |
 | `--font-wordmark` | `"Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace` (the logo only) |
 | `--font-code` | `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace` (an uploaded file's source; no font shipped) |
 
 ### Motion
 
+Five tokens on `:root` set every move in the library: three durations and two curves. Every transition and animation in the stylesheets reads them, so a snappier or a stiller system is five values, not forty rules. Longer moves are multiples of `--motion-slow` and staggers are fractions of `--motion-fast`, so they follow too.
+
 | Token | Value | Use |
 | --- | --- | --- |
-| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Something arriving (accordion panels, empty-state bars). |
-| `--ease-track` | `cubic-bezier(0.4, 0, 0.2, 1)` | Something following a position (tab indicator, contents bar, progress). |
-| `--default-transition-duration` | `100ms` | Tailwind's default. |
+| `--motion-fast` | `150ms` | A colour, a fill or a fade answering a pointer: hover and press grounds, focus rings, carets, tooltips, menus, a toast leaving. |
+| `--motion-base` | `220ms` | Something arriving or folding: dialogs, sheets, toasts arriving, the accordion, the tab indicator, the switch knob, the sidebar. |
+| `--motion-slow` | `300ms` | Something travelling far or easing a whole face: the button's gradient stops, progress, the way-in's height. The empty state's bars take twice it and the focus page's art eleven thirds of it. |
+| `--ease-out` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | Something arriving, and every fade. |
+| `--ease-track` | `cubic-bezier(0.4, 0, 0.2, 1)` | Something following a position (tab indicator, contents bar, progress, sliding views, the sidebar), and the button's face. |
+| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Deprecated, removed in 1.0. The old arrival curve, kept at its own value for anything outside the library that still reads it; no piece reads it now, they read `--ease-out`. |
 
-Pieces also use fixed curves of their own: `cubic-bezier(0.2, 0.8, 0.2, 1)` for entrances (menus, dialogs, toasts, the switch knob, the radio dot), `cubic-bezier(0.2, 0.7, 0.2, 1)` for the field error, and the sidebar's `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`. Under `prefers-reduced-motion: reduce` every entrance, slide, sweep, spin and fold stops (each piece's section says which); short colour and fill eases stay.
+Under `prefers-reduced-motion: reduce` the three durations are `0s`, set once in `tokens.css`, so every piece lands in its end state at once: entrances, slides, folds and fades alike. Pieces carry no reduced-motion rules of their own except for loops, whose period is not a duration: the spinner and the unknown progress bar stand still, the file chip's unknown bar becomes a still stretch at half strength, and the code field's cursor stops blinking. A system that sets its own durations sets them inside `@media (prefers-reduced-motion: no-preference)`, or the zeroing loses to them; a section can set them for itself the same way.
+
+```css
+/* Snappier */
+@media (prefers-reduced-motion: no-preference) {
+  :root { --motion-fast: 100ms; --motion-base: 150ms; --motion-slow: 200ms; }
+}
+
+/* Stiller: nothing moves, for everyone */
+:root { --motion-fast: 0s; --motion-base: 0s; --motion-slow: 0s; }
+```
+
+Kept literal, because they are not motion: the loop periods (`ui-spin` 700ms, `ui-progress-sweep` 1.4s, the code cursor's 1.28s blink), the checkbox tick's overshooting curve `cubic-bezier(0.2, 0.8, 0.2, 1.4)` (its duration is `--motion-fast`), and the timers in script: the tooltip's `TIP_DELAY_MS` and 400ms warm window, the 700ms type-ahead window, the sidebar scrollbar's 600ms hold, and `FormSteps`, whose motion is drawn by the `motion` library (480ms, its own curve, none under reduced motion). One timer mirrors a duration: a leaving toast stays in the list for the leave transition it is actually drawn with (its computed `transition-duration` plus delay, `--motion-fast` as resolved on the toast, in `s` or `ms`), and one dismissed before it is drawn waits the `--motion-fast` its Toaster region resolves, or nothing when there is no Toaster. A duration of zero fires no `transitionend`, and nothing in the library waits on one: the image preview's eased zoom clears itself when reduced motion is on.
+
+`tokens.css` is unlayered, and Tailwind v4 also names a curve `--ease-out` (`cubic-bezier(0, 0, 0.2, 1)`, in its `theme` layer). An app that loads `vic-ui/styles.css` (`dist/vic-ui.css`) beside its own Tailwind build therefore gets vic-ui's curve under its `ease-out` utility, because an unlayered declaration beats a layered one. To keep Tailwind's curve for the app's own utilities and vic-ui's for the pieces, give the utility another name in the app's theme (`@theme { --ease-tw-out: cubic-bezier(0, 0, 0.2, 1); }`, then `ease-tw-out`) or write `ease-[cubic-bezier(0,0,0.2,1)]`. Setting `:root { --ease-out: cubic-bezier(0, 0, 0.2, 1); }` unlayered after `vic-ui/styles.css` restores it everywhere, the pieces' arrivals included.
+
+In the shadcn catalogue (`vic-ui/ui`), Tailwind's default transition duration and curve are `--motion-fast` and `--ease-track`, its `ease-in-out` is `--ease-track`, and its `ease-out` utility reads this `--ease-out` (they share the name). tw-animate-css's `animate-in` and `animate-out` default to `--motion-fast` and `--ease-out`, and its accordion and collapsible to `--motion-base`. A `duration-*` utility is a literal Tailwind writes, which no token reaches, so that stylesheet keeps its own rule under reduced motion: every animation is cut to `0s`, as the tokens cut them, and every transition to 0.01ms, so anything waiting on `transitionend` still hears it. The `scroll-fade` utilities are left out of the animation cut: their animations run on a scroll timeline, not the clock, so a zero duration would stop the edge fade following the scroll, and a fade that follows the reader's own scroll is not motion the page makes by itself.
 
 ### Scrim
 
@@ -2423,6 +2518,8 @@ A scrim is one colour at many strengths, so it is three numbers, read as `oklch(
 
 No state (focus, hover, press, chosen, selected, active, open, current) changes `font-weight`, `font-size` or letter spacing. A chosen tab keeps `--weight-ui` like the rest; a current contents entry keeps 400; a field's label keeps 600 when focused. Colour, fill, ring or shadow carries the change, because a change of weight reflows the row. Counts are tabular numerals in reserved widths (`min-width: 2ch` on a tab's count) so a number changing moves nothing.
 
+`tests/state-size.test.mjs` enforces it. It draws every interactive root piece from the built package (Button in each look and size, IconButton, Checkbox, Switch, RadioGroup, Choice, Tabs, Select, TextField, SearchField, Combobox, SidebarMenuButton, Menu's trigger and rows, Pagination, Reaction) and measures each piece's box, and the boxes of its tabs, rows or page buttons, at rest, under the pointer, with the keyboard's focus, held down, chosen, checked or open where it has that state, and disabled, in light and in dark. A piece of several parts (tabs, a radio group's options, pages, a menu's rows) is hovered, focused and pressed at each part, not only at the chosen one. It fails on any change of width or height larger than a quarter of a CSS pixel, which only absorbs rounding between two layouts of fractional text. A piece that fails is fixed, or named with its reason in the test's `KNOWN` list, which runs that case as a todo; the tolerance is never widened.
+
 ### Disabled says why
 
 - Every interactive piece has an eased hover, a press state and a focus ring.
@@ -2432,11 +2529,13 @@ No state (focus, hover, press, chosen, selected, active, open, current) changes 
 
 ### Dense control height
 
-`--control-h-sm` (2rem) is the dense height and the norm inside the product; `--control-h` (2.25rem) is the default and what the way in uses. A header row holds every control at one height and never mixes the two. A control taller than the words beside it gives back the difference with a negative block margin.
+`--control-h-sm` (2rem) is the dense height and the norm inside the product; `--control-h` (2.25rem) is the default and what the way in uses. A header row holds every control at one height and never mixes the two. A control taller than the words beside it gives back the difference with a negative block margin. The two values here are the default density; `data-density` moves both together (see [Density](#density)), so the rule holds at every step.
 
 ### Sentence case everywhere
 
 Every label, eyebrow, caption, table head, placeholder and button is written and drawn in sentence case, never in capitals. Hierarchy is carried by weight (600 for a label, 400 for its value) and by size on the working scale (a label at `text-ui` over a value at `text-lead`), never by `text-transform` or the letter spacing capitals need.
+
+Capitalisation is the author's, not the piece's: no piece forces a case on the words it is given. A badge draws its words as written, so a data word such as "script" or "file" stays as it is (`tests/badge-words.test.mjs`).
 
 ### Focus
 
@@ -2446,7 +2545,8 @@ Every label, eyebrow, caption, table head, placeholder and button is written and
 
 ### Colour
 
-- Colour comes only from the palette in `tokens.css`, written in oklch or oklab (`color-mix(in oklab, ...)`). A colour the palette lacks is added to it, with a light and a dark value, before anything uses it. Nothing writes a colour inline.
+- Colour comes only from the palette in `tokens.css`, written in oklch or oklab (`color-mix(in oklab, ...)`). The palette is the neutrals, the four tones (meaning), the five hues and the accent (look), and the art hues (drawing only). A colour the palette lacks is added to it, with a light and a dark value, before anything uses it. Nothing writes a colour inline.
+- The accent is a look, never a fifth tone: it says no state, so whatever is drawn in it still says what it is in words. The art hues live only inside thumbnails, banners and illustrations; no control reads them.
 - The four tones keep their meanings wherever a state is shown: **danger** (clay) for what has gone wrong or is being destroyed, and every action that removes, ends, voids, refunds or suspends; **caution** (butter) for what must be read before going on (a change to agreed terms, a warning, a risk not yet harm); **settled** (sage) for what is done and fine (paid, signed); **moving** (sky) for what is under way and waiting on somebody else (open, due, sent).
 - Weight says urgency and the tone says kind: a hairline pill in a tone is a standing state; a solid pill asks for a hand now; a notice is the tone's tint behind a rule in its ink; a destructive commit is filled in the danger ink and its way in is outlined in it; the commit of a change to agreed terms is filled in the caution ink.
 - The five hues are for look, handed to a part by `[data-hue]`.
@@ -2455,9 +2555,9 @@ Every label, eyebrow, caption, table head, placeholder and button is written and
 
 ### Contrast, measured
 
-Copied from the comment in `tokens.css`. WCAG 2 relative luminance, against light canvas `#fbfbfb` and panel `#ffffff`, dark canvas `#030303` and panel `#0f0f0f` (held by `test/colour-tokens.test.ts`). No ink falls below 5.8:1 on either canvas, the panel or its own tint, and the words on a solid tone likewise.
+Copied from the comment in `tokens.css`. WCAG 2 relative luminance, against light canvas `#fbfbfb` and panel `#ffffff`, dark canvas `#030303` and panel `#0f0f0f`, measured on the colours Chromium resolves from the built stylesheet by `tests/colour-contrast.test.mjs` (part of `npm test`), which fails below 5.8:1. No ink falls below 5.8:1 on either canvas, the panel or its own tint, and the words on a solid tone or on the accent likewise.
 
-Ink on canvas / panel / its own tint, and `--tone-on` on the ink:
+Ink on canvas / panel / its own tint, and `--tone-on` on the ink (for the accent, `--accent-on` on `--accent` and on `--accent-ink`):
 
 | Tone | Light | Dark |
 | --- | --- | --- |
@@ -2465,6 +2565,9 @@ Ink on canvas / panel / its own tint, and `--tone-on` on the ink:
 | caution | 7.06 / 7.31 / 5.93, 7.31 | 13.51 / 12.56 / 9.91, 12.97 |
 | settled | 7.64 / 7.90 / 6.38, 7.90 | 12.77 / 11.87 / 9.56, 12.26 |
 | moving | 8.66 / 8.96 / 7.16, 8.96 | 11.95 / 11.10 / 9.06, 11.47 |
+| accent (a look) | 7.09 / 7.33 / 6.05, 6.79 and 7.33 | 11.05 / 10.27 / 7.96, 9.22 and 10.61 |
+
+The same test holds the accent button's words at 5.8:1 on every face stop (rest, hover, press) and the accent Tabs indicator likewise, and checks that `--accent` is not moving's ink.
 
 ### Nothing smaller than 11px
 
@@ -2473,6 +2576,8 @@ Ink on canvas / panel / its own tint, and `--tone-on` on the ink:
 ### One ink button per page, for committing only
 
 The bevelled ink button (`Button look="ink"`, `DangerButton`, `CautionButton`) is only for a real committing action, and a page has at most one ink button. Navigation, sidebar items, filters and toggles use the flat `look="line"`, `quiet`, square icon buttons or `Tabs`. Only a page's primary action is filled, so the one action that matters is the one that reads solid.
+
+A development build warns once in the console when a second ink button mounts inside the same `main` landmark, naming both; `allowSecond` on a `Button` leaves it out of the count, for the rare page that needs two. Buttons in a dialog or a popover are their own surface and are not counted. `tests/one-ink.test.mjs` enforces the warning and its silence in a production build.
 
 ### Fields are filled, with no border
 
@@ -2513,7 +2618,7 @@ Every correction the interface has had has been less: smaller, fewer, one screen
 
 ### Copy
 
-No em or en dashes as connective punctuation anywhere in source or interface. Declarative register. A refusal says what to do next, not what a validator wanted. State carries a word, never only a colour.
+Declarative register. A refusal says what to do next, not what a validator wanted. State carries a word, never only a colour. The house style for the library's own writing (no em or en dashes as punctuation, held by `npm run check:dashes`) is in `CONTRIBUTING.md`; it is not a rule of the system.
 
 ### Icons
 
@@ -2528,10 +2633,14 @@ The library itself uses fifteen: `AlertCircleIcon` (tabler `alert-circle`), `Ale
 | Cal Sans UI | `cal-sans-ui-wght-geom.woff2` (one variable file, `woff2-variations`) | `wght` 300 to 700; `GEOM` 0 to 100 | SIL Open Font License 1.1 | Mark Davis (WORDMARK), for Cal.com | Everything: the interface at the default `GEOM`, statements at `GEOM 100`. The axis is set by `font-variation-settings: "GEOM" 100` in the app's `.display` rule (`web/src/styles/components/type.css`); `--font-display` names the face only, so the library's dialog title and large org mark draw at the default `GEOM`. |
 | Space Mono Bold | `space-mono-700-latin.woff2` | weight 700 only | SIL Open Font License 1.1 | Colophon Foundry, for Google Fonts | The wordmark, and nothing else (`--font-wordmark`). |
 
-Both are declared in `base.css` with `font-display: swap`. Fallback stacks are the font tokens above: `--font-sans` falls back to `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`; `--font-display` to `ui-sans-serif, system-ui, sans-serif`; `--font-wordmark` to `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`. `--font-code` ships no font and is the device's own fixed-width face. The `GEOM` axis runs from the flowing, interface-tuned drawing (0) to a geometric one (100); never ask for a weight under 300, which clamps.
+Both are declared in `base.css` with `font-display: swap`. Fallback stacks are the font tokens above: `--font-sans` and `--font-display` fall back to `--font-sans-fallback`, which is `"Cal Sans UI Fallback"` and then `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`.
+
+`"Cal Sans UI Fallback"` is two more `@font-face` rules in `fonts.css`, by weight, with no file of their own. Weights 300 to 500: `src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans")` (Liberation Sans is drawn to Arial's measure), `size-adjust: 108.9%`, `ascent-override: 82.64%`, `descent-override: 20.2%`, `line-gap-override: 0%`. Weights 600 and 700, so a heading draws in a real bold and not a thickened regular: `local("Arial Bold")`, `local("Arial-BoldMT")`, `local("Liberation Sans Bold")`, `local("LiberationSans-Bold")`, `local("Helvetica Bold")`, `local("Helvetica-Bold")`, `size-adjust: 104.5%`, `ascent-override: 86.12%`, `descent-override: 21.05%`, `line-gap-override: 0%`; Cal Sans UI runs 1.035 times as wide as Arial Bold at 600 and 1.056 at 700 (the same `measureText` over the same paragraph), and the face takes the middle. It stands in while Cal Sans UI loads (`font-display: swap`), so the swap moves nothing: a line takes the same width within about 1.5% and the same height. The numbers are measured from `cal-sans-ui-wght-geom.woff2`: its `head`, `hhea` and `OS/2` tables give 1000 units to the em, ascender 900, descender -220 and no line gap (with `USE_TYPO_METRICS` set and the typo metrics equal); the width is Chromium's `measureText` over a paragraph of interface copy at `--weight-ui` (500), where Cal Sans UI runs 1.089 times as wide as Arial (1.070 at 400, 1.109 at 600). `size-adjust` scales the overrides too, so each is the face's metric over 1.089. Where neither Arial nor Liberation Sans is installed the face does not load and the device's own stack follows. Leaving `fonts.css` out leaves the name unresolved, and the stack goes straight to the device's faces as before. `tests/density-type.test.mjs` sets a paragraph in each face and holds the fallback to Cal Sans UI's lines, height and width.
+
+The rest of the stacks: `--font-wordmark` to `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`. `--font-code` ships no font and is the device's own fixed-width face. The `GEOM` axis runs from the flowing, interface-tuned drawing (0) to a geometric one (100); never ask for a weight under 300, which clamps.
 
 `body` sets `--font-sans` at `--text-body` with `-webkit-font-smoothing: antialiased` and `-moz-osx-font-smoothing: grayscale`. Selection is `light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0))` behind `light-dark(oklch(0.9851 0 0), oklch(0.1448 0 0))`.
 
-The composable `vic-ui/ui` controls share the original component styles. Its Button renders the same rim, face, busy state and disabled explanation as `vic-ui`; Input, Textarea, Card and Switch use the existing field, surface and switch classes. Import `vic-ui/ui/styles.css` once for either API.
+The composable `vic-ui/ui` controls share the original component styles. Its Button renders the same rim, face, busy state and disabled explanation as `vic-ui`, and is the same button: `variant="default"` (its default) and `variant="destructive"` draw as `look="ink"`, are counted by the one-ink-button warning, and take `allowSecond` as `Button` does; Input, Textarea, Card and Switch use the existing field, surface and switch classes. Import `vic-ui/ui/styles.css` once for either API.
 
 Composable menus, selectors, popovers, tooltips, badges, tabs, checks, radios, tables, progress and dialog typography reuse the corresponding vic classes. Base UI owns their state and positioning; the existing stylesheet owns their appearance. Tabs use Base UI’s indicator measurements for vic’s moving ink mark.

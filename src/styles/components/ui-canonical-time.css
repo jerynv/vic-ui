@@ -10,6 +10,7 @@
     border-radius: var(--radius-control);
     background: var(--field-fill);
     font-size: var(--text-lead);
+    letter-spacing: var(--track-lead);
     font-variant-numeric: tabular-nums;
   }
   .ui-time-segment { padding: 0 0.25rem; border-radius: var(--radius-mark); outline: none; caret-color: transparent; }

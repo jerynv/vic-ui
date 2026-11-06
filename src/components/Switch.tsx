@@ -7,8 +7,9 @@ import { reasonOf } from "./held";
  * with ink and a knob that slides to the end when it is on. `onCheckedChange` is handed the
  * new state. Its name is its `aria-label`, or the words written beside it. `look="flat"`
  * removes the track's decorative rim while preserving its fill, knob and focus ring.
+ * `tone="accent"` fills the track in the brand accent when it is on: a look, not a state.
  */
-export function Switch({ checked, onCheckedChange, className, look = "rimmed", type = "button", disabled, disabledReason, ...rest }: Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> & { checked: boolean; onCheckedChange?: (checked: boolean) => void; disabledReason?: string | undefined; look?: "flat" | "rimmed" }) {
+export function Switch({ checked, onCheckedChange, className, look = "rimmed", tone, type = "button", disabled, disabledReason, ...rest }: Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> & { checked: boolean; onCheckedChange?: (checked: boolean) => void; disabledReason?: string | undefined; look?: "flat" | "rimmed"; tone?: "accent" | undefined }) {
   const held = useBlocked<HTMLButtonElement>(disabled, disabledReason);
   return (
     <>
@@ -16,7 +17,7 @@ export function Switch({ checked, onCheckedChange, className, look = "rimmed", t
       type={type}
       role="switch"
       aria-checked={checked}
-      className={["ui-switch", look === "flat" ? "ui-switch-flat" : "", className].filter(Boolean).join(" ")}
+      className={["ui-switch", look === "flat" ? "ui-switch-flat" : "", tone === "accent" ? "ui-switch-accent" : "", className].filter(Boolean).join(" ")}
       onClick={() => onCheckedChange?.(!checked)}
       {...rest}
       {...held.props} aria-describedby={[rest["aria-describedby"], reasonOf(held.props)["aria-describedby"]].filter(Boolean).join(" ") || undefined}

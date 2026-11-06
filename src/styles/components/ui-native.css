@@ -4,7 +4,7 @@
     min-block-size: var(--control-h-sm);
     max-inline-size: 100%;
     min-inline-size: 0;
-    padding: 0.375rem 0.75rem;
+    padding: 0.375rem var(--field-pad-x);
     border: 1px solid var(--ui-field-edge, transparent);
     border-radius: var(--radius-field);
     background: var(--ui-field-fill, var(--field-fill));

@@ -33,12 +33,18 @@
     --progress-fill: var(--tone-moving-ink);
   }
 
+  /* The accent is a look: the bar in the brand colour, its words still saying how far. */
+  .ui-progress[data-tone="accent"] {
+    --progress-fill: var(--accent);
+  }
+
   .ui-progress-head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 0.75rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   .ui-progress-label {
@@ -73,7 +79,7 @@
     inset: 0 auto 0 0;
     border-radius: inherit;
     background: var(--progress-fill);
-    transition: width 300ms var(--ease-track);
+    transition: width var(--motion-slow) var(--ease-track);
   }
 
   /* Under way, how far unknown: a stretch of the bar sweeps across it. */
@@ -119,8 +125,9 @@
     background: var(--toast-ground);
     box-shadow: var(--shadow-float);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     pointer-events: auto;
-    animation: ui-toast-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+    animation: ui-toast-in var(--motion-base) var(--ease-out) backwards;
   }
 
   /* A tone draws the toast as a notice: the tone's tint behind a rule in its ink. */
@@ -156,8 +163,8 @@
     opacity: 0;
     translate: 0 4px;
     transition:
-      opacity 160ms ease,
-      translate 160ms ease;
+      opacity var(--motion-fast) var(--ease-out),
+      translate var(--motion-fast) var(--ease-out);
   }
 
   .ui-toast-icon {
@@ -186,6 +193,7 @@
   .ui-toast-description {
     margin-top: 0.125rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--toast-quiet);
   }
 
@@ -200,10 +208,11 @@
     background: transparent;
     font: inherit;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: 600;
     color: var(--toast-words);
     cursor: pointer;
-    transition: background-color 160ms ease;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-toast-action {
@@ -265,16 +274,12 @@
   }
 }
 
-/* Under reduced motion the spinner is a still mark and the unknown bar a still stretch. */
+/* Under reduced motion the spinner is a still mark and the unknown bar a still stretch. These
+   are loops, whose period is not a motion token, so they stop here; every other move in this
+   file is zeroed with the duration tokens. */
 @media (prefers-reduced-motion: reduce) {
   .ui-spinner,
-  .ui-progress-track[data-unknown] .ui-progress-fill,
-  .ui-toast {
+  .ui-progress-track[data-unknown] .ui-progress-fill {
     animation: none;
-  }
-
-  .ui-progress-fill,
-  .ui-toast[data-leaving] {
-    transition: none;
   }
 }

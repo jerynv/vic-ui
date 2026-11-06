@@ -23,9 +23,11 @@
     box-shadow: 0 0 0 2px var(--focus);
   }
 
+  /* A small field's padding is a step under the density's, as its height is. */
   .ui-field-sm .ui-field-input {
-    padding: 0 0.625rem;
+    padding: 0 calc(var(--field-pad-x) - 0.125rem);
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   /* A dense select keeps the room its caret stands in, which the dense padding above would
@@ -36,22 +38,24 @@
 
   .ui-field-prefix {
     flex: none;
-    padding-left: 0.75rem;
+    padding-left: var(--field-pad-x);
     font-size: var(--field-text);
+    letter-spacing: var(--track-read);
     color: var(--fg-subtle);
   }
 
   .ui-field-sm .ui-field-prefix,
   .ui-field-sm .ui-field-suffix {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   .ui-field-sm .ui-field-prefix {
-    padding-left: 0.625rem;
+    padding-left: calc(var(--field-pad-x) - 0.125rem);
   }
 
   .ui-field-sm .ui-field-suffix {
-    padding-right: 0.625rem;
+    padding-right: calc(var(--field-pad-x) - 0.125rem);
   }
 
   /* The line under a field with a count: the hint or the error, then the count at its end,
@@ -72,10 +76,11 @@
     flex: none;
     margin-left: auto;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.45;
     font-variant-numeric: tabular-nums;
     color: var(--fg-subtle);
-    transition: color 160ms;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-field-count[data-full] {
@@ -92,7 +97,7 @@
   .ui-textarea {
     display: block;
     height: auto;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem var(--field-pad-x);
     line-height: 1.5;
     resize: vertical;
   }
@@ -103,16 +108,16 @@
   }
 
   .ui-field-sm .ui-textarea {
-    padding: 0.375rem 0.625rem;
+    padding: 0.375rem calc(var(--field-pad-x) - 0.125rem);
   }
 
   /* ---- a search ------------------------------------------------------------------- */
 
   .ui-search-glass {
     flex: none;
-    margin-left: 0.75rem;
+    margin-left: var(--field-pad-x);
     color: var(--fg-subtle);
-    transition: color 160ms;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-search-box:focus-within .ui-search-glass {
@@ -129,7 +134,7 @@
   }
 
   .ui-field-sm .ui-search-glass {
-    margin-left: 0.625rem;
+    margin-left: calc(var(--field-pad-x) - 0.125rem);
   }
 
   .ui-field-sm .ui-search {
@@ -150,8 +155,8 @@
     color: var(--fg-subtle);
     cursor: pointer;
     transition:
-      background-color 140ms,
-      color 140ms;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-search-clear:hover {
@@ -246,6 +251,7 @@
     background: var(--surface-lifted);
     box-shadow: 0 0 0 1px var(--tone-edge, var(--line-soft));
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--tone-ink, var(--fg-strong));
   }
 
@@ -254,6 +260,7 @@
     flex: none;
     padding-inline: 0.375rem 0.25rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--tone-ink, var(--fg-subtle));
   }
 
@@ -282,8 +289,8 @@
     color: var(--fg-subtle);
     cursor: pointer;
     transition:
-      background-color 140ms,
-      color 140ms;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-combo-chip-x:hover {
@@ -299,6 +306,7 @@
   .ui-menu-group {
     padding: 0.5rem 0.65rem 0.25rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-weight: 600;
     color: var(--fg-subtle);
     user-select: none;
@@ -312,6 +320,7 @@
   .ui-menu-foot {
     padding: 0.5rem 0.65rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 
@@ -321,7 +330,7 @@
   }
 
   .ui-menu-item {
-    transition: background-color 120ms;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-combo-menu .ui-menu-item:active:not([aria-disabled]) {

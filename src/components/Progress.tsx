@@ -5,13 +5,14 @@ import { useId, type ReactNode } from "react";
  * to `max` (100 unless given); left out, the bar says only that it is under way. `valueText`
  * is the words for how far (`"3 of 8 files"`), the percentage where none is given. A `tone`
  * colours the bar, and the words beside it say the state, so the colour never says it alone.
+ * `tone="accent"` draws the bar in the brand accent, a look that says no state.
  */
 export function Progress(props: {
   label: ReactNode;
   value?: number;
   max?: number;
   valueText?: string;
-  tone?: "danger" | "caution" | "settled" | "moving";
+  tone?: "danger" | "caution" | "settled" | "moving" | "accent";
   size?: "sm";
   className?: string;
 }) {

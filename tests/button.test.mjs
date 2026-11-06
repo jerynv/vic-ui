@@ -61,6 +61,19 @@ test("buttons and descriptions render on the server and hydrate without changing
     const id = await theme.getAttribute("aria-describedby");
     assert.equal(await page.locator(`[id="${id}"]`).textContent(), "Theme");
     assert.equal(await page.getByRole("link", { name: "Destination" }).getAttribute("href"), "#destination");
+    // A cleanup-returning callback ref keeps its cleanup: React runs it in place of a call with
+    // null, and the plain button, whose joined ref is stable, attaches once across rerenders.
+    const tally = (calls, entry) => calls.filter((call) => call === entry).length;
+    let calls = await page.evaluate(() => globalThis.tidyCalls);
+    assert.equal(tally(calls, "attach Tidy"), 1);
+    assert.equal(tally(calls, "cleanup Tidy"), 0);
+    assert.ok(tally(calls, "attach Tidy held") >= 1);
+    await page.getByRole("button", { name: "Remove tidy", exact: true }).click();
+    await page.waitForFunction(() => globalThis.tidyCalls.at(-1)?.startsWith("cleanup") && !document.body.textContent.includes("Tidy held"));
+    calls = await page.evaluate(() => globalThis.tidyCalls);
+    assert.equal(tally(calls, "null"), 0);
+    assert.equal(tally(calls, "cleanup Tidy"), 1);
+    assert.equal(tally(calls, "cleanup Tidy held"), tally(calls, "attach Tidy held"));
     assert.deepEqual(errors, []);
   } finally {
     await browser?.close();

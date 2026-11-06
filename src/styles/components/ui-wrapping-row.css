@@ -9,7 +9,8 @@
     border-radius: var(--radius-row);
     color: inherit;
     font-size: var(--text-ui);
-    transition: background-color 200ms ease;
+    letter-spacing: var(--track-ui);
+    transition: background-color var(--motion-base) var(--ease-out);
   }
 
   .ui-wrapping-row:hover,
@@ -61,11 +62,4 @@
 .hit-row {
   padding-top: 0.625rem;
   padding-bottom: 0.625rem;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ui-wrapping-row,
-  .hit-row {
-    transition: none;
-  }
 }

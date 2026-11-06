@@ -1,9 +1,10 @@
-import { forwardRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode, type Ref } from "react";
+import { forwardRef, useCallback, useRef, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ReactNode, type Ref } from "react";
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { Link } from "./Link";
 import { useBlocked } from "./reason";
 import { reasonOf } from "./held";
 import { Spinner } from "./Spinner";
+import { assertOneReact, useOneInk } from "./dev";
 
 /**
  * The library's button. `ink` is a page's one filled action, `line` an outlined one beside
@@ -25,6 +26,10 @@ import { Spinner } from "./Spinner";
  * `busy` is `IconButton`'s: the button is `aria-busy` and held while it lasts, and a spinner
  * stands where its icon was, or over its words where it has none, the words kept in place but
  * unseen, so the button keeps its width and nothing beside it moves.
+ *
+ * A page has one ink button, for its committing action. In a development build a second
+ * `look="ink"` button mounted inside the same `main` landmark warns once in the console,
+ * naming both; `allowSecond` leaves a button that must stay ink out of the count.
  */
 export type ButtonLook = "ink" | "line" | "glass" | "quiet" | "link";
 
@@ -32,11 +37,32 @@ function classes(look: ButtonLook, size: "xs" | "md" | "lg", full?: boolean, ext
   return ["ui-button", `ui-button-${look}`, tone === "accent" ? "ui-button-accent" : "", size === "lg" ? "ui-button-lg" : size === "xs" ? "ui-button-xs" : "", full ? "ui-button-full" : "", square ? "ui-button-square" : "", round ? "ui-button-round" : "", extra ?? ""].filter(Boolean).join(" ");
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; tone?: "accent" | undefined; size?: "xs" | "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; busy?: boolean; disabledReason?: string | undefined; render?: ButtonPrimitive.Props["render"]; nativeButton?: boolean }>(function Button(
-  { look = "ink", tone, size = "md", full, square, round, icon, busy, className, children, type = "button", disabled, disabledReason, ...rest },
+export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & { look?: ButtonLook; tone?: "accent" | undefined; size?: "xs" | "md" | "lg"; full?: boolean; square?: boolean; round?: boolean; icon?: ReactNode; busy?: boolean; disabledReason?: string | undefined; render?: ButtonPrimitive.Props["render"]; nativeButton?: boolean; allowSecond?: boolean }>(function Button(
+  { look = "ink", tone, size = "md", full, square, round, icon, busy, className, children, type = "button", disabled, disabledReason, allowSecond, ...rest },
   ref,
 ) {
-  const held = useBlocked(disabled || busy, disabledReason, ref);
+  assertOneReact();
+  const own = useRef<HTMLButtonElement | null>(null);
+  // The caller's ref and the one the ink count reads. A callback ref that hands back a cleanup
+  // (React 19) keeps it: React then runs the cleanup on unmount in place of a call with null,
+  // so the cleanup clears this ref too. Any other ref is called with null, as it was.
+  const joined = useCallback(
+    (element: HTMLButtonElement | null) => {
+      own.current = element;
+      if (typeof ref === "function") {
+        const cleanup = (ref as (element: HTMLButtonElement | null) => unknown)(element);
+        if (typeof cleanup === "function")
+          return () => {
+            cleanup();
+            own.current = null;
+          };
+      } else if (ref) ref.current = element;
+      return undefined;
+    },
+    [ref],
+  );
+  useOneInk(own, look === "ink", allowSecond);
+  const held = useBlocked(disabled || busy, disabledReason, joined);
   const over = busy && !icon && children !== undefined && children !== null;
   return (
     <>

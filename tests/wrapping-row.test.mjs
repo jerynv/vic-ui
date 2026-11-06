@@ -140,7 +140,7 @@ test("WrappingRow matches the supplied cascade and portable console shapes", { t
         else assert.notEqual(result.bg, 'rgba(0, 0, 0, 0)');
       }
       await page.emulateMedia({ reducedMotion: 'no-preference' });
-      assert.equal(await page.locator('#plain').evaluate(el => getComputedStyle(el).transitionDuration), '0.2s');
+      assert.equal(await page.locator('#plain').evaluate(el => getComputedStyle(el).transitionDuration), '0.22s', 'the row eases over --motion-base');
       assert.deepEqual(errors, []); await page.close(); await reference.close();
     });
     if (screenshots) await writeFile(`${screenshots}/source-comparison.json`, JSON.stringify(comparison, null, 2));

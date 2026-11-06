@@ -37,8 +37,17 @@
 
   .ui-tabs-mark[data-eased] {
     transition:
-      translate 240ms var(--ease-track),
-      width 240ms var(--ease-track);
+      translate var(--motion-base) var(--ease-track),
+      width var(--motion-base) var(--ease-track);
+  }
+
+  /* The indicator in the accent (`tone="accent"`): the accent's face and rim, mixed as the accent
+     button's are, and the chosen tab's words in `--accent-on`. A look; the row says no state. */
+  .ui-tabs-accent {
+    --ink-face-top: color-mix(in oklab, var(--accent), white 4%);
+    --ink-face-bottom: color-mix(in oklab, var(--accent), black 10%);
+    --ink-rim-edge: color-mix(in oklab, var(--accent), black 22%);
+    --ink-words: var(--accent-on);
   }
 
   .ui-tab {
@@ -52,6 +61,7 @@
     background: transparent;
     font: inherit;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: var(--weight-ui);
     line-height: 1;
     white-space: nowrap;
@@ -59,8 +69,8 @@
     color: var(--fg-subtle);
     cursor: pointer;
     transition:
-      color 200ms ease,
-      background-color 160ms ease;
+      color var(--motion-base) var(--ease-out),
+      background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-tab:hover:not([aria-selected="true"]):not(:disabled):not([aria-disabled="true"]) {
@@ -101,6 +111,7 @@
   .ui-tab-count {
     min-width: 2ch;
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     font-variant-numeric: tabular-nums;
     text-align: left;
     opacity: 0.65;
@@ -128,13 +139,14 @@
     border-collapse: separate;
     border-spacing: 0;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     font-variant-numeric: tabular-nums;
     color: var(--fg);
   }
 
   .ui-table th,
   .ui-table td {
-    padding: 0.5rem 0.75rem;
+    padding: var(--cell-pad-y) 0.75rem;
     text-align: left;
     vertical-align: middle;
     border-bottom: 1px solid var(--line-soft);
@@ -167,8 +179,9 @@
     position: sticky;
     z-index: 1;
     top: 0;
-    padding-block: 0.4rem;
+    padding-block: calc(var(--cell-pad-y) - 0.1rem);
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: 600;
     white-space: nowrap;
     color: var(--fg-subtle);
@@ -189,8 +202,8 @@
     color: inherit;
     cursor: pointer;
     transition:
-      color 160ms ease,
-      background-color 160ms ease;
+      color var(--motion-fast) var(--ease-out),
+      background-color var(--motion-fast) var(--ease-out);
   }
 
   [data-align="end"] > .ui-table-sort {
@@ -220,8 +233,8 @@
     flex: none;
     opacity: 0;
     transition:
-      opacity 160ms ease,
-      rotate 200ms ease;
+      opacity var(--motion-fast) var(--ease-out),
+      rotate var(--motion-base) var(--ease-out);
   }
 
   .ui-table-sort:hover .ui-table-sort-mark {
@@ -237,7 +250,7 @@
   }
 
   .ui-table tbody tr {
-    transition: background-color 160ms ease;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-table tbody tr[data-pressable] {
@@ -289,6 +302,7 @@
     margin-inline: -0.5rem;
     padding: 0 0.5rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   .ui-list-mark {
@@ -327,7 +341,7 @@
     border-radius: var(--radius-row);
     color: var(--fg-subtle);
     text-decoration: none;
-    transition: color 150ms ease;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-list-more-link:hover {
@@ -353,12 +367,13 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    min-height: 2.75rem;
+    min-height: var(--row-h);
     margin-inline: -0.5rem;
-    padding: 0.625rem 0.5rem;
+    padding: calc(0.625rem + (var(--row-h) - 2.75rem) / 2) 0.5rem;
     border-radius: var(--radius-row);
     font-size: var(--text-ui);
-    transition: background-color 150ms ease;
+    letter-spacing: var(--track-ui);
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-list-row:has(.ui-list-row-link):hover {
@@ -417,6 +432,7 @@
   .ui-list-row-description {
     margin-top: 0.125rem;
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     color: var(--fg-subtle);
   }
 
@@ -445,7 +461,7 @@
     position: relative;
     z-index: 1;
     color: inherit;
-    transition: color 150ms ease;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-list-row-place-link:hover {
@@ -498,6 +514,7 @@
     justify-content: space-between;
     gap: 0.5rem 1rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   .ui-pages-words {
@@ -527,8 +544,8 @@
     color: var(--fg);
     cursor: pointer;
     transition:
-      color 160ms ease,
-      background-color 160ms ease;
+      color var(--motion-fast) var(--ease-out),
+      background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-page:hover:not([aria-current="page"]),
@@ -569,11 +586,5 @@
     place-items: center;
     min-width: var(--control-h-sm);
     color: var(--fg-subtle);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ui-tabs-mark[data-eased] {
-    transition: none;
   }
 }

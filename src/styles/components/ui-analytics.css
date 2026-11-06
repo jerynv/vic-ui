@@ -29,6 +29,7 @@
     max-width: 70ch;
     margin: 0;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     line-height: var(--text-read--line-height);
     color: var(--fg-subtle);
   }
@@ -60,6 +61,7 @@
 
   .ui-metric-summary-item dt {
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     line-height: var(--text-meta--line-height);
     color: var(--fg-subtle);
   }
@@ -73,7 +75,7 @@
     font-size: calc(var(--text-lead) * 1.5);
     font-weight: 600;
     line-height: 1.2;
-    letter-spacing: -0.02em;
+    letter-spacing: var(--track-title);
     font-variant-numeric: tabular-nums;
     color: var(--fg-strong);
   }
@@ -81,6 +83,7 @@
   .ui-metric-summary-description {
     margin-block-start: 0.125rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     line-height: var(--text-meta--line-height);
     color: var(--fg-subtle);
   }

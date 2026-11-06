@@ -1,6 +1,6 @@
 ---
 title: Theming
-description: Shared colors, typography, shape, and light or dark appearance.
+description: Shared colors, typography, density, shape, motion, and light or dark appearance.
 ---
 
 ## One set of tokens
@@ -11,7 +11,143 @@ Override tokens in your application stylesheet, after importing `vic-ui/ui/style
 
 ## Your brand, not ours
 
-The palette, faces, corners and heights on this site are one interpretation, a default to start from. Your app is expected to set its own tokens and does not have to match these. Put them in one theme stylesheet, imported after vic-ui's and outside any `@layer`: colours as `light-dark()` pairs and radii on `:root, [data-mode]`, so a section set to the other mode keeps them, and `--font-sans` and `--font-display` on `:root`. Keep the `color-scheme` declaration, or compiled colours resolve to nothing. Token names, component props and `ui-` class names are the stable contract, so change the look through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the keyboard focus ring, disabled pieces that say why, state that carries a word and not only a colour, and each tone ink at least 5.8:1 on the canvas, the panel and its own tint in both modes.
+The palette, faces, corners and heights on this site are one interpretation, a default to start from. Your app is expected to set its own tokens and does not have to match these. Put them in one theme stylesheet, imported after vic-ui's and outside any `@layer`: colours as `light-dark()` pairs and radii on `:root, [data-mode]`, so a section set to the other mode keeps them, and `--font-sans` and `--font-display` on `:root`. Heights belong to the density: set them on `:root, [data-density]`, or on one step such as `[data-density="compact"]`. Keep the `color-scheme` declaration, or compiled colours resolve to nothing. Token names, component props and `ui-` class names are the stable contract, so change the look through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the keyboard focus ring, disabled pieces that say why, state that carries a word and not only a colour, and each tone ink at least 5.8:1 on the canvas, the panel and its own tint in both modes.
+
+## Density
+
+Set `data-density` on the document element, or on any section, to `compact`, `default` or `comfortable`. One setting moves every height together: controls (`--control-h` and `--control-h-sm`), a list's rows (`--row-h`), a table's cells (`--cell-pad-y`), a menu's items (`--menu-item-h`), the room either side of a field's words (`--field-pad-x`) and the sidebar's rows and headings. It works like `data-mode`: a section inside a compact page can be set back to `default`, and a section set to the other mode keeps the density around it.
+
+<ComponentPreview name="density" />
+
+```tsx
+<html data-density="compact">
+  <section data-density="comfortable">
+    <TextField label="Email" />
+    <TextField label="Search" size="sm" />
+  </section>
+</html>
+```
+
+`size="sm"` stays a local step down from the density: a small field is always one step under the fields around it. `SidebarProvider size="sm"` draws the same rail as `data-density="compact"`, kept to the rail, so the page beside it keeps its own density.
+
+| Token | Compact | Default | Comfortable |
+| --- | --- | --- | --- |
+| `--control-h` | 2rem | 2.25rem | 2.5rem |
+| `--control-h-sm` | 1.75rem | 2rem | 2.25rem |
+| `--row-h` | 2.25rem | 2.75rem | 3.25rem |
+| `--cell-pad-y` | 0.3125rem | 0.5rem | 0.75rem |
+| `--menu-item-h` | 1.75rem | 2.125rem | 2.5rem |
+| `--field-pad-x` | 0.625rem | 0.75rem | 0.875rem |
+| `--sidebar-row-height` | 1.75rem | 2rem | 2.25rem |
+
+To make your own step, set these tokens on `[data-density="your-name"]` in your theme stylesheet.
+
+## Type
+
+The working sizes are `--text-tag` (11px), `--text-meta` (12px), `--text-ui` (13px), `--text-read` (14px) and `--text-lead` (16px). Above them, `--text-title` (1.25rem, line height 1.2) is a headline in the product, such as a dialog's title, and `--text-statement` (2rem, line height 1.12) is the one sentence a screen on the way in is about. Each size has its line height as a token beside it, such as `--text-title--line-height`.
+
+Letter spacing is a token per size: `--track-tag`, `--track-meta`, `--track-ui`, `--track-read`, `--track-lead`, `--track-title` (-0.02em), `--track-statement` (-0.01em) and `--track-display` (-0.035em), for headlines above a statement such as this site's marketing headings. The working sizes default to the face's own spacing. Each piece reads the spacing that goes with its size, so a face that needs looser small text takes one line:
+
+```css
+:root {
+  --track-tag: 0.02em;
+  --track-meta: 0.01em;
+}
+```
+
+The stylesheet ships a fallback face, "Cal Sans UI Fallback": the device's Arial, scaled with `size-adjust`, `ascent-override` and `descent-override` to Cal Sans UI's measured metrics. While Cal Sans UI loads, text draws in the fallback at the same width and line height, so nothing moves when the face arrives. `--font-sans-fallback` names it, followed by the system stack. `--font-sans` and `--font-display` are `"Cal Sans UI", var(--font-sans-fallback)`. If you bring your own face, set `--font-sans` and point `--font-sans-fallback` at a fallback measured for your face.
+
+## The surface stack
+
+Every ground in the library, bottom to top. A surface on the page carries an edge and no shadow; only what floats over the page casts one.
+
+| Token | Light | Dark | What sits on it | Edge or shadow |
+| --- | --- | --- | --- | --- |
+| `--bg-frame` | `oklch(0.962 0 0)` | `oklch(0.09 0 0)` | An application window: the grey round a product's chrome | None |
+| `--bg-canvas` | `oklch(0.9875 0 0)` | `oklch(0.1 0 0)` | The page (`body`) | None |
+| `--bg-base` | `oklch(1 0 0)` | `oklch(0.17 0 0)` | The rail, a table's ground, a panel | `--edge` |
+| `--bg-tint` | `oklch(0.97 0 0)` | `oklch(0.269 0 0)` | A tinted ground | None |
+| `--bg-recessed` | `oklch(0.965 0 0)` | `oklch(0.15 0 0)` | Sunk: a preview well, a sheet's backdrop | None |
+| `--surface-lifted` | `oklch(1 0 0)` | `oklch(0.1913 0 0)` | Cards, chips; menus and dialogs over the page | `--edge`; `--shadow-float` when it floats |
+| `--bg-contrast` | `oklch(0.12 0 0)` | `oklch(0.985 0 0)` | A tooltip, the rail's dot | `--shadow-raise` |
+
+Set `--bg-frame` to change the ground round an app's window without moving the canvas. `--bg-elevated` is deprecated and goes in 0.4: it sinks in dark rather than lifting, so use `--surface-lifted` for what sits on top and `--bg-recessed` for what sinks.
+
+<ComponentPreview name="surface-stack" />
+
+## The accent
+
+One brand colour, for a look and never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone and says no state, so a piece in it still says what it is in words, and a state keeps its tone (danger, caution, settled, moving). `--accent` is the fill and `--accent-on` the words on it; `--accent-ink` is words and lines in the accent on the page, `--accent-tint` a pale ground and `--accent-edge` an outline. `--button-accent` and `--button-on-accent` are the filled button's, and fall back to `--accent` and `--accent-on` unless a part of the page sets them apart. Either pair works on any section: set `--accent` on a section and its buttons follow, or set `--button-accent` there to move only the buttons.
+
+`tone="accent"` draws Badge, Count, Switch, Progress, the Tabs indicator, Button and Announcement's tag in it. Set your brand as a `light-dark()` pair; the accent ink keeps 5.8:1 on the canvas, the panel and its own tint, and `--accent-on` on `--accent`, in both modes, as the tone inks do.
+
+```css
+:root, [data-mode] {
+  --accent: light-dark(oklch(0.48 0.19 262), oklch(0.76 0.12 258));
+  --accent-on: light-dark(oklch(1 0 0), oklch(0.1448 0 0));
+  --accent-ink: light-dark(oklch(0.46 0.17 262), oklch(0.8 0.1 258));
+  --accent-tint: light-dark(oklch(0.935 0.03 262), oklch(0.275 0.065 262));
+  --accent-edge: light-dark(oklch(0.46 0.17 262 / 0.45), oklch(0.8 0.1 258 / 0.45));
+}
+```
+
+**Coming from shadcn.** In shadcn, `--accent` is the grey under a hovered menu row or ghost button. In vic-ui from 0.2 it is the brand colour above, so a stylesheet that sets `--accent` to change that hover grey now recolours every `tone="accent"` piece instead, and no longer moves the hover. The composable sheet (`vic-ui/ui/styles.css`) draws Tailwind's `bg-accent` from `--fill-hover`; set `--fill-hover` to change the hover grey, which also moves the hover fill of vic's own lists and menus, as the one fill scale should. Drop an `--accent` you set for hover, or keep it only if you mean it as your brand.
+
+## Art
+
+`--art-1` to `--art-4` are four hues for what is drawn rather than read: pale in light, deep in dark. `--art-grain` is the alpha of a dot overlay that keeps a gradient from reading as flat vector. They are used only inside thumbnails, banners and illustrations, and never by a control.
+
+<ComponentPreview name="art-swatches" />
+
+## Motion
+
+Five tokens on `:root` set every move in the library, so a snappier or a stiller system is five values, not forty rules. Every transition and animation reads them; longer moves are multiples of `--motion-slow` and staggers fractions of `--motion-fast`, so they follow.
+
+| Token | Default | Moves |
+| --- | --- | --- |
+| `--motion-fast` | `150ms` | A colour, fill or fade answering a pointer: hover grounds, carets, tooltips, menus. |
+| `--motion-base` | `220ms` | Something arriving or folding: dialogs, toasts, the accordion, the tab indicator, the switch, the sidebar. |
+| `--motion-slow` | `300ms` | Something travelling far or easing a whole face: progress, the button's gradient. |
+| `--ease-out` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | Arriving, and every fade. |
+| `--ease-track` | `cubic-bezier(0.4, 0, 0.2, 1)` | Following a position: the tab indicator, progress, the sidebar. |
+
+When the reader asks for reduced motion, vic-ui sets the three durations to `0s` in one place, and every piece lands in its end state at once. Set your own durations inside `prefers-reduced-motion: no-preference`, or they override that. A spinner and an unknown progress bar are loops, not durations; they stand still under reduced motion by themselves.
+
+<ComponentPreview name="motion" />
+
+```css
+/* Snappier, only where the reader has not asked for less motion */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --motion-fast: 100ms;
+    --motion-base: 150ms;
+    --motion-slow: 200ms;
+  }
+}
+
+/* Still, for everyone */
+:root {
+  --motion-fast: 0s;
+  --motion-base: 0s;
+  --motion-slow: 0s;
+}
+```
+
+The tokens inherit, so a section can set its own. In the shadcn catalogue, Tailwind's default transition and tw-animate-css's `animate-in`, `animate-out`, accordion and collapsible read the same tokens; a `duration-*` utility is a literal and does not.
+
+`vic-ui/styles.css` declares its tokens outside any cascade layer, and Tailwind v4 has its own `--ease-out` (`cubic-bezier(0, 0, 0.2, 1)`) in its `theme` layer. If your app loads `vic-ui/styles.css` next to its own Tailwind build, the unlayered vic-ui value wins, so the app's `ease-out` utility takes vic-ui's curve. To keep Tailwind's curve for your utilities, give it another name in your theme, or set it back for everything, vic-ui's pieces included:
+
+```css
+/* Tailwind's curve under its own name: write ease-tw-out */
+@theme {
+  --ease-tw-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Or Tailwind's curve everywhere, unlayered and after vic-ui/styles.css */
+:root {
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+```
 
 ## Flat and bordered surfaces
 

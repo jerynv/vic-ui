@@ -88,7 +88,7 @@ export function SidebarProvider(props: {
   mobileBreakpoint?: number;
   /** Within its container rather than the window: the sheet and its backdrop cover the container. */
   contained?: boolean;
-  /** The rail's density: `sm` sets every row 1.75rem tall and every heading a step smaller. A row's or a heading's own `size` outranks it. */
+  /** The rail's own density, which outranks the page's: `sm` sets every row 1.75rem tall and every heading a step smaller, and `md` holds rows at 2rem and headings at their full size. Without it the rail follows the density around it. A row's or a heading's own `size` outranks either. */
   size?: "sm" | "md";
   className?: string;
   style?: CSSProperties;
@@ -139,7 +139,7 @@ export function SidebarProvider(props: {
         ref={container}
         data-sidebar-wrapper=""
         data-state={value.state}
-        data-size={props.size === "sm" ? "sm" : undefined}
+        data-size={props.size === "sm" || props.size === "md" ? props.size : undefined}
         className={join("ui-sidebar-wrapper", !contained && "ui-sidebar-window", props.className)}
         style={props.style}
       >

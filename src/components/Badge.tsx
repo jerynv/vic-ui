@@ -6,8 +6,15 @@ import type { HTMLAttributes, ReactNode } from "react";
  */
 export type Tone = "danger" | "caution" | "settled" | "moving" | "neutral";
 
+/**
+ * A tone, or the accent. The accent is a look, not a fifth tone: it says no state, so a piece
+ * drawn in it ("New", a chosen mode) still says what it is in words. Pieces that take it name
+ * this type; `Notice`, `Toast` and the like take `Tone` alone, because they say a state.
+ */
+export type ToneOrAccent = Tone | "accent";
+
 /** The class that hands a part its tone's ink, tint and edge (`tokens.css`); none for neutral. */
-export function toneClass(tone: Tone | undefined): string {
+export function toneClass(tone: ToneOrAccent | undefined): string {
   return tone && tone !== "neutral" ? `tone-${tone}` : "";
 }
 
@@ -15,10 +22,12 @@ export function toneClass(tone: Tone | undefined): string {
  * A state said in a word or two. Hairline in its tone is a standing state; `solid` fills it
  * with the tone's ink, the one that asks for a hand now, and `soft` sets the tone's ink on its
  * tint, which asks less (`solid` outranks it). `dot` or `icon` leads the words, and
- * `count` follows them as a number. It always carries words, so the tone never says it alone,
- * and lower-case data reads as a sentence: its first letter is raised.
+ * `count` follows them as a number. It always carries words, so the tone never says it alone.
+ * The words are drawn as written: capitalisation is the author's, so write "Owner" for a
+ * state and leave a data word such as "script" or "file" as it is. `tone="accent"` draws it
+ * in the brand accent, a look for a "New" or a "Beta" that says no state.
  */
-export function Badge(props: HTMLAttributes<HTMLSpanElement> & { tone?: Tone; solid?: boolean; soft?: boolean; dot?: boolean; icon?: ReactNode; count?: number; children: ReactNode }) {
+export function Badge(props: HTMLAttributes<HTMLSpanElement> & { tone?: ToneOrAccent; solid?: boolean; soft?: boolean; dot?: boolean; icon?: ReactNode; count?: number; children: ReactNode }) {
   const { tone, solid, soft, dot, icon, count, className, children, ...rest } = props;
   const classes = ["ui-badge", solid ? "ui-badge-solid" : soft ? "ui-badge-soft" : "", toneClass(tone), className ?? ""].filter(Boolean).join(" ");
   return (
@@ -35,9 +44,10 @@ export function Badge(props: HTMLAttributes<HTMLSpanElement> & { tone?: Tone; so
  * a conversation's row, Home and the tour alike. `label` is the words a screen reader hears
  * ("3 unread messages"), since the number is all that is drawn; past `max` it reads `max+`.
  * `soft` sets it in its tone's ink on the tone's tint, for a count to notice that asks less
- * than a filled one (a backlog, mentions in a busy rail).
+ * than a filled one (a backlog, mentions in a busy rail). `tone="accent"` fills it in the brand
+ * accent, a look rather than a state.
  */
-export function Count(props: { value: number; label: string; max?: number; tone?: Tone; soft?: boolean; className?: string }) {
+export function Count(props: { value: number; label: string; max?: number; tone?: ToneOrAccent; soft?: boolean; className?: string }) {
   const max = props.max ?? 99;
   const shown = props.value > max ? `${max}+` : String(props.value);
   const classes = ["ui-count", props.soft ? "ui-count-soft" : "", toneClass(props.tone), props.className ?? ""].filter(Boolean).join(" ");

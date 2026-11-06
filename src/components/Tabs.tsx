@@ -25,6 +25,8 @@ export type TabOption = Option & {
  * to the ends, and only the chosen tab is in the page's tab order. `items` is any shape
  * `toOptions` reads, and options may carry a `count`, and `apart` to start a group of their
  * own after a hairline, as a calendar's glances at the dates stand apart from its lists.
+ * `tone="accent"` draws the indicator in the brand accent: a look, as a product's own switcher
+ * may want, and never a state.
  */
 export function Tabs(props: {
   items: Items | ReadonlyArray<TabOption>;
@@ -34,6 +36,7 @@ export function Tabs(props: {
   /** Each tab controls the panel with the id `${idPrefix}-${value}-panel`, and is `${idPrefix}-${value}`. */
   idPrefix?: string;
   size?: "sm";
+  tone?: "accent" | undefined;
   className?: string;
 }) {
   const made = useId();
@@ -96,7 +99,7 @@ export function Tabs(props: {
     choose(move(), true);
   };
 
-  const classes = ["ui-tabs", props.size === "sm" ? "ui-tabs-sm" : "", props.className ?? ""].filter(Boolean).join(" ");
+  const classes = ["ui-tabs", props.size === "sm" ? "ui-tabs-sm" : "", props.tone === "accent" ? "ui-tabs-accent" : "", props.className ?? ""].filter(Boolean).join(" ");
   return (
     <div ref={track} role="tablist" aria-label={props["aria-label"]} className={classes}>
       <span

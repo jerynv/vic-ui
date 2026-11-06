@@ -21,10 +21,12 @@
   [data-look="roster"] .ui-table {
     table-layout: fixed;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
+  /* Its cells grow and shrink with the density's cell padding, both sides of the words. */
   [data-look="roster"] .ui-table :is(td, tbody th) {
-    height: 2.5rem;
+    height: calc(2.5rem + (var(--cell-pad-y) - 0.5rem) * 2);
     padding-block: 0.25rem;
     color: var(--fg-subtle);
     white-space: nowrap;
@@ -59,7 +61,7 @@
     text-align: left;
     color: inherit;
     cursor: pointer;
-    transition: background-color 140ms;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-cell-press:hover {
@@ -101,8 +103,8 @@
     color: var(--fg);
     cursor: pointer;
     transition:
-      background-color 140ms ease,
-      color 140ms ease;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-row-button:hover {
@@ -144,10 +146,11 @@
     gap: 0.25rem;
     min-width: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: var(--weight-ui);
     line-height: 1.25rem;
     color: var(--fg-subtle);
-    transition: color 140ms ease;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-row-button:hover .ui-row-button-words {

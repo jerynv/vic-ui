@@ -17,6 +17,7 @@
     padding-block: 0.625rem;
     border-top: 1px solid var(--line);
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg);
   }
 
@@ -33,12 +34,14 @@
   .ui-trace-waterfall-label small {
     display: block;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--fg-subtle);
   }
 
   .ui-trace-waterfall-timing {
     min-width: 0;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-variant-numeric: tabular-nums;
     color: var(--fg);
   }

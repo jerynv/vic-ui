@@ -1,11 +1,15 @@
-/* vic-ui tokens: the type scale, faces, easings, and every colour, corner, height and shadow,
+/* vic-ui tokens: the type scale, faces, motion, and every colour, corner, height and shadow,
    light and dark. Every colour is oklch, resolved per element by light-dark() against the
    element's color-scheme, which the rules at the end of this file declare. */
 
 :root {
-  --font-sans: "Cal Sans UI", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* What draws while Cal Sans UI loads, or where it never does: first "Cal Sans UI Fallback",
+     the device's Arial scaled to Cal Sans UI's measure (fonts.css), so the swap moves nothing,
+     then the device's own faces. A brand with another face points this at its own fallback. */
+  --font-sans-fallback: "Cal Sans UI Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Cal Sans UI", var(--font-sans-fallback);
   --default-font-family: var(--font-sans);
-  --font-display: "Cal Sans UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cal Sans UI", var(--font-sans-fallback);
   --font-wordmark: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   /* The interface's weight: buttons, tabs, rows and labels. Cal Sans UI reads heavy, so a
@@ -24,8 +28,50 @@
   --text-read--line-height: 1.55;
   --text-lead: 1rem;
   --text-lead--line-height: 1.4;
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* A headline in the product: a dialog's title, the name a screen or a pane is under. */
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.2;
+  /* A statement: the one sentence a screen on the way in is about. */
+  --text-statement: 2rem;
+  --text-statement--line-height: 1.12;
+  /* Letter spacing, one per size, read wherever that size is set. The working sizes sit at the
+     face's own spacing; the headlines draw a little closer, as large type needs. A state never
+     changes any of them. */
+  --track-tag: 0em;
+  --track-meta: 0em;
+  --track-ui: 0em;
+  --track-read: 0em;
+  --track-lead: 0em;
+  --track-title: -0.02em;
+  --track-statement: -0.01em;
+  /* A display headline, above a statement: the marketing site's headings and its icon page's.
+     The hero draws 0.02em closer still. */
+  --track-display: -0.035em;
+  /* Motion: three durations and two curves, read by every transition and animation in the
+     library. Fast is a colour, a fill or a fade answering a pointer; base is something arriving
+     or folding (a menu, a dialog, a panel); slow is something travelling far or easing a whole
+     face. `--ease-out` is for arriving and `--ease-track` for following a position. Longer moves
+     are multiples of `--motion-slow` and staggers fractions of `--motion-fast`, so these five
+     set the whole system. A loop's period (a spinner, a sweep, a cursor) is not one of them. */
+  --motion-fast: 150ms;
+  --motion-base: 220ms;
+  --motion-slow: 300ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-track: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Deprecated, removed in 1.0: the old arrival curve, kept at its own value for anything that
+     still reads it. The library's pieces read `--ease-out` instead. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduced motion, in one place: every duration is zero, so nothing slides, folds or fades and
+   every piece lands in its end state at once. A system that sets its own durations sets them
+   under `prefers-reduced-motion: no-preference`, or this rule loses to it. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0s;
+    --motion-base: 0s;
+    --motion-slow: 0s;
+  }
 }
 
 /* Unlayered, and on every [data-mode] element as well as :root, so a painted section set to
@@ -45,12 +91,17 @@
   --fg-inactive: light-dark(oklch(0.87 0 0), oklch(0.439 0 0));
   --line: light-dark(oklch(0.145 0 0 / 0.1), oklch(0.32 0 0));
   --line-hairline: light-dark(oklch(0.935 0 0), oklch(0.269 0 0));
+  /* The ground an application window sits on: the grey round the white chrome of a product's
+     frame, a step under the canvas so the window reads as one piece without moving the canvas. */
+  --bg-frame: light-dark(oklch(0.962 0 0), oklch(0.09 0 0));
   --bg-base: light-dark(oklch(1 0 0), oklch(0.17 0 0));
   --bg-canvas: light-dark(oklch(0.9875 0 0), oklch(0.1 0 0));
   --bg-tint: light-dark(oklch(0.97 0 0), oklch(0.269 0 0));
   --bg-recessed: light-dark(oklch(0.965 0 0), oklch(0.15 0 0));
   --bg-contrast: light-dark(oklch(0.12 0 0), oklch(0.985 0 0));
   --bg-control: light-dark(oklch(1 0 0), oklch(0.205 0 0));
+  /* Deprecated, and removed in 0.4: it sinks in dark rather than lifting. Use `--surface-lifted`
+     for what sits on top and `--bg-recessed` for what sinks. */
   --bg-elevated: light-dark(oklch(0.98 0 0), oklch(0.12 0 0));
   --focus: light-dark(oklch(0.15 0 0), oklch(0.935 0 0));
   --brand: light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0));
@@ -64,16 +115,11 @@
    * The surface that lifts.
    *
    * `--bg-elevated` is #060606 in the dark theme while `--bg-base` is #0f0f0f, so it sinks
-   * a panel rather than raising it. Anything that has to read as sitting on top of the
-   * page uses this instead.
+   * a panel rather than raising it; it is deprecated and goes in 0.4. Anything that has to
+   * read as sitting on top of the page uses this instead.
    */
   --surface-lifted: light-dark(oklch(1 0 0), oklch(0.1913 0 0));
-  /* The height of a control in a header row: a tab switcher, a field, a choice, an icon
-     button and a button with words alike, named once so a header never mixes it with the
-     smaller one. */
-  --control-h: 2.25rem;
-  /* A button beside words, a step under the control height. */
-  --control-h-sm: 2rem;
+  /* The control heights are set by the density, after this block. */
   /* A page's or a pane's header bar: an empty page stands in the height under it. */
   --head-h: calc(2.5rem - 1px);
   /* Corners, one scale: a panel (a card, a dialog, a sheet) is the roundest; what floats over
@@ -193,6 +239,43 @@
   --tone-moving-edge: light-dark(oklch(0.4076 0.1033 254.88 / 0.45), oklch(0.8225 0.0698 253.93 / 0.45));
 
   /*
+   * The accent: one brand colour for a look, never a meaning. A "New" pill, a chosen mode, a
+   * send button, a switch that is on, a link that is the product's own. It is not a fifth tone
+   * and says no state: a toned piece still says its state in words, and the accent never
+   * stands in for moving (which it is not: moving is a navy ink, this a clear blue).
+   * `--accent` is the fill, `--accent-on` the words on it, `--accent-ink` words and lines in the
+   * accent on the page, `--accent-tint` a pale ground and `--accent-edge` an outline. The class
+   * `tone-accent` hands them to the slots `tone-*` fills, so a piece that takes a tone takes the
+   * accent the same way.
+   *
+   * Measured as the tones are: ink on canvas / panel / its own tint, and --accent-on on the
+   * accent and on the ink:
+   *   light 7.09 / 7.33 / 6.05, 6.79 and 7.33   dark 11.05 / 10.27 / 7.96, 9.22 and 10.61
+   * (tests/colour-contrast.test.mjs measures them, and every tone, in Chromium).
+   */
+  --accent: light-dark(oklch(0.48 0.19 262), oklch(0.76 0.12 258));
+  --accent-on: light-dark(oklch(1 0 0), oklch(0.1448 0 0));
+  --accent-ink: light-dark(oklch(0.46 0.17 262), oklch(0.8 0.1 258));
+  --accent-tint: light-dark(oklch(0.935 0.03 262), oklch(0.275 0.065 262));
+  --accent-edge: light-dark(oklch(0.46 0.17 262 / 0.45), oklch(0.8 0.1 258 / 0.45));
+  /* The filled button's accent (`Button tone="accent"`) is `--button-accent` and the words on
+     it `--button-on-accent`. Neither is declared here: the button reads each with `--accent` and
+     `--accent-on` as its fallback (`ui.css`), so setting either pair on any section reaches the
+     buttons inside it. */
+
+  /*
+   * Art: four hues and a grain for what is drawn rather than read, used only inside thumbnails,
+   * banners and illustrations, never by a control. Pale in light and deep in dark, so a picture
+   * sits back on either canvas. `--art-grain` is the alpha of a dot overlay that keeps a gradient
+   * from reading as flat vector, a number in both modes.
+   */
+  --art-1: light-dark(oklch(0.9 0.06 25), oklch(0.32 0.08 25));
+  --art-2: light-dark(oklch(0.93 0.07 85), oklch(0.34 0.07 75));
+  --art-3: light-dark(oklch(0.9 0.05 185), oklch(0.32 0.06 190));
+  --art-4: light-dark(oklch(0.88 0.06 285), oklch(0.3 0.09 285));
+  --art-grain: 0.08;
+
+  /*
    * The five hues: the palette's colours for look, used anywhere. Each is a block (pale on
    * light, deep on dark) and an ink dark enough for words on its own block and on the page.
    * `[data-hue="x"]` hands one to `--hue` and `--hue-ink` (at the end of this file).
@@ -207,6 +290,61 @@
   --hue-lilac-ink: light-dark(oklch(0.4151 0.1445 287.91), oklch(0.8144 0.0833 295.37));
   --hue-clay: light-dark(oklch(0.8948 0.0441 52.62), oklch(0.2522 0.0502 41.12));
   --hue-clay-ink: light-dark(oklch(0.4532 0.118 42.5), oklch(0.8173 0.0863 48.74));
+}
+
+/*
+ * Density, in three steps: `data-density="compact"`, `"default"` (or no attribute) and
+ * `"comfortable"`, on the root or on any section, as `data-mode` is. One setting moves every
+ * height a piece is drawn at together: a control (`--control-h`, and `--control-h-sm` a step
+ * under it), a list's row, a table's cells, a menu's item, a field's padding and the sidebar's
+ * rows. `size="sm"` on a piece stays a local step down from whatever the density sets.
+ * Declared apart from the colours, so a section set to the other mode keeps the density
+ * around it, and a section set to a density keeps the mode.
+ */
+:root,
+[data-density] {
+  /* The height of a control in a header row: a tab switcher, a field, a choice, an icon
+     button and a button with words alike, named once so a header never mixes it with the
+     smaller one. */
+  --control-h: 2.25rem;
+  /* A button beside words, a step under the control height. */
+  --control-h-sm: 2rem;
+  /* A list's row (`Row`) at its least, one line of words with room above and below. */
+  --row-h: 2.75rem;
+  /* The room above and below the words in a table's cell. */
+  --cell-pad-y: 0.5rem;
+  /* A menu's or a list's item at its least, one line of words. */
+  --menu-item-h: 2.125rem;
+  /* The room either side of the words in a field. */
+  --field-pad-x: 0.75rem;
+  /* The sidebar's row; its heading is `--sidebar-label-text` over `--sidebar-label-pad`. */
+  --sidebar-row-height: 2rem;
+  --sidebar-label-text: var(--text-meta);
+  --sidebar-label-pad: 0.25rem 0.375rem;
+}
+
+/* What `size="sm"` on `SidebarProvider` draws, so the two dense rails are one. */
+[data-density="compact"] {
+  --control-h: 2rem;
+  --control-h-sm: 1.75rem;
+  --row-h: 2.25rem;
+  --cell-pad-y: 0.3125rem;
+  --menu-item-h: 1.75rem;
+  --field-pad-x: 0.625rem;
+  --sidebar-row-height: 1.75rem;
+  --sidebar-label-text: var(--text-tag);
+  --sidebar-label-pad: 0.125rem 0.1875rem;
+}
+
+[data-density="comfortable"] {
+  --control-h: 2.5rem;
+  --control-h-sm: 2.25rem;
+  --row-h: 3.25rem;
+  --cell-pad-y: 0.75rem;
+  --menu-item-h: 2.5rem;
+  --field-pad-x: 0.875rem;
+  --sidebar-row-height: 2.25rem;
+  --sidebar-label-pad: 0.375rem 0.5rem;
 }
 
 /*
@@ -241,6 +379,14 @@
   --tone-tint: var(--tone-moving-tint);
   --tone-edge: var(--tone-moving-edge);
   --tone-fill-on: var(--tone-on);
+}
+
+/* The accent through the same slots: a look, not a fifth tone (`Badge tone="accent"`). */
+.tone-accent {
+  --tone-ink: var(--accent-ink);
+  --tone-tint: var(--accent-tint);
+  --tone-edge: var(--accent-edge);
+  --tone-fill-on: var(--accent-on);
 }
 
 /*

@@ -28,7 +28,7 @@
   .ui-dialog[open] {
     display: flex;
     flex-direction: column;
-    animation: ui-dialog-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+    animation: ui-dialog-in var(--motion-base) var(--ease-out) backwards;
   }
 
   .ui-dialog::backdrop,
@@ -42,7 +42,7 @@
   }
 
   .ui-dialog[open]::backdrop {
-    animation: ui-veil-in 200ms ease-out backwards;
+    animation: ui-veil-in var(--motion-base) var(--ease-out) backwards;
   }
 
   .ui-dialog:focus-visible {
@@ -75,9 +75,9 @@
     margin: 0;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.25rem;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    font-size: var(--text-title);
+    line-height: var(--text-title--line-height);
+    letter-spacing: var(--track-title);
     text-wrap: balance;
     color: var(--fg-strong);
   }
@@ -86,6 +86,7 @@
     margin: 0;
     max-width: 46ch;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     line-height: 1.5;
     text-wrap: pretty;
     color: var(--fg-subtle);
@@ -115,6 +116,7 @@
     min-width: 0;
     margin: 0 auto 0 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.4;
     color: var(--tone-danger-ink);
   }
@@ -138,7 +140,7 @@
 
     .ui-dialog[open] {
       animation-name: ui-sheet-in;
-      animation-duration: 260ms;
+      animation-duration: var(--motion-base);
     }
 
     .ui-dialog-still {
@@ -154,7 +156,7 @@
 
     .ui-palette[open] {
       animation-name: ui-dialog-in;
-      animation-duration: 200ms;
+      animation-duration: var(--motion-base);
     }
 
     .ui-dialog-still .ui-dialog-body {
@@ -196,6 +198,7 @@
     margin: 0;
     padding: 2rem 1rem;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     line-height: 1.5;
     text-align: center;
     text-wrap: pretty;
@@ -245,6 +248,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 
@@ -259,7 +263,7 @@
     flex: none;
     color: var(--fg-subtle);
     opacity: 0;
-    transition: opacity 120ms;
+    transition: opacity var(--motion-fast) var(--ease-out);
   }
 
   .ui-palette-item[data-active] .ui-palette-go {
@@ -278,6 +282,7 @@
     padding: 0.5rem 1rem;
     border-top: 1px solid var(--line);
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--fg-subtle);
     background: var(--fill-faint);
   }
@@ -308,7 +313,7 @@
   }
 
   .ui-menu-actions .ui-menu-item {
-    transition: background-color 120ms;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-menu-actions .ui-menu-item:active:not([aria-disabled]) {
@@ -322,7 +327,7 @@
     width: 1rem;
     height: 1rem;
     color: var(--fg-subtle);
-    transition: color 120ms;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-menu-item[data-active] .ui-menu-icon {
@@ -369,6 +374,7 @@
   .ui-menu-label {
     padding: 0.35rem 0.65rem 0.2rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-weight: 600;
     color: var(--fg-subtle);
     user-select: none;
@@ -381,6 +387,7 @@
     max-width: min(22rem, calc(100vw - 1rem));
     padding: 0.875rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.5;
   }
 
@@ -405,13 +412,14 @@
     border: 0;
     border-radius: var(--radius-float);
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-weight: var(--weight-ui);
     line-height: 1.35;
     color: var(--fg-inverse);
     background: var(--bg-contrast);
     box-shadow: var(--shadow-raise);
     pointer-events: none;
-    animation: ui-tip-in 120ms ease-out backwards;
+    animation: ui-tip-in var(--motion-fast) var(--ease-out) backwards;
   }
 
   /* Whatever says why it cannot be used is refused to the pointer in words, not in silence. */
@@ -445,14 +453,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ui-dialog[open],
-  .ui-dialog[open]::backdrop,
-  .ui-tooltip {
-    animation: none;
-  }
-}
-
 /* A date chosen from a month (`DatePicker.tsx`): the field is the select's, the grid floats on
    `.ui-menu`. Today is ringed and the chosen day filled with ink; no state changes the type. */
 @layer components.parts {
@@ -478,6 +478,7 @@
 
   .ui-date-month {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: 600;
     color: var(--fg-strong);
     font-variant-numeric: tabular-nums;
@@ -493,9 +494,9 @@
     color: var(--fg);
     cursor: pointer;
     transition:
-      background-color 140ms ease,
-      color 140ms ease,
-      box-shadow 140ms ease;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out),
+      box-shadow var(--motion-fast) var(--ease-out);
   }
 
   .ui-date-step {
@@ -540,6 +541,7 @@
   .ui-date-weekday {
     height: 1.5rem;
     font-size: var(--text-tag);
+    letter-spacing: var(--track-tag);
     font-weight: 400;
     color: var(--fg-subtle);
   }
@@ -548,6 +550,7 @@
     width: 2rem;
     height: 2rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-variant-numeric: tabular-nums;
   }
 
@@ -597,6 +600,7 @@
   .ui-emoji-group {
     margin: 0.375rem 0.25rem 0.125rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-weight: 600;
     color: var(--fg-subtle);
   }
@@ -616,7 +620,7 @@
     font-size: 1.125rem;
     line-height: 1;
     cursor: pointer;
-    transition: background-color 120ms ease;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-emoji:hover {
@@ -635,6 +639,7 @@
   .ui-emoji-none {
     margin: 0.75rem 0.25rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 }

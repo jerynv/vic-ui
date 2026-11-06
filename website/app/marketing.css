@@ -2,7 +2,7 @@
 .marketing-hero { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 3rem; padding-block: 5rem; }
 .eyebrow { display: flex; align-items: center; gap: .6rem; font-family: var(--font-mono); font-size: .65rem; letter-spacing: .12em; line-height: 1.6; color: var(--fg-subtle); }
 .brand-dot { width: .45rem; height: .45rem; border-radius: var(--radius-round); background: var(--tone-settled-ink); }
-.hero-copy h1 { margin-block: 1.5rem; font-size: clamp(3.3rem, 5.9vw, 5.5rem); font-weight: 600; line-height: .99; letter-spacing: -.055em; }
+.hero-copy h1 { margin-block: 1.5rem; font-size: clamp(3.3rem, 5.9vw, 5.5rem); font-weight: 600; line-height: .99; letter-spacing: calc(var(--track-display) - .02em); }
 .hero-description { max-width: 29rem; margin-bottom: 2rem; font-size: 1.125rem; line-height: 1.65; color: var(--fg-subtle); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
 .hero-footnote { margin-top: 1.5rem; font-size: .75rem; color: var(--fg-subtle); }
@@ -14,7 +14,7 @@
 .foundation-strip > :first-child { color: var(--fg-subtle); }
 .marketing-section { padding-block: 5rem; scroll-margin-top: 5rem; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; }
-.marketing h2 { margin-top: .75rem; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 500; line-height: 1.1; letter-spacing: -.035em; }
+.marketing h2 { margin-top: .75rem; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 500; line-height: 1.1; letter-spacing: var(--track-display); }
 .section-heading > p { max-width: 20rem; font-size: .9rem; line-height: 1.6; color: var(--fg-subtle); }
 .component-shelf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--radius-panel); overflow: hidden; }
 .shelf-item:nth-child(even) { border-left: 1px solid var(--line); }

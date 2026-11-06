@@ -10,6 +10,52 @@
   src: url("../fonts/cal-sans-ui-wght-geom.woff2") format("woff2-variations");
 }
 
+/*
+ * What `--font-sans-fallback` names first: the device's Arial (or Liberation Sans, drawn to
+ * Arial's measure) scaled to Cal Sans UI, so a line set while the face loads takes the room it
+ * will take once it has, and the swap reflows nothing. Two faces, by weight: 300 to 500 over
+ * the regular Arial, 600 and 700 over the bold one, so a heading draws in a real bold and not
+ * the regular one thickened.
+ *
+ * Measured from cal-sans-ui-wght-geom.woff2 itself. Its head, hhea and OS/2 tables were read
+ * after brotli-decompressing the woff2 stream: 1000 units to the em; hhea ascender 900,
+ * descender -220, line gap 0; OS/2 sets USE_TYPO_METRICS with the same 900, -220 and 0. The
+ * width was measured in Chromium with canvas measureText over a paragraph of interface copy
+ * at --weight-ui (500): Cal Sans UI runs 1.089 times as wide as Arial (1.070 at 400, 1.109 at
+ * 600; 1.073 over short labels, 1.107 over English letter frequencies). size-adjust scales the
+ * overrides too, so each is the face's metric over 1.089: 0.900 / 1.089 = 82.64% and
+ * 0.220 / 1.089 = 20.20%.
+ */
+@font-face {
+  font-family: "Cal Sans UI Fallback";
+  font-style: normal;
+  font-weight: 300 500;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans");
+  size-adjust: 108.9%;
+  ascent-override: 82.64%;
+  descent-override: 20.2%;
+  line-gap-override: 0%;
+}
+
+/*
+ * The bold, measured the same way: canvas measureText in Chromium over the same paragraph,
+ * Cal Sans UI at 600 and at 700 against Arial Bold (Liberation Sans Bold, its metric twin).
+ * Cal Sans UI runs 1.035 times as wide at 600 and 1.056 at 700, so the face takes the middle,
+ * 1.045, and holds both within about 1%. The vertical metrics are the same 900 and -220 over
+ * it: 0.900 / 1.045 = 86.12% and 0.220 / 1.045 = 21.05%. Helvetica Bold, last, draws to
+ * Arial Bold's widths.
+ */
+@font-face {
+  font-family: "Cal Sans UI Fallback";
+  font-style: normal;
+  font-weight: 600 700;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold"), local("Helvetica Bold"), local("Helvetica-Bold");
+  size-adjust: 104.5%;
+  ascent-override: 86.12%;
+  descent-override: 21.05%;
+  line-gap-override: 0%;
+}
+
 @font-face {
   font-family: "Space Mono";
   font-style: normal;

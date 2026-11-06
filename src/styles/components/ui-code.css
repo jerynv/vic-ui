@@ -19,12 +19,13 @@
     color: var(--fg-strong);
     background: var(--ui-field-fill, var(--field-fill));
     box-shadow: inset 0 0 0 1px var(--ui-field-edge, transparent);
-    transition: box-shadow 150ms ease;
+    transition: box-shadow var(--motion-fast) var(--ease-out);
   }
   .ui-code-cell[data-active="true"] { box-shadow: inset 0 0 0 1.5px var(--hue-ink, var(--fg-strong)); }
   .ui-code:has(input[aria-invalid="true"]) .ui-code-cell,
   .ui-code-cell[aria-invalid="true"] { box-shadow: inset 0 0 0 1px var(--tone-danger-ink); }
   .ui-code-cursor { width: 2px; height: 1.1em; background: var(--fg-strong); animation: ui-code-blink 1.28s step-end infinite; }
   @keyframes ui-code-blink { 50% { opacity: 0; } }
+  /* The blink is a loop, whose period is not a motion token, so it stops here. */
   @media (prefers-reduced-motion: reduce) { .ui-code-cursor { animation: none; } }
 }

@@ -12,8 +12,8 @@
    * After Cult UI's Texture Button: the button is the rim, a hairline edge round a gradient one
    * pixel deep. The face follows that corner minus the rim's actual inset. Each gradient's
    * stops are registered properties (below, outside the layers), so a hover or a press eases
-   * from one gradient to the next over 300ms instead of jumping, which a gradient left as an
-   * image cannot do. Nothing moves on a press: the face darkens.
+   * from one gradient to the next over `--motion-slow` instead of jumping, which a gradient
+   * left as an image cannot do. Nothing moves on a press: the face darkens.
    */
   .ui-button {
     --ui-button-radius: var(--ui-button-context-radius, var(--radius-button));
@@ -31,6 +31,7 @@
     background-origin: border-box;
     font: inherit;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: var(--weight-ui);
     line-height: 1;
     white-space: nowrap;
@@ -38,11 +39,11 @@
     color: var(--words);
     cursor: pointer;
     transition:
-      --rim-top 300ms ease-in-out,
-      --rim-bottom 300ms ease-in-out,
-      border-color 300ms ease-in-out,
-      color 300ms ease-in-out,
-      opacity 120ms;
+      --rim-top var(--motion-slow) var(--ease-track),
+      --rim-bottom var(--motion-slow) var(--ease-track),
+      border-color var(--motion-slow) var(--ease-track),
+      color var(--motion-slow) var(--ease-track),
+      opacity var(--motion-fast) var(--ease-out);
   }
 
   .ui-button-face {
@@ -58,8 +59,8 @@
     border-radius: max(0px, calc(var(--ui-button-radius) - var(--ui-button-inset)));
     background: linear-gradient(var(--face-top), var(--face-bottom));
     transition:
-      --face-top 300ms ease-in-out,
-      --face-bottom 300ms ease-in-out;
+      --face-top var(--motion-slow) var(--ease-track),
+      --face-bottom var(--motion-slow) var(--ease-track);
   }
 
   .ui-button:focus-visible {
@@ -89,6 +90,7 @@
   .ui-button-lg {
     height: var(--control-h);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
   }
 
   .ui-button-lg .ui-button-face {
@@ -162,19 +164,23 @@
     --face-bottom: var(--ink-face-bottom-press);
   }
 
-  /* Extend the danger/caution mix pattern to a consumer's accent. Scope every ink slot to
-     this filled control; semantic commits keep their own palette even with tone="accent". */
+  /* The filled button in the accent (`--button-accent`, falling back to `--accent`), mixed
+     toward white and black for its rim and face as danger and caution are, and its words in
+     `--button-on-accent` (falling back to `--accent-on`). Both are read here and declared
+     nowhere, so either pair set on any section reaches the buttons inside it. Every ink slot is
+     scoped to this control; danger and caution commits keep their own palette even with
+     tone="accent". */
   .ui-button-ink.ui-button-accent:not(.ui-button-danger, .ui-button-caution) {
-    --ink-rim-edge: color-mix(in oklab, var(--button-accent, var(--fg-strong)), black 22%);
-    --ink-rim-top: color-mix(in oklab, var(--button-accent, var(--fg-strong)), white 30%);
-    --ink-rim-bottom: color-mix(in oklab, var(--button-accent, var(--fg-strong)), black 12%);
-    --ink-face-top: color-mix(in oklab, var(--button-accent, var(--fg-strong)), white 4%);
-    --ink-face-bottom: color-mix(in oklab, var(--button-accent, var(--fg-strong)), black 10%);
-    --ink-face-top-hover: color-mix(in oklab, var(--button-accent, var(--fg-strong)), white 6%);
-    --ink-face-bottom-hover: color-mix(in oklab, var(--button-accent, var(--fg-strong)), white 2%);
-    --ink-face-top-press: color-mix(in oklab, var(--button-accent, var(--fg-strong)), black 12%);
-    --ink-face-bottom-press: color-mix(in oklab, var(--button-accent, var(--fg-strong)), black 4%);
-    --words: var(--button-on-accent, var(--ink-words));
+    --ink-rim-edge: color-mix(in oklab, var(--button-accent, var(--accent)), black 22%);
+    --ink-rim-top: color-mix(in oklab, var(--button-accent, var(--accent)), white 30%);
+    --ink-rim-bottom: color-mix(in oklab, var(--button-accent, var(--accent)), black 12%);
+    --ink-face-top: color-mix(in oklab, var(--button-accent, var(--accent)), white 4%);
+    --ink-face-bottom: color-mix(in oklab, var(--button-accent, var(--accent)), black 10%);
+    --ink-face-top-hover: color-mix(in oklab, var(--button-accent, var(--accent)), white 6%);
+    --ink-face-bottom-hover: color-mix(in oklab, var(--button-accent, var(--accent)), white 2%);
+    --ink-face-top-press: color-mix(in oklab, var(--button-accent, var(--accent)), black 12%);
+    --ink-face-bottom-press: color-mix(in oklab, var(--button-accent, var(--accent)), black 4%);
+    --words: var(--button-on-accent, var(--accent-on));
   }
 
   /* Beside it: flat, a hairline and nothing else, so the bevel stays with the actions that
@@ -237,8 +243,8 @@
     text-decoration-color: var(--fg-subtle);
     text-underline-offset: 0.2em;
     transition:
-      text-decoration-color 160ms ease-in-out,
-      opacity 120ms;
+      text-decoration-color var(--motion-fast) var(--ease-track),
+      opacity var(--motion-fast) var(--ease-out);
   }
 
   .ui-button-link .ui-button-face {
@@ -257,9 +263,9 @@
     height: var(--control-h-sm);
     color: var(--fg);
     transition:
-      background-color 160ms ease-in-out,
-      color 160ms ease-in-out,
-      opacity 120ms;
+      background-color var(--motion-fast) var(--ease-track),
+      color var(--motion-fast) var(--ease-track),
+      opacity var(--motion-fast) var(--ease-out);
   }
 
   .ui-button-quiet.ui-button-square.ui-button-lg {
@@ -300,6 +306,7 @@
 
   .ui-field-label {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: 600;
     line-height: 1.45;
     color: var(--fg-strong);
@@ -327,8 +334,8 @@
 
   .ui-field-head > .ui-field-label {
     transition:
-      opacity 160ms ease,
-      transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      opacity var(--motion-fast) var(--ease-out),
+      transform var(--motion-base) var(--ease-out);
   }
 
   .ui-field-head[data-error] > .ui-field-label {
@@ -344,13 +351,13 @@
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
-    animation: ui-field-error-out 180ms ease;
+    animation: ui-field-error-out var(--motion-base) var(--ease-out);
   }
 
   .ui-field-head[data-error] > .ui-field-error {
     opacity: 1;
     visibility: visible;
-    animation: ui-field-error-in 220ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation: ui-field-error-in var(--motion-base) var(--ease-out) backwards;
   }
 
   /* The words that went, when there were any, leave the way they came. */
@@ -378,16 +385,6 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .ui-field-head > .ui-field-label,
-    .ui-field-head > .ui-field-error,
-    .ui-field-head[data-error] > .ui-field-error {
-      transition: none;
-      animation: none;
-      transform: none;
-    }
-  }
-
   .ui-field-box {
     display: flex;
     align-items: center;
@@ -397,8 +394,8 @@
     background: var(--ui-field-fill, var(--field-fill));
     box-shadow: inset 0 0 0 1px var(--ui-field-edge, transparent);
     transition:
-      box-shadow 120ms,
-      background-color 120ms;
+      box-shadow var(--motion-fast) var(--ease-out),
+      background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-field-box:has(:disabled) {
@@ -423,11 +420,12 @@
     flex: 1;
     min-width: 0;
     height: 100%;
-    padding: 0 0.75rem;
+    padding: 0 var(--field-pad-x);
     border: 0;
     background: none;
     font: inherit;
     font-size: var(--field-text);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     outline: none;
   }
@@ -438,8 +436,9 @@
 
   .ui-field-suffix {
     flex: none;
-    padding-right: 0.75rem;
+    padding-right: var(--field-pad-x);
     font-size: var(--field-text);
+    letter-spacing: var(--track-read);
     color: var(--fg-subtle);
   }
 
@@ -447,6 +446,7 @@
   .ui-field-error {
     margin: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.45;
     color: var(--fg-subtle);
   }
@@ -565,12 +565,12 @@
 
   .ui-select-caret {
     position: absolute;
-    right: 0.75rem;
+    right: var(--field-pad-x);
     top: 50%;
     translate: 0 -50%;
     color: var(--fg-subtle);
     pointer-events: none;
-    transition: rotate 160ms ease;
+    transition: rotate var(--motion-fast) var(--ease-out);
   }
 
   .ui-select-box[data-open] .ui-select-caret {
@@ -596,7 +596,7 @@
     color: var(--fg);
     background: var(--surface-lifted);
     box-shadow: var(--shadow-float);
-    animation: ui-menu-in 140ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+    animation: ui-menu-in var(--motion-fast) var(--ease-out) backwards;
   }
 
   .ui-menu[data-side="top"] {
@@ -607,10 +607,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    min-height: 2.125rem;
-    padding: 0.4rem 0.65rem;
+    min-height: var(--menu-item-h);
+    padding: calc(0.4rem + (var(--menu-item-h) - 2.125rem) / 2) 0.65rem;
     border-radius: calc(var(--radius-float) - 0.3rem);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     cursor: pointer;
     user-select: none;
@@ -637,6 +638,7 @@
     display: block;
     margin-top: 0.125rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--fg-subtle);
     white-space: normal;
   }
@@ -650,6 +652,7 @@
   .ui-menu-end {
     flex: none;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--fg-subtle);
   }
 
@@ -703,8 +706,8 @@
     box-shadow: inset 0 0 0 1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14));
     cursor: pointer;
     transition:
-      background-color 160ms,
-      box-shadow 160ms;
+      background-color var(--motion-fast) var(--ease-out),
+      box-shadow var(--motion-fast) var(--ease-out);
   }
 
   .ui-check-box input:hover:not(:disabled, [aria-disabled="true"]):not(:checked),
@@ -739,8 +742,8 @@
     opacity: 0;
     scale: 0.6;
     transition:
-      opacity 140ms,
-      scale 160ms cubic-bezier(0.2, 0.8, 0.2, 1.4);
+      opacity var(--motion-fast) var(--ease-out),
+      scale var(--motion-fast) cubic-bezier(0.2, 0.8, 0.2, 1.4);
   }
 
   .ui-check-box input:checked + .ui-check-tick,
@@ -753,6 +756,7 @@
   .ui-check-words {
     min-width: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.45;
     color: var(--fg);
     cursor: pointer;
@@ -790,6 +794,7 @@
     align-items: center;
     gap: 0.625rem;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     cursor: pointer;
   }
@@ -811,8 +816,8 @@
     box-shadow: inset 0 0 0 1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14));
     cursor: inherit;
     transition:
-      box-shadow 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
-      background-color 160ms;
+      box-shadow var(--motion-base) var(--ease-out),
+      background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-radio-dot:hover:not(:disabled, [aria-disabled="true"]):not(:checked) {
@@ -844,6 +849,7 @@
 
   .ui-radio-hint {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 
@@ -860,8 +866,8 @@
     background: var(--field-fill);
     box-shadow: inset 0 0 0 1px transparent;
     transition:
-      background-color 150ms var(--ease-track),
-      box-shadow 150ms var(--ease-track);
+      background-color var(--motion-fast) var(--ease-track),
+      box-shadow var(--motion-fast) var(--ease-track);
   }
 
   .ui-radios-cards .ui-radio:hover:not([data-disabled]) {
@@ -870,12 +876,6 @@
 
   .ui-radios-cards .ui-radio:has(.ui-radio-dot:checked) {
     box-shadow: inset 0 0 0 1.5px var(--ink-face-bottom);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ui-radios-cards .ui-radio {
-      transition: none;
-    }
   }
 
   /* ---- one of a few, as cards (`ChoiceCards.tsx`) ---------------------------------- */
@@ -900,10 +900,11 @@
     border-radius: var(--radius-control);
     box-shadow: inset 0 0 0 1px var(--line);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     line-height: var(--text-read--line-height);
     color: var(--fg-strong);
     cursor: pointer;
-    transition: box-shadow 150ms ease, background-color 150ms ease;
+    transition: box-shadow var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-choice-card:hover {
@@ -943,6 +944,7 @@
 
   .ui-choice-card-hint {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: var(--text-ui--line-height);
     color: var(--fg-subtle);
   }
@@ -950,6 +952,7 @@
   .ui-choice-card-end {
     flex: none;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
@@ -981,7 +984,7 @@
     background: var(--field-fill);
     box-shadow: inset 0 0 0 1px light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1));
     cursor: pointer;
-    transition: background-color 200ms;
+    transition: background-color var(--motion-base) var(--ease-out);
   }
 
   .ui-switch:hover:not(:disabled, [aria-disabled="true"]):not([aria-checked="true"]) {
@@ -994,6 +997,13 @@
 
   .ui-switch[aria-checked="true"]:hover:not(:disabled, [aria-disabled="true"]) {
     background: var(--ink-face-top);
+  }
+
+  /* In the accent (`tone="accent"`), a look and not a state: the track fills with `--accent` and
+     moves toward the canvas under the pointer, as the ink track does. */
+  .ui-switch-accent {
+    --ink-face-bottom: var(--accent);
+    --ink-face-top: color-mix(in oklab, var(--accent), var(--bg-canvas) 14%);
   }
 
   .ui-switch:focus-visible {
@@ -1012,7 +1022,7 @@
     border-radius: 50%;
     background: var(--surface-lifted);
     box-shadow: var(--shadow-raise);
-    transition: translate 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: translate var(--motion-base) var(--ease-out);
   }
 
   .ui-switch[aria-checked="true"] .ui-switch-knob {
@@ -1032,6 +1042,7 @@
     --words: var(--fg);
     height: var(--control-h);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     font-weight: 400;
   }
 
@@ -1139,12 +1150,6 @@
   from {
     opacity: 0;
     translate: 0 -4px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ui-menu {
-    animation: none;
   }
 }
 
