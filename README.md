@@ -90,7 +90,7 @@ export function Invite() {
 | Import | What it is |
 | --- | --- |
 | `vic-ui` | Every piece, hook and helper |
-| `vic-ui/icons` | 121 icons, each `(props: { size?, weight? }) => svg` |
+| `vic-ui/icons` | 155 icons, each `(props: { size?, weight? }) => svg` |
 | `vic-ui/styles.css` | Fonts, tokens, base and every piece, in one file |
 | `vic-ui/components.css` | The base layer and every piece, without fonts or tokens |
 | `vic-ui/tokens.css` | The custom properties alone |

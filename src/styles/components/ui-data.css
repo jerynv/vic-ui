@@ -140,6 +140,20 @@
     border-bottom: 1px solid var(--line-soft);
   }
 
+  /* A row's header cell (`rowHeaderKey`) names its row but reads as a cell of it: the body's own
+     weight, not the browser's bold. */
+  .ui-table tbody th {
+    font-weight: inherit;
+  }
+
+  /* A caption names the table above it, quietly, when nothing else names it. */
+  .ui-table caption {
+    padding: 0 0.75rem 0.5rem;
+    font-size: var(--text-ui);
+    text-align: start;
+    color: var(--fg-subtle);
+  }
+
   .ui-table [data-align="end"] {
     text-align: right;
   }
@@ -248,7 +262,7 @@
   }
 
   /* A line under a row, read as part of it: no rule between them, and only its own padding below. */
-  .ui-table tbody tr:has(+ .ui-table-after) td {
+  .ui-table tbody tr:has(+ .ui-table-after) :is(td, th) {
     border-bottom-color: transparent;
   }
 

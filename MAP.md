@@ -761,7 +761,8 @@ The one surface on the page: `lifted` sits on the page on the lifted surface wit
 | `tone` | `"danger" \| undefined` | none | The edge in `--tone-danger-edge`. |
 | `plain` | `boolean` | `false` | The children in the card itself, padded `0.75rem 0.875rem`, for a card that lays them out; no head, body or foot. |
 | `flush` | `boolean` | `false` | The body has no padding, for rows that run to its edges. |
-| `title` | `ReactNode` | none | The head's title (an `h3`). |
+| `title` | `ReactNode` | none | The head's title (an `h3` unless `level` says otherwise). |
+| `level` | `2 \| 3 \| 4 \| 5 \| 6` | `3` | The title's heading level, so a card under a page's `h1` heads with an `h2`. |
 | `description` | `ReactNode` | none | Under the title. |
 | `actions` | `ReactNode` | none | At the head's end. |
 | `foot` | `ReactNode` | none | A foot under a rule. |
@@ -1213,6 +1214,9 @@ The one table: dense rows, a head pinned to the top of its scroller, every numbe
 | `rowProps` | `(row) => HTMLAttributes & data attributes` | none | Added to each row, after its own. |
 | `tableProps` | `TableHTMLAttributes` | none | Added to the table. |
 | `tableRef` | `Ref<HTMLTableElement>` | none | The table. |
+| `caption` | `ReactNode` | none | A `caption` as the table's first child, at `--text-ui` in `--fg-subtle`, start-aligned. It names the table only when `aria-label` is not set. |
+| `rowHeaderKey` | `string` | none | That column's cells are `th scope="row"`, so each row is named by it. They read as body cells: the body's weight, and the roster look and the line under a row apply to them too. |
+| `cellProps` | `(row, column) => HTMLAttributes & data attributes` | none | Added to each body cell; its `className` joins the column's. |
 
 `TableColumn` is `{ key: string; label: ReactNode; align?: "start" | "center" | "end"; width?: string | number; sort?: boolean; className?: string }`. `TableSort` is `{ key: string; direction: "asc" | "desc" }`.
 
@@ -2105,6 +2109,57 @@ A hairline between groups inside an `ActionBar`: 1px of `--line`, margin `0.3125
 
 CSS: `ui-timeline.css`. Class `ui-actionbar-rule`.
 
+## Analytics
+
+From `Analytics.tsx` and `TraceWaterfall.tsx`, with their CSS in `ui-analytics.css` and `ui-trace-waterfall.css`. The caller formats every value; the pieces only lay them out.
+
+### WorkspaceHeader
+
+A page's heading with its supporting words and its actions at the end.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `title` | `ReactNode` | required | The page's `h1`. |
+| `description` | `ReactNode` | none | A paragraph under it, at most 70ch. |
+| `action` | `ReactNode` | none | At the end of the row; under the words below 40rem. |
+| `as` | `"header" \| "div"` | `"header"` | The element. |
+| native attributes | `HTMLAttributes<HTMLElement>` | | Passed through. |
+
+States: none. Title `calc(var(--text-lead) * 1.5)` weight 600, line height 1.2, tracking -0.025em, `--fg-strong`; description `--text-read`, `--fg-subtle`. Gap 1.25rem, 1.5rem below.
+
+CSS: classes `ui-workspace-header`, `ui-workspace-header-copy`, `ui-workspace-header-title`, `ui-workspace-header-description`, `ui-workspace-header-action`.
+
+### MetricSummary, MetricSummaryItem
+
+A list of headline measures (`section` named by `label`, holding a `dl`), in columns of at least 9rem that wrap.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `items` | `readonly MetricSummaryItem[]` | required | Each `{ label, value, description?, action? }`, every one a `ReactNode` the caller formats. |
+| `label` | `string` | `"Summary metrics"` | The section's name. A page with more than one summary gives each its own, or screen readers list several regions by the same name. |
+| `bare` | `boolean` | `false` | No rules above and below (`data-bare`). Inside a `Card` the rules are dropped already. |
+| native attributes | `HTMLAttributes<HTMLElement>` | | Passed through. |
+
+States: none. Between two `--line` rules with 1rem padding (none when bare or in a card). Label `--text-meta` `--fg-subtle`; value `calc(var(--text-lead) * 1.5)` weight 600, tabular, `--fg-strong`; description `--text-meta` `--fg-subtle`; action 0.5rem below. In a recessed card `--fg-subtle` is remapped to `--fg-subtle-on-fill`, which holds its contrast on the fill.
+
+CSS: classes `ui-metric-summary`, `ui-metric-summary-item`, `ui-metric-summary-value`, `ui-metric-summary-description`, `ui-metric-summary-action`.
+
+### TraceWaterfall, TraceWaterfallSpan
+
+Spans on one shared wall-time track, as an `ol` named by `label`: concurrent spans overlap.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `spans` | `readonly TraceWaterfallSpan[]` | required | Each `{ id, label, detail?, offsetMs, durationMs, status? }`. |
+| `extentMs` | `number` | required | The track's full length; 0 or invalid draws no tracks. |
+| `renderStatus` | `(status, span) => ReactNode` | the status words | Draws the status at the row's end (a `Badge`, say). |
+| `label` | `string` | `"Trace timing"` | The list's name. |
+| native attributes | `HTMLAttributes<HTMLOListElement>` | | Passed through to the `ol`. |
+
+States: a span with invalid timing reads "Timing unavailable". Track 0.4375rem, round, on `--line-hairline`; bar `--fg-subtle`, `--tone-danger-ink` when `status` is `error`. Rows split by `--line`; label `--text-ui`, detail `--text-meta` `--fg-subtle`, timing `--text-meta` `--fg`, tabular. Below 40rem the timing takes its own line.
+
+CSS: classes `ui-trace-waterfall`, `ui-trace-waterfall-row`, `ui-trace-waterfall-label`, `ui-trace-waterfall-timing`, `ui-trace-waterfall-track`, `ui-trace-waterfall-status`.
+
 ## Tokens
 
 All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are listed as their light and dark values. The colour tokens and the scales are declared on `:root, [data-mode]` (unlayered), so a section set to the other mode reads them in its own. The type scale, the font tokens and the easings are in Tailwind's `@theme` block.
@@ -2464,7 +2519,7 @@ No em or en dashes as connective punctuation anywhere in source or interface. De
 
 Icons are generated by `scripts/gen-icons.mjs` from Tabler Icons (MIT, https://tabler.io/icons), IconMCP (MIT, https://iconmcp.com/licence), MingCute (Apache-2.0, https://github.com/Richard9394/MingCute) and the project's own SVGs (`web/src/icons`, named `own:<file>`, one per file, in `currentColor`; a file with a script, an event handler, a link or a foreign object is refused). Each is made by `makeIcon` in `icon-base.tsx`: an `<svg>` of `fill="currentColor"`, `focusable="false"`, `aria-hidden` unless labelled, sized by `size` (default `1em`), drawing its filled twin when `weight="fill"` and one exists. Add an icon to the generator's list; never import a set directly. In vic-ui they ship in `src/icons`.
 
-The library itself uses fifteen: `AlertCircleIcon` (tabler `alert-circle`), `AlertTriangleIcon` (`alert-triangle`), `ArrowDownIcon` (`arrow-down`), `ArrowRightIcon` (`arrow-right`), `CalendarEventIcon` (`calendar-event`), `CheckCircleIcon` (`circle-check`), `CheckIcon` (`check`), `ChevronDownIcon` (`own:chevron-down`), `ChevronRightIcon` (`own:chevron-right`), `ClockIcon` (`clock`), `DownloadSimpleIcon` (`download`), `FlagIcon` (`flag`), `InfoCircleIcon` (`info-circle`), `MagnifyingGlassIcon` (`search`), `XIcon` (`x`). None of them comes from MingCute; the generated file holds 154 icons in all. The four IconMCP SVGs are in `src/icons/iconmcp`; `src/icons/registry.json` records the source of every glyph. Library components and Fumadocs use this catalogue, without a Lucide runtime.
+The library itself uses fifteen: `AlertCircleIcon` (tabler `alert-circle`), `AlertTriangleIcon` (`alert-triangle`), `ArrowDownIcon` (`arrow-down`), `ArrowRightIcon` (`arrow-right`), `CalendarEventIcon` (`calendar-event`), `CheckCircleIcon` (`circle-check`), `CheckIcon` (`check`), `ChevronDownIcon` (`own:chevron-down`), `ChevronRightIcon` (`own:chevron-right`), `ClockIcon` (`clock`), `DownloadSimpleIcon` (`download`), `FlagIcon` (`flag`), `InfoCircleIcon` (`info-circle`), `MagnifyingGlassIcon` (`search`), `XIcon` (`x`). None of them comes from MingCute; the generated file holds 155 icons in all. The four IconMCP SVGs are in `src/icons/iconmcp`; `src/icons/registry.json` records the source of every glyph. Library components and Fumadocs use this catalogue, without a Lucide runtime.
 
 ## Fonts
 

@@ -46,6 +46,12 @@ export function Table<Row>(props: {
   rows: ReadonlyArray<Row>;
   rowKey: (row: Row) => string;
   cell?: (row: Row, column: TableColumn) => ReactNode;
+  /** Optional accessible name or summary for the table. */
+  caption?: ReactNode;
+  /** Column key whose body cells are row headers instead of data cells. */
+  rowHeaderKey?: string;
+  /** Extra native attributes for a body cell; row header scope and column alignment remain controlled by Table. */
+  cellProps?: (row: Row, column: TableColumn) => HTMLAttributes<HTMLTableCellElement> & { scope?: "row" | "col" | "rowgroup" | "colgroup"; [data: `data-${string}`]: string | boolean | undefined };
   sort?: TableSort | null;
   onSortChange?: (sort: TableSort) => void;
   onRowPress?: (row: Row) => void;
@@ -103,6 +109,7 @@ export function Table<Row>(props: {
       data-look={props.look}
     >
       <table ref={props.tableRef} className="ui-table" aria-label={props["aria-label"]} {...props.tableProps}>
+        {props.caption != null && <caption>{props.caption}</caption>}
         <colgroup>
           {props.columns.map((column) => (
             <col key={column.key} className={column.className} data-wide={column.wide ? "" : undefined} style={column.width !== undefined ? { width: typeof column.width === "number" ? `${column.width}px` : column.width } : undefined} />
@@ -147,11 +154,14 @@ export function Table<Row>(props: {
                     onKeyDown={pressable ? (event) => keyed(event, row) : undefined}
                     {...props.rowProps?.(row)}
                   >
-                    {props.columns.map((column) => (
-                      <td key={column.key} className={column.className} data-wide={column.wide ? "" : undefined} data-align={column.align ?? "start"}>
-                        {draw(row, column)}
-                      </td>
-                    ))}
+                    {props.columns.map((column) => {
+                      const custom = props.cellProps?.(row, column);
+                      const className = [column.className, custom?.className].filter(Boolean).join(" ") || undefined;
+                      const content = draw(row, column);
+                      return props.rowHeaderKey === column.key
+                        ? <th key={column.key} {...custom} scope="row" className={className} data-wide={column.wide ? "" : undefined} data-align={column.align ?? "start"}>{content}</th>
+                        : <td key={column.key} {...custom} className={className} data-wide={column.wide ? "" : undefined} data-align={column.align ?? "start"}>{content}</td>;
+                    })}
                   </tr>
                   {more ? (
                     <tr className="ui-table-after">

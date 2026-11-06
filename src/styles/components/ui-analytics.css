@@ -1,0 +1,106 @@
+/* The library's analytics display (`src/components/Analytics.tsx`), in the layer the other pieces
+   are in. Words, sizes and rules come from the tokens only, so a theme reaches them. */
+@layer components.parts {
+
+  /* A page's heading with its supporting words, and its actions at the end. */
+  .ui-workspace-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem;
+    min-width: 0;
+    margin-block-end: 1.5rem;
+  }
+
+  .ui-workspace-header-copy {
+    min-width: 0;
+  }
+
+  .ui-workspace-header-title {
+    margin: 0 0 0.5rem;
+    font-size: calc(var(--text-lead) * 1.5);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: var(--fg-strong);
+  }
+
+  .ui-workspace-header-description {
+    max-width: 70ch;
+    margin: 0;
+    font-size: var(--text-read);
+    line-height: var(--text-read--line-height);
+    color: var(--fg-subtle);
+  }
+
+  .ui-workspace-header-action {
+    flex: none;
+  }
+
+  /* Headline measures in a row that wraps, between two rules; `bare`, or set in a card, drops the
+     rules, since the card's own edge already frames them. */
+  .ui-metric-summary dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+    margin: 0;
+    padding-block: 1rem;
+    border-block: 1px solid var(--line);
+  }
+
+  .ui-metric-summary[data-bare] dl,
+  .ui-card .ui-metric-summary dl {
+    padding-block: 0;
+    border-block: 0;
+  }
+
+  .ui-metric-summary-item {
+    min-width: 0;
+    padding-inline: 1rem;
+  }
+
+  .ui-metric-summary-item dt {
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    color: var(--fg-subtle);
+  }
+
+  .ui-metric-summary-item dd {
+    margin: 0.125rem 0 0;
+  }
+
+  .ui-metric-summary-value {
+    display: block;
+    font-size: calc(var(--text-lead) * 1.5);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-strong);
+  }
+
+  .ui-metric-summary-description {
+    margin-block-start: 0.125rem;
+    font-size: var(--text-meta);
+    line-height: var(--text-meta--line-height);
+    color: var(--fg-subtle);
+  }
+
+  .ui-metric-summary-action {
+    margin-block-start: 0.5rem;
+  }
+
+  /* On a recessed card's fill the subtle words take the darker ink measured for fills. */
+  .ui-card-recessed .ui-metric-summary {
+    --fg-subtle: var(--fg-subtle-on-fill);
+  }
+
+  @media (max-width: 40rem) {
+    .ui-workspace-header {
+      flex-direction: column;
+    }
+
+    .ui-metric-summary-item {
+      padding: 0.5rem;
+    }
+  }
+}

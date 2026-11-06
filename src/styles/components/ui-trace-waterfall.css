@@ -1,0 +1,82 @@
+/* The library's trace waterfall (`src/components/TraceWaterfall.tsx`), in the layer the other
+   pieces are in: each span a bar on one shared track, the danger ink for a span that failed. */
+@layer components.parts {
+  .ui-trace-waterfall {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ui-trace-waterfall-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 1fr) minmax(140px, 1fr) 9rem;
+    gap: 1rem;
+    align-items: center;
+    min-width: 0;
+    padding-block: 0.625rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--text-ui);
+    color: var(--fg);
+  }
+
+  .ui-trace-waterfall-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-trace-waterfall-label strong {
+    font-weight: 600;
+    color: var(--fg-strong);
+  }
+
+  .ui-trace-waterfall-label small {
+    display: block;
+    font-size: var(--text-meta);
+    color: var(--fg-subtle);
+  }
+
+  .ui-trace-waterfall-timing {
+    min-width: 0;
+    font-size: var(--text-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg);
+  }
+
+  .ui-trace-waterfall-track {
+    position: relative;
+    height: 0.4375rem;
+    margin-block: 0.3125rem;
+    overflow: hidden;
+    border-radius: var(--radius-round);
+    background: var(--line-hairline);
+  }
+
+  .ui-trace-waterfall-track > span {
+    position: absolute;
+    inset-block: 0;
+    display: block;
+    min-width: 2px;
+    background: var(--fg-subtle);
+  }
+
+  .ui-trace-waterfall-row[data-status="error"] .ui-trace-waterfall-track > span {
+    background: var(--tone-danger-ink);
+  }
+
+  .ui-trace-waterfall-status {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 40rem) {
+    .ui-trace-waterfall-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.5rem;
+    }
+
+    .ui-trace-waterfall-timing {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+  }
+}

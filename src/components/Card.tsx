@@ -8,7 +8,8 @@ import type { HTMLAttributes, ReactNode } from "react";
  * head (`title`, a `description` under it and `actions` at its end) and a `foot` are drawn only
  * when given. `plain` puts the children in the card itself, padded, for a card that lays them
  * out (a grid of fields, a form), and `flush` gives the body no padding, for rows that run to
- * the card's edges. `as` draws it as a section or as the form it is.
+ * the card's edges. `as` draws it as a section or as the form it is. The title is an `h3`;
+ * `level` sets another heading level, so a card under a page's `h1` can head with an `h2`.
  */
 export function Card(
   props: Omit<HTMLAttributes<HTMLElement>, "title"> & {
@@ -19,13 +20,16 @@ export function Card(
     plain?: boolean;
     flush?: boolean;
     title?: ReactNode;
+    /** The title's heading level. */
+    level?: 2 | 3 | 4 | 5 | 6;
     description?: ReactNode;
     actions?: ReactNode;
     foot?: ReactNode;
     children?: ReactNode;
   },
 ) {
-  const { as: As = "div", look = "lifted", tone, surface, plain, flush, title, description, actions, foot, className, children, ...rest } = props;
+  const { as: As = "div", look = "lifted", tone, surface, plain, flush, title, level = 3, description, actions, foot, className, children, ...rest } = props;
+  const Heading = `h${level}` as "h3";
   const classes = ["ui-card", `ui-card-${look}`, plain ? "ui-card-plain" : "", className ?? ""].filter(Boolean).join(" ");
   if (plain) {
     return (
@@ -39,7 +43,7 @@ export function Card(
       {title || description || actions ? (
         <div className="ui-card-head">
           <div className="ui-card-heading">
-            {title ? <h3 className="ui-card-title">{title}</h3> : null}
+            {title ? <Heading className="ui-card-title">{title}</Heading> : null}
             {description ? <p className="ui-card-description">{description}</p> : null}
           </div>
           {actions ? <div className="ui-card-actions">{actions}</div> : null}

@@ -65,10 +65,53 @@ function CommandDialog({
   )
 }
 
+/**
+ * cmdk only works out which item the input points at (`aria-activedescendant`) when the chosen
+ * value changes, so a list mounted with a `value` or `defaultValue` already chosen starts with
+ * none. This keeps the input pointing at the item cmdk marks selected, read from the DOM: it sets
+ * the attribute when it is missing or wrong, and removes it when no item is selected (a filter
+ * that matches nothing, a value no item has), so it never names an option Enter would not choose.
+ * Where cmdk is already right it changes nothing.
+ */
+function useActiveDescendant(input: React.RefObject<HTMLInputElement | null>) {
+  React.useLayoutEffect(() => {
+    const field = input.current
+    const root = field?.closest("[cmdk-root]")
+    if (!field || !root) return
+    const sync = () => {
+      const id = root.querySelector('[cmdk-item][aria-selected="true"]')?.id
+      const current = field.getAttribute("aria-activedescendant")
+      if (id) {
+        if (current !== id) field.setAttribute("aria-activedescendant", id)
+      } else if (current !== null) field.removeAttribute("aria-activedescendant")
+    }
+    sync()
+    const watch = new MutationObserver(sync)
+    watch.observe(root, { subtree: true, childList: true, attributes: true, attributeFilter: ["aria-selected", "aria-activedescendant"] })
+    return () => watch.disconnect()
+  }, [input])
+}
+
+
 function CommandInput({
   className,
+  ref: forwardedRef,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
+  const inputRef = React.useRef<HTMLInputElement | null>(null)
+  useActiveDescendant(inputRef)
+  // Keeps a React 19 callback ref's cleanup: when the caller's ref returns one, React calls it
+  // instead of the ref with null.
+  const setInputRef = React.useCallback((node: HTMLInputElement | null) => {
+    inputRef.current = node
+    if (typeof forwardedRef === "function") {
+      const done = forwardedRef(node)
+      if (typeof done === "function") return () => { inputRef.current = null; done() }
+      return () => { inputRef.current = null; forwardedRef(null) }
+    }
+    if (forwardedRef) forwardedRef.current = node
+    return () => { inputRef.current = null; if (forwardedRef) forwardedRef.current = null }
+  }, [forwardedRef])
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
       <InputGroup className="h-8! rounded-(--radius-control)! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
@@ -78,6 +121,7 @@ function CommandInput({
             "w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
             className
           )}
+          ref={setInputRef}
           {...props}
         />
         <InputGroupAddon>
