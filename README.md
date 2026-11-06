@@ -28,7 +28,7 @@ The palette, faces, corners and heights vic-ui ships with are one interpretation
 ```
 
 - Give every colour a `light-dark()` pair, so both modes stay yours.
-- Use `:root, [data-mode]`, the selector vic-ui declares its colours, corners and heights on, so a section set to the other mode keeps your values.
+- Use `:root, [data-mode]`, the selector vic-ui declares its colours and corners on, so a section set to the other mode keeps your values. Heights belong to the density: `:root, [data-density]`, or one step such as `[data-density="compact"]`.
 - Keep the `color-scheme` declaration (see [Theming](#theming-light-dark-and-the-devices-own)). Without it, every compiled colour resolves to nothing.
 
 **What stays stable for you.** Token names, component props and the `ui-` class names are the contract between vic-ui and your app, and a theme written against them keeps working across releases. Change the look through tokens, not by styling `ui-` classes or passing `className` to restyle a piece: those rules are internal and can change. If there is no token for what you need, ask for one.
@@ -148,7 +148,7 @@ import "vic-ui/tokens.css";
 import "vic-ui/components.css";
 ```
 
-Then load your faces and set `--font-sans`, `--font-display` and `--font-wordmark`. Without either, the stacks fall back to the system's sans and monospace.
+Then load your faces and set `--font-sans`, `--font-display` and `--font-wordmark`. Without either, the stacks fall back to the system's sans and monospace. While Cal Sans UI loads, `fonts.css` draws in "Cal Sans UI Fallback", the device's Arial scaled to its metrics, so the swap reflows nothing; `--font-sans-fallback` names it, and a face of your own can point it at a fallback measured for that face.
 
 The interface's weight is a token too: `--weight-ui` (500) for buttons, tabs, rows and labels, and `--weight-quiet` (following it) for what sits back: quiet buttons and the sidebar's rows, headings and counts. Set either to 400 on `:root`, outside a layer, if your face reads heavy. No state changes the weight.
 
@@ -162,7 +162,7 @@ What every piece already does, and what anything built with them is held to:
 - **One ink button** per page, for its committing action. Navigation, filters and toggles are `line`, `quiet`, icon buttons or tabs.
 - **Fields are filled**, with no border and no focus ring: the caret says where focus is. Buttons, tabs and switches keep a keyboard-only ring.
 - **Errors take the label's place**, so an error coming or going moves nothing.
-- **Dense by default.** `size="sm"` (2rem) inside an app; the default (2.25rem) for a way in and a header.
+- **Dense by default.** `size="sm"` (2rem) inside an app; the default (2.25rem) for a way in and a header. `data-density="compact" | "comfortable"` on the root or a section moves every height together, and `size="sm"` stays a step under it.
 - **Sentence case** everywhere, never capitals. Hierarchy is weight and size.
 - **Nothing under 11px.**
 - **Colour only from the palette**, in oklch. The palette is the neutrals, the four tones, the five hues, the accent and the art hues. The four tones keep their meanings (danger, caution, settled, moving), and state always carries a word, never only a colour. The accent (`--accent` and its family, `tone="accent"`) is one brand colour for a look, never a fifth tone. The art hues (`--art-1` to `--art-4`, `--art-grain`) live only inside thumbnails, banners and illustrations, never on a control. No tone ink or accent ink is below 5.8:1 on the canvas, the panel or its own tint, in either mode (`tests/colour-contrast.test.mjs`).

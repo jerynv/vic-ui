@@ -8,9 +8,9 @@
   .ui-grow-inner { display: flow-root; animation: ui-grow-in var(--motion-slow) var(--ease-out) backwards; }
   @keyframes ui-grow-in { from { opacity: 0; translate: 0 0.5rem; } }
 
-  .ui-focus-line { margin: 0; max-width: 46ch; font-size: var(--text-read); line-height: 1.55; color: var(--fg-subtle); text-wrap: pretty; overflow-wrap: anywhere; }
+  .ui-focus-line { margin: 0; max-width: 46ch; font-size: var(--text-read); letter-spacing: var(--track-read); line-height: 1.55; color: var(--fg-subtle); text-wrap: pretty; overflow-wrap: anywhere; }
   .ui-focus-quiet { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1rem; }
-  .ui-focus-foot-line { margin: 1.75rem 0 0; text-align: left; font-size: var(--text-read); line-height: 1.55; color: var(--fg-subtle); overflow-wrap: anywhere; }
+  .ui-focus-foot-line { margin: 1.75rem 0 0; text-align: left; font-size: var(--text-read); letter-spacing: var(--track-read); line-height: 1.55; color: var(--fg-subtle); overflow-wrap: anywhere; }
   .ui-focus-foot-line a { white-space: nowrap; color: var(--fg-strong); text-decoration: underline; text-underline-offset: 3px; }
 
   .ui-code-field-root { display: grid; gap: 0.5rem; }

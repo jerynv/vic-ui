@@ -1,14 +1,14 @@
 @layer components.parts {
   .ui-preview-office { min-width: 0; color: var(--fg); background: var(--bg-base); }
   .ui-preview-office:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
-  .ui-preview-office-notice { margin: 0; padding: 0.75rem 1rem; color: var(--fg-subtle); font-size: var(--text-ui); line-height: var(--text-ui--line-height); }
+  .ui-preview-office-notice { margin: 0; padding: 0.75rem 1rem; color: var(--fg-subtle); font-size: var(--text-ui); letter-spacing: var(--track-ui); line-height: var(--text-ui--line-height); }
   .ui-preview-office-tabs { padding: 0 0.75rem 0.75rem; max-width: 100%; overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
   .ui-preview-office-tabs .ui-tabs { width: max-content; min-width: 0; }
   .ui-preview-office-slides { max-height: 36rem; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
   .ui-preview-office-slides:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
   .ui-preview-office-slide { padding: 1.25rem; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
-  .ui-preview-office-slide-number { margin: 0 0 0.5rem; color: var(--fg-subtle); font-size: var(--text-meta); font-variant-numeric: tabular-nums; }
-  .ui-preview-office-slide h3 { margin: 0 0 0.75rem; font-size: var(--text-read); line-height: var(--text-read--line-height); }
+  .ui-preview-office-slide-number { margin: 0 0 0.5rem; color: var(--fg-subtle); font-size: var(--text-meta); letter-spacing: var(--track-meta); font-variant-numeric: tabular-nums; }
+  .ui-preview-office-slide h3 { margin: 0 0 0.75rem; font-size: var(--text-read); letter-spacing: var(--track-read); line-height: var(--text-read--line-height); }
   .ui-preview-office-slide ul { margin: 0; padding-left: 1.25rem; list-style: disc; }
   .ui-preview-office-slide li + li { margin-top: 0.375rem; }
   .ui-preview-office-slide ::selection { color: var(--fg-inverse); background: var(--fg-strong); }

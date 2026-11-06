@@ -26,6 +26,7 @@
   .ui-field-sm .ui-field-input {
     padding: 0 0.625rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   /* A dense select keeps the room its caret stands in, which the dense padding above would
@@ -36,14 +37,16 @@
 
   .ui-field-prefix {
     flex: none;
-    padding-left: 0.75rem;
+    padding-left: var(--field-pad-x);
     font-size: var(--field-text);
+    letter-spacing: var(--track-read);
     color: var(--fg-subtle);
   }
 
   .ui-field-sm .ui-field-prefix,
   .ui-field-sm .ui-field-suffix {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
   }
 
   .ui-field-sm .ui-field-prefix {
@@ -72,6 +75,7 @@
     flex: none;
     margin-left: auto;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.45;
     font-variant-numeric: tabular-nums;
     color: var(--fg-subtle);
@@ -92,7 +96,7 @@
   .ui-textarea {
     display: block;
     height: auto;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem var(--field-pad-x);
     line-height: 1.5;
     resize: vertical;
   }
@@ -110,7 +114,7 @@
 
   .ui-search-glass {
     flex: none;
-    margin-left: 0.75rem;
+    margin-left: var(--field-pad-x);
     color: var(--fg-subtle);
     transition: color var(--motion-fast) var(--ease-out);
   }
@@ -246,6 +250,7 @@
     background: var(--surface-lifted);
     box-shadow: 0 0 0 1px var(--tone-edge, var(--line-soft));
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--tone-ink, var(--fg-strong));
   }
 
@@ -254,6 +259,7 @@
     flex: none;
     padding-inline: 0.375rem 0.25rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--tone-ink, var(--fg-subtle));
   }
 
@@ -299,6 +305,7 @@
   .ui-menu-group {
     padding: 0.5rem 0.65rem 0.25rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-weight: 600;
     color: var(--fg-subtle);
     user-select: none;
@@ -312,6 +319,7 @@
   .ui-menu-foot {
     padding: 0.5rem 0.65rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 

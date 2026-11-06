@@ -3,9 +3,13 @@
    element's color-scheme, which the rules at the end of this file declare. */
 
 :root {
-  --font-sans: "Cal Sans UI", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* What draws while Cal Sans UI loads, or where it never does: first "Cal Sans UI Fallback",
+     the device's Arial scaled to Cal Sans UI's measure (fonts.css), so the swap moves nothing,
+     then the device's own faces. A brand with another face points this at its own fallback. */
+  --font-sans-fallback: "Cal Sans UI Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Cal Sans UI", var(--font-sans-fallback);
   --default-font-family: var(--font-sans);
-  --font-display: "Cal Sans UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cal Sans UI", var(--font-sans-fallback);
   --font-wordmark: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   /* The interface's weight: buttons, tabs, rows and labels. Cal Sans UI reads heavy, so a
@@ -24,6 +28,22 @@
   --text-read--line-height: 1.55;
   --text-lead: 1rem;
   --text-lead--line-height: 1.4;
+  /* A headline in the product: a dialog's title, the name a screen or a pane is under. */
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.2;
+  /* A statement: the one sentence a screen on the way in is about. */
+  --text-statement: 2rem;
+  --text-statement--line-height: 1.12;
+  /* Letter spacing, one per size, read wherever that size is set. The working sizes sit at the
+     face's own spacing; the headlines draw a little closer, as large type needs. A state never
+     changes any of them. */
+  --track-tag: 0em;
+  --track-meta: 0em;
+  --track-ui: 0em;
+  --track-read: 0em;
+  --track-lead: 0em;
+  --track-title: -0.02em;
+  --track-statement: -0.01em;
   /* Motion: three durations and two curves, read by every transition and animation in the
      library. Fast is a colour, a fill or a fade answering a pointer; base is something arriving
      or folding (a menu, a dialog, a panel); slow is something travelling far or easing a whole
@@ -96,12 +116,7 @@
    * read as sitting on top of the page uses this instead.
    */
   --surface-lifted: light-dark(oklch(1 0 0), oklch(0.1913 0 0));
-  /* The height of a control in a header row: a tab switcher, a field, a choice, an icon
-     button and a button with words alike, named once so a header never mixes it with the
-     smaller one. */
-  --control-h: 2.25rem;
-  /* A button beside words, a step under the control height. */
-  --control-h-sm: 2rem;
+  /* The control heights are set by the density, after this block. */
   /* A page's or a pane's header bar: an empty page stands in the height under it. */
   --head-h: calc(2.5rem - 1px);
   /* Corners, one scale: a panel (a card, a dialog, a sheet) is the roundest; what floats over
@@ -272,6 +287,61 @@
   --hue-lilac-ink: light-dark(oklch(0.4151 0.1445 287.91), oklch(0.8144 0.0833 295.37));
   --hue-clay: light-dark(oklch(0.8948 0.0441 52.62), oklch(0.2522 0.0502 41.12));
   --hue-clay-ink: light-dark(oklch(0.4532 0.118 42.5), oklch(0.8173 0.0863 48.74));
+}
+
+/*
+ * Density, in three steps: `data-density="compact"`, `"default"` (or no attribute) and
+ * `"comfortable"`, on the root or on any section, as `data-mode` is. One setting moves every
+ * height a piece is drawn at together: a control (`--control-h`, and `--control-h-sm` a step
+ * under it), a list's row, a table's cells, a menu's item, a field's padding and the sidebar's
+ * rows. `size="sm"` on a piece stays a local step down from whatever the density sets.
+ * Declared apart from the colours, so a section set to the other mode keeps the density
+ * around it, and a section set to a density keeps the mode.
+ */
+:root,
+[data-density] {
+  /* The height of a control in a header row: a tab switcher, a field, a choice, an icon
+     button and a button with words alike, named once so a header never mixes it with the
+     smaller one. */
+  --control-h: 2.25rem;
+  /* A button beside words, a step under the control height. */
+  --control-h-sm: 2rem;
+  /* A list's row (`Row`) at its least, one line of words with room above and below. */
+  --row-h: 2.75rem;
+  /* The room above and below the words in a table's cell. */
+  --cell-pad-y: 0.5rem;
+  /* A menu's or a list's item at its least, one line of words. */
+  --menu-item-h: 2.125rem;
+  /* The room either side of the words in a field. */
+  --field-pad-x: 0.75rem;
+  /* The sidebar's row; its heading is `--sidebar-label-text` over `--sidebar-label-pad`. */
+  --sidebar-row-height: 2rem;
+  --sidebar-label-text: var(--text-meta);
+  --sidebar-label-pad: 0.25rem 0.375rem;
+}
+
+/* What `size="sm"` on `SidebarProvider` draws, so the two dense rails are one. */
+[data-density="compact"] {
+  --control-h: 2rem;
+  --control-h-sm: 1.75rem;
+  --row-h: 2.25rem;
+  --cell-pad-y: 0.3125rem;
+  --menu-item-h: 1.75rem;
+  --field-pad-x: 0.625rem;
+  --sidebar-row-height: 1.75rem;
+  --sidebar-label-text: var(--text-tag);
+  --sidebar-label-pad: 0.125rem 0.1875rem;
+}
+
+[data-density="comfortable"] {
+  --control-h: 2.5rem;
+  --control-h-sm: 2.25rem;
+  --row-h: 3.25rem;
+  --cell-pad-y: 0.75rem;
+  --menu-item-h: 2.5rem;
+  --field-pad-x: 0.875rem;
+  --sidebar-row-height: 2.25rem;
+  --sidebar-label-pad: 0.375rem 0.5rem;
 }
 
 /*

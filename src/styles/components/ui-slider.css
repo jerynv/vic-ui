@@ -12,5 +12,5 @@
   .ui-slider[data-disabled] { opacity: 0.55; }
   .ui-slider[data-disabled] .ui-slider-control, .ui-slider[data-disabled] .ui-slider-thumb { cursor: not-allowed; }
   .ui-slider[data-disabled] .ui-slider-thumb-visual { background: var(--surface-lifted); }
-  .ui-slider-hint { font-size: var(--text-meta); line-height: 1.4; color: var(--fg-subtle); overflow-wrap: anywhere; }
+  .ui-slider-hint { font-size: var(--text-meta); letter-spacing: var(--track-meta); line-height: 1.4; color: var(--fg-subtle); overflow-wrap: anywhere; }
 }

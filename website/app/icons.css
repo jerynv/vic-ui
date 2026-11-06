@@ -17,12 +17,12 @@
 .icon-grid .icon-tile[data-pressed] { background: var(--field-fill); box-shadow: inset 0 0 0 1px var(--line); color: var(--fg-strong); }
 .icon-inspector { position: sticky; top: 6rem; display: grid; min-width: 0; gap: 1rem; padding-top: 2.5rem; }
 .icon-specimen { display: grid; place-items: center; min-height: 12rem; border-radius: var(--radius-panel); background: var(--field-fill); }
-.icon-inspector h2 { font-size: 1.25rem; font-weight: 600; }
+.icon-inspector h2 { font-size: var(--text-title); line-height: var(--text-title--line-height); letter-spacing: var(--track-title); font-weight: 600; }
 .icon-source { margin-top: -0.75rem; color: var(--fg-subtle); font-size: var(--text-tag); overflow-wrap: anywhere; }
 .icon-actions { display: flex; gap: 0.5rem; }
 .icon-usage, .icon-inspector > a { font-size: var(--text-ui); line-height: 1.5; color: var(--fg-subtle); }
 .icon-empty { display: grid; justify-items: start; gap: 0.75rem; padding: 3rem 0; }
-.icon-empty h2 { font-size: 1.25rem; font-weight: 500; }
+.icon-empty h2 { font-size: var(--text-title); line-height: var(--text-title--line-height); letter-spacing: var(--track-title); font-weight: 500; }
 .icon-empty p { color: var(--fg-subtle); }
 @media (width < 960px) {
   .icon-workspace { grid-template-columns: minmax(0, 1fr); }

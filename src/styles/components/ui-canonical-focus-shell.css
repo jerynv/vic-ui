@@ -136,8 +136,9 @@
   white-space: nowrap;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.25rem;
-  line-height: 1.2;
+  font-size: var(--text-title);
+  line-height: var(--text-title--line-height);
+  letter-spacing: var(--track-title);
 }
 
 /* The steps: done ones ticked, this one in the full block, the rest quieter. */
@@ -155,6 +156,7 @@
   align-items: center;
   gap: 0.75rem;
   font-size: var(--text-read);
+  letter-spacing: var(--track-read);
   font-weight: var(--weight-ui);
   counter-increment: way;
   color: color-mix(in oklab, var(--hue) 72%, var(--hue-ink));
@@ -171,6 +173,7 @@
   border: 1.5px solid currentColor;
   border-radius: var(--radius-round);
   font-size: var(--text-tag);
+  letter-spacing: var(--track-tag);
   font-weight: 600;
   transition:
     background-color var(--motion-base) var(--ease-out),
@@ -294,9 +297,9 @@
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: 2rem;
-  line-height: 1.12;
-  letter-spacing: -0.01em;
+  font-size: var(--text-statement);
+  line-height: var(--text-statement--line-height);
+  letter-spacing: var(--track-statement);
   text-wrap: balance;
   overflow-wrap: anywhere;
   color: var(--fg-strong);
@@ -309,7 +312,7 @@
   font-weight: 400;
   font-size: 1.5rem;
   line-height: 1.2;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--track-statement);
   color: var(--fg-strong);
 }
 
@@ -322,6 +325,7 @@
   padding: 0.25rem 0.5rem 0.25rem 0.375rem;
   border-radius: var(--radius-row);
   font-size: var(--text-ui);
+  letter-spacing: var(--track-ui);
   color: var(--fg-subtle);
   text-decoration: none;
   transition:
@@ -428,6 +432,7 @@
 .ui-providers-said {
   margin: 0;
   font-size: var(--text-read);
+  letter-spacing: var(--track-read);
   line-height: var(--text-read--line-height);
   color: var(--fg);
 }
@@ -444,6 +449,7 @@
   width: 100%;
   height: var(--control-h);
   font-size: var(--text-read);
+  letter-spacing: var(--track-read);
   font-weight: 400;
 }
 
@@ -465,6 +471,7 @@
   margin: 0.875rem 0 0;
   font-family: var(--font-sans);
   font-size: var(--text-ui);
+  letter-spacing: var(--track-ui);
   color: var(--fg-subtle);
 }
 
@@ -533,6 +540,7 @@
     background: var(--form-steps-surface);
     color: var(--fg-subtle);
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-variant-numeric: tabular-nums;
     line-height: var(--text-ui--line-height);
     transition: color var(--motion-base) var(--ease-out), background-color var(--motion-base) var(--ease-out), border-color var(--motion-base) var(--ease-out);
@@ -558,6 +566,7 @@
     background: linear-gradient(to right, var(--form-steps-surface) calc(100% - 2rem), transparent);
     color: var(--fg-subtle);
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-weight: var(--weight-ui);
     line-height: var(--text-ui--line-height);
     white-space: nowrap;

@@ -43,6 +43,7 @@
     justify-content: space-between;
     gap: 1rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 
@@ -53,6 +54,7 @@
   .ui-panel-head {
     margin: 1.5rem 0 0.5rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: 600;
     color: var(--fg-subtle);
   }
@@ -95,6 +97,7 @@
     min-width: 0;
     margin: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 
@@ -122,6 +125,7 @@
   .ui-panel-note {
     display: grid;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     line-height: var(--text-meta--line-height);
   }
 
@@ -144,6 +148,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     border-radius: var(--radius-mark);
   }
@@ -199,6 +204,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
   }
 
@@ -243,6 +249,7 @@
   .ui-panel-block-label {
     margin: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 
@@ -266,6 +273,7 @@
     background: none;
     font: inherit;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     text-align: left;
     text-decoration: none;
@@ -335,6 +343,7 @@
 
   .ui-mode-name {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
     transition: color var(--motion-fast) var(--ease-out);
   }
@@ -455,6 +464,7 @@
 
   .ui-settings-dialog-eyebrow {
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     line-height: var(--text-meta--line-height);
     color: var(--fg-subtle);
   }
@@ -469,7 +479,7 @@
     font-weight: 700;
     font-size: 0.9375rem;
     line-height: 1.2;
-    letter-spacing: -0.01em;
+    letter-spacing: var(--track-title);
     color: var(--fg-strong);
   }
 
@@ -532,6 +542,7 @@
     flex: 1 1 auto;
     min-width: 0;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     line-height: var(--text-meta--line-height);
     font-weight: var(--weight-ui);
     white-space: nowrap;
@@ -552,6 +563,7 @@
 
   .ui-settings-dialog-count {
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     font-variant-numeric: tabular-nums;
     color: var(--fg-subtle);
   }
@@ -616,6 +628,7 @@
     min-width: 0;
     margin-right: auto;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.4;
     color: var(--fg-subtle);
   }

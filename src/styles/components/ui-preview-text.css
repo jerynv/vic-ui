@@ -23,6 +23,7 @@
     margin: 0;
     padding: 0.875rem 1rem;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: var(--text-ui--line-height);
     color: var(--fg-subtle);
     white-space: normal;
@@ -33,6 +34,7 @@
     padding: 0.75rem 1rem 0.75rem 0;
     font-family: var(--font-code);
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.6;
     tab-size: 4;
     counter-reset: preview-line;
@@ -64,6 +66,7 @@
     border-collapse: separate;
     border-spacing: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: var(--text-ui--line-height);
     font-variant-numeric: tabular-nums;
   }

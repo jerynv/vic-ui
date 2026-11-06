@@ -31,6 +31,7 @@
     background-origin: border-box;
     font: inherit;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: var(--weight-ui);
     line-height: 1;
     white-space: nowrap;
@@ -89,6 +90,7 @@
   .ui-button-lg {
     height: var(--control-h);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
   }
 
   .ui-button-lg .ui-button-face {
@@ -304,6 +306,7 @@
 
   .ui-field-label {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-weight: 600;
     line-height: 1.45;
     color: var(--fg-strong);
@@ -417,11 +420,12 @@
     flex: 1;
     min-width: 0;
     height: 100%;
-    padding: 0 0.75rem;
+    padding: 0 var(--field-pad-x);
     border: 0;
     background: none;
     font: inherit;
     font-size: var(--field-text);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     outline: none;
   }
@@ -432,8 +436,9 @@
 
   .ui-field-suffix {
     flex: none;
-    padding-right: 0.75rem;
+    padding-right: var(--field-pad-x);
     font-size: var(--field-text);
+    letter-spacing: var(--track-read);
     color: var(--fg-subtle);
   }
 
@@ -441,6 +446,7 @@
   .ui-field-error {
     margin: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.45;
     color: var(--fg-subtle);
   }
@@ -559,7 +565,7 @@
 
   .ui-select-caret {
     position: absolute;
-    right: 0.75rem;
+    right: var(--field-pad-x);
     top: 50%;
     translate: 0 -50%;
     color: var(--fg-subtle);
@@ -601,10 +607,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    min-height: 2.125rem;
-    padding: 0.4rem 0.65rem;
+    min-height: var(--menu-item-h);
+    padding: calc(0.4rem + (var(--menu-item-h) - 2.125rem) / 2) 0.65rem;
     border-radius: calc(var(--radius-float) - 0.3rem);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     cursor: pointer;
     user-select: none;
@@ -631,6 +638,7 @@
     display: block;
     margin-top: 0.125rem;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--fg-subtle);
     white-space: normal;
   }
@@ -644,6 +652,7 @@
   .ui-menu-end {
     flex: none;
     font-size: var(--text-meta);
+    letter-spacing: var(--track-meta);
     color: var(--fg-subtle);
   }
 
@@ -747,6 +756,7 @@
   .ui-check-words {
     min-width: 0;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: 1.45;
     color: var(--fg);
     cursor: pointer;
@@ -784,6 +794,7 @@
     align-items: center;
     gap: 0.625rem;
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     color: var(--fg-strong);
     cursor: pointer;
   }
@@ -838,6 +849,7 @@
 
   .ui-radio-hint {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     color: var(--fg-subtle);
   }
 
@@ -888,6 +900,7 @@
     border-radius: var(--radius-control);
     box-shadow: inset 0 0 0 1px var(--line);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     line-height: var(--text-read--line-height);
     color: var(--fg-strong);
     cursor: pointer;
@@ -931,6 +944,7 @@
 
   .ui-choice-card-hint {
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     line-height: var(--text-ui--line-height);
     color: var(--fg-subtle);
   }
@@ -938,6 +952,7 @@
   .ui-choice-card-end {
     flex: none;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
@@ -1027,6 +1042,7 @@
     --words: var(--fg);
     height: var(--control-h);
     font-size: var(--text-read);
+    letter-spacing: var(--track-read);
     font-weight: 400;
   }
 

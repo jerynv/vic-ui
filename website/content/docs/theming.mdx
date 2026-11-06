@@ -1,6 +1,6 @@
 ---
 title: Theming
-description: Shared colors, typography, shape, motion, and light or dark appearance.
+description: Shared colors, typography, density, shape, motion, and light or dark appearance.
 ---
 
 ## One set of tokens
@@ -11,7 +11,51 @@ Override tokens in your application stylesheet, after importing `vic-ui/ui/style
 
 ## Your brand, not ours
 
-The palette, faces, corners and heights on this site are one interpretation, a default to start from. Your app is expected to set its own tokens and does not have to match these. Put them in one theme stylesheet, imported after vic-ui's and outside any `@layer`: colours as `light-dark()` pairs and radii on `:root, [data-mode]`, so a section set to the other mode keeps them, and `--font-sans` and `--font-display` on `:root`. Keep the `color-scheme` declaration, or compiled colours resolve to nothing. Token names, component props and `ui-` class names are the stable contract, so change the look through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the keyboard focus ring, disabled pieces that say why, state that carries a word and not only a colour, and each tone ink at least 5.8:1 on the canvas, the panel and its own tint in both modes.
+The palette, faces, corners and heights on this site are one interpretation, a default to start from. Your app is expected to set its own tokens and does not have to match these. Put them in one theme stylesheet, imported after vic-ui's and outside any `@layer`: colours as `light-dark()` pairs and radii on `:root, [data-mode]`, so a section set to the other mode keeps them, and `--font-sans` and `--font-display` on `:root`. Heights belong to the density: set them on `:root, [data-density]`, or on one step such as `[data-density="compact"]`. Keep the `color-scheme` declaration, or compiled colours resolve to nothing. Token names, component props and `ui-` class names are the stable contract, so change the look through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the keyboard focus ring, disabled pieces that say why, state that carries a word and not only a colour, and each tone ink at least 5.8:1 on the canvas, the panel and its own tint in both modes.
+
+## Density
+
+Set `data-density` on the document element, or on any section, to `compact`, `default` or `comfortable`. One setting moves every height together: controls (`--control-h` and `--control-h-sm`), a list's rows (`--row-h`), a table's cells (`--cell-pad-y`), a menu's items (`--menu-item-h`), the room either side of a field's words (`--field-pad-x`) and the sidebar's rows and headings. It works like `data-mode`: a section inside a compact page can be set back to `default`, and a section set to the other mode keeps the density around it.
+
+<ComponentPreview name="density" />
+
+```tsx
+<html data-density="compact">
+  <section data-density="comfortable">
+    <TextField label="Email" />
+    <TextField label="Search" size="sm" />
+  </section>
+</html>
+```
+
+`size="sm"` stays a local step down from the density: a small field is always one step under the fields around it. `SidebarProvider size="sm"` draws the same rail as `data-density="compact"`, kept to the rail, so the page beside it keeps its own density.
+
+| Token | Compact | Default | Comfortable |
+| --- | --- | --- | --- |
+| `--control-h` | 2rem | 2.25rem | 2.5rem |
+| `--control-h-sm` | 1.75rem | 2rem | 2.25rem |
+| `--row-h` | 2.25rem | 2.75rem | 3.25rem |
+| `--cell-pad-y` | 0.3125rem | 0.5rem | 0.75rem |
+| `--menu-item-h` | 1.75rem | 2.125rem | 2.5rem |
+| `--field-pad-x` | 0.625rem | 0.75rem | 0.875rem |
+| `--sidebar-row-height` | 1.75rem | 2rem | 2.25rem |
+
+To make your own step, set these tokens on `[data-density="your-name"]` in your theme stylesheet.
+
+## Type
+
+The working sizes are `--text-tag` (11px), `--text-meta` (12px), `--text-ui` (13px), `--text-read` (14px) and `--text-lead` (16px). Above them, `--text-title` (1.25rem, line height 1.2) is a headline in the product, such as a dialog's title, and `--text-statement` (2rem, line height 1.12) is the one sentence a screen on the way in is about. Each size has its line height as a token beside it, such as `--text-title--line-height`.
+
+Letter spacing is a token per size: `--track-tag`, `--track-meta`, `--track-ui`, `--track-read`, `--track-lead`, `--track-title` (-0.02em) and `--track-statement` (-0.01em). The working sizes default to the face's own spacing. Each piece reads the spacing that goes with its size, so a face that needs looser small text takes one line:
+
+```css
+:root {
+  --track-tag: 0.02em;
+  --track-meta: 0.01em;
+}
+```
+
+The stylesheet ships a fallback face, "Cal Sans UI Fallback": the device's Arial, scaled with `size-adjust`, `ascent-override` and `descent-override` to Cal Sans UI's measured metrics. While Cal Sans UI loads, text draws in the fallback at the same width and line height, so nothing moves when the face arrives. `--font-sans-fallback` names it, followed by the system stack. `--font-sans` and `--font-display` are `"Cal Sans UI", var(--font-sans-fallback)`. If you bring your own face, set `--font-sans` and point `--font-sans-fallback` at a fallback measured for your face.
 
 ## The surface stack
 

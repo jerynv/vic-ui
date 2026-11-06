@@ -145,7 +145,7 @@ From `web/src/ui/README.md`:
 - **Controlled, one value.** A piece that holds a choice takes `value` and gives `onValueChange(value)`; one that is on or off takes `checked` and gives `onCheckedChange(checked)`. A native piece still passes `onChange` and every other native attribute through.
 - **Lists are `Items`**: a record of value to words, pairs in order, or `Option`s. Every list-shaped piece reads them through `toOptions`.
 - **Labelled the same way.** A field has `label` (or `aria-label`) and `hint` on its own line under the box. A short `error` (up to `SHORT_ERROR`, 56 characters) takes the label's place in the danger ink (`FieldHead`); a longer refusal is a `Notice` with `onDismiss` at the top of the form. `name` posts the value with its form, through a hidden input where the piece is not a native control.
-- **Sizes.** `size="sm"` is the dense size (`--control-h-sm`, 2rem); the default is `--control-h` (2.25rem). Inside the product the dense size is the norm; the way in uses the default. The one exception is `Button`, whose default is already the dense height and whose `lg` is `--control-h`.
+- **Sizes.** `size="sm"` is the dense size (`--control-h-sm`, 2rem); the default is `--control-h` (2.25rem). Inside the product the dense size is the norm; the way in uses the default. The one exception is `Button`, whose default is already the dense height and whose `lg` is `--control-h`. Both heights come from the [density](#density) (`data-density` on the root or on a section), so `size="sm"` is always a step under whatever the density sets.
 - **Classes.** Every class starts `ui-`. `className` is for placement only, never to restyle a piece.
 - **Floating.** Anything that floats opens in the top layer (`popover="manual"`), positioned by `@floating-ui/dom` with `strategy: "fixed"`, on `.ui-menu`'s surface.
 - **States.** Every interactive piece has an eased hover, a press and a focus ring, and no state changes the weight or size of its words. A disabled piece is dimmed to 0.55 with a `not-allowed` pointer; one that takes `disabledReason` stays focusable and says the reason on hover and focus.
@@ -581,7 +581,7 @@ States:
 - Focus: nothing is drawn; the caret shows it (`outline: none` on the input).
 - Error (`data-invalid`): `inset 0 0 0 1px var(--tone-danger-ink)`; `aria-invalid`; the error takes the label's place (see `FieldHead`).
 - Disabled (`:has(:disabled)`): box opacity 0.55, `not-allowed`, no hover.
-- Input: padding `0 0.75rem` (`sm`: `0 0.625rem`, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
+- Input: padding `0 var(--field-pad-x)` (0.75rem at the default density; `sm`: `0 0.625rem`, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
 - Disabled for a reason (`disabledReason`, `useFieldReason`): the input is `readOnly` and `aria-disabled` rather than disabled, the box carries `data-disabled`, and the reason hangs from the box on pointer rest and focus.
 
 Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
@@ -869,7 +869,7 @@ Words over several lines, in the box `TextField` draws. Optionally grows with it
 
 States:
 
-- Box: height auto, stretches; textarea padding `0.5rem 0.75rem` (`sm`: `0.375rem 0.625rem`), line height 1.5, `resize: vertical` (none with `grow`).
+- Box: height auto, stretches; textarea padding `0.5rem var(--field-pad-x)` (`sm`: `0.375rem 0.625rem`), line height 1.5, `resize: vertical` (none with `grow`).
 - Hover, error and disabled: as `TextField`; disabled or held also sets `data-disabled` on the box (opacity 0.55, `not-allowed`, hover stays `--field-fill`). A held field that takes focus draws `0 0 0 2px var(--focus)` round the box.
 - Count: `--text-ui`, tabular, `--fg-subtle`; at the limit (`data-full`) `--tone-caution-ink` (`--motion-fast`). The foot line keeps `calc(var(--text-ui) * 1.45)` height.
 
@@ -1019,7 +1019,7 @@ States:
 - Up: `--surface-lifted`, radius `--radius-panel`, `--shadow-float`, max height `calc(100dvh - 2rem)`, scrolls inside; enters with `ui-dialog-in` (opacity 0 and scale 0.98, `--motion-base` `--ease-out`, `backwards`).
 - Veil: `light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62))` with `blur(3px)`, fading in over `--motion-base`.
 - Focus: the dialog itself draws no outline.
-- Head padding `1.25rem 1.25rem 0`; title `--font-display` 700 at 1.25rem, line height 1.15, letter spacing -0.02em, balanced, `--fg-strong`; description `--text-read`, line height 1.5, max 46ch, `--fg-subtle`.
+- Head padding `1.25rem 1.25rem 0`; title `--font-display` 700 at `--text-title` (1.25rem), line height `--text-title--line-height` (1.2), letter spacing `--track-title` (-0.02em), balanced, `--fg-strong`; description `--text-read`, line height 1.5, max 46ch, `--fg-subtle`.
 - Body: grid gap 1rem, padding `1rem 1.25rem 1.25rem`. Foot: flex end, gap 0.5rem, padding `0.75rem 1.25rem`, top rule `1px solid var(--line)`, ground `--fill-faint`; directly under the head it has 1.25rem above.
 - Problem: `--text-ui`, line height 1.4, `--tone-danger-ink`, `role="alert"`.
 - Below 640px: full width, max height 88dvh, at the bottom, top corners `--radius-panel`, entering with `ui-sheet-in` (from `translate: 0 100%`, `--motion-base`).
@@ -1072,7 +1072,7 @@ A click from the keys (Enter or Space, `detail === 0`) opens on the first action
 States:
 
 - Surface: `ui-menu` (see below) plus min width 11rem, max width `min(20rem, calc(100vw - 1rem))`; no outline on the menu or its items.
-- Item: min height 2.125rem, padding `0.4rem 0.65rem`, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `--fill-hover`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `--fill-press`. Background eases over `--motion-fast`.
+- Item: min height `--menu-item-h` (2.125rem at the default density), padding `0.4rem 0.65rem` with the block padding moving by half of what the density adds or takes, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `--fill-hover`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `--fill-press`. Background eases over `--motion-fast`.
 - Danger: words and icon `--tone-danger-ink`; active ground `--tone-danger-tint`.
 - Disabled with no reason: opacity 0.55, `not-allowed`, passed over by the keys.
 - Disabled with a reason: still reached by the keys; active ground `--fill-faint`; the reason shows in a tooltip to the right while it is active.
@@ -1238,8 +1238,8 @@ The one table: dense rows, a head pinned to the top of its scroller, every numbe
 States:
 
 - Scroller: `--ui-table-ground: var(--bg-base)`, `overflow-x: clip`; with a height, `overflow: auto`.
-- Cells: padding `0.5rem 0.75rem`, bottom rule `1px solid var(--line-soft)`, `--text-read`, `--fg`; `data-align` end and center.
-- Head: sticky at top, padding-block 0.4rem, `--text-ui` weight 600, `--fg-subtle` on `--ui-table-ground`, rule `--line`.
+- Cells: padding `var(--cell-pad-y) 0.75rem` (0.5rem at the default density), bottom rule `1px solid var(--line-soft)`, `--text-read`, `--fg`; `data-align` end and center.
+- Head: sticky at top, padding-block `calc(var(--cell-pad-y) - 0.1rem)` (0.4rem), `--text-ui` weight 600, `--fg-subtle` on `--ui-table-ground`, rule `--line`.
 - Sort button: radius `--radius-row`; hover `--fg-strong` on `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset 2px; sorted `--fg-strong`. Its arrow (`ArrowDownIcon` 12px) always holds its room: opacity 0, 0.4 on hover, 1 when sorted; ascending rotates 180deg.
 - Pressable row: `cursor: pointer`; hover `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset -2px. Current row `--field-fill-hover`. Background eases over `--motion-fast`.
 - After: a row of its own (`ui-table-after`) with one cell spanning the columns, no top padding, and the row above it loses its rule, so the two read as one.
@@ -1286,7 +1286,7 @@ Groups of rows with an optional secondary `description` (`List.tsx`): a group's 
 States:
 
 - Head: height 2rem, `--text-ui`; mark `var(--hue-ink, var(--fg-subtle))`; title weight 600 `--fg-strong`; count tabular `--fg-subtle`; more `--fg-subtle`, `--fg-strong` on hover, focus outline 2px `--focus`. Head and rows hang 0.5rem past the column, so the words line up with what is above them.
-- Row: minimum height 2.75rem, padding 0.625rem 0.5rem, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
+- Row: minimum height `--row-h` (2.75rem at the default density), padding 0.625rem 0.5rem with the block padding moving by half of what the density adds or takes, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
 - Under 640px: a place that is not a link goes, and when goes from a row with an action.
 
 Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--hue-ink`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
@@ -1761,12 +1761,12 @@ Holds the sidebar's state and draws the row it sits in with the page: a flex row
 | `collapsible` | `"icon" \| "offcanvas" \| "none"` | `"icon"` | Folds to its marks, goes away, or never folds. |
 | `mobileBreakpoint` | `number` | `768` | Below this width in pixels it is a sheet; `0` never. |
 | `contained` | `boolean` | `false` | The sheet and backdrop cover the container, not the window. |
-| `size` | `"sm" \| "md"` | `"md"` | The rail's density: `sm` sets `--sidebar-row-height` to 1.75rem and every heading without its own `size` a step smaller (`data-size="sm"` on the wrapper). |
+| `size` | `"sm" \| "md"` | `"md"` | The rail's density: `sm` sets `--sidebar-row-height` to 1.75rem and every heading without its own `size` a step smaller (`data-size="sm"` on the wrapper). It is the rail `data-density="compact"` draws, kept to the rail, so the page beside it keeps the density around it. Without it the rail follows the density. |
 | `className` | `string` | none | On the wrapper. |
 | `style` | `CSSProperties` | none | On the wrapper. |
 | `children` | `ReactNode` | required | The `Sidebar` and the page. |
 
-The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: var(--motion-base)`, `--sidebar-easing: var(--ease-track)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-row-height: 2rem` (1.75rem under `size="sm"`), `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). Not contained, it is at least `100svh` tall.
+The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: var(--motion-base)`, `--sidebar-easing: var(--ease-track)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). From the [density](#density): `--sidebar-row-height` (2rem; compact 1.75rem, comfortable 2.25rem), `--sidebar-label-text` (`--text-meta`; compact `--text-tag`) and `--sidebar-label-pad` (`0.25rem 0.375rem`; compact `0.125rem 0.1875rem`, comfortable `0.375rem 0.5rem`); `size="sm"` sets the compact three on the wrapper. Not contained, it is at least `100svh` tall.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-wrapper`, `ui-sidebar-window`.
 
@@ -1831,12 +1831,12 @@ A group's heading, which folds into a rule as the rail folds (none above the fir
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `children` | `ReactNode` | | The heading. |
-| `size` | `"sm" \| "md"` | the provider's | `sm` is denser: `--text-tag`, padding-block `0.125rem 0.1875rem`. `md` keeps the full size in a dense rail. Sets `data-size`. |
+| `size` | `"sm" \| "md"` | the provider's, else the density's | `sm` is denser: `--text-tag`, padding-block `0.125rem 0.1875rem`. `md` keeps the full size in a dense rail or a compact density. Sets `data-size`, which sets `--sidebar-label-text` and `--sidebar-label-pad` on the heading. |
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 
-States: words `--text-meta` weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem` (`sm`, or under a dense provider without a `size` of its own: `--text-tag` and `0.125rem 0.5rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (`--motion-fast`); the first group's label keeps no margin and no rule. In a sheet it does not transition.
+States: words `var(--sidebar-label-text)` (`--text-meta`) weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg-subtle`, padding-inline 0.5rem and padding-block `var(--sidebar-label-pad)` (`0.25rem 0.375rem`; `sm`, under a dense provider or under `data-density="compact"` without a `size` of its own: `--text-tag` and `0.125rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (`--motion-fast`); the first group's label keeps no margin and no rule. In a sheet it does not transition.
 
-Tokens: `--text-meta`, `--fg-subtle`, `--line`, `--sidebar-animation-duration`, `--sidebar-easing`.
+Tokens: `--sidebar-label-text`, `--sidebar-label-pad`, `--text-meta`, `--text-tag`, `--fg-subtle`, `--line`, `--sidebar-animation-duration`, `--sidebar-easing`.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-group-label`, `ui-sidebar-group-fold`, `ui-sidebar-group-words`.
 
@@ -1862,7 +1862,7 @@ A place: a link by `href` (through `LinkProvider` for a path of the app beginnin
 | `active` | `boolean` | `false` | The place you are in (`data-active="true"`). |
 | `tooltip` | `ReactNode` | none | Said beside the mark (to the right) while the rail is folded. |
 | `dot` | `string \| undefined` | none | A dot on the mark while folded; the words are for a screen reader. |
-| `size` | `"sm" \| "md" \| "lg"` | the provider's | The row's height: 1.75rem, 2rem or 2.5rem, outranking the provider's `--sidebar-row-height`. Sets `data-size`. |
+| `size` | `"sm" \| "md" \| "lg"` | the provider's, else the density's | The row's height: 1.75rem, 2rem or 2.5rem, outranking the provider's or the density's `--sidebar-row-height`. Sets `data-size`. |
 | `count` | `{ value: number; label: string; tone?: Tone; max?: number }` | none | A soft `Count` at the row's end while open (in a `ui-sidebar-badge`), the dot on the mark while folded; `label` is said in either, once. Nothing at 0. An explicit `dot` outranks the count's words. |
 | `href` | `string` | none | Makes it a link. |
 | `children` | `ReactNode` | none | The words. |
@@ -2177,7 +2177,7 @@ CSS: classes `ui-trace-waterfall`, `ui-trace-waterfall-row`, `ui-trace-waterfall
 
 ## Tokens
 
-All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are listed as their light and dark values. The colour tokens and the scales are declared on `:root, [data-mode]` (unlayered), so a section set to the other mode reads them in its own. The type scale, the font tokens and the easings are in Tailwind's `@theme` block.
+All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are listed as their light and dark values. The colour tokens and the scales are declared on `:root, [data-mode]` (unlayered), so a section set to the other mode reads them in its own; the heights the density sets are on `:root, [data-density]` instead (see [Density](#density)). The type scale, the font tokens and the easings are in Tailwind's `@theme` block.
 
 **The defaults are a starting point.** These values are vic-ui's own interpretation, not a spec a consuming app has to match. An app sets its own brand in one theme stylesheet, imported after vic-ui's and outside any `@layer`, overriding tokens on `:root, [data-mode]` (colours as `light-dark()` pairs) and the font tokens on `:root`, while keeping the `color-scheme` declarations below. Token names, component props and `ui-` class names are the stable contract; the look changes through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the focus ring, disabled says why, state carries a word, nothing moves, and every tone ink stays at or above 5.8:1 on the canvas, the panel and its own tint in both modes (see [Contrast, measured](#contrast-measured)).
 
@@ -2380,6 +2380,32 @@ A nested corner stays concentric by subtracting its inset: `calc(var(--radius-bu
 | `--control-h` | `2.25rem` | The default: fields, tabs, choices, `Button size="lg"`. The way in uses it. |
 | `--control-h-sm` | `2rem` | The dense height: `Button`'s default, `size="sm"` fields and tabs, pager buttons, icon buttons. The norm inside the product. |
 
+Both are set by the density below, so they are declared on `:root, [data-density]` rather than with the colours.
+
+### Density
+
+One setting moves every height a piece is drawn at together. Set `data-density` on the root or on any section, as `data-mode` is: `compact`, `default` (or no attribute) or `comfortable`. The tokens are declared on `:root, [data-density]` apart from the colours, so a section set to the other mode keeps the density around it, and a section set back to `default` inside a compact one draws at the default again. `size="sm"` on a piece stays a local step under whatever the density sets (a small field reads `--control-h-sm`, which the density moves too). Nothing in a piece changes its height by state, and the density is not a state: it is set once, for a page or a part of one.
+
+| Token | Compact | Default | Comfortable | Read by |
+| --- | --- | --- | --- | --- |
+| `--control-h` | `2rem` | `2.25rem` | `2.5rem` | Fields, tabs, choices, `Button size="lg"`, every piece of the control height. |
+| `--control-h-sm` | `1.75rem` | `2rem` | `2.25rem` | `Button`, `size="sm"` fields and tabs, icon buttons, pager buttons. |
+| `--row-h` | `2.25rem` | `2.75rem` | `3.25rem` | A list's `Row` at its least; its block padding moves by half the difference from 2.75rem. |
+| `--cell-pad-y` | `0.3125rem` | `0.5rem` | `0.75rem` | A `Table`'s cells above and below; its head takes 0.1rem less. |
+| `--menu-item-h` | `1.75rem` | `2.125rem` | `2.5rem` | A `Menu`'s, a `Select`'s and a `Combobox`'s item at its least; its block padding moves by half the difference from 2.125rem. |
+| `--field-pad-x` | `0.625rem` | `0.75rem` | `0.875rem` | The room either side of a field's words, its prefix, its suffix, a select's caret, a search's glass, a textarea and the native input and select. `size="sm"` keeps 0.625rem. |
+| `--sidebar-row-height` | `1.75rem` | `2rem` | `2.25rem` | The sidebar's rows. `SidebarProvider size="sm"` sets 1.75rem on the rail alone; a row's own `size` outranks both. |
+| `--sidebar-label-text` | `--text-tag` | `--text-meta` | `--text-meta` | A sidebar group's heading. |
+| `--sidebar-label-pad` | `0.125rem 0.1875rem` | `0.25rem 0.375rem` | `0.375rem 0.5rem` | Above and below a sidebar group's heading. |
+
+`SidebarProvider size="sm"` and `data-density="compact"` draw the same rail (rows 1.75rem, headings at `--text-tag`); the prop keeps it to the rail, the attribute moves the page beside it too. `tests/density-type.test.mjs` measures every row of this table in each step, a section set to the other mode inside a compact one, and the two dense rails against each other.
+
+```html
+<html data-density="compact">
+  <section data-density="comfortable">A form on the way in, a step roomier.</section>
+</html>
+```
+
 ### Type scale
 
 The working scale (everything that is not a statement). Nothing drawn is smaller than 11px.
@@ -2393,6 +2419,24 @@ Two weight tokens sit with the faces on `:root`. `--weight-ui: 500` is the inter
 | `--text-ui` | `0.8125rem` (13px) | `1.45` |
 | `--text-read` | `0.875rem` (14px) | `1.55` |
 | `--text-lead` | `1rem` (16px) | `1.4` |
+| `--text-title` | `1.25rem` (20px) | `1.2` |
+| `--text-statement` | `2rem` (32px) | `1.12` |
+
+`--text-title` is a headline in the product, set at 500 to 700: a dialog's title (`ui-dialog-title`, 700), the name a screen on the way in is under (`ui-focus-name`, 600). `--text-statement` is the one sentence a screen on the way in is about (`ui-focus-title`, 400). Each line height is its own token, `--text-title--line-height` and `--text-statement--line-height`, as the working sizes' are.
+
+Letter spacing is a token per size, on `:root`, read beside the size wherever a piece sets it (`letter-spacing: var(--track-ui)` next to `font-size: var(--text-ui)`, and `--track-read` next to `--field-text`). The working sizes sit at the face's own spacing; the headlines draw a little closer. A state never changes any of them.
+
+| Token | Value | Read with |
+| --- | --- | --- |
+| `--track-tag` | `0em` | `--text-tag` |
+| `--track-meta` | `0em` | `--text-meta` |
+| `--track-ui` | `0em` | `--text-ui` |
+| `--track-read` | `0em` | `--text-read`, `--field-text` |
+| `--track-lead` | `0em` | `--text-lead` |
+| `--track-title` | `-0.02em` | `--text-title`, and the settings dialog's 0.9375rem title |
+| `--track-statement` | `-0.01em` | `--text-statement`, and the 1.5rem line under it (`ui-focus-when`) |
+
+The one `letter-spacing` that is not a token is the one-time code's hidden input (`ui-code-field-input`, 2.5rem), which spreads its transparent digits one to a cell and is not type.
 
 Also declared in the same block, for older and longer-form text:
 
@@ -2414,9 +2458,10 @@ Font tokens:
 
 | Token | Value |
 | --- | --- |
-| `--font-sans` | `"Cal Sans UI", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` |
+| `--font-sans-fallback` | `"Cal Sans UI Fallback", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` (the metrics-matched fallback face, then the device's; see [Fonts](#fonts)) |
+| `--font-sans` | `"Cal Sans UI", var(--font-sans-fallback)` |
 | `--default-font-family` | `var(--font-sans)` |
-| `--font-display` | `"Cal Sans UI", ui-sans-serif, system-ui, sans-serif` |
+| `--font-display` | `"Cal Sans UI", var(--font-sans-fallback)` |
 | `--font-mark` | `var(--font-sans)` (eyebrows, numerals, times, code labels; one face) |
 | `--font-wordmark` | `"Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace` (the logo only) |
 | `--font-code` | `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace` (an uploaded file's source; no font shipped) |
@@ -2504,7 +2549,7 @@ No state (focus, hover, press, chosen, selected, active, open, current) changes 
 
 ### Dense control height
 
-`--control-h-sm` (2rem) is the dense height and the norm inside the product; `--control-h` (2.25rem) is the default and what the way in uses. A header row holds every control at one height and never mixes the two. A control taller than the words beside it gives back the difference with a negative block margin.
+`--control-h-sm` (2rem) is the dense height and the norm inside the product; `--control-h` (2.25rem) is the default and what the way in uses. A header row holds every control at one height and never mixes the two. A control taller than the words beside it gives back the difference with a negative block margin. The two values here are the default density; `data-density` moves both together (see [Density](#density)), so the rule holds at every step.
 
 ### Sentence case everywhere
 
@@ -2604,7 +2649,11 @@ The library itself uses fifteen: `AlertCircleIcon` (tabler `alert-circle`), `Ale
 | Cal Sans UI | `cal-sans-ui-wght-geom.woff2` (one variable file, `woff2-variations`) | `wght` 300 to 700; `GEOM` 0 to 100 | SIL Open Font License 1.1 | Mark Davis (WORDMARK), for Cal.com | Everything: the interface at the default `GEOM`, statements at `GEOM 100`. The axis is set by `font-variation-settings: "GEOM" 100` in the app's `.display` rule (`web/src/styles/components/type.css`); `--font-display` names the face only, so the library's dialog title and large org mark draw at the default `GEOM`. |
 | Space Mono Bold | `space-mono-700-latin.woff2` | weight 700 only | SIL Open Font License 1.1 | Colophon Foundry, for Google Fonts | The wordmark, and nothing else (`--font-wordmark`). |
 
-Both are declared in `base.css` with `font-display: swap`. Fallback stacks are the font tokens above: `--font-sans` falls back to `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`; `--font-display` to `ui-sans-serif, system-ui, sans-serif`; `--font-wordmark` to `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`. `--font-code` ships no font and is the device's own fixed-width face. The `GEOM` axis runs from the flowing, interface-tuned drawing (0) to a geometric one (100); never ask for a weight under 300, which clamps.
+Both are declared in `base.css` with `font-display: swap`. Fallback stacks are the font tokens above: `--font-sans` and `--font-display` fall back to `--font-sans-fallback`, which is `"Cal Sans UI Fallback"` and then `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`.
+
+`"Cal Sans UI Fallback"` is a third `@font-face` in `fonts.css`, with no file of its own: `src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans")` (Liberation Sans is drawn to Arial's measure), `size-adjust: 108.9%`, `ascent-override: 82.64%`, `descent-override: 20.2%`, `line-gap-override: 0%`. It stands in while Cal Sans UI loads (`font-display: swap`), so the swap moves nothing: a line takes the same width within about 1.5% and the same height. The numbers are measured from `cal-sans-ui-wght-geom.woff2`: its `head`, `hhea` and `OS/2` tables give 1000 units to the em, ascender 900, descender -220 and no line gap (with `USE_TYPO_METRICS` set and the typo metrics equal); the width is Chromium's `measureText` over a paragraph of interface copy at `--weight-ui` (500), where Cal Sans UI runs 1.089 times as wide as Arial (1.070 at 400, 1.109 at 600). `size-adjust` scales the overrides too, so each is the face's metric over 1.089. Where neither Arial nor Liberation Sans is installed the face does not load and the device's own stack follows. Leaving `fonts.css` out leaves the name unresolved, and the stack goes straight to the device's faces as before. `tests/density-type.test.mjs` sets a paragraph in each face and holds the fallback to Cal Sans UI's lines, height and width.
+
+The rest of the stacks: `--font-wordmark` to `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`. `--font-code` ships no font and is the device's own fixed-width face. The `GEOM` axis runs from the flowing, interface-tuned drawing (0) to a geometric one (100); never ask for a weight under 300, which clamps.
 
 `body` sets `--font-sans` at `--text-body` with `-webkit-font-smoothing: antialiased` and `-moz-osx-font-smoothing: grayscale`. Selection is `light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0))` behind `light-dark(oklch(0.9851 0 0), oklch(0.1448 0 0))`.
 

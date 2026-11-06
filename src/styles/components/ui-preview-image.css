@@ -18,6 +18,7 @@
     min-width: 4ch;
     text-align: center;
     font-size: var(--text-ui);
+    letter-spacing: var(--track-ui);
     font-variant-numeric: tabular-nums;
     color: var(--fg-subtle);
   }

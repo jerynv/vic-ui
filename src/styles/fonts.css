@@ -10,6 +10,30 @@
   src: url("../fonts/cal-sans-ui-wght-geom.woff2") format("woff2-variations");
 }
 
+/*
+ * What `--font-sans-fallback` names first: the device's Arial (or Liberation Sans, drawn to
+ * Arial's measure) scaled to Cal Sans UI, so a line set while the face loads takes the room it
+ * will take once it has, and the swap reflows nothing.
+ *
+ * Measured from cal-sans-ui-wght-geom.woff2 itself. Its head, hhea and OS/2 tables were read
+ * after brotli-decompressing the woff2 stream: 1000 units to the em; hhea ascender 900,
+ * descender -220, line gap 0; OS/2 sets USE_TYPO_METRICS with the same 900, -220 and 0. The
+ * width was measured in Chromium with canvas measureText over a paragraph of interface copy
+ * at --weight-ui (500): Cal Sans UI runs 1.089 times as wide as Arial (1.070 at 400, 1.109 at
+ * 600; 1.073 over short labels, 1.107 over English letter frequencies). size-adjust scales the
+ * overrides too, so each is the face's metric over 1.089: 0.900 / 1.089 = 82.64% and
+ * 0.220 / 1.089 = 20.20%.
+ */
+@font-face {
+  font-family: "Cal Sans UI Fallback";
+  font-style: normal;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans");
+  size-adjust: 108.9%;
+  ascent-override: 82.64%;
+  descent-override: 20.2%;
+  line-gap-override: 0%;
+}
+
 @font-face {
   font-family: "Space Mono";
   font-style: normal;
