@@ -12,7 +12,16 @@ import { ProviderButtons, ProviderChoice, type ProviderKind } from "vic-ui";
   verb="Continue with" onChoose={chooseProvider} />
 ```
 
-`ProviderKind` is `"google"`, `"apple"` or `"microsoft"`. Buttons render the source provider marks, use type=button and call `onChoose`. Optional `disabled` blocks selection. `inline={{}}` uses compact marks and existing secondary-button sizing; the source-compatible optional `inline.size` field does not independently change sizing.
+`ProviderKind` is `"google"`, `"apple"` or `"microsoft"`. Buttons render the source provider marks, use type=button and call `onChoose`.
+
+## Posting a form per provider
+
+```tsx
+<ProviderButtons providers={["google", "apple"]} verb="Continue with"
+  action={(provider) => `/auth/${provider}/start`} />
+```
+
+With `action`, each provider is a submit button in its own `<form method="post">` posting to `action(provider)`, so a server that writes a row or mints a state on the press is reached by a person, never by a preview bot following a link. `onChoose`, when also given, is told first; `onLeave` runs just before the form is sent. `hold(provider, go)` holds a press back when it returns true and hands over `go`, which sends that form later: a heads-up shown with `ProviderChoice`'s `notice`, for example. The forms take no box (`display: contents`), so the layout is unchanged. A disabled fieldset around them holds every press, including one held earlier. Give `onChoose`, `action`, or both. With `action`, never place the buttons inside another `<form>`: forms cannot nest, so the browser drops the inner forms and the buttons would submit the outer one. Optional `disabled` blocks selection. `inline={{}}` uses compact marks and existing secondary-button sizing; the source-compatible optional `inline.size` field does not independently change sizing.
 
 ## Controlled notice
 
@@ -25,4 +34,4 @@ import { ProviderButtons, ProviderChoice, type ProviderKind } from "vic-ui";
 
 The host controls when a notice opens and supplies its content. Both panels stay mounted in one grid cell to reserve height; inactive content is hidden and inert. Opening focuses `noticeFocusRef`, or the notice container when no ref is supplied. Closing restores the last connected, enabled provider button. Pending focus work is cancelled on controlled changes and unmount.
 
-`separator` defaults to `"or"`; pass null to omit it. Empty providers render nothing. These controls do not submit forms, start authentication, persist accounts, show provider-specific advice or run countdowns. Those operations remain in the host.
+`separator` defaults to `"or"`; pass null to omit it. Empty providers render nothing. Apart from posting to an `action` the host names, these controls do not start authentication, persist accounts, show provider-specific advice or run countdowns. Those operations remain in the host.

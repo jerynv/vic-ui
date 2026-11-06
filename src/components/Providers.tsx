@@ -4,36 +4,75 @@ import { Button } from "./Button";
 
 /** Portable identities represented by the source's own provider marks. No database type is imported. */
 export type ProviderKind = keyof typeof BRAND_MARKS;
-export interface ProviderButtonsProps {
+
+interface ProviderButtonsShared {
   providers: readonly ProviderKind[];
   verb: string;
-  onChoose: (provider: ProviderKind) => void;
+  /** Drawn as the page's own secondary buttons beside the ones around it, rather than the way in's wide ones. */
   inline?: { size?: "sm" } | undefined;
   disabled?: boolean | undefined;
+  /** Run just before a provider's form is sent (only with `action`). */
+  onLeave?: (() => void) | undefined;
+  /**
+   * Holds a press back when it answers true (only with `action`), and is handed `go`, which
+   * sends that provider's form when the page is ready to: a heads-up before leaving, say.
+   */
+  hold?: ((provider: ProviderKind, go: () => void) => boolean) | undefined;
 }
+
+/**
+ * `onChoose` alone: each provider is a plain button and the host does the rest. `action`: each
+ * provider is a submit button in its own `<form method="post">` posting to `action(provider)`;
+ * `onChoose`, when given too, is told first. At least one of the two is required.
+ */
+export type ProviderButtonsProps = ProviderButtonsShared &
+  (
+    | { onChoose: (provider: ProviderKind) => void; action?: ((provider: ProviderKind) => string) | undefined }
+    | { action: (provider: ProviderKind) => string; onChoose?: ((provider: ProviderKind) => void) | undefined }
+  );
+
 function Buttons({ onTrigger, ...props }: ProviderButtonsProps & { onTrigger?: ((button: HTMLButtonElement) => void) | undefined }) {
   return <>{props.providers.map(one => {
     const { label, Mark } = BRAND_MARKS[one];
-    return <Button key={one} type="button" look="line" disabled={props.disabled} {...(props.inline ? {} : { className: "ui-provider-button" })} data-provider={one} onClick={event => {
+    const action = props.action;
+    const button = <Button key={one} type={action ? "submit" : "button"} look="line" disabled={props.disabled} {...(props.inline ? {} : { className: "ui-provider-button" })} data-provider={one} onClick={event => {
+      // Sent by hand, so a press can be held back and sent later, which only requestSubmit can do.
+      if (action) event.preventDefault();
       if (props.disabled) return;
-      onTrigger?.(event.currentTarget); props.onChoose(one);
+      const pressed = event.currentTarget;
+      onTrigger?.(pressed); props.onChoose?.(one);
+      if (!action) return;
+      const go = () => {
+        // Held for a while, the button may have gone or been disabled since, on its own or by a fieldset.
+        if (!pressed.isConnected || pressed.matches(":disabled")) return;
+        props.onLeave?.();
+        pressed.form?.requestSubmit(pressed);
+      };
+      if (props.hold?.(one, go)) return;
+      go();
     }}><Mark size={props.inline ? 14 : 17} />{props.verb} {label}</Button>;
+    // A form, not a link: a server that writes a row or mints a state on the press is never
+    // reached by a preview bot following a link.
+    return action ? <form key={one} method="post" action={action(one)} className="ui-provider-form">{button}</form> : button;
   })}</>;
 }
 
-/** Provider selection only. The host owns any authorization, form submission or navigation. */
+/**
+ * Provider buttons. Without `action` the host owns authorization, submission and navigation
+ * (`onChoose`); with it each posts its own form to the address it gives.
+ */
 export function ProviderButtons(props: ProviderButtonsProps) { return <Buttons {...props} />; }
 
-export interface ProviderChoiceProps extends ProviderButtonsProps {
+export type ProviderChoiceProps = ProviderButtonsProps & {
   /** Always mounted in the same grid cell, reserving the notice's height before it opens. */
   notice?: ReactNode;
   showNotice?: boolean | undefined;
   noticeLabel?: string | undefined;
   noticeFocusRef?: RefObject<HTMLElement | null> | undefined;
   separator?: ReactNode;
-}
+};
 
-/** Controlled provider/notice composition, without provider-specific advice, countdowns or automatic submission. */
+/** Controlled provider/notice composition, without provider-specific advice or countdowns; `hold` and `notice` compose one. */
 export function ProviderChoice({ notice, showNotice = false, noticeLabel = "Provider notice", noticeFocusRef, separator = "or", ...props }: ProviderChoiceProps) {
   const noticeNode = useRef<HTMLDivElement>(null);
   const lastTrigger = useRef<HTMLButtonElement | null>(null);

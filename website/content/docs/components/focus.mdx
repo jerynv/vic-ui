@@ -22,7 +22,26 @@ import { FocusLayout, FocusHead, FocusMark } from "vic-ui";
 
 The desktop layout places a sticky side panel beside the form. At narrower widths, the organization mark and name move above the form. `width="list"` widens the content column; `tone="danger"` uses the danger palette. `back={{to,label,onClick}}` uses Vic Link, and `actions` supplies header actions.
 
-Without `org`, supply host `brand` content. `renderAppearance(placement)` supplies controls for `"side"` and, with `looksOnPhone`, `"phone"` placement. The host owns theme changes, preference storage and document titles.
+Without `org`, supply host `brand` content. `renderAppearance(placement)` supplies controls for `"side"` and, with `looksOnPhone`, `"phone"` placement. The host owns theme changes and preference storage. `tab` sets the document's title while the layout is drawn and restores the previous one after, unless something has changed the title since; pass the whole title, with any product name your host adds.
+
+## A frame that stays mounted
+
+```tsx
+import { FocusFrame, useFocusFrame } from "vic-ui";
+
+// Around a lazy route: the side and the column are drawn once, from the first paint.
+<FocusFrame title="Book a demo" tab="Book a demo" steps={steps} brand={<Wordmark />}>
+  <Suspense fallback={<FormBones />}><BookingPage /></Suspense>
+</FocusFrame>
+
+// Inside the page: name the frame, or draw a layout of its own where there is none.
+function BookingPage() {
+  const framed = useFocusFrame({ title: "Your details", steps, back: { to: "/demo", label: "Times" } });
+  return framed ? <Form /> : <FocusLayout title="Your details" steps={steps}><Form /></FocusLayout>;
+}
+```
+
+`FocusFrame` takes the words (`title`, `tab`, `steps`, `back`) and every other `FocusLayout` prop, which it passes on. It draws its own words until a page below calls `useFocusFrame`, which renames it before the frame paints and returns `true`; outside a frame it returns `false`. The way back's press is always the one the page last drew. When the page unmounts while the frame stays, the frame draws its own words again. `FocusFrameWords` is the words' type.
 
 `renderArt({pulse})` optionally fills the decorative side region. Pulse contains an incrementing `n` and `amount`: input emits 0.7, button/link pointer presses emit 2, and submission emits 3. No shader or artwork engine is bundled. An optional `remember` key opts into Grow's remembered height across remounts.
 

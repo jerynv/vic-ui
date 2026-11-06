@@ -8,12 +8,16 @@ import { describedBy, FieldHead, FieldHint } from "./FieldHead";
 import { toneClass, type Tone } from "./Badge";
 import { useFieldReason } from "./reason";
 
+// Every optional prop also takes `undefined`, so a wrapper can forward its own optional props
+// straight through under `exactOptionalPropertyTypes`.
 interface Shared {
   label?: ReactNode;
-  "aria-label"?: string;
+  "aria-label"?: string | undefined;
   items: Items;
   /** What the field says while nothing is typed; open, a single field says its choice instead. */
-  placeholder?: string;
+  placeholder?: string | undefined;
+  /** A mark inside the box before the words, for example a search glass. */
+  lead?: ReactNode;
   hint?: ReactNode;
   error?: ReactNode;
   /** Said in the list when nothing matches; without it a list with nothing in it stays shut. */
@@ -21,49 +25,52 @@ interface Shared {
   /** Said at the foot of the open list, such as that a search found more than it shows. */
   footer?: ReactNode;
   /** What is typed, held by the page (a search the server answers); otherwise the field keeps it. */
-  query?: string;
-  onQueryChange?: (query: string) => void;
+  query?: string | undefined;
+  onQueryChange?: ((query: string) => void) | undefined;
   /** How an option matches what is typed; `false` filters nothing, for a list the server has already narrowed. */
-  filter?: false | ((option: Option, query: string) => boolean);
+  filter?: false | ((option: Option, query: string) => boolean) | undefined;
   /**
    * The chosen options as the field and its chips draw them when `items` does not carry them,
    * such as a search the server answers only while the list is open.
    */
-  chosenItems?: Items;
+  chosenItems?: Items | undefined;
   /**
    * The open list keeps one height from the moment it opens, on the side with more room, so an
    * answer arriving from the server never resizes it or moves it to the other side.
    */
-  steady?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  disabled?: boolean;
+  steady?: boolean | undefined;
+  onOpenChange?: ((open: boolean) => void) | undefined;
+  disabled?: boolean | undefined;
   disabledReason?: string | undefined;
-  name?: string;
-  id?: string;
-  size?: "sm";
-  surface?: SurfaceStyle;
-  className?: string;
+  name?: string | undefined;
+  id?: string | undefined;
+  /** `sm` the dense size, `xs` the thin one (`--control-h-xs`). */
+  size?: "sm" | "xs" | undefined;
+  /** `bare`: no box of its own, for a field set as a line inside a surface that is already the box (a row of chips and the words to add one). */
+  look?: "field" | "bare" | undefined;
+  surface?: SurfaceStyle | undefined;
+  className?: string | undefined;
 }
 
 interface One extends Shared {
   value: string | null;
-  onValueChange?: (value: string) => void;
+  onValueChange?: ((value: string) => void) | undefined;
   values?: undefined;
 }
 
 interface Many extends Shared {
   values: string[];
-  onValuesChange?: (values: string[]) => void;
+  onValuesChange?: ((values: string[]) => void) | undefined;
   /** A chosen value as its chip, less its x; the option's label when not given. */
-  chip?: (value: string, option: Option | undefined) => ReactNode;
+  chip?: ((value: string, option: Option | undefined) => ReactNode) | undefined;
   /** What the x on a chip says to a screen reader. */
-  chipLabel?: (value: string, option: Option | undefined) => string;
+  chipLabel?: ((value: string, option: Option | undefined) => string) | undefined;
   /** A word at a chip's end saying how it stands (Sending, Sent, Not sent). */
-  chipEnd?: (value: string) => ReactNode;
+  chipEnd?: ((value: string) => ReactNode) | undefined;
   /** A chip's tone, for a chip whose state is not fine (an address the server refused). */
-  chipTone?: (value: string) => Tone | undefined;
+  chipTone?: ((value: string) => Tone | undefined) | undefined;
   /** A chip that cannot be taken off yet (one still being sent): no x, and Backspace passes it by. */
-  chipFixed?: (value: string) => boolean;
+  chipFixed?: ((value: string) => boolean) | undefined;
   value?: undefined;
 }
 
@@ -259,7 +266,7 @@ export function Combobox(props: ComboboxProps) {
   const shown = many || open ? query : singleWords;
   const placeholder = !many && open && singleWords ? singleWords : props.placeholder;
 
-  const classes = ["ui-field", props.size === "sm" ? "ui-field-sm" : "", props.className ?? ""].filter(Boolean).join(" ");
+  const classes = ["ui-field", props.size === "sm" ? "ui-field-sm" : props.size === "xs" ? "ui-field-sm ui-field-xs" : "", props.look === "bare" ? "ui-combo-bare" : "", props.className ?? ""].filter(Boolean).join(" ");
   const groupOf = (at: number) => visible[at]!.group;
   return (
     <div data-ui-surface={props.surface} className={classes}>
@@ -316,6 +323,7 @@ export function Combobox(props: ComboboxProps) {
               );
             })
           : null}
+        {props.lead ? <span className="ui-combo-lead">{props.lead}</span> : null}
         {single?.start ? <span className="ui-start ui-combo-start">{single.start}</span> : null}
         <input
           ref={input}
