@@ -18,7 +18,7 @@ export interface ChoiceCardItem {
  * One decision among a few, as cards a press each: a real radio group inside a fieldset, so
  * the arrow keys move between them and a reader hears every card, the ones that cannot be
  * chosen disabled with their reason on the card itself. The chosen card is edged in ink and
- * its dot filled; nothing changes weight or size.
+ * its dot filled; nothing changes weight or size. `size="sm"` draws them as compact rows.
  */
 export function ChoiceCards(props: {
   legend: string;
@@ -28,11 +28,13 @@ export function ChoiceCards(props: {
   onChange: (value: string) => void;
   /** Told whether the next choice came from the pointer (true) or the keys (false). */
   onPress?: ((pointer: boolean) => void) | undefined;
+  /** Compact rows on the dense field scale, for a choice set inside a form rather than heading it. */
+  size?: "sm" | undefined;
   className?: string | undefined;
 }) {
   const press = props.onPress;
   return (
-    <fieldset className={props.className ? `ui-choice-cards ${props.className}` : "ui-choice-cards"} onPointerDown={press ? () => press(true) : undefined} onKeyDown={press ? () => press(false) : undefined}>
+    <fieldset className={["ui-choice-cards", props.size === "sm" ? "ui-choice-cards-sm" : "", props.className ?? ""].filter(Boolean).join(" ")} onPointerDown={press ? () => press(true) : undefined} onKeyDown={press ? () => press(false) : undefined}>
       <legend className="sr-only">{props.legend}</legend>
       {props.items.map((item) => {
         const shut = Boolean(item.off) || Boolean(item.held);

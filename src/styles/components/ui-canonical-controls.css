@@ -198,3 +198,87 @@
   }
   @media (prefers-reduced-motion: reduce) { .ui-dialog-side-right[open] { animation: none; } }
 }
+
+@layer components.parts {
+  /* The name of the thing a form makes, as its first line (`look="title"` on TextField): the
+     lead size at a label's weight, with no box, fill or edge in any surface. */
+  .ui-field-title {
+    --ui-field-edge: transparent;
+  }
+
+  .ui-field-title .ui-field-box,
+  .ui-field-title .ui-field-box:hover:not(:focus-within, :has(:disabled)) {
+    height: auto;
+    background: transparent;
+  }
+
+  .ui-field-title .ui-field-input {
+    height: auto;
+    padding: 0;
+    font-size: var(--text-lead);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* A combobox set as a line inside a surface that is already the box (`look="bare"`): its
+     chips and the words to add one, no fill or edge of its own, open or not. */
+  .ui-combo-bare {
+    --ui-field-edge: transparent;
+  }
+
+  .ui-combo-bare .ui-combo-box,
+  .ui-combo-bare .ui-combo-box[data-open],
+  .ui-combo-bare .ui-combo-box:hover:not(:focus-within, :has(:disabled)) {
+    background: transparent;
+  }
+
+  .ui-combo-bare .ui-combo-box[data-many] {
+    padding-inline: 0;
+  }
+
+  .ui-combo-bare .ui-combo-input,
+  .ui-combo-bare .ui-combo-box[data-many] .ui-combo-input {
+    padding-inline: 0.25rem;
+  }
+
+  /* With nothing chosen, its words start where the lines above and below them start. */
+  .ui-combo-bare .ui-combo-box > .ui-combo-input:first-child {
+    padding-inline-start: 0;
+  }
+
+  /* A mark before the words (`lead` on Combobox), a search glass, where a search field puts its own. */
+  .ui-combo-lead {
+    display: inline-flex;
+    flex: none;
+    margin-left: 0.625rem;
+    color: var(--fg-subtle);
+    transition: color 160ms;
+  }
+
+  .ui-combo-box:focus-within .ui-combo-lead {
+    color: var(--fg-strong);
+  }
+
+  .ui-combo-lead + .ui-combo-input {
+    padding-left: 0.4rem;
+  }
+
+  /* Compact choice cards (`size="sm"` on ChoiceCards): rows on the dense field scale, the chosen
+     one filled as well as edged. Only the fill changes when chosen; nothing changes size. */
+  .ui-choice-cards-sm .ui-choice-card {
+    min-height: var(--control-h-sm);
+    padding: 0.5rem 0.625rem;
+    gap: 0.5rem;
+    font-size: var(--text-ui);
+    line-height: var(--text-ui--line-height);
+  }
+
+  .ui-choice-cards-sm .ui-choice-card:has(input:checked) {
+    background: var(--field-fill);
+  }
+
+  .ui-choice-cards-sm .ui-choice-card-dot {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}

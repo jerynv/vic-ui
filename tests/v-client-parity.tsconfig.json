@@ -1,0 +1,1 @@
+{"extends":"../tsconfig.json","include":["../src","v-client-parity.fixture.tsx"]}

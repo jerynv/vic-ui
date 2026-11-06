@@ -445,6 +445,12 @@
   gap: 0.5rem;
 }
 
+/* With `action` each button sits in its own form, which takes no box, so the buttons lay out
+   exactly as they do without one. */
+.ui-provider-form {
+  display: contents;
+}
+
 /* The mark at the left edge and the words after it, in the reading weight. */
 .ui-provider-button {
   width: 100%;

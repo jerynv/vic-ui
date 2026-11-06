@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { Grow } from "./Grow";
 import { Link } from "./Link";
 import { ArrowLeftIcon } from "../icons/icons";
@@ -25,6 +25,8 @@ export interface FocusLayoutProps {
   renderAppearance?: ((placement: "side" | "phone") => ReactNode) | undefined;
   /** Optional art renderer; the library does not bundle the application's shader. */
   renderArt?: ((state: { pulse: FocusPulse }) => ReactNode) | undefined;
+  /** What this page is called in a tab, in history and in a bookmark: the document's title while it is drawn, the one before restored after. */
+  tab?: string | undefined;
   /** Opt in to carrying a measured height across remounts using a host-owned key. */
   remember?: string | undefined;
   className?: string | undefined;
@@ -32,6 +34,7 @@ export interface FocusLayoutProps {
 
 /** Source-derived two-pane focus layout. Navigation, appearance, branding and content remain host-owned. */
 export function FocusLayout(props: FocusLayoutProps) {
+  useTab(props.tab);
   const plain = props.org || props.tone ? undefined : "sky";
   const [pulse, setPulse] = useState<FocusPulse>({ n: 0, amount: 0 });
   const stir = (amount: number) => setPulse(last => ({ n: last.n + 1, amount }));
@@ -72,4 +75,67 @@ export function FocusMark(props: { name: string; slug?: string; logo?: string | 
   return <span className="ui-focus-mark" data-hue={props.slug ? hueFor(props.slug) : undefined} data-logo={logo.shown ? "" : undefined} aria-hidden="true">
     {props.name.trim().charAt(0).toUpperCase()}{logo.image}
   </span>;
+}
+
+/** The document's title while a screen is drawn, and the one before it once it is gone. */
+function useTab(tab: string | undefined): void {
+  useEffect(() => {
+    if (!tab) return;
+    const was = document.title;
+    document.title = tab;
+    return () => {
+      document.title = was;
+    };
+  }, [tab]);
+}
+
+/** What a page held in a `FocusFrame` tells the layout above it: its title, its tab, its steps and its way back. */
+export interface FocusFrameWords {
+  title: string;
+  tab?: string | undefined;
+  steps?: readonly FocusStep[] | undefined;
+  back?: FocusBack | undefined;
+}
+
+const FrameSetter = createContext<Dispatch<SetStateAction<FocusFrameWords | null>> | null>(null);
+
+function sameWords(a: FocusFrameWords, b: FocusFrameWords): boolean {
+  const steps = (words: FocusFrameWords) => JSON.stringify(words.steps?.map((step) => [step.at, step.words]) ?? []);
+  return a.title === b.title && a.tab === b.tab && steps(a) === steps(b) && a.back?.to === b.back?.to && a.back?.label === b.back?.label && !a.back?.onClick === !b.back?.onClick;
+}
+
+/**
+ * One `FocusLayout` above a page whose code or read is still on its way, so the side and the
+ * form's column are mounted once and only what is inside them changes. It draws the words it is
+ * given until the page below names its own with `useFocusFrame`. Everything else a layout takes
+ * (`brand`, `org`, `renderArt`, `renderAppearance` and the rest) is the frame's to pass on.
+ */
+export function FocusFrame({ title, tab, steps, back, children, ...layout }: FocusFrameWords & Omit<FocusLayoutProps, "title" | "tab" | "steps" | "back">) {
+  const [named, setNamed] = useState<FocusFrameWords | null>(null);
+  const words = named ?? { title, tab, steps, back };
+  return (
+    <FrameSetter.Provider value={setNamed}>
+      <FocusLayout {...layout} title={words.title} tab={words.tab} steps={words.steps} back={words.back}>
+        {children}
+      </FocusLayout>
+    </FrameSetter.Provider>
+  );
+}
+
+/**
+ * Names the `FocusFrame` this page is drawn in, before the frame paints; true when there is one,
+ * and false when the page has to draw its own `FocusLayout`. The way back's press is always the
+ * one the page last drew.
+ */
+export function useFocusFrame(words: FocusFrameWords): boolean {
+  const setNamed = useContext(FrameSetter);
+  const press = useRef<(() => void) | undefined>(undefined);
+  useLayoutEffect(() => {
+    press.current = words.back?.onClick;
+    if (!setNamed) return;
+    const back = words.back ? { to: words.back.to, label: words.back.label, ...(words.back.onClick ? { onClick: () => press.current?.() } : {}) } : undefined;
+    const next: FocusFrameWords = { ...words, back };
+    setNamed((last) => (last && sameWords(last, next) ? last : next));
+  });
+  return setNamed !== null;
 }

@@ -10,18 +10,21 @@ import { useFieldReason } from "./reason";
  * the ring round the whole box, so a suffix reads as part of what is typed. Without `label` it
  * is named by `aria-label`; `size="sm"` is the dense one; `prefix` is fixed at its start. With
  * `disabled` and a `disabledReason` it is not natively disabled: it stays focusable, takes no
- * words and says why, as every other field here does (`useFieldReason`).
+ * words and says why, as every other field here does (`useFieldReason`). `look="title"` draws
+ * it as a line of words at the lead size with no box, no fill and no edge, for the name of the
+ * thing a form makes as its first line; it is a different axis from `surface`, which a title
+ * line ignores.
  */
 export const TextField = forwardRef<
   HTMLInputElement,
-  Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> & { label?: ReactNode; "aria-label"?: string; suffix?: ReactNode; prefix?: ReactNode; hint?: ReactNode; error?: ReactNode; size?: "sm"; surface?: SurfaceStyle; disabledReason?: string | undefined }
->(function TextField({ label, suffix, prefix, hint, error, size, surface, className, id, disabled, disabledReason, onFocus, onBlur, onKeyDown, ...rest }, ref) {
+  Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> & { label?: ReactNode; "aria-label"?: string; suffix?: ReactNode; prefix?: ReactNode; hint?: ReactNode; error?: ReactNode; size?: "sm" | undefined; look?: "field" | "title" | undefined; surface?: SurfaceStyle | undefined; disabledReason?: string | undefined }
+>(function TextField({ label, suffix, prefix, hint, error, size, look, surface, className, id, disabled, disabledReason, onFocus, onBlur, onKeyDown, ...rest }, ref) {
   const made = useId();
   const field = id ?? made;
   const why = useFieldReason(disabled, disabledReason);
   const held = why.held;
   return (
-    <div data-ui-surface={surface} className={["ui-field", size === "sm" ? "ui-field-sm" : "", className ?? ""].filter(Boolean).join(" ")}>
+    <div data-ui-surface={surface} className={["ui-field", size === "sm" ? "ui-field-sm" : "", look === "title" ? "ui-field-title" : "", className ?? ""].filter(Boolean).join(" ")}>
       <FieldHead field={field} label={label} error={error} />
       <div ref={why.anchor} className="ui-field-box" data-invalid={error ? "" : undefined} data-disabled={held ? "" : undefined} {...why.box}>
         {prefix ? <span className="ui-field-prefix">{prefix}</span> : null}

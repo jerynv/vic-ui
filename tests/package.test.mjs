@@ -42,7 +42,7 @@ test("packed library preserves historical exports and types in Bundler and NodeN
     const previewNames = ["FilePreviewStage", "FilePreviewToolbar", "FilePreviewStatus", "FilePreviewDialog", "ImagePreview", "TextPreview", "DelimitedPreview"];
     for (const sheet of ["vic-ui.css", "components.css", "ui/styles.css"]) {
       const css = await readFile(join(temporary, "package/dist", sheet), "utf8");
-      for (const name of ["ui-wrapping-row", "ui-time-picker", "ui-code-field", "ui-pane-views", "ui-tree", "ui-facts", "ui-panel", "ui-settings-dialog", "ui-focus", "ui-select-lead", "ui-cell", "ui-row-button", "ui-slider-thumb", "ui-settings-row", "ui-preview-docx", "ui-preview-office", "ui-preview-media", "ui-preview-stage", "ui-preview-dialog", "ui-preview-image", "ui-preview-text", "ui-preview-table", "ui-combobox-search", "ui-combobox-list", "ui-combobox-item"]) assert.ok(css.includes(name), `${sheet} contains ${name}`);
+      for (const name of ["ui-wrapping-row", "ui-time-picker", "ui-code-field", "ui-pane-views", "ui-tree", "ui-facts", "ui-panel", "ui-settings-dialog", "ui-focus", "ui-select-lead", "ui-cell", "ui-row-button", "ui-slider-thumb", "ui-settings-row", "ui-preview-docx", "ui-preview-office", "ui-preview-media", "ui-preview-stage", "ui-preview-dialog", "ui-preview-image", "ui-preview-text", "ui-preview-table", "ui-combobox-search", "ui-combobox-list", "ui-combobox-item", "ui-field-title", "ui-combo-bare", "ui-combo-lead", "ui-choice-cards-sm", "ui-provider-form"]) assert.ok(css.includes(name), `${sheet} contains ${name}`);
     }
     for (const sheet of ["vic-ui.css", "components.css", "ui/styles.css"]) {
       const file = join(temporary, "package/dist", sheet), css = await readFile(file, "utf8");
@@ -59,7 +59,8 @@ test("packed library preserves historical exports and types in Bundler and NodeN
       import { XlsxPreview, PptxPreview } from "vic-ui/preview/office";
       import { DocxPreview } from "vic-ui/preview/docx";
       if (![AudioPreview, VideoPreview, XlsxPreview, PptxPreview, DocxPreview].every(value => typeof value === "function")) throw new Error("Missing optional previews");
-      if (Object.keys(Vic).length !== 181) throw new Error("Root export count changed");
+      if (Object.keys(Vic).length !== 187) throw new Error("Root export count changed");
+      if (![Vic.CheckMark, Vic.reasonOf, Vic.unlessHeld, Vic.useBlocked, Vic.FocusFrame, Vic.useFocusFrame].every(value => typeof value === "function")) throw new Error("Missing v-client parity exports");
       const missing = ${JSON.stringify([...currentBaseline, ...baselineNames, ...names, ...previewNames, ...comboboxNames])}.filter(name => !(name in Vic));
       if (missing.length) throw new Error("Missing historical exports: " + missing.join(", "));
       if (![Vic.Slider, Vic.SettingsLayout, Vic.SettingsSection, Vic.SettingsGroup, Vic.SettingsRow].every(value => typeof value === "function" || typeof value === "object")) throw new Error("Missing controls");
@@ -70,6 +71,7 @@ test("packed library preserves historical exports and types in Bundler and NodeN
     const consumer = await readFile(new URL("./package-consumer.tsx", import.meta.url), "utf8");
     await writeFile(join(temporary, "consumer.tsx"), `${consumer}\nvoid [${baselineNames.map(name => `Vic.${name}`).join(",")}];\n`);
     await copyFile(new URL("./canonical-package-consumer.tsx", import.meta.url), join(temporary, "canonical-consumer.tsx"));
+    await copyFile(new URL("./v-client-parity-consumer.tsx", import.meta.url), join(temporary, "parity-consumer.tsx"));
     for (const resolution of ["Bundler", "NodeNext"]) {
       await writeFile(join(temporary, "tsconfig.json"), JSON.stringify({ compilerOptions: {
         target: "ES2022", module: resolution === "Bundler" ? "ESNext" : "NodeNext", moduleResolution: resolution,
@@ -77,6 +79,15 @@ test("packed library preserves historical exports and types in Bundler and NodeN
       }, files: ["consumer.tsx", "canonical-consumer.tsx"] }));
       try { await run(join(root, "node_modules/.bin/tsc"), ["-p", join(temporary, "tsconfig.json")], { cwd: temporary }); }
       catch (error) { assert.fail(`${resolution} packed declarations:\n${error.stdout}\n${error.stderr}`); }
+    }
+    // v-client's call sites, under its own exactOptionalPropertyTypes.
+    for (const resolution of ["Bundler", "NodeNext"]) {
+      await writeFile(join(temporary, "tsconfig.json"), JSON.stringify({ compilerOptions: {
+        target: "ES2022", module: resolution === "Bundler" ? "ESNext" : "NodeNext", moduleResolution: resolution,
+        jsx: "react-jsx", strict: true, exactOptionalPropertyTypes: true, noUncheckedIndexedAccess: true, noEmit: true, skipLibCheck: false,
+      }, files: ["parity-consumer.tsx"] }));
+      try { await run(join(root, "node_modules/.bin/tsc"), ["-p", join(temporary, "tsconfig.json")], { cwd: temporary }); }
+      catch (error) { assert.fail(`${resolution} v-client parity declarations:\n${error.stdout}\n${error.stderr}`); }
     }
     if (process.env.VIC_UI_PACKAGE_OUT) await copyFile(archive, process.env.VIC_UI_PACKAGE_OUT);
   } finally { await rm(temporary, { recursive: true, force: true }); }

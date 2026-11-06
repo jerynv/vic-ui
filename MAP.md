@@ -4,6 +4,10 @@
 
 Owner-authorized additive source sync from V-Client555625f4 is tracked in [docs/tasks/canonical-controls-sync.md](docs/tasks/canonical-controls-sync.md). Historical extraction and current parity are distinct; preview transfers do not close controls coverage. Preserve released142 root exports and all existing defaults. Implementation isolated on feat/canonical-controls-sync.
 
+## v-client parity
+
+Additive props and exports so v-client's `web/src/ui` call sites at `64d719de` compile against vic-ui with `exactOptionalPropertyTypes`: `TextField` `look="title"`, `Combobox` `look="bare"`, `size="xs"`, `lead` and `| undefined` on every optional prop, `ChoiceCards` `size="sm"`, `ProviderButtons` and `ProviderChoice` `action`, `onLeave` and `hold`, `FocusLayout` `tab`, and six root exports: `CheckMark`, `reasonOf`, `unlessHeld`, `useBlocked`, `FocusFrame`, `useFocusFrame` (and the type `FocusFrameWords`), 187 root exports in all. Defaults are unchanged. `tests/v-client-parity.test.mjs` exercises them in both stylesheets and themes; `tests/v-client-parity-consumer.tsx` copies the call sites and `package.test.mjs` compiles it against the packed declarations.
+
 ## Optional Office/media release
 
 Owned isolated branch `feat/office-media-previews` in `t3-c2cc92d0`, baseline `6deb7fc`. Five additive optional exports: AudioPreview/VideoPreview at `vic-ui/preview/media`, XlsxPreview/PptxPreview at `vic-ui/preview/office`, DocxPreview at `vic-ui/preview/docx`. All require ready Blob/Uint8Array input and title; host retains loading/auth/classification/downloads. Root137 exports unchanged. DOCX alone needs exact optional peer docx-preview0.4.1. No Phaethon/shared checkout edits. Provenance is authorized first-party V-Client pin2f2713d8, with all116 source-pack payload hashes reverified; no invented upstream MIT grant.
@@ -142,7 +146,7 @@ From `web/src/ui/README.md`:
 - **States.** Every interactive piece has an eased hover, a press and a focus ring, and no state changes the weight or size of its words. A disabled piece is dimmed to 0.55 with a `not-allowed` pointer; one that takes `disabledReason` stays focusable and says the reason on hover and focus.
 - **Colour** comes only from the tokens; the hues reach a piece through `data-hue`.
 
-Two internal helpers in `reason.ts` carry the disabled-with-reason behaviour. They are not exported from `index.ts`:
+Two helpers in `reason.ts` carry the disabled-with-reason behaviour. `useBlocked` is exported from the root, with `reasonOf` and `unlessHeld` from `held.ts` (see [useBlocked, reasonOf, unlessHeld](#useblocked-reasonof-unlessheld)); `useFieldReason` stays internal:
 
 - `useBlocked(disabled, reason, forwardedRef)`: with a reason, returns props that make the control `aria-disabled`, keep it in the tab order, swallow clicks, Enter and Space, and attach the tooltip (`node`); without one, returns `{ disabled, ref }` so the control is natively disabled.
 - `useFieldReason(disabled, reason)`: the same for a field that must stay typeable-looking but take no words (`readOnly` plus `aria-disabled`), with the reason hung from the box on pointer rest and focus.
@@ -272,6 +276,19 @@ CSS: `ui.css`. Classes `ui-check`, `ui-check-box`, `ui-check-tick`, `ui-check-wo
 
 Dependencies: `useBlocked`; icon `CheckIcon`.
 
+### CheckMark
+
+The checkbox's square drawn without an input, for a row that is already the control (a menu row that ticks, `DatePicker`'s "no date" row). It is `aria-hidden`; the row says its state.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | required | Filled in ink with its tick, or empty. |
+| `className` | `string` | none | Added beside `ui-check-box`. |
+
+States: as `Checkbox`'s box, the fill on `ui-check-face` (`data-checked` while ticked): rest `--field-fill` with the 0.14 inset ring, ticked `--ink-face-bottom` and the tick shown. Nothing changes size.
+
+CSS: `ui-canonical-controls.css`. Classes `ui-check-box`, `ui-check-face`, `ui-check-tick`.
+
 ### Choice
 
 One of a row of choices (a day, a time): a native button that says whether it is chosen, read out as pressed. Unchosen it is the field's fill; chosen it is the ink button.
@@ -308,14 +325,16 @@ One of a few as cards: a real radio group (a `fieldset` of labelled radios), so 
 | `onChange` | `(value: string) => void` | required | Handed the new choice. |
 | `onPress` | `(pointer: boolean) => void` | none | Told whether the next choice came from the pointer or the keys. |
 | `items` | `readonly ChoiceCardItem[]` | required | `{ value, label, hint?, mark?, end?, off?, held? }`: `mark` leads the card; `end` stands at its end before its dot (a price); `off` is why it cannot be chosen, said in place of its hint; `held` is one that cannot be chosen whose own words already say why (the one in use). |
+| `size` | `"sm" \| undefined` | none | Compact rows on the dense field scale. |
 | `className` | `string` | none | Placement. |
 
 States:
 
+- `size="sm"`: min height `--control-h-sm`, padding `0.5rem 0.625rem`, gap 0.5rem, `--text-ui` at `--text-ui--line-height`, the dot 0.875rem; the chosen card is also filled `--field-fill`. Choosing changes only the fill and ring, never the size.
 - Card: min height 3.25rem, padding `0.625rem 0.875rem`, radius `--radius-control`, inset ring `1px var(--line)`, `--text-read`, `--fg-strong`. Hover `--field-fill`. Chosen: ring `--fg-strong`, the dot filled (a ring, the canvas and a centre in `--fg-strong`). Focus: outline 2px `--fg-strong`, offset 2px. Off (`data-off`): `--fg-subtle`, `not-allowed`, no hover, no dot.
 - Hint `--text-ui` `--fg-subtle`; end `--text-ui`, tabular. Nothing changes weight or size.
 
-CSS: `ui.css`. Classes `ui-choice-cards`, `ui-choice-card`, `ui-choice-card-words`, `ui-choice-card-label`, `ui-choice-card-hint`, `ui-choice-card-end`, `ui-choice-card-dot`.
+CSS: `ui.css`, and `ui-canonical-controls.css` for `ui-choice-cards-sm`. Classes `ui-choice-cards`, `ui-choice-cards-sm`, `ui-choice-card`, `ui-choice-card-words`, `ui-choice-card-label`, `ui-choice-card-hint`, `ui-choice-card-end`, `ui-choice-card-dot`.
 
 ### DangerButton
 
@@ -556,7 +575,9 @@ A label, a native input, and what is fixed at its start or end (a currency sign,
 | `suffix` | `ReactNode` | none | Fixed at the box's end. |
 | `hint` | `ReactNode` | none | A line under the box. |
 | `error` | `ReactNode` | none | A short error in the label's place; rings the box. |
-| `size` | `"sm"` | none | The dense height. |
+| `size` | `"sm" \| undefined` | none | The dense height. |
+| `look` | `"field" \| "title" \| undefined` | `"field"` | `title`: a line of words at the lead size with no box, for the name of the thing a form makes as its first line. A different axis from `surface`. |
+| `surface` | `"flat" \| "bordered" \| undefined` | inherited | The field's fill and edge; a title line ignores it. |
 | `disabledReason` | `string \| undefined` | none | With `disabled`, keeps it focusable and says why on hover and focus. |
 | `id` | `string` | `useId()` | The input's id. |
 | `ref` | `Ref<HTMLInputElement>` | none | Forwarded. |
@@ -571,10 +592,11 @@ States:
 - Disabled (`:has(:disabled)`): box opacity 0.55, `not-allowed`, no hover.
 - Input: padding `0 0.75rem` (`sm`: `0 0.625rem`, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
 - Disabled for a reason (`disabledReason`, `useFieldReason`): the input is `readOnly` and `aria-disabled` rather than disabled, the box carries `data-disabled`, and the reason hangs from the box on pointer rest and focus.
+- `look="title"` (`ui-field-title`): the box is transparent at rest and on hover, has no edge in any surface (`--ui-field-edge: transparent`) and takes its height from the words; the input has no padding, `--text-lead`, weight 600 (a label's), line height 1.5, in either size. Focus draws nothing; the caret shows it.
 
-Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
+Tokens: `--control-h`, `--control-h-sm`, `--text-lead`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
 
-CSS: `ui.css` (`ui-field`, `ui-field-sm`, `ui-field-head`, `ui-field-label`, `ui-field-error`, `ui-field-box`, `ui-field-input`, `ui-field-suffix`, `ui-field-hint`) and `ui-inputs.css` (`ui-field-prefix`, and the `sm` sizes of the input, prefix and suffix).
+CSS: `ui.css` (`ui-field`, `ui-field-sm`, `ui-field-head`, `ui-field-label`, `ui-field-error`, `ui-field-box`, `ui-field-input`, `ui-field-suffix`, `ui-field-hint`), `ui-inputs.css` (`ui-field-prefix`, and the `sm` sizes of the input, prefix and suffix) and `ui-canonical-controls.css` (`ui-field-title`).
 
 Dependencies: `FieldHead`, `FieldHint`, `describedBy`, `useFieldReason`.
 
@@ -892,8 +914,13 @@ Shared props:
 | `disabledReason` | `string \| undefined` | none | Focusable, takes no words, says why. |
 | `name` | `string` | none | Posts each chosen value through a hidden input. |
 | `id` | `string` | `useId()` | The input's id. |
-| `size` | `"sm"` | none | The dense height. |
+| `size` | `"sm" \| "xs" \| undefined` | none | `sm` the dense height; `xs` the thin one (`--control-h-xs`, `--text-meta`), which is also dense (`ui-field-sm ui-field-xs`). |
+| `look` | `"field" \| "bare" \| undefined` | `"field"` | `bare`: no fill or edge of its own, open or not, for a field set as a line inside a surface that is already the box. |
+| `lead` | `ReactNode` | none | A mark inside the box before the words, such as a search glass (`ui-combo-lead`). |
+| `surface` | `"flat" \| "bordered" \| undefined` | inherited | The field's fill and edge. |
 | `className` | `string` | none | Placement. |
+
+Every optional prop also accepts `undefined`, so a wrapper can forward its own optional props under `exactOptionalPropertyTypes`.
 
 One choice (`One`): `value: string | null` (required), `onValueChange?: (value: string) => void`. Emptying what was typed never unchooses it.
 
@@ -911,10 +938,13 @@ States:
 - Chip: `calc(var(--control-h) - 0.5rem)` tall (`sm`: `calc(var(--control-h-sm) - 0.375rem)`), radius `--radius-row`, `--surface-lifted`, ring `0 0 0 1px var(--tone-edge, var(--line-soft))`, `--text-ui`, words `var(--tone-ink, var(--fg-strong))`; the chip clears `--tone-ink` and `--tone-edge` on itself first, so only a tone named on it colours it. Its end word: `--text-meta`, `var(--tone-ink, var(--fg-subtle))`, padding-inline `0.375rem 0.25rem`. Its x is 1.25rem, radius `calc(var(--radius-row) - 0.25rem)`, `--fg-subtle`; hover `--fill-chosen` and `--fg-strong`, press `--fill-press`. Disabled chips have no x.
 - List: as `Select`'s (`ui-menu`, offset 6, flip, shift, min width of the box, max height `min(LIST_MOST, max(LIST_LEAST, availableHeight))`px, and with `steady` that height fixed). Active row `data-active`; press on a row `--fill-press`; chosen rows end in a tick; group headings `--text-meta` weight 600 `--fg-subtle`; empty and foot `--text-ui` `--fg-subtle`, the foot under `1px solid light-dark(oklch(0 0 0 / 0.06), oklch(1 0 0 / 0.08))`.
 - Disabled and held: as `Textarea`.
+- `look="bare"` (`ui-combo-bare`): the box transparent at rest, on hover and open, with no edge; several chosen drop the box's inline padding, the input's inline padding is 0.25rem, and with nothing chosen the words start at the box's edge.
+- `size="xs"`: box `--control-h-xs`, input `--text-meta` with padding `0 0.5rem`, a leading option mark 1rem, `ui-combo-start` margin 0.5rem.
+- Lead: `--fg-subtle`, `--fg-strong` while the field has focus (160ms); margin-left 0.625rem, the input after it padded 0.4rem.
 
-Tokens: the field tokens, the list tokens, `--surface-lifted`, `--radius-row`, `--radius-mark`, `--text-meta`, `--control-h`, `--control-h-sm`.
+Tokens: the field tokens, the list tokens, `--control-h-xs`, `--surface-lifted`, `--radius-row`, `--radius-mark`, `--text-meta`, `--control-h`, `--control-h-sm`.
 
-CSS: `ui-inputs.css` (`ui-combo-box`, `ui-combo-input`, `ui-combo-chip`, `ui-combo-chip-words`, `ui-combo-chip-state`, `ui-combo-chip-x`, `ui-combo-start`, `ui-combo-menu`, `ui-menu-group`, `ui-menu-empty`, `ui-menu-foot`, `ui-start`) plus `ui-menu`, `ui-menu-item` and the field classes in `ui.css`.
+CSS: `ui-inputs.css` (`ui-combo-box`, `ui-combo-input`, `ui-combo-chip`, `ui-combo-chip-words`, `ui-combo-chip-state`, `ui-combo-chip-x`, `ui-combo-start`, `ui-combo-menu`, `ui-menu-group`, `ui-menu-empty`, `ui-menu-foot`, `ui-start`) plus `ui-menu`, `ui-menu-item` and the field classes in `ui.css`; `ui-canonical-controls.css` (`ui-combo-bare`, `ui-combo-lead`, `ui-field-xs`).
 
 Dependencies: `@floating-ui/dom` (used directly), `LIST_MOST`, `LIST_LEAST`, `toneClass`, `FieldHead`, `FieldHint`, `describedBy`, `toOptions`, `textOf`, `useFieldReason`; icons `CheckIcon`, `XIcon`.
 
@@ -2108,6 +2138,55 @@ CSS: `ui-timeline.css`. Class `ui-actionbar`, keyframes `ui-actionbar-in`.
 A hairline between groups inside an `ActionBar`: 1px of `--line`, margin `0.3125rem 0.125rem`. No props.
 
 CSS: `ui-timeline.css`. Class `ui-actionbar-rule`.
+
+### useBlocked, reasonOf, unlessHeld
+
+The disabled-with-reason helpers every held control is built from, exported so a page's own control can hold the same way.
+
+- `useBlocked<T>(disabled: boolean | undefined, reason: string | undefined, forwarded?: ForwardedRef<T>)`: returns `{ props, node }`. With `disabled` and a `reason`, `props` makes the control `aria-disabled` (not natively disabled), keeps it in the tab order, swallows its press, Enter and Space, and carries the tooltip's description and anchor ref; `node` is the tooltip to render beside it. Otherwise `props` is `{ disabled, ref }` and `node` is null. Spread `props` last.
+- `reasonOf(props)`: reads the `aria-describedby`, `onClick` and `onKeyDown` that `useBlocked` may have given, typed, so a control joins the description to its own (`[own, reasonOf(held.props)["aria-describedby"]].filter(Boolean).join(" ")`).
+- `unlessHeld(disabled, reason, own)`: a handler that runs `own` while not held and the reason's handler (when there is one) while held, so a held control's own click or key handler chooses nothing.
+
+Source: `reason.ts`, `held.ts`. Dependencies: `Tooltip`'s `useReason`.
+
+### ProviderButtons, ProviderChoice
+
+Sign-in provider buttons with the source's marks (`ProviderKind`: `"google" | "apple" | "microsoft"`), wide, one under another, or `inline` as secondary buttons.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `providers` | `readonly ProviderKind[]` | required | In order. `ProviderChoice` draws nothing when empty. |
+| `verb` | `string` | required | Before the provider's name: "Continue with". |
+| `onChoose` | `(provider) => void` | none | Told the provider pressed. Without `action` it is required, and each button is `type="button"`. |
+| `action` | `(provider) => string` | none | Each provider becomes a `type="submit"` button in its own `<form method="post" action={action(provider)}>` (`ui-provider-form`, `display: contents`), sent by `requestSubmit` with the button as submitter. Required when `onChoose` is not given. |
+| `onLeave` | `() => void` | none | With `action`: run just before a form is sent. |
+| `hold` | `(provider, go) => boolean` | none | With `action`: returning true holds the press back; calling `go` later sends that form (nothing when the button has gone). |
+| `inline` | `{ size?: "sm" } \| undefined` | none | Compact marks (14px) and the plain secondary button. |
+| `disabled` | `boolean \| undefined` | `false` | Nothing is chosen or sent. A disabled fieldset around them does the same natively. |
+
+`ProviderChoice` adds `notice`, `showNotice`, `noticeLabel`, `noticeFocusRef` and `separator` (default "or"): the buttons and the notice share one cell, the one not shown hidden and inert, so the column keeps its height; showing the notice focuses it, hiding it returns focus to the last button pressed. A heads-up before leaving is `hold` plus `notice`.
+
+States: as `Button` `look="line"`; wide ones (`ui-provider-button`) are full width at `--control-h`, `--text-read` weight 400, the mark at the start.
+
+CSS: `ui-canonical-focus-shell.css`. Classes `ui-providers`, `ui-providers-stack`, `ui-providers-buttons`, `ui-providers-heads`, `ui-providers-or`, `ui-provider-button`, `ui-provider-form`.
+
+### FocusFrame, useFocusFrame, FocusFrameWords
+
+One `FocusLayout` above a page whose code or data is still on its way, so the side and the form's column are mounted once and only what is inside them changes.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `title` | `string` | required | Drawn until a page below names its own. |
+| `tab` | `string \| undefined` | none | The document's title while drawn (`FocusLayout`'s `tab`). |
+| `steps` | `readonly FocusStep[] \| undefined` | none | As `FocusLayout`. |
+| `back` | `FocusBack \| undefined` | none | As `FocusLayout`. |
+| every other `FocusLayout` prop | | | Passed on: `brand`, `org`, `renderArt`, `renderAppearance`, `width`, `tone` and the rest. |
+
+`useFocusFrame(words: FocusFrameWords): boolean` names the frame it is drawn in before the frame paints (a layout effect, skipping identical words) and returns `true`; outside a frame it returns `false` and the page draws its own `FocusLayout`. The way back's press is always the one the page last drew. `FocusFrameWords` is `{ title, tab?, steps?, back? }`.
+
+`FocusLayout` takes `tab?: string`: the document's title while it is drawn, the previous one restored after. The library adds no product name; pass the whole title.
+
+Source: `Focus.tsx`. CSS: as `FocusLayout` (`ui-canonical-focus-shell.css`).
 
 ## Analytics
 

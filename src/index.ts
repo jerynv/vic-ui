@@ -1,7 +1,9 @@
 /** vic-ui: every piece, hook and helper a page imports. */
 export { Button, ButtonLink } from "./components/Button";
 export { Link, LinkProvider, type LinkComponent, type LinkProps } from "./components/Link";
-export { Checkbox } from "./components/Checkbox";
+export { Checkbox, CheckMark } from "./components/Checkbox";
+export { reasonOf, unlessHeld } from "./components/held";
+export { useBlocked } from "./components/reason";
 export { Choice } from "./components/Choice";
 export { ChoiceCards, type ChoiceCardItem } from "./components/ChoiceCards";
 export { DangerButton, DangerButtonLink } from "./components/DangerButton";
@@ -99,7 +101,7 @@ export { PaneViews, PaneView } from "./components/PaneViews";
 export { Grow } from "./components/Grow";
 export { FocusLine, FocusQuiet, FocusFoot } from "./components/FocusLines";
 export { CodeField } from "./components/CodeField";
-export { FocusLayout, FocusHead, FocusMark, type FocusLayoutProps, type FocusStep, type FocusBack, type FocusPlace, type FocusPulse } from "./components/Focus";
+export { FocusLayout, FocusHead, FocusMark, FocusFrame, useFocusFrame, type FocusFrameWords, type FocusLayoutProps, type FocusStep, type FocusBack, type FocusPlace, type FocusPulse } from "./components/Focus";
 export { ProviderButtons, ProviderChoice, type ProviderKind, type ProviderButtonsProps, type ProviderChoiceProps } from "./components/Providers";
 export { FormSteps } from "./components/FormSteps";
 export { Player } from "./components/Player";
