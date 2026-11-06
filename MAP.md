@@ -2132,7 +2132,7 @@ A list of headline measures (`section` named by `label`, holding a `dl`), in col
 | `bare` | `boolean` | `false` | No rules above and below (`data-bare`). Inside a `Card` the rules are dropped already. |
 | native attributes | `HTMLAttributes<HTMLElement>` | | Passed through. |
 
-States: none. Between two `--line` rules with 1rem padding (none when bare or in a card). Label `--text-meta` `--fg-subtle`; value `calc(var(--text-lead) * 1.5)` weight 600, tabular, `--fg-strong`; description `--text-meta` `--fg-subtle`; action 0.5rem below. In a recessed card `--fg-subtle` is remapped to `--fg-subtle-on-fill`, which holds its contrast on the fill.
+States: none. Between two `--line` rules with 1rem padding (none when bare or in a card). Label `--text-meta` `--fg-subtle`; value `calc(var(--text-lead) * 1.5)` weight 600, tracking `--track-title` (-0.02em), tabular, `--fg-strong`; description `--text-meta` `--fg-subtle`; action 0.5rem below. In a recessed card `--fg-subtle` is remapped to `--fg-subtle-on-fill`, which holds its contrast on the fill.
 
 CSS: classes `ui-metric-summary`, `ui-metric-summary-item`, `ui-metric-summary-value`, `ui-metric-summary-description`, `ui-metric-summary-action`.
 

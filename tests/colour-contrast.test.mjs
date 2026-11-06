@@ -4,7 +4,7 @@ import test from "node:test";
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { chromium } from "playwright";
-import { Announcement, Badge, Button, Count, Progress, Switch, Tabs } from "../dist/index.js";
+import { Announcement, Badge, Button, Count, Progress, Switch, Tabs, TraceWaterfall } from "../dist/index.js";
 
 // The contrast rule, measured on the colours Chromium resolves from the built stylesheet, in both
 // modes: every tone ink and the accent ink at 5.8:1 or more on the canvas, the panel and its own
@@ -34,6 +34,7 @@ const pieces = h("main", { id: "pieces" },
   h(Tabs, { tone: "accent", "aria-label": "Views", items: { list: "List", board: "Board" }, value: "list", className: "tabs" }),
   h(Button, { id: "button", tone: "accent" }, "Send"),
   h(Announcement, { href: "#", tag: "New", tone: "accent", hue: "sage", className: "announcement" }, "Calls in every group"),
+  h(TraceWaterfall, { className: "trace", extentMs: 100, spans: [{ id: "ok", label: "Fetch", offsetMs: 0, durationMs: 40, status: "ok" }, { id: "error", label: "Render", offsetMs: 40, durationMs: 60, status: "error" }] }),
 );
 
 async function open(browser, sheet) {
@@ -105,6 +106,10 @@ test("tone and accent inks hold 5.8:1 in both modes, and the accent pieces read 
       assert.deepEqual(await style(".progress .ui-progress-fill", "backgroundColor"), accent, "progress fill");
       assert.deepEqual(await style(".announcement .ui-announcement-tag", "backgroundColor"), accent, "announcement tag, over its hue");
       assert.deepEqual(await style(".tabs .ui-tab[aria-selected='true']", "color"), accentOn, "chosen tab words");
+      // A failed span's bar in a trace is the danger ink, whose contrast is measured above.
+      const danger = await read("var(--tone-danger-ink)");
+      assert.deepEqual(await style(".trace [data-status='error'] .ui-trace-waterfall-track > span", "backgroundColor"), danger, "failed span bar");
+      assert.notDeepEqual(await style(".trace [data-status='ok'] .ui-trace-waterfall-track > span", "backgroundColor"), danger, "a span that did not fail is not the danger ink");
       const tabFaces = await page.evaluate(() => ["var(--ink-face-top)", "var(--ink-face-bottom)"].map(face => window.paint(face, ".tabs")));
       for (const face of tabFaces) {
         const ratio = contrast(accentOn, face);

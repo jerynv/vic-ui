@@ -71,6 +71,8 @@ function compare(failures, label, before, after) {
 // label is the label's and the focus is its input's.
 async function states(page, id, label, target, control, before, failures) {
   const reached = async (selector) => (await target.evaluate((element, selector) => element.matches(selector), selector)) || control.evaluate((element, selector) => element.matches(selector), selector);
+  // A tall piece (a table's rows) can reach past the viewport, where the pointer cannot go.
+  await target.scrollIntoViewIfNeeded();
   const where = await target.boundingBox();
   const centre = { x: where.x + where.width / 2, y: where.y + where.height / 2 };
   await page.mouse.move(centre.x, centre.y);

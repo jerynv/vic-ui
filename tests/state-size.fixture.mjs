@@ -16,6 +16,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   Switch,
+  Table,
   Tabs,
   TextField,
 } from "../dist/index.js";
@@ -121,6 +122,22 @@ function Rows() {
   );
 }
 
+// A table's sortable heads and pressable rows, each a part; the first column is the row's
+// header (`rowHeaderKey`). Choosing a row draws it as the current one, and a head press sorts.
+const PEOPLE = [{ id: "ada", name: "Ada Lovelace", role: "Owner" }, { id: "alan", name: "Alan Turing", role: "Editor" }, { id: "grace", name: "Grace Hopper", role: "Viewer" }];
+const COLUMNS = [{ key: "name", label: "Name", sort: true }, { key: "role", label: "Role", sort: true }];
+
+function Tables() {
+  const [current, setCurrent] = useState(null);
+  const [sort, setSort] = useState(null);
+  const table = (extra) => h(Table, { "aria-label": "People", columns: COLUMNS, rows: PEOPLE, rowKey: (row) => row.id, cell: (row, column) => row[column.key], rowHeaderKey: "name", sort, onSortChange: setSort, onRowPress: (row) => setCurrent(row.id), currentKey: current, ...extra });
+  return [
+    h(Case, { key: "table-rows", id: "table-rows", parts: "tbody tr", chosen: "second" }, table({})),
+    h(Case, { key: "table-sort", id: "table-sort", parts: ".ui-table-sort", chosen: "second" }, table({})),
+    h(Case, { key: "table-roster", id: "table-roster", parts: "tbody tr", chosen: "second" }, table({ look: "roster" })),
+  ];
+}
+
 export function Fixture() {
   return h("main", { className: "cases" },
     h(Buttons),
@@ -136,5 +153,6 @@ export function Fixture() {
     h(Pickers),
     h(Rail),
     h(Rows),
+    h(Tables),
   );
 }
