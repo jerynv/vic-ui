@@ -2306,11 +2306,13 @@ One brand colour for a look, never a meaning: a "New" pill, a chosen mode, a sen
 | --- | --- | --- | --- |
 | `--accent` | `oklch(0.48 0.19 262)` | `oklch(0.76 0.12 258)` | The fill: a switch's track, a bar, a filled button, a tag. |
 | `--accent-on` | `oklch(1 0 0)` | `oklch(0.1448 0 0)` | Words on the fill and on the ink. |
-| `--accent-ink` | `oklch(0.46 0.17 262)` | `oklch(0.8 0.1 258)` | Words and lines in the accent on the page; a solid badge's and a count's fill. |
-| `--accent-tint` | `oklch(0.935 0.03 262)` | `oklch(0.275 0.065 262)` | A pale ground (`soft`). |
-| `--accent-edge` | `oklch(0.46 0.17 262 / 0.45)` | `oklch(0.8 0.1 258 / 0.45)` | An outline (a hairline badge). |
+| `--accent-ink` | `color-mix(in oklab, var(--accent), var(--fg-strong) 15%)` | same | Words and lines in the accent on the page; a solid badge's and a count's fill. |
+| `--accent-tint` | `color-mix(in oklab, var(--accent) 10%, var(--bg-canvas))` | the same at 24% | A pale ground (`soft`). |
+| `--accent-edge` | `color-mix(in oklab, var(--accent-ink) 45%, transparent)` | same | An outline (a hairline badge). |
 | `--button-accent` | unset, read as `var(--button-accent, var(--accent))` | same | The filled button's accent; set it on a part of the page to give its buttons another colour. |
 | `--button-on-accent` | unset, read as `var(--button-on-accent, var(--accent-on))` | same | The words on it. |
+
+The ink, tint and edge are drawn from `--accent`, so a brand sets `--accent` (and `--accent-on` if its words need the other end) on `:root, [data-mode]` and the rest follow. `tests/colour-contrast.test.mjs` holds the drawn ink at 5.8:1 on the canvas, the panel and its tint for a royal blue, a violet, a green, a red and a teal brand. A brand pale in light or deep in dark can fall short: set `--accent-ink` (and `--accent-tint` if you like) to a pair of its own, which outranks the drawn one.
 
 `--accent` is not shadcn's hover grey: the composable sheet's `--color-accent` (`bg-accent`) reads `--fill-hover`, so set `--fill-hover`, not `--accent`, to change that hover (see the 0.2 notes in [CHANGELOG.md](CHANGELOG.md)).
 
@@ -2565,7 +2567,7 @@ Ink on canvas / panel / its own tint, and `--tone-on` on the ink (for the accent
 | caution | 7.06 / 7.31 / 5.93, 7.31 | 13.51 / 12.56 / 9.91, 12.97 |
 | settled | 7.64 / 7.90 / 6.38, 7.90 | 12.77 / 11.87 / 9.56, 12.26 |
 | moving | 8.66 / 8.96 / 7.16, 8.96 | 11.95 / 11.10 / 9.06, 11.47 |
-| accent (a look) | 7.09 / 7.33 / 6.05, 6.79 and 7.33 | 11.05 / 10.27 / 7.96, 9.22 and 10.61 |
+| accent (a look) | 8.07 / 8.35 / 6.91, 6.79 and 8.35 | 10.83 / 10.06 / 8.20, 9.22 and 10.39 |
 
 The same test holds the accent button's words at 5.8:1 on every face stop (rest, hover, press) and the accent Tabs indicator likewise, and checks that `--accent` is not moving's ink.
 

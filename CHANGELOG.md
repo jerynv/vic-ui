@@ -2,6 +2,12 @@
 
 What each release of vic-ui added and how it was checked. Until 0.2 these notes lived at the top of `MAP.md`; they are copied here word for word, so `MAP.md` can stay the spec. Newest first.
 
+## Unreleased
+
+### Changed
+
+- **The accent family is drawn from `--accent`.** `--accent-ink` is `--accent` mixed 15% toward `--fg-strong`, `--accent-tint` is `--accent` at 10% (light) or 24% (dark) on `--bg-canvas`, and `--accent-edge` is the ink at 45%, so a brand sets one pair. A theme that already sets all four keeps its own values. The default accent now measures light 8.07 / 8.35 / 6.91, dark 10.83 / 10.06 / 8.20 (ink on canvas / panel / tint). `tests/colour-contrast.test.mjs` holds the drawn ink at 5.8:1 for five brand colours set as `--accent` alone; a pale or deep brand sets `--accent-ink` itself.
+
 ## Unreleased: 0.2, foundations
 
 ### To act on
