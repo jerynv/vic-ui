@@ -2080,6 +2080,8 @@ CSS: `ui-timeline.css`. Class `ui-actionbar-rule`.
 
 All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are listed as their light and dark values. The colour tokens and the scales are declared on `:root, [data-mode]` (unlayered), so a section set to the other mode reads them in its own. The type scale, the font tokens and the easings are in Tailwind's `@theme` block.
 
+**The defaults are a starting point.** These values are vic-ui's own interpretation, not a spec a consuming app has to match. An app sets its own brand in one theme stylesheet, imported after vic-ui's and outside any `@layer`, overriding tokens on `:root, [data-mode]` (colours as `light-dark()` pairs) and the font tokens on `:root`, while keeping the `color-scheme` declarations below. Token names, component props and `ui-` class names are the stable contract; the look changes through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the focus ring, disabled says why, state carries a word, nothing moves, and every tone ink stays at or above 5.8:1 on the canvas, the panel and its own tint in both modes (see [Contrast, measured](#contrast-measured)).
+
 `light-dark()` needs `color-scheme` declared: `:root` is `light`; `:root:not([data-mode])` follows `prefers-color-scheme: dark`; `:root[data-mode="light"]` and `:root[data-mode="dark"]` force one. `:root[data-switching]` turns every transition off for the frame the mode changes in (the one `!important`).
 
 ### Neutrals: words

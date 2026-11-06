@@ -9,6 +9,10 @@ The compiled stylesheet includes Cal Sans UI, Space Mono, and the vic palette. C
 
 Override tokens in your application stylesheet, after importing `vic-ui/ui/styles.css`. Radius tokens are `--radius-mark`, `--radius-row`, `--radius-control`, `--radius-float`, `--radius-panel`, and `--radius-round`.
 
+## Your brand, not ours
+
+The palette, faces, corners and heights on this site are one interpretation, a default to start from. Your app is expected to set its own tokens and does not have to match these. Put them in one theme stylesheet, imported after vic-ui's and outside any `@layer`: colours as `light-dark()` pairs and radii on `:root, [data-mode]`, so a section set to the other mode keeps them, and `--font-sans` and `--font-display` on `:root`. Keep the `color-scheme` declaration, or compiled colours resolve to nothing. Token names, component props and `ui-` class names are the stable contract, so change the look through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the keyboard focus ring, disabled pieces that say why, state that carries a word and not only a colour, and each tone ink at least 5.8:1 on the canvas, the panel and its own tint in both modes.
+
 ## Flat and bordered surfaces
 
 Use one shared style for a form, card, or page. Both styles keep the same sizes, behavior, validation and action buttons. Flat fields use a soft fill; bordered fields use a clear outline. Cards keep their surface with or without an edge.
