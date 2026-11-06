@@ -761,7 +761,8 @@ The one surface on the page: `lifted` sits on the page on the lifted surface wit
 | `tone` | `"danger" \| undefined` | none | The edge in `--tone-danger-edge`. |
 | `plain` | `boolean` | `false` | The children in the card itself, padded `0.75rem 0.875rem`, for a card that lays them out; no head, body or foot. |
 | `flush` | `boolean` | `false` | The body has no padding, for rows that run to its edges. |
-| `title` | `ReactNode` | none | The head's title (an `h3`). |
+| `title` | `ReactNode` | none | The head's title (an `h3` unless `level` says otherwise). |
+| `level` | `2 \| 3 \| 4 \| 5 \| 6` | `3` | The title's heading level, so a card under a page's `h1` heads with an `h2`. |
 | `description` | `ReactNode` | none | Under the title. |
 | `actions` | `ReactNode` | none | At the head's end. |
 | `foot` | `ReactNode` | none | A foot under a rule. |
@@ -1213,6 +1214,9 @@ The one table: dense rows, a head pinned to the top of its scroller, every numbe
 | `rowProps` | `(row) => HTMLAttributes & data attributes` | none | Added to each row, after its own. |
 | `tableProps` | `TableHTMLAttributes` | none | Added to the table. |
 | `tableRef` | `Ref<HTMLTableElement>` | none | The table. |
+| `caption` | `ReactNode` | none | A `caption` as the table's first child. |
+| `rowHeaderKey` | `string` | none | That column's cells are `th scope="row"`, so each row is named by it. |
+| `cellProps` | `(row, column) => HTMLAttributes & data attributes` | none | Added to each body cell; its `className` joins the column's. |
 
 `TableColumn` is `{ key: string; label: ReactNode; align?: "start" | "center" | "end"; width?: string | number; sort?: boolean; className?: string }`. `TableSort` is `{ key: string; direction: "asc" | "desc" }`.
 
@@ -2104,6 +2108,56 @@ CSS: `ui-timeline.css`. Class `ui-actionbar`, keyframes `ui-actionbar-in`.
 A hairline between groups inside an `ActionBar`: 1px of `--line`, margin `0.3125rem 0.125rem`. No props.
 
 CSS: `ui-timeline.css`. Class `ui-actionbar-rule`.
+
+## Analytics
+
+From `Analytics.tsx` and `TraceWaterfall.tsx`, with their CSS in `ui-analytics.css` and `ui-trace-waterfall.css`. The caller formats every value; the pieces only lay them out.
+
+### WorkspaceHeader
+
+A page's heading with its supporting words and its actions at the end.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `title` | `ReactNode` | required | The page's `h1`. |
+| `description` | `ReactNode` | none | A paragraph under it, at most 70ch. |
+| `action` | `ReactNode` | none | At the end of the row; under the words below 40rem. |
+| `as` | `"header" \| "div"` | `"header"` | The element. |
+| native attributes | `HTMLAttributes<HTMLElement>` | | Passed through. |
+
+States: none. Title `calc(var(--text-lead) * 1.5)` weight 600, line height 1.2, tracking -0.025em, `--fg-strong`; description `--text-read`, `--fg-subtle`. Gap 1.25rem, 1.5rem below.
+
+CSS: classes `ui-workspace-header`, `ui-workspace-header-copy`, `ui-workspace-header-title`, `ui-workspace-header-description`, `ui-workspace-header-action`.
+
+### MetricSummary, MetricSummaryItem
+
+A list of headline measures (`section` named by `label`, holding a `dl`), in columns of at least 9rem that wrap.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `items` | `readonly MetricSummaryItem[]` | required | Each `{ label, value, description?, action? }`, every one a `ReactNode` the caller formats. |
+| `label` | `string` | `"Summary metrics"` | The section's name. |
+| `bare` | `boolean` | `false` | No rules above and below (`data-bare`). Inside a `Card` the rules are dropped already. |
+| native attributes | `HTMLAttributes<HTMLElement>` | | Passed through. |
+
+States: none. Between two `--line` rules with 1rem padding (none when bare or in a card). Label `--text-meta` `--fg-subtle`; value `calc(var(--text-lead) * 1.5)` weight 600, tabular, `--fg-strong`; description `--text-meta` `--fg-subtle`; action 0.5rem below.
+
+CSS: classes `ui-metric-summary`, `ui-metric-summary-item`, `ui-metric-summary-value`, `ui-metric-summary-description`, `ui-metric-summary-action`.
+
+### TraceWaterfall, TraceWaterfallSpan
+
+Spans on one shared wall-time track, as an `ol` named by `label`: concurrent spans overlap.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `spans` | `readonly TraceWaterfallSpan[]` | required | Each `{ id, label, detail?, offsetMs, durationMs, status? }`. |
+| `extentMs` | `number` | required | The track's full length; 0 or invalid draws no tracks. |
+| `renderStatus` | `(status, span) => ReactNode` | the status words | Draws the status at the row's end (a `Badge`, say). |
+| `label` | `string` | `"Trace timing"` | The list's name. |
+
+States: a span with invalid timing reads "Timing unavailable". Track 0.4375rem, round, on `--line-hairline`; bar `--fg-subtle`, `--tone-danger-ink` when `status` is `error`. Rows split by `--line`; label `--text-ui`, detail and timing `--text-meta` `--fg-subtle`, timing tabular. Below 40rem the timing takes its own line.
+
+CSS: classes `ui-trace-waterfall`, `ui-trace-waterfall-row`, `ui-trace-waterfall-label`, `ui-trace-waterfall-timing`, `ui-trace-waterfall-track`, `ui-trace-waterfall-status`.
 
 ## Tokens
 
