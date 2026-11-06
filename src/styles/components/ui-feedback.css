@@ -180,7 +180,7 @@
   }
 
   .ui-toast-message {
-    font-weight: 500;
+    font-weight: var(--weight-ui);
   }
 
   .ui-toast-description {

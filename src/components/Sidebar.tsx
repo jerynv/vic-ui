@@ -1,6 +1,7 @@
 import { createContext, forwardRef, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ComponentProps, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref, type RefObject } from "react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { SidebarIcon, XIcon } from "../icons/icons";
+import { Count, type Tone } from "./Badge";
 import { Button } from "./Button";
 import { Link } from "./Link";
 import { useTip } from "./Tooltip";
@@ -37,6 +38,8 @@ export interface SidebarState {
 
 type SidebarContext = SidebarState & { container: RefObject<HTMLDivElement | null> };
 const Context = createContext<SidebarContext | null>(null);
+/** Whether a part is drawn inside the rail or the sheet, rather than on the page beside it. */
+const InRail = createContext(false);
 
 /** The sidebar's state and the presses that change it, from anywhere under `SidebarProvider`. */
 export function useSidebar(): SidebarState {
@@ -85,6 +88,8 @@ export function SidebarProvider(props: {
   mobileBreakpoint?: number;
   /** Within its container rather than the window: the sheet and its backdrop cover the container. */
   contained?: boolean;
+  /** The rail's density: `sm` sets every row 1.75rem tall and every heading a step smaller. A row's or a heading's own `size` outranks it. */
+  size?: "sm" | "md";
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
@@ -134,6 +139,7 @@ export function SidebarProvider(props: {
         ref={container}
         data-sidebar-wrapper=""
         data-state={value.state}
+        data-size={props.size === "sm" ? "sm" : undefined}
         className={join("ui-sidebar-wrapper", !contained && "ui-sidebar-window", props.className)}
         style={props.style}
       >
@@ -171,7 +177,7 @@ export const Sidebar = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(func
             {...rest}
             aria-label={rest["aria-label"] ?? "Navigation"}
           >
-            {children}
+            <InRail.Provider value={true}>{children}</InRail.Provider>
             <DialogPrimitive.Close render={<Button aria-label="Close navigation" square look="quiet" icon={<XIcon size={16} />} className="ui-sidebar-close" />} />
           </DialogPrimitive.Popup>
         </DialogPrimitive.Portal>
@@ -181,7 +187,7 @@ export const Sidebar = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(func
   return (
     <aside ref={ref} data-sidebar="sidebar" data-state={state} data-collapsible={collapsible} className={join("ui-sidebar", className)} {...rest}>
       <div data-sidebar="content-container" className="ui-sidebar-inner">
-        {children}
+        <InRail.Provider value={true}>{children}</InRail.Provider>
       </div>
     </aside>
   );
@@ -271,7 +277,7 @@ export const SidebarGroup = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEle
  */
 export const SidebarGroupLabel = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { size?: "sm" | "md" }>(function SidebarGroupLabel({ size, className, children, ...rest }, ref) {
   return (
-    <div ref={ref} data-sidebar="group-label" data-size={size === "sm" ? "sm" : undefined} className={join("ui-sidebar-group-label", className)} {...rest}>
+    <div ref={ref} data-sidebar="group-label" data-size={size} className={join("ui-sidebar-group-label", className)} {...rest}>
       <div className="ui-sidebar-group-fold">
         <div className="ui-sidebar-group-words">{children}</div>
       </div>
@@ -304,8 +310,13 @@ type Shared = {
   tooltip?: ReactNode;
   /** A dot on the mark while folded, for what a badge says open; the words are for a screen reader. */
   dot?: string | undefined;
-  /** The row's height: 1.75rem (`sm`), 2rem (`md`) or 2.5rem (`lg`, for a row with a second line or a face). */
+  /** The row's height: 1.75rem (`sm`), 2rem (`md`) or 2.5rem (`lg`, for a row with a second line or a face). Without it, the provider's `size`. */
   size?: "sm" | "md" | "lg";
+  /**
+   * How many are waiting there: a soft `Count` at the row's end while the rail is open, and the
+   * dot on the mark while it is folded. `label` is what a screen reader hears in either. None at 0.
+   */
+  count?: { value: number; label: string; tone?: Tone; max?: number };
   children?: ReactNode;
 };
 
@@ -319,7 +330,9 @@ export type SidebarMenuButtonProps =
  * drawn as it is, so a row can carry a second word at its end.
  */
 export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>(function SidebarMenuButton(props, ref) {
-  const { icon, active, tooltip, dot, size, children, className, ...rest } = props;
+  const { icon, active, tooltip, dot: ownDot, size, count, children, className, ...rest } = props;
+  const counted = count && count.value > 0 ? count : undefined;
+  const dot = ownDot ?? counted?.label;
   const { state, isMobile } = useSidebar();
   const inItem = useContext(InItem);
   const tip = useTip(state === "collapsed" && !isMobile ? tooltip : undefined, { placement: "right" });
@@ -341,7 +354,7 @@ export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>
     className: join("ui-sidebar-button", className),
     "data-sidebar": "menu-button",
     "data-active": active ? "true" : undefined,
-    "data-size": size && size !== "md" ? size : undefined,
+    "data-size": size,
     "aria-current": (own["aria-current"] as HTMLAttributes<HTMLElement>["aria-current"]) ?? (active ? "page" as const : undefined),
     "aria-describedby": tip.has ? join(own["aria-describedby"] as string | undefined, tip.id) : (own["aria-describedby"] as string | undefined),
   };
@@ -357,7 +370,14 @@ export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>
           ) : null}
         </span>
       ) : null}
-      <span className="ui-sidebar-words">{typeof children === "string" || typeof children === "number" ? <span className="ui-sidebar-word">{children}</span> : children}</span>
+      <span className="ui-sidebar-words">
+        {typeof children === "string" || typeof children === "number" ? <span className="ui-sidebar-word">{children}</span> : children}
+        {counted ? (
+          <span data-sidebar="menu-badge" className="ui-sidebar-badge">
+            <Count soft {...counted} />
+          </span>
+        ) : null}
+      </span>
     </div>
   );
   let button: ReactNode;
@@ -401,14 +421,18 @@ export const SidebarMenuBadge = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLS
 });
 
 /**
- * The press that folds or opens the rail, or on a phone opens the sheet: a quiet square button
- * with the rail's mark, named "Navigation" (`aria-label` renames it) and `aria-expanded` saying
- * which state it is in. Put it in the page's header, beside the rail. A rail that never folds
- * (`collapsible="none"`) has none beside it, so it draws nothing there.
+ * The press that folds or opens the rail: a quiet square button with the rail's mark, named for
+ * what it will do ("Collapse menu", "Expand menu"; on a phone "Open menu") with `aria-expanded`
+ * saying the state, and `aria-label` renaming it. In the rail's `SidebarHeader` it sits at the
+ * header's end, and folded it is all the header shows; a phone's sheet has its own close, so
+ * there it draws nothing and the page's header carries one instead. A rail that never folds
+ * (`collapsible="none"`) has none on a wide screen.
  */
 export const SidebarTrigger = forwardRef<HTMLButtonElement, Omit<ComponentProps<typeof Button>, "children" | "square" | "icon">>(function SidebarTrigger({ onClick, look = "quiet", className, ...rest }, ref) {
   const { state, isMobile, collapsible, toggleSidebar } = useSidebar();
-  if (collapsible === "none" && !isMobile) return null;
+  const inRail = useContext(InRail);
+  if (isMobile ? inRail : collapsible === "none") return null;
+  const expanded = state === "expanded";
   return (
     <Button
       ref={ref}
@@ -416,8 +440,8 @@ export const SidebarTrigger = forwardRef<HTMLButtonElement, Omit<ComponentProps<
       square
       icon={<SidebarIcon size={16} />}
       data-sidebar="trigger"
-      aria-label="Navigation"
-      aria-expanded={state === "expanded"}
+      aria-label={isMobile ? "Open menu" : expanded ? "Collapse menu" : "Expand menu"}
+      aria-expanded={expanded}
       className={join("ui-sidebar-trigger", className)}
       {...rest}
       onClick={(event) => {

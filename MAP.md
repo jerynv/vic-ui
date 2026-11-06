@@ -172,7 +172,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 
 States, as `ui.css` implements them:
 
-- Rest: `ink` rim `--ink-rim-top` to `--ink-rim-bottom`, face `--ink-face-top` to `--ink-face-bottom`, words `--ink-words`, edge `--ink-rim-edge`. `line`: edge `--line`, rim and face transparent, words `--fg-strong`. `quiet`: no rim, no face, no border, `height: auto`, words `--fg-subtle`, weight 500.
+- Rest: `ink` rim `--ink-rim-top` to `--ink-rim-bottom`, face `--ink-face-top` to `--ink-face-bottom`, words `--ink-words`, edge `--ink-rim-edge`. `line`: edge `--line`, rim and face transparent, words `--fg-strong`. `quiet`: no rim, no face, no border, `height: auto`, words `--fg-subtle`, weight `--weight-quiet`.
 - Hover: `ink` face moves to `--ink-face-top-hover` / `--ink-face-bottom-hover`; `line` face fills `--field-fill-hover`; `quiet` words go `--fg-strong` and underline (offset 3px).
 - Press (`:active`): `ink` face `--ink-face-top-press` / `--ink-face-bottom-press`; `line` face `--field-fill`. Nothing moves; the face darkens.
 - `line` with `aria-pressed="true"` takes the ink rim and face (a held toggle).
@@ -184,7 +184,7 @@ States, as `ui.css` implements them:
 - Busy (`aria-busy`): held as disabled is. With no icon, the face is `position: relative`, the words (`ui-button-busy-words`) are `opacity: 0` and the spinner (`ui-button-busy-mark`) is laid over them (`position: absolute; inset: 0; margin: auto`).
 - Full (`full`, not `link`): `height: auto`, `min-height: --control-h-sm` (`lg`: `--control-h`), `white-space: normal`; its face has `padding-block: 0.25rem`, line height 1.25 and centred words, so words longer than the column wrap inside the button and one line keeps its height.
 - The rim's gradient is painted from the outer edge (`background-origin: border-box`), so it does not repeat under the border as a sliver along the top of a tall button.
-- Type: `--text-ui` (13px), weight 500, line height 1, no wrap; `lg` uses `--text-read` (14px).
+- Type: `--text-ui` (13px), weight `--weight-ui`, line height 1, no wrap; `lg` uses `--text-read` (14px).
 - Face padding `0 0.875rem` (`lg`: `0 1rem`, `square`: 0), gap 0.5rem, radius `calc(var(--radius-button) - 2px)`.
 
 Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
@@ -629,7 +629,7 @@ One section of an `Accordion`: `title` is its head (a button with `aria-expanded
 
 States:
 
-- Head: min height `--control-h-sm`, margin `0.125rem -0.5rem`, padding `0.375rem 0.5rem`, radius `--radius-row`, `--text-ui` weight 500, `--fg-strong`. Hover `--field-fill`; press `--field-fill-hover` (150ms ease-out). Focus outline 2px `--focus`, offset 2px. Disabled opacity 0.55, `not-allowed`.
+- Head: min height `--control-h-sm`, margin `0.125rem -0.5rem`, padding `0.375rem 0.5rem`, radius `--radius-row`, `--text-ui` weight `--weight-ui`, `--fg-strong`. Hover `--field-fill`; press `--field-fill-hover` (150ms ease-out). Focus outline 2px `--focus`, offset 2px. Disabled opacity 0.55, `not-allowed`.
 - Open (`data-open`): the chevron (`ChevronDownIcon` 15px, `--fg-subtle`) rotates 180deg; the panel's grid rows ease from `0fr` to `1fr` over 220ms `--ease-out-expo`. A closed panel is `inert`. No transitions under reduced motion.
 - Items after the first have a top rule `1px solid var(--line)`.
 - Content: padding `0.125rem 0 0.75rem`, `--text-ui`, line height 1.5, `--fg`.
@@ -655,7 +655,7 @@ The small pill a front page leads with: a tag, the words and an arrow, the whole
 
 States:
 
-- Rest: height 1.75rem, radius `--radius-round`, `--text-ui` weight 500, `--fg-strong` on `--surface-lifted`, `--edge`. Padding `0 0.625rem 0 0.1875rem` (`0.625rem` on the left without a tag).
+- Rest: height 1.75rem, radius `--radius-round`, `--text-ui` weight `--weight-ui`, `--fg-strong` on `--surface-lifted`, `--edge`. Padding `0 0.625rem 0 0.1875rem` (`0.625rem` on the left without a tag).
 - Hover: the arrow (`ArrowRightIcon` 13px) goes from `--fg-subtle` to `--fg-strong` (200ms).
 - Press: `--field-fill` with a `0 0 0 1px var(--line)` ring.
 - Focus: outline 2px `--focus`, offset 2px.
@@ -693,12 +693,13 @@ Dependencies: none beyond React.
 
 ### Badge
 
-A state said in a word or two. Hairline in its tone is a standing state; `solid` fills it with the tone's ink, asking for a hand now. It always carries words, and lower-case data reads as a sentence: its first letter is raised.
+A state said in a word or two. Hairline in its tone is a standing state; `solid` fills it with the tone's ink, asking for a hand now; `soft` sets the tone's ink on its tint, asking less. It always carries words, and lower-case data reads as a sentence: its first letter is raised.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `tone` | `Tone` | none (neutral) | `danger`, `caution`, `settled`, `moving` or `neutral`. |
 | `solid` | `boolean` | `false` | Filled in the tone's ink (or ink with no tone). |
+| `soft` | `boolean` | `false` | The tone's ink on its tint, no ring (`--fg-strong` on `--fill-chosen` with no tone). `solid` outranks it. |
 | `dot` | `boolean` | `false` | A 0.375rem dot in `currentColor` leads the words. |
 | `icon` | `ReactNode` | none | Leads the words (drawn 0.75rem) when there is no dot. |
 | `count` | `number` | none | A number after the words, tabular, at opacity 0.75. |
@@ -709,7 +710,7 @@ States: none interactive. Hairline: height 1.25rem, max width 100%, padding `0 0
 
 Tokens: `--tone-ink`, `--tone-edge`, `--tone-fill-on` (set by `.tone-*`), `--fg-strong`, `--line`, `--ink-words`, `--ink-face-bottom`, `--radius-row`, `--radius-round`, `--text-tag`.
 
-CSS: `ui-display.css` (`ui-badge`, `ui-badge-words`, `ui-badge-solid`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`).
+CSS: `ui-display.css` (`ui-badge`, `ui-badge-words`, `ui-badge-solid`, `ui-badge-soft`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`).
 
 Dependencies: `toneClass`.
 
@@ -783,7 +784,7 @@ A key name drawn as a key. Several keys pressed together are several `Kbd`s side
 | `name` | `string` | none | What a screen reader hears where the key is a symbol (`↵` as "Enter"). |
 | `className` | `string` | none | Placement. |
 
-States: none. Min width and height 1.25rem, padding `0 0.3125rem`, radius `--radius-mark`, `--font-sans` `--text-tag` weight 500, flat (no bevel, no shadow): `--fg-subtle` on `var(--kbd-fill, color-mix(in oklab, currentColor 12%, transparent))`, its own colour at a low strength so it reads on any ground; a surface that wants another fill sets `--kbd-fill`. A key after a key has 0.1875rem before it.
+States: none. Min width and height 1.25rem, padding `0 0.3125rem`, radius `--radius-mark`, `--font-sans` `--text-tag` weight `--weight-ui`, flat (no bevel, no shadow): `--fg-subtle` on `var(--kbd-fill, color-mix(in oklab, currentColor 12%, transparent))`, its own colour at a low strength so it reads on any ground; a surface that wants another fill sets `--kbd-fill`. A key after a key has 0.1875rem before it.
 
 Tokens: `--radius-mark`, `--font-sans`, `--text-tag`, `--fg-subtle`; local slot `--kbd-fill`.
 
@@ -1137,7 +1138,7 @@ A word or two in ink beside a control: shown after the pointer rests or at once 
 | `placement` | `Placement` | `"top"` | Its side. |
 | `delay` | `number` | `TIP_DELAY_MS` (500) | Rest before it shows. |
 
-States: once one tooltip has shown, the next shows at once for 400ms after it hides ("warm"). Placed with gap 6 and no height cap. Surface: width `max-content`, max `min(18rem, calc(100vw - 16px))`, padding `0.3rem 0.6rem`, radius `--radius-float`, `--text-meta` weight 500, line height 1.35, `--fg-inverse` on `--bg-contrast`, `--shadow-raise`, `pointer-events: none`, fading in 120ms (none under reduced motion). The tooltip element is `aria-hidden`; a hidden span with the same words carries the `aria-describedby` id.
+States: once one tooltip has shown, the next shows at once for 400ms after it hides ("warm"). Placed with gap 6 and no height cap. Surface: width `max-content`, max `min(18rem, calc(100vw - 16px))`, padding `0.3rem 0.6rem`, radius `--radius-float`, `--text-meta` weight `--weight-ui`, line height 1.35, `--fg-inverse` on `--bg-contrast`, `--shadow-raise`, `pointer-events: none`, fading in 120ms (none under reduced motion). The tooltip element is `aria-hidden`; a hidden span with the same words carries the `aria-describedby` id.
 
 Tokens: `--radius-float`, `--text-meta`, `--fg-inverse`, `--bg-contrast`, `--shadow-raise`.
 
@@ -1179,7 +1180,7 @@ States:
 
 - Track: inline flex, height `--control-h` (`sm`: `--control-h-sm`), padding 2px, radius `--radius-field`, `--field-fill`, scrolls sideways with no scrollbar.
 - Indicator: `linear-gradient(var(--ink-face-top), var(--ink-face-bottom))` with a `0 0 0 1px var(--ink-rim-edge)` ring, radius `calc(var(--radius-field) - 2px)`, measured onto the chosen tab (and again on any resize); the first placing is drawn where it lands, every move after eases `translate` and `width` over 240ms `--ease-track` (none under reduced motion).
-- Tab: padding `0 0.75rem`, `--text-ui` weight 500, `--fg-subtle`. Hover (not chosen, not disabled): `--fg-strong` on `--field-fill-hover`. Press: `--bone`. Chosen: `--ink-words`. Focus: outline 2px `--focus`, offset 2px. Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
+- Tab: padding `0 0.75rem`, `--text-ui` weight `--weight-ui`, `--fg-subtle`. Hover (not chosen, not disabled): `--fg-strong` on `--field-fill-hover`. Press: `--bone`. Chosen: `--ink-words`. Focus: outline 2px `--focus`, offset 2px. Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
 - Rule: 1px by 1rem, `--line`, margin 0.25rem each side.
 - Count: min width 2ch, `--text-tag`, tabular, opacity 0.65.
 
@@ -1291,7 +1292,7 @@ A numbered pager: where this page sits in words, then previous, the pages and ne
 
 States:
 
-- Page and step buttons: min width and height `--control-h-sm`, padding `0 0.375rem`, radius `--radius-control`, weight 500, tabular, `--fg`. Hover `--fg-strong` on `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset 2px.
+- Page and step buttons: min width and height `--control-h-sm`, padding `0 0.375rem`, radius `--radius-control`, weight `--weight-ui`, tabular, `--fg`. Hover `--fg-strong` on `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset 2px.
 - Current page (`aria-current="page"`): `--ink-words` on `--ink-face-bottom`, `cursor: default`.
 - Steps at an end: held with the reasons "This is the first page" and "This is the last page" (opacity 0.55, `not-allowed`, the reason in a tooltip).
 - Gap: `…` in `--fg-subtle`. Words: tabular, `--fg-subtle`, `aria-live="polite"`.
@@ -1649,7 +1650,7 @@ A list of the places on a page, each a link, grouped under quiet headings over o
 States:
 
 - Track: left border `2px solid var(--line-soft)`, gap 0.5rem.
-- Heading: `--text-ui` weight 500, line height 1.25rem, `--fg-subtle`, padding-left 1rem.
+- Heading: `--text-ui` weight `--weight-ui`, line height 1.25rem, `--fg-subtle`, padding-left 1rem.
 - Entry: `--text-ui` weight 400, `--fg-subtle`, padding-left 1rem (1.75rem under a heading), one line with an ellipsis, right corners `--radius-row`. Hover `--fg` on `--field-fill`; press `--field-fill-hover`; current (`aria-current="page"`) `--fg-strong`; focus outline 2px `--focus`, offset 2px. Colour and ground ease 150ms `--ease-track`.
 - Bar: 2px, round, `--brand`, set by its top and bottom so each end eases on its own (180ms `--ease-track`) once it has been placed. Still under reduced motion.
 
@@ -1741,11 +1742,12 @@ Holds the sidebar's state and draws the row it sits in with the page: a flex row
 | `collapsible` | `"icon" \| "offcanvas" \| "none"` | `"icon"` | Folds to its marks, goes away, or never folds. |
 | `mobileBreakpoint` | `number` | `768` | Below this width in pixels it is a sheet; `0` never. |
 | `contained` | `boolean` | `false` | The sheet and backdrop cover the container, not the window. |
+| `size` | `"sm" \| "md"` | `"md"` | The rail's density: `sm` sets `--sidebar-row-height` to 1.75rem and every heading without its own `size` a step smaller (`data-size="sm"` on the wrapper). |
 | `className` | `string` | none | On the wrapper. |
 | `style` | `CSSProperties` | none | On the wrapper. |
 | `children` | `ReactNode` | required | The `Sidebar` and the page. |
 
-The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: 250ms`, `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-group-gap: 0rem` (added above each group after the first while the rail is open). Not contained, it is at least `100svh` tall.
+The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: 250ms`, `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-row-height: 2rem` (1.75rem under `size="sm"`), `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). Not contained, it is at least `100svh` tall.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-wrapper`, `ui-sidebar-window`.
 
@@ -1799,7 +1801,7 @@ CSS: `ui-sidebar.css`. Classes `ui-sidebar-content`, `ui-sidebar-viewport`, `ui-
 
 ### SidebarGroup
 
-A run of places, with or without a heading. `HTMLAttributes<HTMLDivElement>`, forwarded ref. Column, row gap 1px. Each group after the first sits `--sidebar-group-gap` below the one before while the rail is open (or a sheet); folded, the gap is 0 and the label's rule spaces them. The margin eases with the fold.
+A run of places, with or without a heading. `HTMLAttributes<HTMLDivElement>`, forwarded ref. Column, row gap 1px. Each group after the first sits `--sidebar-group-gap` (0.75rem, the room a folded rail's rule takes) below the one before while the rail is open (or a sheet); folded, the gap is 0 and the label's rule spaces them. The margin eases with the fold.
 
 CSS: `ui-sidebar.css`. Class `ui-sidebar-group`.
 
@@ -1810,10 +1812,10 @@ A group's heading, which folds into a rule as the rail folds (none above the fir
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `children` | `ReactNode` | | The heading. |
-| `size` | `"sm" \| "md"` | `"md"` | `sm` is denser: padding-block `0.125rem 0.1875rem` (`data-size="sm"`). |
+| `size` | `"sm" \| "md"` | the provider's | `sm` is denser: `--text-tag`, padding-block `0.125rem 0.1875rem`. `md` keeps the full size in a dense rail. Sets `data-size`. |
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 
-States: words `--text-meta` weight 500, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem` (`sm`: `0.125rem 0.5rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (160ms); the first group's label keeps no margin and no rule. In a sheet it does not transition.
+States: words `--text-meta` weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem` (`sm`, or under a dense provider without a `size` of its own: `--text-tag` and `0.125rem 0.5rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (160ms); the first group's label keeps no margin and no rule. In a sheet it does not transition.
 
 Tokens: `--text-meta`, `--fg-subtle`, `--line`, `--sidebar-animation-duration`, `--sidebar-easing`.
 
@@ -1841,7 +1843,8 @@ A place: a link by `href` (through `LinkProvider` for a path of the app beginnin
 | `active` | `boolean` | `false` | The place you are in (`data-active="true"`). |
 | `tooltip` | `ReactNode` | none | Said beside the mark (to the right) while the rail is folded. |
 | `dot` | `string \| undefined` | none | A dot on the mark while folded; the words are for a screen reader. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | The row's height: 1.75rem, 2rem or 2.5rem (`data-size` for `sm` and `lg`). |
+| `size` | `"sm" \| "md" \| "lg"` | the provider's | The row's height: 1.75rem, 2rem or 2.5rem, outranking the provider's `--sidebar-row-height`. Sets `data-size`. |
+| `count` | `{ value: number; label: string; tone?: Tone; max?: number }` | none | A soft `Count` at the row's end while open (in a `ui-sidebar-badge`), the dot on the mark while folded; `label` is said in either, once. Nothing at 0. An explicit `dot` outranks the count's words. |
 | `href` | `string` | none | Makes it a link. |
 | `children` | `ReactNode` | none | The words. |
 | native attributes | anchor or button attributes | | Passed through. |
@@ -1851,7 +1854,7 @@ A place: a link by `href` (through `LinkProvider` for a path of the app beginnin
 
 States:
 
-- Row: 2rem tall (`sm` 1.75rem, `lg` 2.5rem; the mark stays 0.5rem in, so a folded rail centres it at any size), padding `0 0.5rem`, gap 0.625rem, radius `--radius-row`, `--text-ui` weight 500, line height `calc(1 / 0.85)`, `--fg`; its icon `--fg-subtle`. Its reach covers the pixel between rows.
+- Row: `--sidebar-row-height` tall (2rem; `sm` 1.75rem, `lg` 2.5rem; the mark stays 0.5rem in, so a folded rail centres it at any size), padding `0 0.5rem`, gap 0.625rem, radius `--radius-row`, `--text-ui` weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg`; its icon `--fg-subtle`. Where you are is the fill and the icon's ink, never a heavier weight. Its reach covers the pixel between rows.
 - Hover: `--field-fill`, `--fg-strong`, icon `--fg-strong`.
 - Active: `--field-fill-hover`, `--fg-strong`, icon `--fg-strong`.
 - Focus: outline 2px `--focus`, offset -2px.
@@ -1866,27 +1869,32 @@ Dependencies: `useSidebar`, `useTip`, the provider's link.
 
 ### SidebarMenuBadge
 
-A quiet count at a row's end, hidden while the rail is folded. `HTMLAttributes<HTMLSpanElement>`, forwarded ref. For a pill, set a `Count` in it: filled for unread, `soft` for a count that asks less.
+A quiet count at a row's end, hidden while the rail is folded. `HTMLAttributes<HTMLSpanElement>`, forwarded ref. For a pill, set a `Count` in it: filled for unread, `soft` for a count that asks less. `SidebarMenuButton`'s `count` draws the soft one and its folded dot for you.
 
-States: `--text-meta` weight 500, tabular, `--fg-subtle`, pushed to the end. Not a pill.
+States: `--text-meta` weight `--weight-quiet`, tabular, `--fg-subtle`, pushed to the end. Not a pill.
 
 CSS: `ui-sidebar.css`. Class `ui-sidebar-badge`.
 
 ### SidebarTrigger
 
-The press that folds or opens the rail, or on a phone opens the sheet: `Button` with `look="quiet"`, `square` and `SidebarIcon` at 16px, calling `toggleSidebar`. Put it in the page's header, beside the rail.
+The press that folds or opens the rail, or on a phone opens the sheet: `Button` with `look="quiet"`, `square` and `SidebarIcon` at 16px, calling `toggleSidebar`.
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `aria-label` | `string` | `"Navigation"` | Its name; it stays the same in either state. |
+| `aria-label` | `string` | what it will do | "Collapse menu" or "Expand menu"; on a phone "Open menu". |
 | `look` | `ButtonLook` | `"quiet"` | As `Button`. |
 | `onClick` | `MouseEventHandler` | none | Runs first; `preventDefault()` keeps the rail as it is. |
 | other `Button` props | | | Passed through, except `children`, `square` and `icon`. |
 | `ref` | `Ref<HTMLButtonElement>` | none | Forwarded. |
 
-States: `aria-expanded` is `true` while the rail (or the sheet) is open. With `collapsible="none"` and not a phone it draws nothing. Carries `data-sidebar="trigger"`.
+States: `aria-expanded` is `true` while the rail (or the sheet) is open. Carries `data-sidebar="trigger"`.
 
-CSS: `ui.css` through `Button`; class `ui-sidebar-trigger` for placement.
+Where it goes:
+
+- **In the rail's header** (the usual place): `<SidebarHeader><Brand /><SidebarTrigger /></SidebarHeader>`. It sits at the header's end (`margin-inline-start: auto`). Folded, everything else in that header is hidden and the trigger, 2rem square at the header's 0.5rem inset, sits exactly over the marks. On a phone it draws nothing inside the sheet, which has its own close; the sheet's `padding-inline-end: 3rem` is for that close.
+- **In the page's header**: always drawn, except on a wide screen when `collapsible="none"`. Use it there for a phone (`useSidebar().isMobile`), since a closed sheet's header is not on the page.
+
+CSS: `ui.css` through `Button`; `ui-sidebar.css` (`.ui-sidebar-header > .ui-sidebar-trigger`) places it in a header.
 
 Dependencies: `useSidebar`, `Button`, `SidebarIcon`.
 
@@ -2060,7 +2068,7 @@ Something said back to a message, as a small pill: its mark and how many. Its wo
 | `onPress` | `() => void` | required | Say it or take it back. |
 | `tip` | `ReactNode` | `label` | What the tooltip says ("Seen by Ana and you"). |
 
-States: 1.375rem tall, radius `--radius-round`, `--text-tag` weight 500, `--fg-subtle` on `--field-fill`. Hover `--fg` on `--field-fill-hover`. Press: ring `inset 0 0 0 1px var(--fg-subtle)`. Pressed: `--fg-strong` on `--surface-lifted`, ring `inset 0 0 0 1px var(--fg-strong)`. Focus outline 2px `--focus`, offset 2px. Count tabular. Eases 150ms.
+States: 1.375rem tall, radius `--radius-round`, `--text-tag` weight `--weight-ui`, `--fg-subtle` on `--field-fill`. Hover `--fg` on `--field-fill-hover`. Press: ring `inset 0 0 0 1px var(--fg-subtle)`. Pressed: `--fg-strong` on `--surface-lifted`, ring `inset 0 0 0 1px var(--fg-strong)`. Focus outline 2px `--focus`, offset 2px. Count tabular. Eases 150ms.
 
 Tokens: `--radius-round`, `--text-tag`, `--fg-subtle`, `--fg`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--surface-lifted`, `--focus`.
 
@@ -2268,6 +2276,8 @@ A nested corner stays concentric by subtracting its inset: `calc(var(--radius-bu
 
 The working scale (everything that is not a statement). Nothing drawn is smaller than 11px.
 
+Two weight tokens sit with the faces on `:root`. `--weight-ui: 500` is the interface's weight: buttons, tabs, rows, labels, toasts, every place the pieces drew 500 before, and in the composable API Tailwind's `font-medium` (`--font-weight-medium` maps to it). `--weight-quiet: var(--weight-ui)` is what sits back (quiet buttons, the sidebar's rows, headings and counts) and follows `--weight-ui` unless set apart. An app that finds Cal Sans UI heavy sets either to 400. No state changes either one.
+
 | Token | Size | Line height |
 | --- | --- | --- |
 | `--text-tag` | `0.6875rem` (11px) | `1.3` |
@@ -2354,7 +2364,7 @@ A scrim is one colour at many strengths, so it is three numbers, read as `oklch(
 
 ### State never changes weight or size
 
-No state (focus, hover, press, chosen, selected, active, open, current) changes `font-weight`, `font-size` or letter spacing. A chosen tab keeps weight 500 like the rest; a current contents entry keeps 400; a field's label keeps 600 when focused. Colour, fill, ring or shadow carries the change, because a change of weight reflows the row. Counts are tabular numerals in reserved widths (`min-width: 2ch` on a tab's count) so a number changing moves nothing.
+No state (focus, hover, press, chosen, selected, active, open, current) changes `font-weight`, `font-size` or letter spacing. A chosen tab keeps `--weight-ui` like the rest; a current contents entry keeps 400; a field's label keeps 600 when focused. Colour, fill, ring or shadow carries the change, because a change of weight reflows the row. Counts are tabular numerals in reserved widths (`min-width: 2ch` on a tab's count) so a number changing moves nothing.
 
 ### Disabled says why
 

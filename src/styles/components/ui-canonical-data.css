@@ -43,7 +43,7 @@
   }
 
   .ui-cell[data-strong] {
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     color: var(--fg-strong);
   }
 
@@ -144,7 +144,7 @@
     gap: 0.25rem;
     min-width: 0;
     font-size: var(--text-ui);
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     line-height: 1.25rem;
     color: var(--fg-subtle);
     transition: color 140ms ease;

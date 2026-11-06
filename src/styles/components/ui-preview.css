@@ -19,7 +19,7 @@
     background: var(--surface-lifted);
   }
   .ui-preview-heading, .ui-preview-header > .ui-preview-name { flex: 1; min-width: 8rem; }
-  .ui-preview-name { margin: 0; font-size: var(--text-ui); font-weight: 500; color: var(--fg-strong); overflow-wrap: anywhere; }
+  .ui-preview-name { margin: 0; font-size: var(--text-ui); font-weight: var(--weight-ui); color: var(--fg-strong); overflow-wrap: anywhere; }
   .ui-preview-description { margin: 0; font-size: var(--text-meta); line-height: 1.5; color: var(--fg-subtle); overflow-wrap: anywhere; }
   .ui-preview-body { min-width: 0; }
   .ui-preview-toolbar, .ui-preview-actions, .ui-preview-status-actions {
@@ -41,7 +41,7 @@
     text-align: center;
   }
   .ui-preview-status > [role] { display: grid; justify-items: center; gap: 0.5rem; max-width: 36rem; }
-  .ui-preview-status-title { margin: 0; font-size: var(--text-read); font-weight: 500; color: var(--fg-strong); }
+  .ui-preview-status-title { margin: 0; font-size: var(--text-read); font-weight: var(--weight-ui); color: var(--fg-strong); }
   .ui-preview-dialog {
     position: fixed;
     inset: 0;

@@ -6,15 +6,21 @@
    * rail folded to 8 + 32 + 8 = 48px has every mark centred by construction. Folding eases the
    * width alone and the rail's own overflow clips the words, which never wrap.
    */
+  .ui-sidebar-wrapper[data-size="sm"] {
+    --sidebar-row-height: 1.75rem;
+  }
+
   .ui-sidebar-wrapper {
     --sidebar-width: 15.5rem;
     --sidebar-width-icon: 3rem;
     --sidebar-animation-duration: 250ms;
     --sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1);
     --sidebar-bg: var(--bg-base);
-    /* Added above each group after the first while the rail is open; folded, the rule between
-       groups spaces them instead. */
-    --sidebar-group-gap: 0rem;
+    /* A row's height, which `size` on the provider or on a row sets. */
+    --sidebar-row-height: 2rem;
+    /* Added above each group after the first while the rail is open, the room a folded rail's
+       rule takes; folded, the rule spaces them instead. */
+    --sidebar-group-gap: 0.75rem;
     position: relative;
     isolation: isolate;
     display: flex;
@@ -111,6 +117,17 @@
     align-items: center;
     gap: 0.25rem;
     padding: 0.625rem 0.5rem 0.75rem;
+  }
+
+  /* A trigger in the header sits at its end; folded, it is all the header shows, centred over
+     the marks as they are (0.5rem in, 2rem wide). */
+  .ui-sidebar-header > .ui-sidebar-trigger {
+    flex: none;
+    margin-inline-start: auto;
+  }
+
+  .ui-sidebar[data-state="collapsed"]:not([data-mobile]) .ui-sidebar-header:has(> .ui-sidebar-trigger) > :not(.ui-sidebar-trigger) {
+    display: none;
   }
 
   .ui-sidebar-footer {
@@ -238,15 +255,18 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: var(--text-meta);
-    font-weight: 500;
+    font-weight: var(--weight-quiet);
     line-height: calc(1 / 0.85);
     color: var(--fg-subtle);
     transition: opacity 160ms ease;
   }
 
-  /* Denser: the same words with less room above and below them. */
-  .ui-sidebar-group-label[data-size="sm"] .ui-sidebar-group-words {
+  /* Denser, by its own `size` or the provider's: a step smaller, with less room above and
+     below. `md` on a heading keeps it at its full size in a dense rail. */
+  .ui-sidebar-group-label[data-size="sm"] .ui-sidebar-group-words,
+  .ui-sidebar-wrapper[data-size="sm"] .ui-sidebar-group-label:not([data-size]) .ui-sidebar-group-words {
     padding-block: 0.125rem 0.1875rem;
+    font-size: var(--text-tag);
   }
 
   .ui-sidebar[data-state="collapsed"]:not([data-mobile]) .ui-sidebar-group-words {
@@ -280,7 +300,7 @@
     gap: 0.625rem;
     width: 100%;
     min-width: 0;
-    height: 2rem;
+    height: var(--sidebar-row-height);
     padding: 0 0.5rem;
     overflow: hidden;
     border: 0;
@@ -288,7 +308,7 @@
     background: transparent;
     font-family: inherit;
     font-size: var(--text-ui);
-    font-weight: 500;
+    font-weight: var(--weight-quiet);
     line-height: calc(1 / 0.85);
     white-space: nowrap;
     text-align: left;
@@ -303,6 +323,10 @@
 
   .ui-sidebar-button[data-size="sm"] {
     height: 1.75rem;
+  }
+
+  .ui-sidebar-button[data-size="md"] {
+    height: 2rem;
   }
 
   .ui-sidebar-button[data-size="lg"] {
@@ -393,7 +417,7 @@
     align-items: center;
     margin-inline-start: auto;
     font-size: var(--text-meta);
-    font-weight: 500;
+    font-weight: var(--weight-quiet);
     font-variant-numeric: tabular-nums;
     line-height: 1;
     color: var(--fg-subtle);

@@ -533,7 +533,7 @@
     min-width: 0;
     font-size: var(--text-meta);
     line-height: var(--text-meta--line-height);
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     white-space: nowrap;
   }
 

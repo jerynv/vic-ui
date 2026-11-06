@@ -24,6 +24,10 @@ export default function Example() {
         <Badge tone="caution" solid count={3}>
           Waiting on you
         </Badge>
+        <Badge tone="moving" soft>
+          In review
+        </Badge>
+        <Badge soft>Draft</Badge>
       </div>
       <div className="demo-row">
         <Count value={3} label="3 unread" />

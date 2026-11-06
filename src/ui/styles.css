@@ -52,6 +52,7 @@
 .light { color-scheme: light; }
 
 @theme inline {
+  --font-weight-medium: var(--weight-ui);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

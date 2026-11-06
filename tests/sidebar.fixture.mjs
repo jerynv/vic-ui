@@ -5,7 +5,7 @@ function Contents({ empty }) {
   const { toggleSidebar } = useSidebar();
   return h(Fragment, {},
     h(Sidebar, { "aria-label": "Project navigation" },
-      h(SidebarHeader, {}, "Project"),
+      h(SidebarHeader, {}, "Project", h(SidebarTrigger, {})),
       !empty && h(Button, { look: "quiet" }, "First page"),
       !empty && h(Button, { look: "quiet" }, "Last page"),
     ),
@@ -19,16 +19,19 @@ export function SidebarFixture({ contained = false, empty = false }) {
 }
 
 // The rail's options at a desktop width: row sizes, a dense group label, the gap between
-// groups, a soft count and the ready-made trigger.
-export function SidebarOptionsFixture() {
-  return h(SidebarProvider, { contained: true, mobileBreakpoint: 0, style: { height: 400, "--sidebar-group-gap": "0.75rem" } },
+// groups, counts, and the ready-made trigger in the header. `dense` sets the provider's size.
+export function SidebarOptionsFixture({ dense = false }) {
+  return h(SidebarProvider, { contained: true, mobileBreakpoint: 0, size: dense ? "sm" : undefined, style: { height: 400 } },
     h(Sidebar, { "aria-label": "Project navigation" },
+      h(SidebarHeader, {}, h("strong", { "data-testid": "brand" }, "Project"), h(SidebarTrigger, {})),
       h(SidebarContent, {},
         h(SidebarGroup, { "data-testid": "first" },
           h(SidebarMenu, {},
             h(SidebarMenuButton, { size: "sm" }, "Small"),
             h(SidebarMenuButton, {}, "Middle", h(SidebarMenuBadge, {}, h(Count, { value: 4, label: "4 mentions", soft: true }))),
             h(SidebarMenuButton, { size: "lg" }, "Large"),
+            h(SidebarMenuButton, { icon: h("svg", { width: 16, height: 16 }), count: { value: 3, label: "3 unread" } }, "Counted"),
+            h(SidebarMenuButton, { size: "md" }, "Kept"),
           ),
         ),
         h(SidebarGroup, { "data-testid": "second" },
@@ -41,6 +44,6 @@ export function SidebarOptionsFixture() {
         ),
       ),
     ),
-    h("main", {}, h(SidebarTrigger, { "data-testid": "trigger" })),
+    h("main", {}, h(Button, { "data-testid": "ink" }, "Save")),
   );
 }

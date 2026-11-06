@@ -405,7 +405,7 @@
     border: 0;
     border-radius: var(--radius-float);
     font-size: var(--text-meta);
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     line-height: 1.35;
     color: var(--fg-inverse);
     background: var(--bg-contrast);

@@ -119,6 +119,8 @@ import "vic-ui/components.css";
 
 Then load your faces and set `--font-sans`, `--font-display` and `--font-wordmark`. Without either, the stacks fall back to the system's sans and monospace.
 
+The interface's weight is a token too: `--weight-ui` (500) for buttons, tabs, rows and labels, and `--weight-quiet` (following it) for what sits back: quiet buttons and the sidebar's rows, headings and counts. Set either to 400 on `:root`, outside a layer, if your face reads heavy. No state changes the weight.
+
 ## The rules
 
 What every piece already does, and what anything built with them is held to:
