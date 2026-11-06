@@ -217,10 +217,10 @@
   --accent-ink: light-dark(oklch(0.46 0.17 262), oklch(0.8 0.1 258));
   --accent-tint: light-dark(oklch(0.935 0.03 262), oklch(0.275 0.065 262));
   --accent-edge: light-dark(oklch(0.46 0.17 262 / 0.45), oklch(0.8 0.1 258 / 0.45));
-  /* The filled button's accent (`Button tone="accent"`): the accent and the words on it, named
-     apart so one button can be given another colour without moving the family. */
-  --button-accent: var(--accent);
-  --button-on-accent: var(--accent-on);
+  /* The filled button's accent (`Button tone="accent"`) is `--button-accent` and the words on
+     it `--button-on-accent`. Neither is declared here: the button reads each with `--accent` and
+     `--accent-on` as its fallback (`ui.css`), so setting either pair on any section reaches the
+     buttons inside it. */
 
   /*
    * Art: four hues and a grain for what is drawn rather than read, used only inside thumbnails,

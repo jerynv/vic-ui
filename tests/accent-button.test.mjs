@@ -92,6 +92,10 @@ test("accent buttons preserve texture, contrast and behavior across both APIs an
         assert.deepEqual(results[0], results[1], `${id}/${state} takes precedence over accent`);
       }
     }
+    await page.mouse.move(1200, 700);
+    const inner = await appearance(page.locator("#inner"));
+    assert.deepEqual(inner, await appearance(page.locator("#inner-reference")), "--accent set on an inner section reaches its button as --button-accent does");
+    assert.notDeepEqual(inner, await appearance(page.locator("#inner-default")), "the inner --accent is not the default accent");
     const count = await page.locator("#result").textContent();
     for (const id of ["disabled", "busy", "held"]) {
       const button = page.locator(`#${id}`), before = await appearance(button);

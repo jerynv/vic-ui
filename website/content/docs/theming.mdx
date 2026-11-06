@@ -33,7 +33,7 @@ Set `--bg-frame` to change the ground round an app's window without moving the c
 
 ## The accent
 
-One brand colour, for a look and never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone and says no state, so a piece in it still says what it is in words, and a state keeps its tone (danger, caution, settled, moving). `--accent` is the fill and `--accent-on` the words on it; `--accent-ink` is words and lines in the accent on the page, `--accent-tint` a pale ground and `--accent-edge` an outline. `--button-accent` and `--button-on-accent` are the filled button's, and follow `--accent` and `--accent-on` unless a part of the page sets them apart.
+One brand colour, for a look and never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone and says no state, so a piece in it still says what it is in words, and a state keeps its tone (danger, caution, settled, moving). `--accent` is the fill and `--accent-on` the words on it; `--accent-ink` is words and lines in the accent on the page, `--accent-tint` a pale ground and `--accent-edge` an outline. `--button-accent` and `--button-on-accent` are the filled button's, and fall back to `--accent` and `--accent-on` unless a part of the page sets them apart. Either pair works on any section: set `--accent` on a section and its buttons follow, or set `--button-accent` there to move only the buttons.
 
 `tone="accent"` draws Badge, Count, Switch, Progress, the Tabs indicator, Button and Announcement's tag in it. Set your brand as a `light-dark()` pair; the accent ink keeps 5.8:1 on the canvas, the panel and its own tint, and `--accent-on` on `--accent`, in both modes, as the tone inks do.
 
@@ -46,6 +46,8 @@ One brand colour, for a look and never a meaning: a "New" pill, a chosen mode, a
   --accent-edge: light-dark(oklch(0.46 0.17 262 / 0.45), oklch(0.8 0.1 258 / 0.45));
 }
 ```
+
+**Coming from shadcn.** In shadcn, `--accent` is the grey under a hovered menu row or ghost button. In vic-ui from 0.2 it is the brand colour above, so a stylesheet that sets `--accent` to change that hover grey now recolours every `tone="accent"` piece instead, and no longer moves the hover. The composable sheet (`vic-ui/ui/styles.css`) draws Tailwind's `bg-accent` from `--fill-hover`; set `--fill-hover` to change the hover grey, which also moves the hover fill of vic's own lists and menus, as the one fill scale should. Drop an `--accent` you set for hover, or keep it only if you mean it as your brand.
 
 ## Art
 

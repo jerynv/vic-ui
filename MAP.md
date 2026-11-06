@@ -1,5 +1,14 @@
 # vic-ui: the map
 
+## Changes in 0.2
+
+There is no CHANGELOG.md; changes a consumer has to act on are noted here.
+
+- **`--accent` is vic's brand colour.** It was shadcn's hover grey in the composable sheet (`--accent: var(--fill-hover)`); that declaration is gone, and `--accent` is now the fill of the accent family in `tokens.css` (`tone="accent"` on Badge, Count, Switch, Progress, Tabs, Button and Announcement). A `vic-ui/ui` consumer who set `--accent` the shadcn way to change the hover grey now changes vic's brand accent instead, and the hover no longer moves. Tailwind's `--color-accent` (`bg-accent`, `hover:bg-accent`) reads `--fill-hover` directly: set `--fill-hover` to change the composable hover grey (it is the one fill scale, so vic's own lists and menus move with it), and drop an `--accent` set for hover.
+- **`--button-accent` and `--button-on-accent` are read, not declared.** The accent button reads `var(--button-accent, var(--accent))` and `var(--button-on-accent, var(--accent-on))`, so either `--accent` or `--button-accent` set on any section reaches the buttons inside it.
+- **`--bg-elevated` is deprecated** and goes in 0.4: use `--surface-lifted` for what sits on top and `--bg-recessed` for what sinks.
+- New: the accent family (`--accent`, `--accent-on`, `--accent-ink`, `--accent-tint`, `--accent-edge`, `.tone-accent`), `--bg-frame`, and the art tokens (`--art-1` to `--art-4`, `--art-grain`).
+
 ## Canonical controls source sync (active)
 
 Owner-authorized additive source sync from V-Client555625f4 is tracked in [docs/tasks/canonical-controls-sync.md](docs/tasks/canonical-controls-sync.md). Historical extraction and current parity are distinct; preview transfers do not close controls coverage. Preserve released142 root exports and all existing defaults. Implementation isolated on feat/canonical-controls-sync.
@@ -158,7 +167,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `look` | `"ink" \| "line" \| "quiet" \| "link"` | `"ink"` | Which look. |
-| `tone` | `"accent"` | none | On `ink`, fills the button in the accent: the rim and face states are mixed from `--button-accent` (which is `--accent`) and the words are `--button-on-accent` (which is `--accent-on`). A look, not a state. Also supported by ButtonLink and the composable default Button. |
+| `tone` | `"accent"` | none | On `ink`, fills the button in the accent: the rim and face states are mixed from `--button-accent` (falling back to `--accent`) and the words are `--button-on-accent` (falling back to `--accent-on`). A look, not a state. Also supported by ButtonLink and the composable default Button. |
 | `size` | `"md" \| "lg"` | `"md"` | `md` is `--control-h-sm` (2rem); `lg` is `--control-h` (2.25rem), a form's commit. |
 | `full` | `boolean` | `false` | Full width. |
 | `square` | `boolean` | `false` | An icon alone, as wide as the button is tall; its words go in `aria-label`. |
@@ -176,7 +185,7 @@ States, as `ui.css` implements them:
 - Hover: `ink` face moves to `--ink-face-top-hover` / `--ink-face-bottom-hover`; `line` face fills `--field-fill-hover`; `quiet` words go `--fg-strong` and underline (offset 3px).
 - Press (`:active`): `ink` face `--ink-face-top-press` / `--ink-face-bottom-press`; `line` face `--field-fill`. Nothing moves; the face darkens.
 - `line` with `aria-pressed="true"` takes the ink rim and face (a held toggle).
-- Accent (`ui-button-accent` on `ink`): rim edge `--button-accent` mixed with black 22%, rim top with white 30%, rim bottom with black 12%; face top with white 4%, bottom with black 10%; hover white 6% / white 2%; press black 12% / black 4%; words `--button-on-accent`. The words hold 5.8:1 on every face stop in both modes with the default accent (`colour-contrast.test.mjs`). Set `--button-accent` and `--button-on-accent` on a part of the page to give its buttons another colour without moving `--accent`.
+- Accent (`ui-button-accent` on `ink`): rim edge `--button-accent` mixed with black 22%, rim top with white 30%, rim bottom with black 12%; face top with white 4%, bottom with black 10%; hover white 6% / white 2%; press black 12% / black 4%; words `--button-on-accent`. The words hold 5.8:1 on every face stop in both modes with the default accent (`colour-contrast.test.mjs`). Set `--button-accent` and `--button-on-accent` on a part of the page to give its buttons another colour without moving `--accent`; set `--accent` on a part of the page and its buttons follow it. Neither button token is declared on the root, so either works at any depth.
 - Accent is local to the filled control; semantic danger/caution rules win. It adapts the existing semantic color-mix treatment but retains two distinct stops when pressed. The five-hue example and `accent-button.test.mjs` cover both APIs, both themes and higher-contrast lightness values.
 - `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (160ms).
 - Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over 300ms `ease-in-out`.
@@ -2323,8 +2332,10 @@ One brand colour for a look, never a meaning: a "New" pill, a chosen mode, a sen
 | `--accent-ink` | `oklch(0.46 0.17 262)` | `oklch(0.8 0.1 258)` | Words and lines in the accent on the page; a solid badge's and a count's fill. |
 | `--accent-tint` | `oklch(0.935 0.03 262)` | `oklch(0.275 0.065 262)` | A pale ground (`soft`). |
 | `--accent-edge` | `oklch(0.46 0.17 262 / 0.45)` | `oklch(0.8 0.1 258 / 0.45)` | An outline (a hairline badge). |
-| `--button-accent` | `var(--accent)` | same | The filled button's accent; set it on a part of the page to give its buttons another colour. |
-| `--button-on-accent` | `var(--accent-on)` | same | The words on it. |
+| `--button-accent` | unset, read as `var(--button-accent, var(--accent))` | same | The filled button's accent; set it on a part of the page to give its buttons another colour. |
+| `--button-on-accent` | unset, read as `var(--button-on-accent, var(--accent-on))` | same | The words on it. |
+
+`--accent` is not shadcn's hover grey: the composable sheet's `--color-accent` (`bg-accent`) reads `--fill-hover`, so set `--fill-hover`, not `--accent`, to change that hover (see Changes in 0.2).
 
 ### Art
 

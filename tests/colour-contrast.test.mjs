@@ -88,9 +88,10 @@ test("tone and accent inks hold 5.8:1 in both modes, and the accent pieces read 
       for (const [accent, moving] of [["--accent", "--tone-moving-ink"], ["--accent-ink", "--tone-moving-ink"], ["--accent-tint", "--tone-moving-tint"]])
         assert.notDeepEqual(await read(`var(${accent})`), await read(`var(${moving})`), `${mode}: ${accent} is not ${moving}`);
 
-      // The button's accent slots are the family's, and each piece draws from it.
-      assert.deepEqual(await read("var(--button-accent)"), await read("var(--accent)"));
-      assert.deepEqual(await read("var(--button-on-accent)"), await read("var(--accent-on)"));
+      // The button's accent slots are left undeclared, so the button falls back to the family,
+      // and each piece draws from it.
+      assert.deepEqual(await page.evaluate(() => ["--button-accent", "--button-on-accent"].map(name => getComputedStyle(document.querySelector("#button")).getPropertyValue(name))), ["", ""], "the button accent slots are not declared");
+      assert.deepEqual(await page.evaluate(() => window.paint("var(--ink-face-top)", "#button")), await read("color-mix(in oklab, var(--accent), white 4%)"), "accent button face reads --accent");
       const accent = await read("var(--accent)"), accentInk = await read("var(--accent-ink)"), accentOn = await read("var(--accent-on)"), accentTint = await read("var(--accent-tint)");
       const style = (selector, property) => page.evaluate(([selector, property]) => window.styleOf(selector, property), [selector, property]);
       assert.deepEqual(await style("#badge", "color"), accentInk, "hairline badge words");

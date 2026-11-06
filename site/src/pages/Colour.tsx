@@ -7,9 +7,18 @@ type Modes = "light" | "dark";
 const MODES: Modes[] = ["light", "dark"];
 const MIN = 5.8;
 
-const NEUTRALS: Array<{ title: string; line: string; tokens: string[]; words?: boolean }> = [
+interface Family {
+  title: string;
+  line: string;
+  tokens: string[];
+  words?: boolean;
+  /** Tokens on their way out, and what to use instead. */
+  deprecated?: Record<string, string>;
+}
+
+const NEUTRALS: Family[] = [
   { title: "Words", line: "The ink of words, strongest to quietest, and words on the contrast ground.", tokens: ["--fg-strong", "--fg", "--fg-subtle", "--fg-placeholder", "--fg-inactive", "--fg-inverse"], words: true },
-  { title: "Grounds", line: "The canvas, the panel on it, and the fills of fields, tints and recesses.", tokens: ["--bg-frame", "--bg-canvas", "--bg-base", "--surface-lifted", "--bg-elevated", "--bg-tint", "--bg-recessed", "--bg-control", "--bg-contrast", "--field-fill", "--field-fill-hover"] },
+  { title: "Grounds", line: "The canvas, the panel on it, and the fills of fields, tints and recesses.", tokens: ["--bg-frame", "--bg-canvas", "--bg-base", "--surface-lifted", "--bg-elevated", "--bg-tint", "--bg-recessed", "--bg-control", "--bg-contrast", "--field-fill", "--field-fill-hover"], deprecated: { "--bg-elevated": "Deprecated, removed in 0.4: use --surface-lifted or --bg-recessed." } },
   { title: "Fills", line: "What lies under a thing the pointer is on, has chosen or is pressing: faint, hover, chosen and press, the same grey in both modes.", tokens: ["--fill-faint", "--fill-hover", "--fill-chosen", "--fill-press"] },
   { title: "Lines and focus", line: "The line between things, quieter rules between rows, and the keyboard's focus ring.", tokens: ["--line", "--line-hairline", "--line-soft", "--focus"] },
   { title: "Placeholders and scrollbars", line: "A shade of the ground, the light that passes over it, and the scrollbar's thumb.", tokens: ["--bone", "--bone-glint", "--scroll-thumb", "--scroll-thumb-hover"] },
@@ -23,6 +32,19 @@ const TONES = [
 ] as const;
 
 const HUE_LIST = ["sky", "sage", "butter", "lilac", "clay"] as const;
+
+const ACCENT_PARTS = [
+  ["fill", "--accent"],
+  ["ink", "--accent-ink"],
+  ["tint", "--accent-tint"],
+  ["edge", "--accent-edge"],
+] as const;
+
+const ART: Family = {
+  title: "Art",
+  line: "Four hues and a grain for what is drawn rather than read, only inside thumbnails, banners and illustrations and never on a control. They carry no words, so they have no contrast floor. The grain is the alpha of a dot overlay, drawn here as that alpha of the strongest ink.",
+  tokens: ["--art-1", "--art-2", "--art-3", "--art-4", "--art-grain"],
+};
 
 const BUTTON_TOKENS = [
   "--ink-rim-edge",
@@ -91,10 +113,58 @@ function Swatch(props: { token: string; mode: Modes; words?: boolean }) {
           Aa
         </span>
       ) : (
-        <span className="site-swatch-chip" style={{ background: `var(${props.token})` }} />
+        <span className="site-swatch-chip" style={{ background: props.token === "--art-grain" ? "color-mix(in oklab, var(--fg-strong) calc(var(--art-grain) * 100%), transparent)" : `var(${props.token})` }} />
       )}
       <code>{value}</code>
     </div>
+  );
+}
+
+/** A family of tokens, each in both modes; words are measured on their ground. */
+function FamilyTable(props: { family: Family; ratio: (key: string, mode: Modes) => number | null }) {
+  const { family, ratio } = props;
+  return (
+    <section className="site-example" aria-label={family.title}>
+      <h2>{family.title}</h2>
+      <p className="site-note">{family.line}</p>
+      <div className="site-table-wrap">
+        <table className="site-table">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>Light</th>
+              <th>Dark</th>
+              {family.words ? <th className="site-num">On its ground, light and dark</th> : null}
+            </tr>
+          </thead>
+          <tbody>
+            {family.tokens.map((token) => (
+              <tr key={token}>
+                <td>
+                  <code>{token}</code>
+                  {family.deprecated?.[token] ? (
+                    <>
+                      {" "}
+                      <small className="site-quiet">{family.deprecated[token]}</small>
+                    </>
+                  ) : null}
+                </td>
+                {MODES.map((mode) => (
+                  <td key={mode}>
+                    <Swatch token={token} mode={mode} {...(family.words ? { words: true } : {})} />
+                  </td>
+                ))}
+                {family.words ? (
+                  <td className="site-num">
+                    <Ratio value={ratio(token, "light")} /> <span className="site-quiet">and</span> <Ratio value={ratio(token, "dark")} />
+                  </td>
+                ) : null}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 }
 
@@ -107,6 +177,11 @@ export function Colour() {
       [`${tone}:tint`, `--tone-${tone}-ink`, `--tone-${tone}-tint`],
       [`${tone}:on`, "--tone-on", `--tone-${tone}-ink`],
     ]),
+    ["accent:canvas", "--accent-ink", "--bg-canvas"],
+    ["accent:panel", "--accent-ink", "--bg-base"],
+    ["accent:tint", "--accent-ink", "--accent-tint"],
+    ["accent:on", "--accent-on", "--accent"],
+    ["accent:on-ink", "--accent-on", "--accent-ink"],
     ...HUE_LIST.flatMap((hue): Array<[string, string, string]> => [
       [`${hue}:block`, `--hue-${hue}-ink`, `--hue-${hue}`],
       [`${hue}:canvas`, `--hue-${hue}-ink`, "--bg-canvas"],
@@ -125,41 +200,7 @@ export function Colour() {
       </header>
 
       {NEUTRALS.map((family) => (
-        <section key={family.title} className="site-example" aria-label={family.title}>
-          <h2>{family.title}</h2>
-          <p className="site-note">{family.line}</p>
-          <div className="site-table-wrap">
-            <table className="site-table">
-              <thead>
-                <tr>
-                  <th>Token</th>
-                  <th>Light</th>
-                  <th>Dark</th>
-                  {family.words ? <th className="site-num">On its ground, light and dark</th> : null}
-                </tr>
-              </thead>
-              <tbody>
-                {family.tokens.map((token) => (
-                  <tr key={token}>
-                    <td>
-                      <code>{token}</code>
-                    </td>
-                    {MODES.map((mode) => (
-                      <td key={mode}>
-                        <Swatch token={token} mode={mode} {...(family.words ? { words: true } : {})} />
-                      </td>
-                    ))}
-                    {family.words ? (
-                      <td className="site-num">
-                        <Ratio value={ratio(token, "light")} /> <span className="site-quiet">and</span> <Ratio value={ratio(token, "dark")} />
-                      </td>
-                    ) : null}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <FamilyTable key={family.title} family={family} ratio={ratio} />
       ))}
 
       <section className="site-example" aria-label="Tones">
@@ -239,6 +280,61 @@ export function Colour() {
           ))}
         </div>
       </section>
+
+      <section className="site-example" aria-label="Accent">
+        <h2>Accent</h2>
+        <p className="site-note">
+          One brand colour for a look, never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone and says no state. <code>--accent</code> is the fill and <code>--accent-on</code> the words on it; <code>--accent-ink</code> is words and lines on the page, <code>--accent-tint</code> a pale ground and <code>--accent-edge</code> an outline. <code>tone="accent"</code> draws a piece in it, and a filled button reads <code>--button-accent</code> and <code>--button-on-accent</code> first. The ink and the words hold {MIN}:1 as the tones do.
+        </p>
+        <div className="site-table-wrap">
+          <table className="site-table">
+            <thead>
+              <tr>
+                <th>Accent</th>
+                <th>Light: fill, ink, tint, edge</th>
+                <th>Dark: fill, ink, tint, edge</th>
+                <th className="site-num">Ink on canvas</th>
+                <th className="site-num">On panel</th>
+                <th className="site-num">On its tint</th>
+                <th className="site-num">Words on fill</th>
+                <th className="site-num">Words on ink</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="site-tone-name">
+                    <Badge tone="accent">New</Badge>
+                    <span>
+                      <code>accent</code>
+                      <small>A look, never a state</small>
+                    </span>
+                  </div>
+                </td>
+                {MODES.map((mode) => (
+                  <td key={mode}>
+                    <div className="site-tone-chips" data-mode={mode}>
+                      {ACCENT_PARTS.map(([part, token]) => (
+                        <span key={part} className="site-swatch-chip" style={{ background: `var(${token})` }} title={`${token}: ${written(token)[mode]}`} />
+                      ))}
+                      <Badge tone="accent" solid>
+                        New
+                      </Badge>
+                    </div>
+                  </td>
+                ))}
+                {(["canvas", "panel", "tint", "on", "on-ink"] as const).map((against) => (
+                  <td key={against} className="site-num">
+                    <Ratio value={ratio(`accent:${against}`, "light")} min={MIN} /> <span className="site-quiet">and</span> <Ratio value={ratio(`accent:${against}`, "dark")} min={MIN} />
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <FamilyTable family={ART} ratio={ratio} />
 
       <section className="site-example" aria-label="Buttons">
         <h2>Button rims and faces</h2>

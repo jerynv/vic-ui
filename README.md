@@ -137,6 +137,8 @@ To stop transitions for the frame the mode changes in, set `data-switching` on t
 
 To change a colour, override its token (`--tone-danger-ink`, `--bg-canvas`) with a new `light-dark()` pair, outside a layer, as [Your brand, not ours](#your-brand-not-ours) shows. Every token and its values are listed in `MAP.md` and on the site's Colour page.
 
+**`--accent` is the brand colour from 0.2.** shadcn uses `--accent` for the grey under a hovered row; vic-ui uses it for its brand accent (`tone="accent"`), so a stylesheet that sets `--accent` to change the hover grey of `vic-ui/ui` pieces now recolours the accent pieces instead. The composable sheet draws `bg-accent` from `--fill-hover`: set `--fill-hover` to change that hover grey (it moves vic's own hover fill too), and drop an `--accent` you set for hover unless you mean it as your brand.
+
 ## Fonts
 
 The pieces are set in **Cal Sans UI** (a variable face: `wght` 300 to 700 and a `GEOM` axis) and a wordmark in **Space Mono Bold**. Both are under the SIL Open Font License 1.1 and ship in `dist/fonts` with their licences in `licenses/`. To use your own faces, import the parts without the fonts:

@@ -162,21 +162,23 @@
     --face-bottom: var(--ink-face-bottom-press);
   }
 
-  /* The filled button in the accent (`--button-accent`, which is `--accent` unless a page sets
-     it apart), mixed toward white and black for its rim and face as danger and caution are, and
-     its words in `--button-on-accent`. Every ink slot is scoped to this control; danger and
-     caution commits keep their own palette even with tone="accent". */
+  /* The filled button in the accent (`--button-accent`, falling back to `--accent`), mixed
+     toward white and black for its rim and face as danger and caution are, and its words in
+     `--button-on-accent` (falling back to `--accent-on`). Both are read here and declared
+     nowhere, so either pair set on any section reaches the buttons inside it. Every ink slot is
+     scoped to this control; danger and caution commits keep their own palette even with
+     tone="accent". */
   .ui-button-ink.ui-button-accent:not(.ui-button-danger, .ui-button-caution) {
-    --ink-rim-edge: color-mix(in oklab, var(--button-accent), black 22%);
-    --ink-rim-top: color-mix(in oklab, var(--button-accent), white 30%);
-    --ink-rim-bottom: color-mix(in oklab, var(--button-accent), black 12%);
-    --ink-face-top: color-mix(in oklab, var(--button-accent), white 4%);
-    --ink-face-bottom: color-mix(in oklab, var(--button-accent), black 10%);
-    --ink-face-top-hover: color-mix(in oklab, var(--button-accent), white 6%);
-    --ink-face-bottom-hover: color-mix(in oklab, var(--button-accent), white 2%);
-    --ink-face-top-press: color-mix(in oklab, var(--button-accent), black 12%);
-    --ink-face-bottom-press: color-mix(in oklab, var(--button-accent), black 4%);
-    --words: var(--button-on-accent);
+    --ink-rim-edge: color-mix(in oklab, var(--button-accent, var(--accent)), black 22%);
+    --ink-rim-top: color-mix(in oklab, var(--button-accent, var(--accent)), white 30%);
+    --ink-rim-bottom: color-mix(in oklab, var(--button-accent, var(--accent)), black 12%);
+    --ink-face-top: color-mix(in oklab, var(--button-accent, var(--accent)), white 4%);
+    --ink-face-bottom: color-mix(in oklab, var(--button-accent, var(--accent)), black 10%);
+    --ink-face-top-hover: color-mix(in oklab, var(--button-accent, var(--accent)), white 6%);
+    --ink-face-bottom-hover: color-mix(in oklab, var(--button-accent, var(--accent)), white 2%);
+    --ink-face-top-press: color-mix(in oklab, var(--button-accent, var(--accent)), black 12%);
+    --ink-face-bottom-press: color-mix(in oklab, var(--button-accent, var(--accent)), black 4%);
+    --words: var(--button-on-accent, var(--accent-on));
   }
 
   /* Beside it: flat, a hairline and nothing else, so the bevel stays with the actions that
