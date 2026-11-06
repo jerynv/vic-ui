@@ -66,11 +66,42 @@ test("CommandInput points at the selected CommandItem on mount, after moving and
       });
     }
 
-    await t.test("controlled, with items valued by their words", async () => {
+    await t.test("controlled, with items valued by their words, after moving, and with a value no item has", async () => {
       await settle();
-      const now = await pointed("controlled-words");
+      let now = await pointed("controlled-words");
       assert.equal(now.item, "Item b");
       assert.equal(now.active, now.id);
+      await page.getByRole("combobox", { name: "Search controlled words" }).press("ArrowDown");
+      await settle();
+      now = await pointed("controlled-words");
+      assert.equal(now.item, "Item c");
+      assert.equal(now.active, now.id);
+      await page.getByRole("button", { name: "Choose nothing" }).click();
+      await settle();
+      now = await pointed("controlled-words");
+      assert.equal(now.item, null);
+      assert.equal(now.active, null, "with nothing selected the input names nothing");
+    });
+
+    await t.test("a filter that matches nothing leaves the input naming nothing", async () => {
+      const input = page.getByRole("combobox", { name: "Search uncontrolled" });
+      // These items filter on their values ("a" to "d"), not their words.
+      await input.fill("c");
+      await page.waitForFunction(() => document.querySelector('[data-case="uncontrolled"] [cmdk-item][aria-selected="true"]')?.textContent === "Item c");
+      await settle();
+      let now = await pointed("uncontrolled");
+      assert.equal(now.item, "Item c");
+      assert.equal(now.active, now.id);
+      await input.fill("zzz");
+      await settle();
+      now = await pointed("uncontrolled");
+      assert.equal(now.item, null);
+      assert.equal(now.active, null);
+      await input.fill("");
+      await page.waitForFunction(() => document.querySelector('[data-case="uncontrolled"] [cmdk-item][aria-selected="true"]') !== null);
+      await settle();
+      now = await pointed("uncontrolled");
+      assert.equal(now.active, now.id, "clearing the filter points at the selected item again");
     });
     assert.deepEqual(errors, []);
   } finally { await browser?.close(); await server.close(); }

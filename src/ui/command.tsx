@@ -69,8 +69,9 @@ function CommandDialog({
  * cmdk only works out which item the input points at (`aria-activedescendant`) when the chosen
  * value changes, so a list mounted with a `value` or `defaultValue` already chosen starts with
  * none. This keeps the input pointing at the item cmdk marks selected, read from the DOM: it sets
- * the attribute when it is missing or wrong and never removes it, so where cmdk is already right
- * it changes nothing.
+ * the attribute when it is missing or wrong, and removes it when no item is selected (a filter
+ * that matches nothing, a value no item has), so it never names an option Enter would not choose.
+ * Where cmdk is already right it changes nothing.
  */
 function useActiveDescendant(input: React.RefObject<HTMLInputElement | null>) {
   React.useLayoutEffect(() => {
@@ -79,7 +80,10 @@ function useActiveDescendant(input: React.RefObject<HTMLInputElement | null>) {
     if (!field || !root) return
     const sync = () => {
       const id = root.querySelector('[cmdk-item][aria-selected="true"]')?.id
-      if (id && field.getAttribute("aria-activedescendant") !== id) field.setAttribute("aria-activedescendant", id)
+      const current = field.getAttribute("aria-activedescendant")
+      if (id) {
+        if (current !== id) field.setAttribute("aria-activedescendant", id)
+      } else if (current !== null) field.removeAttribute("aria-activedescendant")
     }
     sync()
     const watch = new MutationObserver(sync)

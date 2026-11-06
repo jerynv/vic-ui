@@ -35,9 +35,11 @@ function Growing({ name, defaultValue, withValues = true }: { name: string; defa
 // Controlled, with items that take their value from their words.
 function ControlledWords() {
   const [value, setValue] = useState("Item b");
-  return <div data-case="controlled-words"><Command value={value} onValueChange={setValue}>
+  return <div data-case="controlled-words">
+    <button type="button" onClick={() => setValue("nothing")}>Choose nothing</button>
+    <Command value={value} onValueChange={setValue}>
     <CommandInput aria-label="Search controlled words" />
-    <CommandList><CommandItem>Item a</CommandItem><CommandItem>Item b</CommandItem></CommandList>
+    <CommandList><CommandItem>Item a</CommandItem><CommandItem>Item b</CommandItem><CommandItem>Item c</CommandItem></CommandList>
   </Command></div>;
 }
 
