@@ -13,6 +13,46 @@ Override tokens in your application stylesheet, after importing `vic-ui/ui/style
 
 The palette, faces, corners and heights on this site are one interpretation, a default to start from. Your app is expected to set its own tokens and does not have to match these. Put them in one theme stylesheet, imported after vic-ui's and outside any `@layer`: colours as `light-dark()` pairs and radii on `:root, [data-mode]`, so a section set to the other mode keeps them, and `--font-sans` and `--font-display` on `:root`. Keep the `color-scheme` declaration, or compiled colours resolve to nothing. Token names, component props and `ui-` class names are the stable contract, so change the look through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the keyboard focus ring, disabled pieces that say why, state that carries a word and not only a colour, and each tone ink at least 5.8:1 on the canvas, the panel and its own tint in both modes.
 
+## The surface stack
+
+Every ground in the library, bottom to top. A surface on the page carries an edge and no shadow; only what floats over the page casts one.
+
+| Token | Light | Dark | What sits on it | Edge or shadow |
+| --- | --- | --- | --- | --- |
+| `--bg-frame` | `oklch(0.962 0 0)` | `oklch(0.09 0 0)` | An application window: the grey round a product's chrome | None |
+| `--bg-canvas` | `oklch(0.9875 0 0)` | `oklch(0.1 0 0)` | The page (`body`) | None |
+| `--bg-base` | `oklch(1 0 0)` | `oklch(0.17 0 0)` | The rail, a table's ground, a panel | `--edge` |
+| `--bg-tint` | `oklch(0.97 0 0)` | `oklch(0.269 0 0)` | A tinted ground | None |
+| `--bg-recessed` | `oklch(0.965 0 0)` | `oklch(0.15 0 0)` | Sunk: a preview well, a sheet's backdrop | None |
+| `--surface-lifted` | `oklch(1 0 0)` | `oklch(0.1913 0 0)` | Cards, chips; menus and dialogs over the page | `--edge`; `--shadow-float` when it floats |
+| `--bg-contrast` | `oklch(0.12 0 0)` | `oklch(0.985 0 0)` | A tooltip, the rail's dot | `--shadow-raise` |
+
+Set `--bg-frame` to change the ground round an app's window without moving the canvas. `--bg-elevated` is deprecated and goes in 0.4: it sinks in dark rather than lifting, so use `--surface-lifted` for what sits on top and `--bg-recessed` for what sinks.
+
+<ComponentPreview name="surface-stack" />
+
+## The accent
+
+One brand colour, for a look and never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone and says no state, so a piece in it still says what it is in words, and a state keeps its tone (danger, caution, settled, moving). `--accent` is the fill and `--accent-on` the words on it; `--accent-ink` is words and lines in the accent on the page, `--accent-tint` a pale ground and `--accent-edge` an outline. `--button-accent` and `--button-on-accent` are the filled button's, and follow `--accent` and `--accent-on` unless a part of the page sets them apart.
+
+`tone="accent"` draws Badge, Count, Switch, Progress, the Tabs indicator, Button and Announcement's tag in it. Set your brand as a `light-dark()` pair; the accent ink keeps 5.8:1 on the canvas, the panel and its own tint, and `--accent-on` on `--accent`, in both modes, as the tone inks do.
+
+```css
+:root, [data-mode] {
+  --accent: light-dark(oklch(0.48 0.19 262), oklch(0.76 0.12 258));
+  --accent-on: light-dark(oklch(1 0 0), oklch(0.1448 0 0));
+  --accent-ink: light-dark(oklch(0.46 0.17 262), oklch(0.8 0.1 258));
+  --accent-tint: light-dark(oklch(0.935 0.03 262), oklch(0.275 0.065 262));
+  --accent-edge: light-dark(oklch(0.46 0.17 262 / 0.45), oklch(0.8 0.1 258 / 0.45));
+}
+```
+
+## Art
+
+`--art-1` to `--art-4` are four hues for what is drawn rather than read: pale in light, deep in dark. `--art-grain` is the alpha of a dot overlay that keeps a gradient from reading as flat vector. They are used only inside thumbnails, banners and illustrations, and never by a control.
+
+<ComponentPreview name="art-swatches" />
+
 ## Flat and bordered surfaces
 
 Use one shared style for a form, card, or page. Both styles keep the same sizes, behavior, validation and action buttons. Flat fields use a soft fill; bordered fields use a clear outline. Cards keep their surface with or without an edge.

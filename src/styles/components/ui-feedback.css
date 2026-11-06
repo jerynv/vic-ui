@@ -33,6 +33,11 @@
     --progress-fill: var(--tone-moving-ink);
   }
 
+  /* The accent is a look: the bar in the brand colour, its words still saying how far. */
+  .ui-progress[data-tone="accent"] {
+    --progress-fill: var(--accent);
+  }
+
   .ui-progress-head {
     display: flex;
     align-items: baseline;

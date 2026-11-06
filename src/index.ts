@@ -17,7 +17,7 @@ export { TypedConfirm, typedFirst } from "./components/TypedConfirm";
 export { Accordion, AccordionItem } from "./components/Accordion";
 export { Announcement } from "./components/Announcement";
 export { AvatarStack } from "./components/AvatarStack";
-export { Badge, Count, HeadCount, toneClass, type Tone } from "./components/Badge";
+export { Badge, Count, HeadCount, toneClass, type Tone, type ToneOrAccent } from "./components/Badge";
 export { Card } from "./components/Card";
 export { Kbd } from "./components/Kbd";
 export { Notice } from "./components/Notice";

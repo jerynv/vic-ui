@@ -158,7 +158,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `look` | `"ink" \| "line" \| "quiet" \| "link"` | `"ink"` | Which look. |
-| `tone` | `"accent"` | none | On `ink`, derives the rim and face states from `--button-accent`, with explicit `--button-on-accent` words. Also supported by ButtonLink and the composable default Button. |
+| `tone` | `"accent"` | none | On `ink`, fills the button in the accent: the rim and face states are mixed from `--button-accent` (which is `--accent`) and the words are `--button-on-accent` (which is `--accent-on`). A look, not a state. Also supported by ButtonLink and the composable default Button. |
 | `size` | `"md" \| "lg"` | `"md"` | `md` is `--control-h-sm` (2rem); `lg` is `--control-h` (2.25rem), a form's commit. |
 | `full` | `boolean` | `false` | Full width. |
 | `square` | `boolean` | `false` | An icon alone, as wide as the button is tall; its words go in `aria-label`. |
@@ -176,6 +176,7 @@ States, as `ui.css` implements them:
 - Hover: `ink` face moves to `--ink-face-top-hover` / `--ink-face-bottom-hover`; `line` face fills `--field-fill-hover`; `quiet` words go `--fg-strong` and underline (offset 3px).
 - Press (`:active`): `ink` face `--ink-face-top-press` / `--ink-face-bottom-press`; `line` face `--field-fill`. Nothing moves; the face darkens.
 - `line` with `aria-pressed="true"` takes the ink rim and face (a held toggle).
+- Accent (`ui-button-accent` on `ink`): rim edge `--button-accent` mixed with black 22%, rim top with white 30%, rim bottom with black 12%; face top with white 4%, bottom with black 10%; hover white 6% / white 2%; press black 12% / black 4%; words `--button-on-accent`. The words hold 5.8:1 on every face stop in both modes with the default accent (`colour-contrast.test.mjs`). Set `--button-accent` and `--button-on-accent` on a part of the page to give its buttons another colour without moving `--accent`.
 - Accent is local to the filled control; semantic danger/caution rules win. It adapts the existing semantic color-mix treatment but retains two distinct stops when pressed. The five-hue example and `accent-button.test.mjs` cover both APIs, both themes and higher-contrast lightness values.
 - `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (160ms).
 - Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over 300ms `ease-in-out`.
@@ -187,9 +188,9 @@ States, as `ui.css` implements them:
 - Type: `--text-ui` (13px), weight `--weight-ui`, line height 1, no wrap; `lg` uses `--text-read` (14px).
 - Face padding `0 0.875rem` (`lg`: `0 1rem`, `square`: 0), gap 0.5rem, radius `calc(var(--radius-button) - 2px)`.
 
-Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
+Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`, `--button-accent`, `--button-on-accent`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
 
-CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`, `ui-button-busy-words`, `ui-button-busy-mark`. The four `@property` rules sit outside the layer at the end of the buttons block.
+CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-accent`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`, `ui-button-busy-words`, `ui-button-busy-mark`. The four `@property` rules sit outside the layer at the end of the buttons block.
 
 Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`; `Spinner`.
 
@@ -528,19 +529,21 @@ Something on or off, said at once: a native button with the switch role, a track
 | `checked` | `boolean` | required | On or off (`aria-checked`). |
 | `onCheckedChange` | `(checked: boolean) => void` | none | Handed the new state on a press. |
 | `disabledReason` | `string \| undefined` | none | Keeps it focusable and says why. |
+| `look` | `"flat" \| "rimmed"` | `"rimmed"` | `flat` drops the track's inset rim (`ui-switch-flat`). |
+| `tone` | `"accent" \| undefined` | none | When on, the track fills with `--accent` rather than ink (`ui-switch-accent`). A look, not a state. The composable `Switch` takes it too. |
 | `type` | button type | `"button"` | Native type. |
 | native attributes | `ButtonHTMLAttributes` less `onChange` | | Its name is `aria-label` or the words beside it. |
 
 States:
 
 - Off: 2.25rem by 1.375rem track, padding 0.1875rem, radius `--radius-round`, `--field-fill`, inset ring `1px light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1))`. Hover: `--field-fill-hover`.
-- On: track `--ink-face-bottom`; hover `--ink-face-top`. The knob (1rem circle, `--surface-lifted`, `--shadow-raise`) translates 0.875rem over 220ms `cubic-bezier(0.2, 0.8, 0.2, 1)`. Track colour eases 200ms.
+- On: track `--ink-face-bottom`; hover `--ink-face-top`. With `tone="accent"` those two are `--accent` and `--accent` mixed 14% toward `--bg-canvas`, so the track is the accent and moves toward the canvas under the pointer; off, it is the same as any switch. The knob (1rem circle, `--surface-lifted`, `--shadow-raise`) translates 0.875rem over 220ms `cubic-bezier(0.2, 0.8, 0.2, 1)`. Track colour eases 200ms.
 - Focus: outline 2px `--focus`, offset 2px.
 - Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
 
-Tokens: `--radius-round`, `--field-fill`, `--field-fill-hover`, `--ink-face-bottom`, `--ink-face-top`, `--focus`, `--surface-lifted`, `--shadow-raise`.
+Tokens: `--radius-round`, `--field-fill`, `--field-fill-hover`, `--ink-face-bottom`, `--ink-face-top`, `--accent`, `--bg-canvas`, `--focus`, `--surface-lifted`, `--shadow-raise`.
 
-CSS: `ui.css`. Classes `ui-switch`, `ui-switch-knob`.
+CSS: `ui.css`. Classes `ui-switch`, `ui-switch-knob`, `ui-switch-accent`; `ui-switch-variants.css` (`ui-switch-flat`).
 
 Dependencies: `useBlocked`.
 
@@ -650,6 +653,7 @@ The small pill a front page leads with: a tag, the words and an arrow, the whole
 | `to` | `string` | none | A page of the app. |
 | `href` | `string` | none | Any other address. |
 | `hue` | `Hue` | none | Colours the tag; without it the tag is the field's fill. |
+| `tone` | `"accent" \| undefined` | none | Fills the tag in the accent (`--accent-on` on `--accent`), as a "New" pill is; it outranks `hue`. A look, not a state. |
 | `className` | `string` | none | Placement. |
 | `children` | `ReactNode` | required | The words. |
 
@@ -659,9 +663,9 @@ States:
 - Hover: the arrow (`ArrowRightIcon` 13px) goes from `--fg-subtle` to `--fg-strong` (200ms).
 - Press: `--field-fill` with a `0 0 0 1px var(--line)` ring.
 - Focus: outline 2px `--focus`, offset 2px.
-- Tag: 1.375rem tall, `--text-tag` weight 600, `--fg-strong` on `--field-fill`; with `data-hue`, `--hue-ink` on `--hue`.
+- Tag: 1.375rem tall, `--text-tag` weight 600, `--fg-strong` on `--field-fill`; with `data-hue`, `--hue-ink` on `--hue`; with `data-tone="accent"`, `--accent-on` on `--accent`.
 
-Tokens: `--radius-round`, `--text-ui`, `--text-tag`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--edge`, `--field-fill`, `--line`, `--focus`, `--hue`, `--hue-ink`.
+Tokens: `--radius-round`, `--text-ui`, `--text-tag`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--edge`, `--field-fill`, `--line`, `--focus`, `--hue`, `--hue-ink`, `--accent`, `--accent-on`.
 
 CSS: `ui-display.css`. Classes `ui-announcement`, `ui-announcement-tag`, `ui-announcement-words`, `ui-announcement-arrow`. Needs the `[data-hue]` rules.
 
@@ -697,7 +701,7 @@ A state said in a word or two. Hairline in its tone is a standing state; `solid`
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
-| `tone` | `Tone` | none (neutral) | `danger`, `caution`, `settled`, `moving` or `neutral`. |
+| `tone` | `ToneOrAccent` | none (neutral) | `danger`, `caution`, `settled`, `moving` or `neutral`, or `accent`: the brand accent as a look ("New", "Beta"), which says no state. |
 | `solid` | `boolean` | `false` | Filled in the tone's ink (or ink with no tone). |
 | `soft` | `boolean` | `false` | The tone's ink on its tint, no ring (`--fg-strong` on `--fill-chosen` with no tone). `solid` outranks it. |
 | `dot` | `boolean` | `false` | A 0.375rem dot in `currentColor` leads the words. |
@@ -710,7 +714,7 @@ States: none interactive. Hairline: height 1.25rem, max width 100%, padding `0 0
 
 Tokens: `--tone-ink`, `--tone-edge`, `--tone-fill-on` (set by `.tone-*`), `--fg-strong`, `--line`, `--ink-words`, `--ink-face-bottom`, `--radius-row`, `--radius-round`, `--text-tag`.
 
-CSS: `ui-display.css` (`ui-badge`, `ui-badge-words`, `ui-badge-solid`, `ui-badge-soft`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`).
+CSS: `ui-display.css` (`ui-badge`, `ui-badge-words`, `ui-badge-solid`, `ui-badge-soft`, `ui-badge-dot`, `ui-badge-icon`, `ui-badge-count`) and `tokens.css` (`tone-danger`, `tone-caution`, `tone-settled`, `tone-moving`, `tone-accent`).
 
 Dependencies: `toneClass`.
 
@@ -723,7 +727,7 @@ How many are waiting somewhere, as a number on a filled ground (an unread count)
 | `value` | `number` | required | The number. |
 | `label` | `string` | required | What a screen reader hears ("3 unread"). |
 | `max` | `number` | `99` | Past it, reads `max+`. |
-| `tone` | `Tone` | none | Fills in that tone's ink. |
+| `tone` | `ToneOrAccent` | none | Fills in that tone's ink; `accent` fills in `--accent-ink` with `--accent-on` words, a look rather than a state. |
 | `soft` | `boolean` | `false` | The tone's ink on its tint instead of a fill (`ui-count-soft`). |
 | `className` | `string` | none | Placement. |
 
@@ -748,7 +752,7 @@ CSS: `ui-display.css` (`ui-head-count`).
 
 ### toneClass, Tone
 
-Not components. `Tone` is `"danger" | "caution" | "settled" | "moving" | "neutral"`. `toneClass(tone)` returns `` `tone-${tone}` `` for the four tones and `""` for `neutral` or none; the class hands a part `--tone-ink`, `--tone-tint`, `--tone-edge` and `--tone-fill-on` (`tokens.css`).
+Not components. `Tone` is `"danger" | "caution" | "settled" | "moving" | "neutral"`. `ToneOrAccent` is `Tone | "accent"`, taken by the pieces that may be drawn in the accent (Badge, Count); pieces that say a state (Notice, Toast) keep `Tone`, because the accent is a look and never a fifth tone. `toneClass(tone)` returns `` `tone-${tone}` `` for the four tones and `accent`, and `""` for `neutral` or none; the class hands a part `--tone-ink`, `--tone-tint`, `--tone-edge` and `--tone-fill-on` (`tokens.css`). `tone-accent` sets them to `--accent-ink`, `--accent-tint`, `--accent-edge` and `--accent-on`.
 
 ### Card
 
@@ -1171,6 +1175,7 @@ The one switcher between views: a row of tabs on the field's fill with an ink in
 | `aria-label` | `string` | none | The row's name. |
 | `idPrefix` | `string` | `useId()` | Each tab is `${idPrefix}-${value}`; with it given, each controls `${idPrefix}-${value}-panel`. |
 | `size` | `"sm"` | none | The dense height. |
+| `tone` | `"accent" \| undefined` | none | The indicator in the accent and the chosen tab's words in `--accent-on` (`ui-tabs-accent`). A look, not a state. |
 | `className` | `string` | none | Placement. |
 
 `TabOption` is `Option` plus `count?: number | string` (after the words, tabular, two digits wide), `disabledReason?: string` (stays focusable and says why), `to?: string` (drawn as a link through `LinkProvider`; chosen from the keys, it is followed) and `apart?: boolean` (a hairline before it, starting a second group).
@@ -1180,14 +1185,15 @@ Keys: ArrowRight and ArrowLeft move and choose as they go (wrapping, skipping di
 States:
 
 - Track: inline flex, height `--control-h` (`sm`: `--control-h-sm`), padding 2px, radius `--radius-field`, `--field-fill`, scrolls sideways with no scrollbar.
+- Indicator, accent (`tone="accent"`): the track sets `--ink-face-top` to `--accent` mixed with white 4%, `--ink-face-bottom` with black 10%, `--ink-rim-edge` with black 22%, and `--ink-words` to `--accent-on`, which hold 5.8:1 in both modes.
 - Indicator: `linear-gradient(var(--ink-face-top), var(--ink-face-bottom))` with a `0 0 0 1px var(--ink-rim-edge)` ring, radius `calc(var(--radius-field) - 2px)`, measured onto the chosen tab (and again on any resize); the first placing is drawn where it lands, every move after eases `translate` and `width` over 240ms `--ease-track` (none under reduced motion).
 - Tab: padding `0 0.75rem`, `--text-ui` weight `--weight-ui`, `--fg-subtle`. Hover (not chosen, not disabled): `--fg-strong` on `--field-fill-hover`. Press: `--bone`. Chosen: `--ink-words`. Focus: outline 2px `--focus`, offset 2px. Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
 - Rule: 1px by 1rem, `--line`, margin 0.25rem each side.
 - Count: min width 2ch, `--text-tag`, tabular, opacity 0.65.
 
-Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--ink-face-top`, `--ink-face-bottom`, `--ink-rim-edge`, `--ink-words`, `--ease-track`, `--text-ui`, `--text-tag`, `--fg-subtle`, `--fg-strong`, `--bone`, `--focus`, `--line`.
+Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--ink-face-top`, `--ink-face-bottom`, `--ink-rim-edge`, `--ink-words`, `--accent`, `--accent-on`, `--ease-track`, `--text-ui`, `--text-tag`, `--fg-subtle`, `--fg-strong`, `--bone`, `--focus`, `--line`.
 
-CSS: `ui-data.css`. Classes `ui-tabs`, `ui-tabs-sm`, `ui-tabs-mark`, `ui-tab`, `ui-tabs-rule`, `ui-tab-count`.
+CSS: `ui-data.css`. Classes `ui-tabs`, `ui-tabs-sm`, `ui-tabs-accent`, `ui-tabs-mark`, `ui-tab`, `ui-tabs-rule`, `ui-tab-count`.
 
 Dependencies: `toOptions`, `useReason`, the provider's link.
 
@@ -1355,17 +1361,17 @@ How far something has got: its words, how far in words, and a bar under them. Le
 | `value` | `number` | none | How far; without it the bar sweeps. |
 | `max` | `number` | `100` | The end. |
 | `valueText` | `string` | the rounded percentage | The words for how far ("3 of 8 files"). |
-| `tone` | `"danger" \| "caution" \| "settled" \| "moving"` | none | Colours the bar; the words still say the state. |
+| `tone` | `"danger" \| "caution" \| "settled" \| "moving" \| "accent"` | none | Colours the bar; the words still say the state. `accent` draws it in `--accent`, a look that says no state. |
 | `size` | `"sm"` | none | A 0.25rem track rather than 0.375rem. |
 | `className` | `string` | none | Placement. |
 
 States:
 
 - Head: `--text-ui`; label weight 600 `--fg-strong`, clipped; value tabular `--fg-subtle`.
-- Track: radius `--radius-round`, `--field-fill`. Fill: `--progress-fill` (default `--ink-face-bottom`, or the tone's ink), width eases 300ms `--ease-track`.
+- Track: radius `--radius-round`, `--field-fill`. Fill: `--progress-fill` (default `--ink-face-bottom`, the tone's ink, or `--accent`), width eases 300ms `--ease-track`.
 - Unknown (`data-unknown`): a 35% stretch sweeps with `ui-progress-sweep` (1.4s `--ease-track`, infinite, from `translate: -100% 0` to `300% 0`). Still under reduced motion.
 
-Tokens: `--ink-face-bottom`, `--tone-danger-ink`, `--tone-caution-ink`, `--tone-settled-ink`, `--tone-moving-ink`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--radius-round`, `--field-fill`, `--ease-track`.
+Tokens: `--ink-face-bottom`, `--tone-danger-ink`, `--tone-caution-ink`, `--tone-settled-ink`, `--tone-moving-ink`, `--accent`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--radius-round`, `--field-fill`, `--ease-track`.
 
 CSS: `ui-feedback.css`. Classes `ui-progress`, `ui-progress-sm`, `ui-progress-head`, `ui-progress-label`, `ui-progress-value`, `ui-progress-track`, `ui-progress-fill`; keyframes `ui-progress-sweep`.
 
@@ -2194,16 +2200,24 @@ All from `web/src/styles/tokens.css`. Values in the form `light-dark(L, D)` are 
 
 ### Surfaces
 
+The surface stack, bottom to top. A surface on the page carries an edge and no shadow; only what floats over it casts one ([Elevation](#elevation)).
+
+| Token | Light | Dark | What sits on it | Edge or shadow |
+| --- | --- | --- | --- | --- |
+| `--bg-frame` | `oklch(0.962 0 0)` | `oklch(0.09 0 0)` | An application window: the ground round a product's chrome, a step under the canvas, so a frame can be set without moving every canvas-coloured thing. | None. |
+| `--bg-canvas` | `oklch(0.9875 0 0)` | `oklch(0.1 0 0)` | The page (`body`). | None. |
+| `--bg-base` | `oklch(1 0 0)` | `oklch(0.17 0 0)` | The rail, a table's ground, a panel on the page. | `--edge`. |
+| `--bg-tint` | `oklch(0.97 0 0)` | `oklch(0.269 0 0)` | A tinted ground. | None. |
+| `--bg-recessed` | `oklch(0.965 0 0)` | `oklch(0.15 0 0)` | Sunk: previews, a preview well, the sheet's backdrop. | None. |
+| `--surface-lifted` | `oklch(1 0 0)` | `oklch(0.1913 0 0)` | Anything that sits on top: cards, chips; menus and dialogs over the page. | `--edge` on the page; `--shadow-float` when it floats. |
+| `--bg-contrast` | `oklch(0.12 0 0)` | `oklch(0.985 0 0)` | Tooltips, the rail's dot. | `--shadow-raise`. |
+
+Beside the stack:
+
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--bg-canvas` | `oklch(0.9875 0 0)` | `oklch(0.1 0 0)` | The page (`body`). |
-| `--bg-base` | `oklch(1 0 0)` | `oklch(0.17 0 0)` | The rail, a table's ground. |
-| `--bg-tint` | `oklch(0.97 0 0)` | `oklch(0.269 0 0)` | A tinted ground. |
-| `--bg-recessed` | `oklch(0.965 0 0)` | `oklch(0.15 0 0)` | Sunk: previews, the sheet's backdrop. |
-| `--bg-contrast` | `oklch(0.12 0 0)` | `oklch(0.985 0 0)` | Tooltips, the rail's dot. |
 | `--bg-control` | `oklch(1 0 0)` | `oklch(0.205 0 0)` | A control's ground. |
-| `--bg-elevated` | `oklch(0.98 0 0)` | `oklch(0.12 0 0)` | Kept for compatibility; sinks in dark, so lifted things use the next token. |
-| `--surface-lifted` | `oklch(1 0 0)` | `oklch(0.1913 0 0)` | Anything that sits on top: cards, menus, dialogs, chips. |
+| `--bg-elevated` | `oklch(0.98 0 0)` | `oklch(0.12 0 0)` | **Deprecated, removed in 0.4.** It sinks in dark rather than lifting: use `--surface-lifted` for what sits on top and `--bg-recessed` for what sinks. The settings dialog's rail still reads it until then. |
 
 ### Fields
 
@@ -2297,6 +2311,32 @@ Each hue is a block (pale on light, deep on dark) and an ink dark enough for wor
 | clay | `--hue-clay-ink` | `oklch(0.4532 0.118 42.5)` | `oklch(0.8173 0.0863 48.74)` |
 
 The hue inks equal the tone inks they share a colour with: sky is moving, sage is settled, butter is caution, clay is danger.
+
+### Accent (look)
+
+One brand colour for a look, never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone, says no state and is not moving (a navy ink; this is a clear blue). The class `tone-accent` hands a part `--tone-ink: var(--accent-ink)`, `--tone-tint: var(--accent-tint)`, `--tone-edge: var(--accent-edge)` and `--tone-fill-on: var(--accent-on)`. `tone="accent"` is taken by Badge, Count, Switch, Progress, Tabs (the indicator), Button and Announcement (the tag).
+
+| Token | Light | Dark | For |
+| --- | --- | --- | --- |
+| `--accent` | `oklch(0.48 0.19 262)` | `oklch(0.76 0.12 258)` | The fill: a switch's track, a bar, a filled button, a tag. |
+| `--accent-on` | `oklch(1 0 0)` | `oklch(0.1448 0 0)` | Words on the fill and on the ink. |
+| `--accent-ink` | `oklch(0.46 0.17 262)` | `oklch(0.8 0.1 258)` | Words and lines in the accent on the page; a solid badge's and a count's fill. |
+| `--accent-tint` | `oklch(0.935 0.03 262)` | `oklch(0.275 0.065 262)` | A pale ground (`soft`). |
+| `--accent-edge` | `oklch(0.46 0.17 262 / 0.45)` | `oklch(0.8 0.1 258 / 0.45)` | An outline (a hairline badge). |
+| `--button-accent` | `var(--accent)` | same | The filled button's accent; set it on a part of the page to give its buttons another colour. |
+| `--button-on-accent` | `var(--accent-on)` | same | The words on it. |
+
+### Art
+
+Four hues and a grain for what is drawn rather than read. Used only inside thumbnails, banners and illustrations; no control reads them, and they carry no words, so they have no contrast floor.
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `--art-1` | `oklch(0.9 0.06 25)` | `oklch(0.32 0.08 25)` |
+| `--art-2` | `oklch(0.93 0.07 85)` | `oklch(0.34 0.07 75)` |
+| `--art-3` | `oklch(0.9 0.05 185)` | `oklch(0.32 0.06 190)` |
+| `--art-4` | `oklch(0.88 0.06 285)` | `oklch(0.3 0.09 285)` |
+| `--art-grain` | `0.08` | same: the alpha of a dot overlay that keeps a gradient from reading as flat vector. |
 
 ### Radius scale
 
@@ -2446,7 +2486,8 @@ Every label, eyebrow, caption, table head, placeholder and button is written and
 
 ### Colour
 
-- Colour comes only from the palette in `tokens.css`, written in oklch or oklab (`color-mix(in oklab, ...)`). A colour the palette lacks is added to it, with a light and a dark value, before anything uses it. Nothing writes a colour inline.
+- Colour comes only from the palette in `tokens.css`, written in oklch or oklab (`color-mix(in oklab, ...)`). The palette is the neutrals, the four tones (meaning), the five hues and the accent (look), and the art hues (drawing only). A colour the palette lacks is added to it, with a light and a dark value, before anything uses it. Nothing writes a colour inline.
+- The accent is a look, never a fifth tone: it says no state, so whatever is drawn in it still says what it is in words. The art hues live only inside thumbnails, banners and illustrations; no control reads them.
 - The four tones keep their meanings wherever a state is shown: **danger** (clay) for what has gone wrong or is being destroyed, and every action that removes, ends, voids, refunds or suspends; **caution** (butter) for what must be read before going on (a change to agreed terms, a warning, a risk not yet harm); **settled** (sage) for what is done and fine (paid, signed); **moving** (sky) for what is under way and waiting on somebody else (open, due, sent).
 - Weight says urgency and the tone says kind: a hairline pill in a tone is a standing state; a solid pill asks for a hand now; a notice is the tone's tint behind a rule in its ink; a destructive commit is filled in the danger ink and its way in is outlined in it; the commit of a change to agreed terms is filled in the caution ink.
 - The five hues are for look, handed to a part by `[data-hue]`.
@@ -2455,9 +2496,9 @@ Every label, eyebrow, caption, table head, placeholder and button is written and
 
 ### Contrast, measured
 
-Copied from the comment in `tokens.css`. WCAG 2 relative luminance, against light canvas `#fbfbfb` and panel `#ffffff`, dark canvas `#030303` and panel `#0f0f0f` (held by `test/colour-tokens.test.ts`). No ink falls below 5.8:1 on either canvas, the panel or its own tint, and the words on a solid tone likewise.
+Copied from the comment in `tokens.css`. WCAG 2 relative luminance, against light canvas `#fbfbfb` and panel `#ffffff`, dark canvas `#030303` and panel `#0f0f0f`, measured on the colours Chromium resolves from the built stylesheet by `tests/colour-contrast.test.mjs` (part of `npm test`), which fails below 5.8:1. No ink falls below 5.8:1 on either canvas, the panel or its own tint, and the words on a solid tone or on the accent likewise.
 
-Ink on canvas / panel / its own tint, and `--tone-on` on the ink:
+Ink on canvas / panel / its own tint, and `--tone-on` on the ink (for the accent, `--accent-on` on `--accent` and on `--accent-ink`):
 
 | Tone | Light | Dark |
 | --- | --- | --- |
@@ -2465,6 +2506,9 @@ Ink on canvas / panel / its own tint, and `--tone-on` on the ink:
 | caution | 7.06 / 7.31 / 5.93, 7.31 | 13.51 / 12.56 / 9.91, 12.97 |
 | settled | 7.64 / 7.90 / 6.38, 7.90 | 12.77 / 11.87 / 9.56, 12.26 |
 | moving | 8.66 / 8.96 / 7.16, 8.96 | 11.95 / 11.10 / 9.06, 11.47 |
+| accent (a look) | 7.09 / 7.33 / 6.05, 6.79 and 7.33 | 11.05 / 10.27 / 7.96, 9.22 and 10.61 |
+
+The same test holds the accent button's words at 5.8:1 on every face stop (rest, hover, press) and the accent Tabs indicator likewise, and checks that `--accent` is not moving's ink.
 
 ### Nothing smaller than 11px
 

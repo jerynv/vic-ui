@@ -6,14 +6,15 @@ import type { Hue } from "./hue";
 /**
  * The small pill the front page leads with: a tag, the words and an arrow, the whole of it
  * one link, to a page of this app by `to` or anywhere else by `href`. `hue` colours the tag
- * with one of the palette's hues; without it the tag is the fields' fill.
+ * with one of the palette's hues; without it the tag is the fields' fill. `tone="accent"` fills
+ * the tag in the brand accent, as a "New" pill is, and outranks a hue.
  */
-export function Announcement(props: { tag?: ReactNode; to?: string; href?: string; hue?: Hue; className?: string; children: ReactNode }) {
+export function Announcement(props: { tag?: ReactNode; to?: string; href?: string; hue?: Hue; tone?: "accent" | undefined; className?: string; children: ReactNode }) {
   const className = props.className ? `ui-announcement ${props.className}` : "ui-announcement";
   const inner = (
     <>
       {props.tag ? (
-        <span className="ui-announcement-tag" data-hue={props.hue}>
+        <span className="ui-announcement-tag" data-hue={props.hue} data-tone={props.tone}>
           {props.tag}
         </span>
       ) : null}

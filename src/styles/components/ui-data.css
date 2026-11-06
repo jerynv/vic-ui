@@ -41,6 +41,15 @@
       width 240ms var(--ease-track);
   }
 
+  /* The indicator in the accent (`tone="accent"`): the accent's face and rim, mixed as the accent
+     button's are, and the chosen tab's words in `--accent-on`. A look; the row says no state. */
+  .ui-tabs-accent {
+    --ink-face-top: color-mix(in oklab, var(--accent), white 4%);
+    --ink-face-bottom: color-mix(in oklab, var(--accent), black 10%);
+    --ink-rim-edge: color-mix(in oklab, var(--accent), black 22%);
+    --ink-words: var(--accent-on);
+  }
+
   .ui-tab {
     display: inline-flex;
     flex: none;

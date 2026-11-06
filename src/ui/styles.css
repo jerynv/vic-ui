@@ -27,7 +27,6 @@
   --secondary-foreground: var(--fg-strong);
   --muted: var(--field-fill);
   --muted-foreground: var(--fg-subtle);
-  --accent: var(--fill-hover);
   --accent-foreground: var(--fg-strong);
   --destructive: var(--tone-danger-ink);
   --border: var(--line);
@@ -65,7 +64,9 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
+  /* shadcn's hover ground. It reads the fill token directly, because `--accent` is vic's brand
+     accent (`tokens.css`), not a hover grey. */
+  --color-accent: var(--fill-hover);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-border: var(--border);

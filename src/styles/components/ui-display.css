@@ -557,6 +557,12 @@
     background: var(--hue);
   }
 
+  /* The tag in the accent (`tone="accent"`), filled as a "New" pill is; it outranks a hue. */
+  .ui-announcement-tag[data-tone="accent"] {
+    color: var(--accent-on);
+    background: var(--accent);
+  }
+
   .ui-announcement-words {
     min-width: 0;
     overflow: hidden;

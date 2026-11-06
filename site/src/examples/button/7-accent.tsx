@@ -2,14 +2,18 @@ import { useState, type CSSProperties } from "react";
 import { Button } from "vic-ui";
 import { Button as ComposableButton } from "vic-ui/ui";
 
-export const title = "Custom accent";
-export const note = "Set --button-accent and --button-on-accent, then opt in with tone=\"accent\". The rim and all three face states stay coordinated. Hover, press or tab through either API.";
+export const title = "Accent";
+export const note = "tone=\"accent\" fills the button in the brand accent (--accent and --accent-on, through --button-accent and --button-on-accent). Set those two on a part of the page to give its buttons another colour. The rim and all three face states stay coordinated. Hover, press or tab through either API.";
 const hues = [["Red", 25], ["Amber", 80], ["Green", 145], ["Blue", 240], ["Purple", 300]] as const;
 
 export default function Example() {
   const [contrast, setContrast] = useState(false);
   const [last, setLast] = useState("Choose a color to try the action.");
   return <div className="demo-stack" style={{ width: "100%", maxWidth: "none" }}>
+    <div className="demo-row">
+      <Button tone="accent" onClick={() => setLast("Sent with the default accent.")}>Send</Button>
+      <ComposableButton tone="accent" onClick={() => setLast("Sent with the default accent, composable button.")}>Send</ComposableButton>
+    </div>
     <Button look="line" aria-pressed={contrast} onClick={() => setContrast(!contrast)}>High contrast</Button>
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 16rem), 1fr))", gap: "1rem" }}>
       {(["light", "dark"] as const).map(mode => <section key={mode} data-mode={mode} aria-label={`${mode} accent buttons`}

@@ -8,10 +8,12 @@ function Switch({
   className,
   size = "default",
   look = "rimmed",
+  tone,
   ...props
 }: SwitchPrimitive.Root.Props & {
   size?: "sm" | "default"
   look?: "flat" | "rimmed"
+  tone?: "accent" | undefined
 }) {
   return (
     <SwitchPrimitive.Root
@@ -20,6 +22,7 @@ function Switch({
       className={cn(
         "ui-switch peer",
         look === "flat" && "ui-switch-flat",
+        tone === "accent" && "ui-switch-accent",
         className
       )}
       {...props}

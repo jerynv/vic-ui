@@ -33,7 +33,7 @@ The palette, faces, corners and heights vic-ui ships with are one interpretation
 
 **What stays stable for you.** Token names, component props and the `ui-` class names are the contract between vic-ui and your app, and a theme written against them keeps working across releases. Change the look through tokens, not by styling `ui-` classes or passing `className` to restyle a piece: those rules are internal and can change. If there is no token for what you need, ask for one.
 
-**What a theme does not change.** Behaviour and accessibility are the same under any theme: the keyboard focus ring, disabled pieces that say why, state that always carries a word and not only a colour, and nothing moving on load or press. Your colours take on the contrast rule too: each tone ink at least 5.8:1 on the canvas, the panel and its own tint, in both modes.
+**What a theme does not change.** Behaviour and accessibility are the same under any theme: the keyboard focus ring, disabled pieces that say why, state that always carries a word and not only a colour, and nothing moving on load or press. Your colours take on the contrast rule too: each tone ink and the accent ink at least 5.8:1 on the canvas, the panel and its own tint, in both modes, and `--accent-on` on `--accent` likewise.
 
 ## Install
 
@@ -163,7 +163,7 @@ What every piece already does, and what anything built with them is held to:
 - **Dense by default.** `size="sm"` (2rem) inside an app; the default (2.25rem) for a way in and a header.
 - **Sentence case** everywhere, never capitals. Hierarchy is weight and size.
 - **Nothing under 11px.**
-- **Colour only from the palette**, in oklch. The four tones keep their meanings (danger, caution, settled, moving), and state always carries a word, never only a colour. No tone ink is below 5.8:1 on the canvas, the panel or its own tint, in either mode.
+- **Colour only from the palette**, in oklch. The palette is the neutrals, the four tones, the five hues, the accent and the art hues. The four tones keep their meanings (danger, caution, settled, moving), and state always carries a word, never only a colour. The accent (`--accent` and its family, `tone="accent"`) is one brand colour for a look, never a fifth tone. The art hues (`--art-1` to `--art-4`, `--art-grain`) live only inside thumbnails, banners and illustrations, never on a control. No tone ink or accent ink is below 5.8:1 on the canvas, the panel or its own tint, in either mode (`tests/colour-contrast.test.mjs`).
 - **One corner scale** (`--radius-panel`, `-float`, `-control`, `-row`, `-mark`, `-round`) and **one elevation scale**: a surface on the page has an edge and no shadow; only what floats casts one (`--shadow-raise`, `--shadow-float`).
 - **One fill scale** under whatever is hovered, chosen or pressed: `--fill-faint`, `--fill-hover`, `--fill-chosen`, `--fill-press`.
 - **Nothing moves** on load, on choosing or on pressing.

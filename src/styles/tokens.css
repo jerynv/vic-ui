@@ -45,12 +45,17 @@
   --fg-inactive: light-dark(oklch(0.87 0 0), oklch(0.439 0 0));
   --line: light-dark(oklch(0.145 0 0 / 0.1), oklch(0.32 0 0));
   --line-hairline: light-dark(oklch(0.935 0 0), oklch(0.269 0 0));
+  /* The ground an application window sits on: the grey round the white chrome of a product's
+     frame, a step under the canvas so the window reads as one piece without moving the canvas. */
+  --bg-frame: light-dark(oklch(0.962 0 0), oklch(0.09 0 0));
   --bg-base: light-dark(oklch(1 0 0), oklch(0.17 0 0));
   --bg-canvas: light-dark(oklch(0.9875 0 0), oklch(0.1 0 0));
   --bg-tint: light-dark(oklch(0.97 0 0), oklch(0.269 0 0));
   --bg-recessed: light-dark(oklch(0.965 0 0), oklch(0.15 0 0));
   --bg-contrast: light-dark(oklch(0.12 0 0), oklch(0.985 0 0));
   --bg-control: light-dark(oklch(1 0 0), oklch(0.205 0 0));
+  /* Deprecated, and removed in 0.4: it sinks in dark rather than lifting. Use `--surface-lifted`
+     for what sits on top and `--bg-recessed` for what sinks. */
   --bg-elevated: light-dark(oklch(0.98 0 0), oklch(0.12 0 0));
   --focus: light-dark(oklch(0.15 0 0), oklch(0.935 0 0));
   --brand: light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0));
@@ -64,8 +69,8 @@
    * The surface that lifts.
    *
    * `--bg-elevated` is #060606 in the dark theme while `--bg-base` is #0f0f0f, so it sinks
-   * a panel rather than raising it. Anything that has to read as sitting on top of the
-   * page uses this instead.
+   * a panel rather than raising it; it is deprecated and goes in 0.4. Anything that has to
+   * read as sitting on top of the page uses this instead.
    */
   --surface-lifted: light-dark(oklch(1 0 0), oklch(0.1913 0 0));
   /* The height of a control in a header row: a tab switcher, a field, a choice, an icon
@@ -193,6 +198,43 @@
   --tone-moving-edge: light-dark(oklch(0.4076 0.1033 254.88 / 0.45), oklch(0.8225 0.0698 253.93 / 0.45));
 
   /*
+   * The accent: one brand colour for a look, never a meaning. A "New" pill, a chosen mode, a
+   * send button, a switch that is on, a link that is the product's own. It is not a fifth tone
+   * and says no state: a toned piece still says its state in words, and the accent never
+   * stands in for moving (which it is not: moving is a navy ink, this a clear blue).
+   * `--accent` is the fill, `--accent-on` the words on it, `--accent-ink` words and lines in the
+   * accent on the page, `--accent-tint` a pale ground and `--accent-edge` an outline. The class
+   * `tone-accent` hands them to the slots `tone-*` fills, so a piece that takes a tone takes the
+   * accent the same way.
+   *
+   * Measured as the tones are: ink on canvas / panel / its own tint, and --accent-on on the
+   * accent and on the ink:
+   *   light 7.09 / 7.33 / 6.05, 6.79 and 7.33   dark 11.05 / 10.27 / 7.96, 9.22 and 10.61
+   * (tests/colour-contrast.test.mjs measures them, and every tone, in Chromium).
+   */
+  --accent: light-dark(oklch(0.48 0.19 262), oklch(0.76 0.12 258));
+  --accent-on: light-dark(oklch(1 0 0), oklch(0.1448 0 0));
+  --accent-ink: light-dark(oklch(0.46 0.17 262), oklch(0.8 0.1 258));
+  --accent-tint: light-dark(oklch(0.935 0.03 262), oklch(0.275 0.065 262));
+  --accent-edge: light-dark(oklch(0.46 0.17 262 / 0.45), oklch(0.8 0.1 258 / 0.45));
+  /* The filled button's accent (`Button tone="accent"`): the accent and the words on it, named
+     apart so one button can be given another colour without moving the family. */
+  --button-accent: var(--accent);
+  --button-on-accent: var(--accent-on);
+
+  /*
+   * Art: four hues and a grain for what is drawn rather than read, used only inside thumbnails,
+   * banners and illustrations, never by a control. Pale in light and deep in dark, so a picture
+   * sits back on either canvas. `--art-grain` is the alpha of a dot overlay that keeps a gradient
+   * from reading as flat vector, a number in both modes.
+   */
+  --art-1: light-dark(oklch(0.9 0.06 25), oklch(0.32 0.08 25));
+  --art-2: light-dark(oklch(0.93 0.07 85), oklch(0.34 0.07 75));
+  --art-3: light-dark(oklch(0.9 0.05 185), oklch(0.32 0.06 190));
+  --art-4: light-dark(oklch(0.88 0.06 285), oklch(0.3 0.09 285));
+  --art-grain: 0.08;
+
+  /*
    * The five hues: the palette's colours for look, used anywhere. Each is a block (pale on
    * light, deep on dark) and an ink dark enough for words on its own block and on the page.
    * `[data-hue="x"]` hands one to `--hue` and `--hue-ink` (at the end of this file).
@@ -241,6 +283,14 @@
   --tone-tint: var(--tone-moving-tint);
   --tone-edge: var(--tone-moving-edge);
   --tone-fill-on: var(--tone-on);
+}
+
+/* The accent through the same slots: a look, not a fifth tone (`Badge tone="accent"`). */
+.tone-accent {
+  --tone-ink: var(--accent-ink);
+  --tone-tint: var(--accent-tint);
+  --tone-edge: var(--accent-edge);
+  --tone-fill-on: var(--accent-on);
 }
 
 /*
