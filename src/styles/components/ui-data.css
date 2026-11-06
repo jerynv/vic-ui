@@ -52,7 +52,7 @@
     background: transparent;
     font: inherit;
     font-size: var(--text-ui);
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     line-height: 1;
     white-space: nowrap;
     text-decoration: none;
@@ -396,7 +396,7 @@
   }
 
   .ui-list-row:has(.ui-list-row-description) .ui-list-row-title {
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     line-height: 1.5;
   }
 
@@ -508,7 +508,7 @@
     border-radius: var(--radius-control);
     background: transparent;
     font: inherit;
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     font-variant-numeric: tabular-nums;
     color: var(--fg);
     cursor: pointer;

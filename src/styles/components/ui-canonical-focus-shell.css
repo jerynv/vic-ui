@@ -161,7 +161,7 @@
   align-items: center;
   gap: 0.75rem;
   font-size: var(--text-read);
-  font-weight: 500;
+  font-weight: var(--weight-ui);
   counter-increment: way;
   color: color-mix(in oklab, var(--hue) 72%, var(--hue-ink));
   transition: color 240ms;
@@ -564,7 +564,7 @@
     background: linear-gradient(to right, var(--form-steps-surface) calc(100% - 2rem), transparent);
     color: var(--fg-subtle);
     font-size: var(--text-meta);
-    font-weight: 500;
+    font-weight: var(--weight-ui);
     line-height: var(--text-ui--line-height);
     white-space: nowrap;
     pointer-events: none;

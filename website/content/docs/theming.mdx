@@ -7,7 +7,11 @@ description: Shared colors, typography, shape, and light or dark appearance.
 
 The compiled stylesheet includes Cal Sans UI, Space Mono, and the vic palette. Components map shadcn's semantic colors to those tokens: `--background`, `--foreground`, `--primary`, `--border`, and the chart and sidebar colors.
 
-Override tokens in your application stylesheet, after importing `vic-ui/ui/styles.css`. Radius tokens are `--radius-mark`, `--radius-row`, `--radius-control`, `--radius-float`, `--radius-panel`, and `--radius-round`.
+Override tokens in your application stylesheet, after importing `vic-ui/ui/styles.css`. Radius tokens are `--radius-mark`, `--radius-row`, `--radius-control`, `--radius-float`, `--radius-panel`, and `--radius-round`. Weight tokens are `--weight-ui` (500: buttons, tabs, rows, labels, and `font-medium`) and `--weight-quiet` (quiet buttons and the sidebar's rows, headings and counts, following `--weight-ui`); set either to 400 for a lighter interface.
+
+## Your brand, not ours
+
+The palette, faces, corners and heights on this site are one interpretation, a default to start from. Your app is expected to set its own tokens and does not have to match these. Put them in one theme stylesheet, imported after vic-ui's and outside any `@layer`: colours as `light-dark()` pairs and radii on `:root, [data-mode]`, so a section set to the other mode keeps them, and `--font-sans` and `--font-display` on `:root`. Keep the `color-scheme` declaration, or compiled colours resolve to nothing. Token names, component props and `ui-` class names are the stable contract, so change the look through tokens, never by styling `ui-` classes or restyling through `className`. Behaviour and accessibility hold under any theme: the keyboard focus ring, disabled pieces that say why, state that carries a word and not only a colour, and each tone ink at least 5.8:1 on the canvas, the panel and its own tint in both modes.
 
 ## Flat and bordered surfaces
 

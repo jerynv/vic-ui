@@ -78,3 +78,50 @@ The source regression in `tests/controls-layout.test.mjs` asserts one observer m
 ## Root Sidebar current location
 
 `SidebarMenuButton` from `vic-ui` emits `aria-current="page"` for its current item. An explicitly supplied `aria-current` takes precedence. Keep selection in the host and use the persistent-controller composition above for subscriptions.
+
+## Root Sidebar options
+
+These apply to the root API from **`vic-ui`**.
+
+- **Density.** `SidebarProvider` takes `size="sm"`: every row 1.75rem tall and every group label a step smaller. A row's own `size="sm" | "md" | "lg"` (1.75rem, 2rem or 2.5rem) and a label's own `size` outrank it. The height is `--sidebar-row-height` on the provider.
+- **Spacing between groups.** Groups after the first sit 0.75rem apart while the rail is open, the room a folded rail's rule takes. Set `--sidebar-group-gap` on the provider to change it, or `0` for none.
+- **Counts.** `SidebarMenuButton` takes `count={{ value, label, tone? }}`: a soft pill at the row's end while open, the dot on the mark while folded. `label` is what a screen reader hears, once. `Count` and `Badge` both take `soft`, the tone's ink on its tint.
+- **A toggle.** `SidebarTrigger` is a quiet square button with the rail's mark that calls `toggleSidebar`. It is named for what it will do ("Collapse menu", "Expand menu") and `aria-expanded` says the state. Put it in the rail's `SidebarHeader` after the brand: it sits at the header's end, and folded the header shows only the trigger, over the marks. On a phone it draws nothing inside the sheet, which has its own close, so put one in the page's header there too.
+- **Weight.** Rows, labels and counts use `--weight-quiet`, which follows `--weight-ui` (500). Set either to 400 in your theme stylesheet for a lighter interface. The current row is told by its fill and icon, never by weight.
+
+```tsx
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarProvider, SidebarTrigger, useSidebar } from "vic-ui"
+import { ChatsCircleIcon } from "vic-ui/icons"
+
+function PageHeader() {
+  const { isMobile } = useSidebar()
+  return <header>{isMobile ? <SidebarTrigger /> : null}</header>
+}
+
+<SidebarProvider size="sm">
+  <Sidebar aria-label="Admin">
+    <SidebarHeader>
+      <Brand />
+      <SidebarTrigger />
+    </SidebarHeader>
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel>Work</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuButton href="/chat" icon={<ChatsCircleIcon size={16} />} tooltip="Chat" count={{ value: 4, label: "4 mentions" }}>
+            Chat
+          </SidebarMenuButton>
+        </SidebarMenu>
+      </SidebarGroup>
+    </SidebarContent>
+  </Sidebar>
+  <main>
+    <PageHeader />
+  </main>
+</SidebarProvider>
+```
+
+```css
+/* theme.css, imported after vic-ui's stylesheet, outside any @layer */
+:root { --weight-quiet: 400; }
+```

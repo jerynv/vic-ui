@@ -8,6 +8,12 @@
   --font-display: "Cal Sans UI", ui-sans-serif, system-ui, sans-serif;
   --font-wordmark: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* The interface's weight: buttons, tabs, rows and labels. Cal Sans UI reads heavy, so a
+     brand that wants it lighter sets 400 here. `--weight-quiet` is what sits back (quiet
+     buttons, the sidebar's rows, headings and counts) and follows it unless set apart. A state
+     never changes either: where you are is carried by fill and ink, not weight. */
+  --weight-ui: 500;
+  --weight-quiet: var(--weight-ui);
   --text-tag: 0.6875rem;
   --text-tag--line-height: 1.3;
   --text-meta: 0.75rem;

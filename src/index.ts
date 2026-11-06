@@ -60,6 +60,7 @@ export {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarTrigger,
   useSidebar,
   type SidebarCollapsible,
   type SidebarMenuButtonProps,

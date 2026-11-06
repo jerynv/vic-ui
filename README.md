@@ -6,6 +6,35 @@ The documentation site shows every piece live, in every state it has, with the c
 
 `MAP.md` is the full spec: every component's props, states, tokens, classes and dependencies, every token family with its values per mode, and the rules.
 
+## Your brand, not ours
+
+The palette, faces, corners and heights vic-ui ships with are one interpretation, a default to start from. An app built on vic-ui is expected to set its own tokens and look like itself, not like vic-ui. Matching the defaults is never required.
+
+**How.** Write one theme stylesheet, import it after vic-ui's, and override tokens there, outside any `@layer`:
+
+```css
+/* theme.css, imported after vic-ui/styles.css */
+:root,
+[data-mode] {
+  --bg-canvas: light-dark(oklch(0.985 0.01 250), oklch(0.16 0.02 250));
+  --tone-danger-ink: light-dark(oklch(0.5 0.19 25), oklch(0.78 0.14 25));
+  --radius-control: 0.5rem;
+}
+
+:root {
+  --font-sans: "Your Face", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Your Display Face", ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+- Give every colour a `light-dark()` pair, so both modes stay yours.
+- Use `:root, [data-mode]`, the selector vic-ui declares its colours, corners and heights on, so a section set to the other mode keeps your values.
+- Keep the `color-scheme` declaration (see [Theming](#theming-light-dark-and-the-devices-own)). Without it, every compiled colour resolves to nothing.
+
+**What stays stable for you.** Token names, component props and the `ui-` class names are the contract between vic-ui and your app, and a theme written against them keeps working across releases. Change the look through tokens, not by styling `ui-` classes or passing `className` to restyle a piece: those rules are internal and can change. If there is no token for what you need, ask for one.
+
+**What a theme does not change.** Behaviour and accessibility are the same under any theme: the keyboard focus ring, disabled pieces that say why, state that always carries a word and not only a colour, and nothing moving on load or press. Your colours take on the contrast rule too: each tone ink at least 5.8:1 on the canvas, the panel and its own tint, in both modes.
+
 ## Install
 
 ```sh
@@ -106,7 +135,7 @@ Every colour is a `light-dark()` pair in oklch, resolved by the `color-scheme` o
 
 To stop transitions for the frame the mode changes in, set `data-switching` on the root while you change it and remove it on the next frame.
 
-To change a colour, override its token (`--tone-danger-ink`, `--bg-canvas`) with a new `light-dark()` pair, outside a layer. Every token and its values are listed in `MAP.md` and on the site's Colour page.
+To change a colour, override its token (`--tone-danger-ink`, `--bg-canvas`) with a new `light-dark()` pair, outside a layer, as [Your brand, not ours](#your-brand-not-ours) shows. Every token and its values are listed in `MAP.md` and on the site's Colour page.
 
 ## Fonts
 
@@ -118,6 +147,8 @@ import "vic-ui/components.css";
 ```
 
 Then load your faces and set `--font-sans`, `--font-display` and `--font-wordmark`. Without either, the stacks fall back to the system's sans and monospace.
+
+The interface's weight is a token too: `--weight-ui` (500) for buttons, tabs, rows and labels, and `--weight-quiet` (following it) for what sits back: quiet buttons and the sidebar's rows, headings and counts. Set either to 400 on `:root`, outside a layer, if your face reads heavy. No state changes the weight.
 
 ## The rules
 
