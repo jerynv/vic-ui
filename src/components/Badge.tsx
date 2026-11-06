@@ -22,8 +22,9 @@ export function toneClass(tone: ToneOrAccent | undefined): string {
  * A state said in a word or two. Hairline in its tone is a standing state; `solid` fills it
  * with the tone's ink, the one that asks for a hand now, and `soft` sets the tone's ink on its
  * tint, which asks less (`solid` outranks it). `dot` or `icon` leads the words, and
- * `count` follows them as a number. It always carries words, so the tone never says it alone,
- * and lower-case data reads as a sentence: its first letter is raised. `tone="accent"` draws it
+ * `count` follows them as a number. It always carries words, so the tone never says it alone.
+ * The words are drawn as written: capitalisation is the author's, so write "Owner" for a
+ * state and leave a data word such as "script" or "file" as it is. `tone="accent"` draws it
  * in the brand accent, a look for a "New" or a "Beta" that says no state.
  */
 export function Badge(props: HTMLAttributes<HTMLSpanElement> & { tone?: ToneOrAccent; solid?: boolean; soft?: boolean; dot?: boolean; icon?: ReactNode; count?: number; children: ReactNode }) {

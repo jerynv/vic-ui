@@ -20,6 +20,22 @@ export function SaveButton() {
 }
 ```
 
+React and React DOM are peer dependencies only: vic-ui uses your app's copy. Two copies render a blank page, so vic-ui detects them and says so in a clear error. With Vite, use one copy and keep `light-dark()` colour pairs native in the production build:
+
+```ts
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: { dedupe: ["react", "react-dom"] },
+  build: { cssTarget: ["chrome123", "edge123", "firefox120", "safari17.5"] },
+});
+```
+
+Without `cssTarget`, Vite 8's Lightning CSS minifier lowers each `light-dark()` pair to variables that only a `color-scheme` declaration sets; that still works as long as you keep vic-ui's `color-scheme` declarations. The README's Vite setup has the details, including `css.transformer: "lightningcss"`.
+
 ## The component library
 
 Use React 19 and React DOM 19. In frameworks with React Server Components, place interactive examples in a client component. The package includes TypeScript declarations for each component's props.

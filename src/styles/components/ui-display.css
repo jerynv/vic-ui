@@ -27,18 +27,14 @@
     box-shadow: inset 0 0 0 1px var(--tone-edge, var(--line));
   }
 
-  /* Its words, cut with an ellipsis where its row gives it less room than they need. Written
-     from lower-case data ("owner", "you lead it"), the first letter is raised and the rest reads
-     as a phrase; a flex container has no first letter, so the words are an item of their own. */
+  /* Its words, cut with an ellipsis where its row gives it less room than they need. They are
+     drawn as written: capitalisation is the author's, so data words ("script", "file") stay
+     as they are. */
   .ui-badge-words {
     min-width: 0;
     overflow: hidden;
     line-height: 1.35;
     text-overflow: ellipsis;
-  }
-
-  .ui-badge-words::first-letter {
-    text-transform: uppercase;
   }
 
   /* Asks for a hand now: filled in its tone's ink, or in ink where it has none. */

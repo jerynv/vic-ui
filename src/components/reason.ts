@@ -12,10 +12,19 @@ export function useBlocked<T extends HTMLElement>(disabled: boolean | undefined,
   const why = useReason(disabled ? reason : undefined);
   if (!why.node) return { props: { disabled, ref: forwarded }, node: null };
   const { ref: anchor, ...rest } = why.props as { ref: (el: HTMLElement | null) => void } & Record<string, unknown>;
+  // A forwarded callback ref that hands back a cleanup (React 19) keeps it, and the cleanup
+  // lets go of the tooltip's anchor too, since React then calls this with null no more.
   const ref = (el: T | null) => {
     anchor(el);
-    if (typeof forwarded === "function") forwarded(el);
-    else if (forwarded) forwarded.current = el;
+    if (typeof forwarded === "function") {
+      const cleanup = (forwarded as (el: T | null) => unknown)(el);
+      if (typeof cleanup === "function")
+        return () => {
+          cleanup();
+          anchor(null);
+        };
+    } else if (forwarded) forwarded.current = el;
+    return undefined;
   };
   return { props: { ...rest, ref }, node: why.node };
 }

@@ -41,7 +41,33 @@ The palette, faces, corners and heights vic-ui ships with are one interpretation
 npm install github:jerynv/vic-ui
 ```
 
-React 19 and React DOM are peer dependencies. Base UI supplies the button primitive used by shadcn/ui; Floating UI positions floating surfaces. Tailwind is not needed by existing imports: the stylesheet is plain CSS.
+React 19 and React DOM are peer dependencies only: vic-ui uses the app's copy and never brings its own. Base UI supplies the button primitive used by shadcn/ui; Floating UI positions floating surfaces. Tailwind is not needed by existing imports: the stylesheet is plain CSS.
+
+### Vite setup
+
+One block for `vite.config.ts`:
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    // One React for the app and vic-ui. A second copy (a linked or local install with its own
+    // node_modules/react) renders a blank page with "Cannot read properties of null (reading 'useId')".
+    dedupe: ["react", "react-dom"],
+  },
+  build: {
+    // Browsers that draw light-dark() themselves, so Vite's Lightning CSS minifier leaves every
+    // colour pair as written instead of lowering it to --lightningcss-light and -dark variables.
+    cssTarget: ["chrome123", "edge123", "firefox120", "safari17.5"],
+  },
+});
+```
+
+- **Two copies of React.** vic-ui records the React it imported on `globalThis[Symbol.for("vic-ui.react")]`. A second copy of vic-ui that brings a different React logs a clear error naming both versions, and a piece rendered by a React other than its own throws one saying so, rather than failing on a null hook. `npm ls react` shows where the second copy comes from; `resolve.dedupe` makes Vite use one.
+- **`light-dark()` under Vite 8.** By default the production build's CSS minifier (Lightning CSS) lowers each `light-dark()` pair to variables that only a `color-scheme` declaration sets. The `cssTarget` above keeps the pairs native. If you support browsers older than those, leave `cssTarget` out: the lowered colours still work as long as `color-scheme` stays declared (see [Theming](#theming-light-dark-and-the-devices-own)). `build.cssMinify: "esbuild"` also leaves the pairs alone. With `css.transformer: "lightningcss"`, `cssTarget` is not read for transforming; set `css.lightningcss.targets` to the same browsers (for example with `browserslistToTargets` from `lightningcss`) or the pairs are lowered.
 
 ## Use
 
@@ -126,7 +152,7 @@ Every colour is a `light-dark()` pair in oklch, resolved by the `color-scheme` o
 <section data-mode="dark">...</section>
 ```
 
-`tokens.css` declares `color-scheme` for each of these. **Keep that declaration.** A build that lowers `light-dark()` (Vite's default Lightning CSS, a PostCSS preset, older browser targets) turns each one into a pair of variables that only a `color-scheme` declaration sets, so if your own stylesheet removes or overrides `color-scheme` on the root, every colour resolves to nothing once compiled. If you restyle the root, declare it again:
+`tokens.css` declares `color-scheme` for each of these. **Keep that declaration.** A build that lowers `light-dark()` (Vite's default Lightning CSS, a PostCSS preset, older browser targets) turns each one into a pair of variables that only a `color-scheme` declaration sets, so if your own stylesheet removes or overrides `color-scheme` on the root, every colour resolves to nothing once compiled. [Vite setup](#vite-setup) shows how to keep the pairs native under Vite 8. If you restyle the root, declare it again:
 
 ```css
 :root { color-scheme: light; }
@@ -154,22 +180,23 @@ The interface's weight is a token too: `--weight-ui` (500) for buttons, tabs, ro
 
 ## The rules
 
-What every piece already does, and what anything built with them is held to:
+What every piece already does, and what anything built with them is held to. Where a test or a script holds a piece to a rule, it is named after the rule; a rule with none is kept by review alone, and says so.
 
-- **Least first.** Build the least thing that works. No container, card or panel unless the content has parts.
-- **State never changes size.** Hover, press, focus, chosen and open never change a weight, a size or the letter spacing; colour and fill carry the change.
-- **Disabled says why.** Dimmed to 0.55, readable, a `not-allowed` pointer. `disabledReason` keeps it focusable and says the reason on hover and focus.
-- **One ink button** per page, for its committing action. Navigation, filters and toggles are `line`, `quiet`, icon buttons or tabs.
-- **Fields are filled**, with no border and no focus ring: the caret says where focus is. Buttons, tabs and switches keep a keyboard-only ring.
-- **Errors take the label's place**, so an error coming or going moves nothing.
-- **Dense by default.** `size="sm"` (2rem) inside an app; the default (2.25rem) for a way in and a header. `data-density="compact" | "comfortable"` on the root or a section moves every height together, and `size="sm"` stays a step under it.
-- **Sentence case** everywhere, never capitals. Hierarchy is weight and size.
-- **Nothing under 11px.**
-- **Colour only from the palette**, in oklch. The palette is the neutrals, the four tones, the five hues, the accent and the art hues. The four tones keep their meanings (danger, caution, settled, moving), and state always carries a word, never only a colour. The accent (`--accent` and its family, `tone="accent"`) is one brand colour for a look, never a fifth tone. The art hues (`--art-1` to `--art-4`, `--art-grain`) live only inside thumbnails, banners and illustrations, never on a control. No tone ink or accent ink is below 5.8:1 on the canvas, the panel or its own tint, in either mode (`tests/colour-contrast.test.mjs`).
-- **One corner scale** (`--radius-panel`, `-float`, `-control`, `-row`, `-mark`, `-round`) and **one elevation scale**: a surface on the page has an edge and no shadow; only what floats casts one (`--shadow-raise`, `--shadow-float`).
-- **One fill scale** under whatever is hovered, chosen or pressed: `--fill-faint`, `--fill-hover`, `--fill-chosen`, `--fill-press`.
-- **Nothing moves** on load, on choosing or on pressing.
-- **No em or en dashes** as punctuation.
+- **Least first.** Build the least thing that works. No container, card or panel unless the content has parts. *Kept by review.*
+- **State never changes size.** Hover, press, focus, chosen and open never change a weight, a size or the letter spacing; colour and fill carry the change. *Tested by `tests/state-size.test.mjs`: every interactive root piece measured at rest, hovered, focused from the keyboard, pressed, chosen or open, and disabled, in both modes.*
+- **Disabled says why.** Dimmed to 0.55, readable, a `not-allowed` pointer. `disabledReason` keeps it focusable and says the reason on hover and focus. *`tests/button.test.mjs` checks that a button with `disabledReason` stays focusable, ignores a press and shows its reason; the 0.55 dimming is checked for a disabled, busy or held button by `tests/accent-button.test.mjs`, for a switch (with its `not-allowed` pointer) by `tests/switch-variants.test.mjs` and for an input by `tests/native-controls.test.mjs`. Other pieces are kept by review.*
+- **One ink button** per page, for its committing action. Navigation, filters and toggles are `line`, `quiet`, icon buttons or tabs. *A development build warns in the console when a second `look="ink"` Button mounts in the same `main` landmark; `allowSecond` silences it for one button. Tested by `tests/one-ink.test.mjs`.*
+- **Fields are filled**, with no border and no focus ring: the caret says where focus is. Buttons, tabs and switches keep a keyboard-only ring. *Kept by review.*
+- **Errors take the label's place**, so an error coming or going moves nothing. *Kept by review.*
+- **Dense by default.** `size="sm"` (2rem) inside an app; the default (2.25rem) for a way in and a header. `data-density="compact" | "comfortable"` on the root or a section moves every height together, and `size="sm"` stays a step under it. *`tests/density-type.test.mjs` measures each density's heights; using `size="sm"` inside an app is kept by review.*
+- **Sentence case** everywhere, never capitals. Hierarchy is weight and size. Capitalisation is the author's: no piece forces a case on the words it is given. *`tests/badge-words.test.mjs` checks that a badge draws its words as written.*
+- **Nothing under 11px.** *Kept by review.*
+- **Colour only from the palette**, in oklch. The palette is the neutrals, the four tones, the five hues, the accent and the art hues. The four tones keep their meanings (danger, caution, settled, moving), and state always carries a word, never only a colour. The accent (`--accent` and its family, `tone="accent"`) is one brand colour for a look, never a fifth tone. The art hues (`--art-1` to `--art-4`, `--art-grain`) live only inside thumbnails, banners and illustrations, never on a control. No tone ink or accent ink is below 5.8:1 on the canvas, the panel or its own tint, in either mode. *`npm run check:design` (`scripts/check-fills.mjs`) refuses a grey fill written by hand; `tests/colour-contrast.test.mjs` holds every tone ink and the accent to the contrast floor, and `tests/accent-button.test.mjs` the accent button's words on every face stop.*
+- **One corner scale** (`--radius-panel`, `-float`, `-control`, `-row`, `-mark`, `-round`) and **one elevation scale**: a surface on the page has an edge and no shadow; only what floats casts one (`--shadow-raise`, `--shadow-float`). *`npm run check:design` (`scripts/check-radius.mjs`, `scripts/check-shadows.mjs`).*
+- **One fill scale** under whatever is hovered, chosen or pressed: `--fill-faint`, `--fill-hover`, `--fill-chosen`, `--fill-press`. *`npm run check:design` (`scripts/check-fills.mjs`).*
+- **Nothing moves** on load, on choosing or on pressing. *Kept by review.*
+
+The house style for writing the library's own source and docs (no em or en dashes among it) is in [CONTRIBUTING.md](CONTRIBUTING.md), with how to add a piece.
 
 ## Component foundation migration
 
@@ -195,7 +222,7 @@ browser once with `npx playwright install chromium`.
 npm run build          # dist/: ESM, types, vic-ui.css, tokens.css, fonts.css, fonts
 npm run typecheck
 npm run check:design   # every corner on the radius scale, every shadow on the elevation scale, every grey fill a token
-npm run check:dashes   # no em or en dash in the source, the site or the docs
+npm run check:dashes   # no em or en dash in the source, the site or the docs (house style, see CONTRIBUTING.md)
 npm run icons          # regenerate src/icons/icons.tsx from the icon sets
 npm run dev:site       # the documentation site, live
 npm run build:site     # the site as static files in website/build/client

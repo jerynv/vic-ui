@@ -21,6 +21,20 @@ Use `square round` for a native circular icon button, or `size="icon" round` wit
 
 The face follows the outer corner minus the border and padding inset: 2px for filled and outlined buttons, 0px for quiet and link buttons. The same geometry applies on hover and press, including accent buttons. Consumers need no radius overrides.
 
+## One ink button per page
+
+The ink look is a page's one committing action. In a development build, when a second `look="ink"` Button mounts inside the same `main` landmark, the console warns once, naming both buttons by their words. Buttons in a dialog or a popover are their own surface and are not counted. For the rare page that needs two, pass `allowSecond` to the one that must stay ink. A production build says nothing.
+
+The composable `Button` from `vic-ui/ui` draws through the same button: `variant="default"` (its default) and `variant="destructive"` are ink buttons and are counted, and it takes `allowSecond` as well.
+
+```tsx
+<main>
+  <Button>Publish</Button>
+  <Button look="line">Save the draft</Button>
+  <Button allowSecond>Publish and notify</Button>
+</main>
+```
+
 ## Custom accent
 
 Both APIs support `tone="accent"` on a filled button: `Button` from `vic-ui` uses `look="ink"`; `Button` from `vic-ui/ui` uses `variant="default"`. `ButtonLink` and `buttonVariants({ tone: "accent" })` support the same treatment. The live Custom accent example above compares both APIs in both themes, including higher-contrast colors.

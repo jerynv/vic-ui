@@ -1,66 +1,37 @@
 # vic-ui: the map
 
-## Changes in 0.2
+## Optional Office and media previews
 
-There is no CHANGELOG.md; changes a consumer has to act on are noted here.
+Five optional exports outside the root: `AudioPreview` and `VideoPreview` at `vic-ui/preview/media`, `XlsxPreview` and `PptxPreview` at `vic-ui/preview/office`, `DocxPreview` at `vic-ui/preview/docx`. All require ready Blob/Uint8Array input and a title; the host keeps loading, authorisation, classification and downloads. `DocxPreview` alone needs the exact optional peer `docx-preview` 0.4.1.
 
-- **`--accent` is vic's brand colour.** It was shadcn's hover grey in the composable sheet (`--accent: var(--fill-hover)`); that declaration is gone, and `--accent` is now the fill of the accent family in `tokens.css` (`tone="accent"` on Badge, Count, Switch, Progress, Tabs, Button and Announcement). A `vic-ui/ui` consumer who set `--accent` the shadcn way to change the hover grey now changes vic's brand accent instead, and the hover no longer moves. Tailwind's `--color-accent` (`bg-accent`, `hover:bg-accent`) reads `--fill-hover` directly: set `--fill-hover` to change the composable hover grey (it is the one fill scale, so vic's own lists and menus move with it), and drop an `--accent` set for hover.
-- **`--button-accent` and `--button-on-accent` are read, not declared.** The accent button reads `var(--button-accent, var(--accent))` and `var(--button-on-accent, var(--accent-on))`, so either `--accent` or `--button-accent` set on any section reaches the buttons inside it.
-- **`--bg-elevated` is deprecated** and goes in 0.4: use `--surface-lifted` for what sits on top and `--bg-recessed` for what sinks.
-- New: the accent family (`--accent`, `--accent-on`, `--accent-ink`, `--accent-tint`, `--accent-edge`, `.tone-accent`), `--bg-frame`, and the art tokens (`--art-1` to `--art-4`, `--art-grain`).
-
-## Canonical controls source sync (active)
-
-Owner-authorized additive source sync from V-Client555625f4 is tracked in [docs/tasks/canonical-controls-sync.md](docs/tasks/canonical-controls-sync.md). Historical extraction and current parity are distinct; preview transfers do not close controls coverage. Preserve released142 root exports and all existing defaults. Implementation isolated on feat/canonical-controls-sync.
-
-## Optional Office/media release
-
-Owned isolated branch `feat/office-media-previews` in `t3-c2cc92d0`, baseline `6deb7fc`. Five additive optional exports: AudioPreview/VideoPreview at `vic-ui/preview/media`, XlsxPreview/PptxPreview at `vic-ui/preview/office`, DocxPreview at `vic-ui/preview/docx`. All require ready Blob/Uint8Array input and title; host retains loading/auth/classification/downloads. Root137 exports unchanged. DOCX alone needs exact optional peer docx-preview0.4.1. No Phaethon/shared checkout edits. Provenance is authorized first-party V-Client pin2f2713d8, with all116 source-pack payload hashes reverified; no invented upstream MIT grant.
-
-Behavior: native media64MiB encoded; Office10MiB encoded/512ZIPparts/8MiB each/32MiB expanded; XML4MiB per part/100k nodes/depth128. XLSX stored values only, bounded sheets/cells/text/display; PPTX extracted text only. DOCX validates/rebuilds ZIP, renders into inert nodes then sanitized sandboxed srcdoc; PNG/JPEG only, budgeted input/output/images and repeated header/footer/note placement before conversion. Additional DOCX limits and supported restrictions are in the File preview guide and /tmp/vic-office-release-api.md. Other root controls/core previews unchanged.
-
-Verification before final freeze: real rendering/playback, focus/retry/stale-input/URL/bitmap/observer cleanup, both themes/styles, all8 website checks, local-review test, both typechecks, design/dashes/reference build/detector passed. npm test passed actual packed strict Bundler/NodeNext skipLibCheck:false with root137 and optional subpaths loadable without DOCX installed, plus24 behavioral checks. Independent review found3 DOCX precursor gaps; fixes now reject relationship-selected non-XML, bounded numbering expansion, and repeated-header work BEFORE dependency/bitmap/FileReader conversion. Eight exact regressions and ordinary list/five-page-header success cases pass. Parent directly inspected matching dependency relationship/numbering/page paths. Delegated bounded recheck task05562e3a failed BEFORE execution with provider safety filter “possible cybersecurity risk”; no independent recheck success claimed or retry attempted. Initial report /tmp/vic-office-independent-review.txt. Final focused suite and final package+24 behavioral/8 website/1 local-review checks pass, both typechecks/design/dashes/reference build pass. A documentation range dash was corrected after the dash check identified it. All native preview workers completed. Final retained artifact destination /tmp/vic-ui-office.kfXWHM; commit/source and archive metadata recorded outside the tarball.
-
-Released b0a29e2c83622487d6b6b126e26ac90ad573c122 (#29); source5d0ff52f tree identical. Retained archive /tmp/vic-ui-office.kfXWHM/vic-ui-0.1.0.tgz SHA256069fdb0eca38a5206e27a6df9eeceb8d73b29395c45d1a3078c7050087b6dd91,220 files/668425bytes. API/manifest/checks beside archive. Delivered same artifact to Phaethon and V-Client owners; neither application upgraded by this thread. Main CI42005789672 and Pages deployment passed. Logs /tmp/vic-office-*.log. No npm publication. Existing release authorization carries.
-
-## Slider/settings release and docs readiness
-
-Owned branch feat/slider-settings-release in t3-c2cc92d0 based on released b0a29e2. Cherry-picked isolated implementation74a690a and parent fixesbeee6fd/94d4d70 (new branch equivalents9b11f8e/caf5abb/242f3a9). Source worktree t3-dff18547 remains clean/preserved. Five new root exports: Slider, SettingsLayout, SettingsSection, SettingsGroup, SettingsRow; expected142 total preserving prior137 and all optional previews. No dependency added. Sidebar/Radio runtime unchanged.
-
-Independent review found touch stepped presses also triggered native touchstart jump and off-grid callback/form discrepancies. Parent fixes suppress only the companion track touch path and normalize every value channel to the min-anchored step grid. Seven source tests pass including real emulated touch tap/move/drag/jump/disabled, value/ARIA/FormData consistency, and Sidebar observer persistence with explicit focus-boundary wrapping. Actual installed BaseUI1.9.0; source note corrected. New user-requested headingProps supports native heading attributes/ref/tabIndex, with titleId precedence; host focus tests pass. Consumer owner received contract, no package upgrade claimed.
-
-Integrated root exports/CSS imports and strict packed consumer assertions; fixtures use built package/styles across native/composable sheets. Canonical Slider ready/composable family and new Settings page/examples bring the alphabetical catalogue to86 pages. All9 focused built checks pass, including both sheets/themes, heading focus, touch, form consistency and Sidebar lifecycle. Earlier composable-sheet test failures came from sampling layout before the global reduced-motion transition settled; assertions now wait for finished transitions/stable bounds, with no unrelated stylesheet changes. Light desktop and dark mobile docs screenshots inspected. Both typechecks, design/dashes, reference build, all9 website checks and local review pass. Final npm test passes: actual packed strict Bundler/NodeNext and142 exports plus33 behavioral checks. With9 website checks and1 local review,44 checks pass. Logs /tmp/vic-controls-final-tests.log and /tmp/vic-controls-*.log. Released7de0c2c (#30), tree-identical to tested36c3305. Archive /tmp/vic-ui-settings.hvwtXn/vic-ui-0.1.0.tgz SHA2562788b337e419101cf4944994b815752a88cc488edc7ec32fa2e11a26524089ce includes222 files/678554bytes and142 root exports. API/manifest/checks beside archive; delivered to Phaethon and Nclusive, no consumer edits/adoption claim. Main CI42009112876 passed library checks but failed new docs focus assertion; deployment skipped. Reproduced by delaying lazy example JavaScript: prerendered Go to button accepted a click before its handler attached. The docs example now disables its buttons/sliders until hydration, with a gated-asset regression before the normal focus flow. This follow-up does not change library source/API or require an archive replacement. Gated-asset regression now passes before and after hydration, as do website build/types and design/dash checks. Its initial prehydration slider-role assertion waited indefinitely because the server-rendered thumb is hidden until layout; native input.disabled establishes the correct prehydration state without requiring an accessible thumb before initialization. All9 website checks pass together after the fix (/tmp/vic-settings-readiness-website.log). Next release the scoped docs correction and confirm CI/deployment. No active delegates or manual fixture servers.
+Behavior: native media64MiB encoded; Office10MiB encoded/512ZIPparts/8MiB each/32MiB expanded; XML4MiB per part/100k nodes/depth128. XLSX stored values only, bounded sheets/cells/text/display; PPTX extracted text only. DOCX validates/rebuilds ZIP, renders into inert nodes then sanitized sandboxed srcdoc; PNG/JPEG only, budgeted input/output/images and repeated header/footer/note placement before conversion. Additional DOCX limits and supported restrictions are in the File preview guide.
 
 ## Inline combobox composition
 
-Six additive root primitives (`ComboboxRoot`, `ComboboxSearch`, `ComboboxList`, `ComboboxItem`, `ComboboxGroup`, `ComboboxEmpty`) support a pinned search, inline list, provider rail and footer. Root controls query, selected string key and open state; the host supplies visible options in rendered order and retains filtering, catalogue data, permissions and popup ownership. Existing root and `vic-ui/ui` Combobox APIs remain intact. All 131 exports from `603c207` are preserved; there are now 137 runtime root exports and no new dependencies.
+Six root primitives (`ComboboxRoot`, `ComboboxSearch`, `ComboboxList`, `ComboboxItem`, `ComboboxGroup`, `ComboboxEmpty`) support a pinned search, inline list, provider rail and footer. Root controls query, selected string key and open state; the host supplies visible options in rendered order and retains filtering, catalogue data, permissions and popup ownership.
 
 Arrow keys skip disabled rows and clamp at the ends; Home/End traverse the open list, Enter selects and Escape requests closing. Modified keys and IME composition remain native. Input focus uses stable, safely encoded active-descendant IDs; filtering, provider replacement and reorder cannot retain an absent option. Tab reaches the external rail/footer because the scrollable list is explicitly outside tab order. Scrolling reveals the active row inside its own list after reorder/refocus without moving the surrounding page. Root or search-level disabled states and read-only search prevent both keyboard and pointer selection. Controlled state can decline requests, and selection/closing preserve the query.
 
-The existing Combobox family contains live light/dark examples with a 44px provider rail, pinned search, normal-weight rows at least 2px under `--menu-item-h` (32px at the default density) and independent footer. T3 layout reference: `7f6f47b27b44456f1c8214d3b566b375c09f629e` (MIT). Application loaders and account logic were not copied. Installed Base UI was evaluated: its permanently expanded inline state and Home/End caret behavior cannot implement this controller contract through public APIs.
-
-Validation covers SSR hydration, both stylesheet entries/themes, keyboard/pointer/IME, dynamic item identity, disabled/read-only changes, controlled refusal, empty results, focus/scroll recovery, mobile overflow and the old Combobox. Strict packed Bundler/NodeNext declarations use `skipLibCheck:false`, check all 131 prior exports and compile the new API. All three stylesheet outputs contain the new styles. Library/package, seven website and local review checks pass, as do both typechecks, design/dash checks and reference build. Independent review found the leaf restriction mismatch; controller-level guards and regressions resolve it. No Phaethon edits or changes to released preview/control behavior.
+The existing Combobox family contains live light/dark examples with a 44px provider rail, pinned search, normal-weight rows at least 2px under `--menu-item-h` (32px at the default density) and independent footer. Installed Base UI was evaluated: its permanently expanded inline state and Home/End caret behavior cannot implement this controller contract through public APIs.
 
 ## Portable file previews
 
-Seven additive root exports adapt the verified V-Client source: FilePreviewStage, FilePreviewToolbar, FilePreviewStatus, FilePreviewDialog, ImagePreview, TextPreview and DelimitedPreview. These render browser-decodable images, plain UTF-8 text and CSV/TSV. No PDF/DOCX/XLSX/PPTX/Markdown/media renderer or new dependency is included. Inputs are ready Blob/Uint8Array values; host applications retain fetch, permissions, classification and download actions. No Phaethon/V-Client source edits are part of this increment.
+Seven root exports: FilePreviewStage, FilePreviewToolbar, FilePreviewStatus, FilePreviewDialog, ImagePreview, TextPreview and DelimitedPreview. These render browser-decodable images, plain UTF-8 text and CSV/TSV. No PDF/DOCX/XLSX/PPTX/Markdown/media renderer is included in them. Inputs are ready Blob/Uint8Array values; host applications retain fetch, permissions, classification and download actions.
 
 Image input is capped at 20 MiB before copying or URL creation; the host still owns accepted image dimensions/formats and the browser owns decoding memory. Text is capped at 512 KiB/20,000 lines; delimited data at 1 MiB/1,000 total rows/60 columns. Callers can lower limits. Byte-cut CSV omits incomplete final records. Text/HTML/formula-looking cells remain inert. Local image URLs are revoked on replacement/unmount; stale text reads are ignored and retries actually reset conversion state.
 
-The native dialog restores the opener or explicit return target, wraps Tab including editing hosts, respects nested dialog Escape, and preserves renderer arrow keys. Navigation keys apply to the outer content container; replacing focused file content restores container focus. Docs provide real image/text/CSV previews, download/full-screen actions and light/dark loading/retry/unsupported examples. The 85-page catalogue remains alphabetical.
+The native dialog restores the opener or explicit return target, wraps Tab including editing hosts, respects nested dialog Escape, and preserves renderer arrow keys. Navigation keys apply to the outer content container; replacing focused file content restores container focus. Docs provide real image/text/CSV previews, download/full-screen actions and light/dark loading/retry/unsupported examples.
 
-Source pin `2f2713d8744373455d6be2953af26f68ecb37f6f`; source archive SHA256 `35835c7112e44ec753719ff760612a36776cedb44fb3b8b35094f34ebe677906`; manifest SHA256 `751334183baaec3949e3972d2af9312eb798e54431ec0a59b1adb51e3465eb80`. All 116 payloads were independently checked. Provenance records authorized first-party transfer, not an invented upstream MIT license; only pinned main source was adapted.
+## Slider and settings layouts
 
-Validation: 26 package/control/website/review checks pass, both typechecks, design/dash checks and reference build pass. Website count assertions were updated from 84 to 85 for the new family. All 123 historical exports plus seven preview exports and strict packed Bundler/NodeNext declarations are checked; all three component stylesheet outputs contain preview styles. Real desktop/mobile previews exercised zoom/fit, navigation, focus return, text/CSV display, retry and unsupported actions. Independent review findings on CSV arrow keys, lost focus, contenteditable Tab order and nested Escape were fixed with integration regressions. No new Impeccable detector findings.
-
-Previous control release: `ed35c656c274a3c43261d79a11a0d003588062d2` (#26), all 21 checks and Pages deployment passed. Tested archive `/tmp/vic-ui-controls.dyx6Rs/vic-ui-0.1.0.tgz`, SHA256 `3e3b6d466ec00c430e73d3452b4c9c5bba999f83d5656aa84b248cb0783feb41`. Phaethon owner received the archive/API and CI confirmation; downstream adoption remains their responsibility. Switch supports `look="flat" | "rimmed"`; button faces use concentric inset-derived radii.
+`Slider`, `SettingsLayout`, `SettingsSection`, `SettingsGroup` and `SettingsRow` are root exports. Slider takes scalar or range values on a min-anchored step grid, keeps its value, ARIA and form data in step, and suppresses the native touch jump for stepped presses. A settings section's `headingProps` passes native heading attributes, a ref and `tabIndex` to its heading, with `titleId` taking precedence.
 
 ## Documentation website
 
 `website/` ports Fumadocs' React Router SPA template. MDX lives in `website/content/docs`;
 the static search index and each document are prerendered. `npm run dev:website` starts it;
 `npm run build:website` emits `website/build/client`. The `dev:site` and `build:site`
-commands now target this website. GitHub Pages runs library and browser tests before deployment.
+commands target this website. GitHub Pages runs library and browser tests before deployment.
 The shared website theme control and live examples import the actual `vic-ui/ui` API.
 86 canonical family pages cover the 50 vic catalogue entries and 66 composable families. `component-families.ts` maps alternate names to one page; old URLs render the canonical document and navigate to it after hydration. Aliases are excluded before Fumadocs builds navigation and search. Shared families use a Ready-made/Composable tab selector with one active example/usage view. Both the sidebar and marketing directory sort by display name; the reference shell sorts within its categories.
 Rows support an optional description beneath the title; the file-list example demonstrates independent save actions.
@@ -150,6 +121,8 @@ From `web/src/ui/README.md`:
 - **Floating.** Anything that floats opens in the top layer (`popover="manual"`), positioned by `@floating-ui/dom` with `strategy: "fixed"`, on `.ui-menu`'s surface.
 - **States.** Every interactive piece has an eased hover, a press and a focus ring, and no state changes the weight or size of its words. A disabled piece is dimmed to 0.55 with a `not-allowed` pointer; one that takes `disabledReason` stays focusable and says the reason on hover and focus.
 - **Colour** comes only from the tokens; the hues reach a piece through `data-hue`.
+- **One React.** React and React DOM are peer dependencies only. On import, vic-ui records the React it imported on `globalThis[Symbol.for("vic-ui.react")]` (its version and its `Component` class); a second copy of vic-ui that brings a different React logs an error naming both versions. `Button`, `TextField` and `Link` check at the top of their render that the React rendering them is the one vic-ui imported, and throw an error saying two copies are loaded rather than failing on a null hook. Both live in `dev.ts`, run in every build, and are covered by `tests/one-react.test.mjs`. README's Vite setup adds `resolve.dedupe`.
+- **Development checks** read `isDev()` in `dev.ts`: `process.env.NODE_ENV !== "production"`, which the library build leaves as written for the app's bundler to replace. Where nothing replaces it and there is no `process`, the checks stay quiet.
 
 Two internal helpers in `reason.ts` carry the disabled-with-reason behaviour. They are not exported from `index.ts`:
 
@@ -175,6 +148,7 @@ A native button in one of four looks: `ink` (a page's one filled, committing act
 | `icon` | `ReactNode` | none | Drawn before the words inside the face. |
 | `busy` | `boolean` | `false` | Held and `aria-busy` while it lasts; a spinner stands where its icon was, or over its words where it has none, the words kept in place unseen, so its width does not change. |
 | `disabledReason` | `string \| undefined` | none | With `disabled`, keeps it focusable and says why on hover and focus. |
+| `allowSecond` | `boolean` | `false` | Leaves this button out of the development check for one ink button per `main` landmark (see below). Not passed to the DOM. |
 | `type` | button type | `"button"` | Native type. |
 | `ref` | `Ref<HTMLButtonElement>` | none | Forwarded. |
 | native attributes | `ButtonHTMLAttributes` | | Passed through. |
@@ -196,12 +170,14 @@ States, as `ui.css` implements them:
 - The rim's gradient is painted from the outer edge (`background-origin: border-box`), so it does not repeat under the border as a sliver along the top of a tall button.
 - Type: `--text-ui` (13px), weight `--weight-ui`, line height 1, no wrap; `lg` uses `--text-read` (14px).
 - Face padding `0 0.875rem` (`lg`: `0 1rem`, `square`: 0), gap 0.5rem, radius `calc(var(--radius-button) - 2px)`.
+- One ink button: in a development build (`process.env.NODE_ENV` not `"production"`, see `dev.ts`), when a second `look="ink"` button mounts inside the same `main` landmark (`<main>` or `role="main"`), the console warns once for that landmark, naming both buttons by their words. A button inside a `dialog`, `role="dialog"`, `role="alertdialog"` or a popover is not counted, nor one outside every `main`, nor one passed `allowSecond`. `DangerButton`, `CautionButton`, an `IconButton` with `look="ink"` and the composable `vic-ui/ui` Button with `variant="default"` or `"destructive"` draw through `Button` and are counted; the composable Button passes `allowSecond` on. A production build says nothing. `tests/one-ink.test.mjs` covers both builds.
+- Size: no state changes the button's box. `tests/state-size.test.mjs` measures every look at every size at rest, hovered, focused, pressed and disabled (with and without a reason), in both modes.
 
 Tokens: `--control-h-sm`, `--control-h`, `--radius-button`, `--radius-round`, `--text-ui`, `--text-read`, `--focus`, `--ink-rim-edge`, `--ink-rim-top`, `--ink-rim-bottom`, `--ink-face-top`, `--ink-face-bottom`, `--ink-face-top-hover`, `--ink-face-bottom-hover`, `--ink-face-top-press`, `--ink-face-bottom-press`, `--ink-words`, `--line`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`, `--button-accent`, `--button-on-accent`; local slots `--rim-edge`, `--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`, `--words`.
 
 CSS: `ui.css`. Classes `ui-button`, `ui-button-face`, `ui-button-ink`, `ui-button-line`, `ui-button-quiet`, `ui-button-link`, `ui-button-accent`, `ui-button-lg`, `ui-button-full`, `ui-button-square`, `ui-button-round`, `ui-button-busy-words`, `ui-button-busy-mark`. The four `@property` rules sit outside the layer at the end of the buttons block.
 
-Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`; `Spinner`.
+Dependencies: `reason.ts` (`useBlocked`), which uses `Tooltip`'s `useReason`; `Spinner`; `dev.ts` (`useOneInk`, `assertOneReact`).
 
 ### ButtonLink
 
@@ -719,7 +695,7 @@ A state said in a word or two. Hairline in its tone is a standing state; `solid`
 | `children` | `ReactNode` | required | The words. |
 | native attributes | `HTMLAttributes<HTMLSpanElement>` | | Passed through. |
 
-States: none interactive. Hairline: height 1.25rem, max width 100%, padding `0 0.4375rem`, radius `--radius-round`, `--text-tag` weight 600, words `var(--tone-ink, var(--fg-strong))`, inset ring `1px var(--tone-edge, var(--line))`. Solid: words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`, no ring. The badge clears `--tone-ink`, `--tone-edge` and `--tone-fill-on` on itself first, so a badge inside a toned notice is not toned by accident. The words are an item of their own (`ui-badge-words`, line height 1.35), cut with an ellipsis where the row gives less room, their first letter uppercased by `::first-letter`.
+States: none interactive. Hairline: height 1.25rem, max width 100%, padding `0 0.4375rem`, radius `--radius-round`, `--text-tag` weight 600, words `var(--tone-ink, var(--fg-strong))`, inset ring `1px var(--tone-edge, var(--line))`. Solid: words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`, no ring. The badge clears `--tone-ink`, `--tone-edge` and `--tone-fill-on` on itself first, so a badge inside a toned notice is not toned by accident. The words are an item of their own (`ui-badge-words`, line height 1.35), cut with an ellipsis where the row gives less room, drawn as written: capitalisation is the author's (there is no `::first-letter` uppercase, so a data word such as "script" stays as it is).
 
 Tokens: `--tone-ink`, `--tone-edge`, `--tone-fill-on` (set by `.tone-*`), `--fg-strong`, `--line`, `--ink-words`, `--ink-face-bottom`, `--radius-row`, `--radius-round`, `--text-tag`.
 
@@ -2336,7 +2312,7 @@ One brand colour for a look, never a meaning: a "New" pill, a chosen mode, a sen
 | `--button-accent` | unset, read as `var(--button-accent, var(--accent))` | same | The filled button's accent; set it on a part of the page to give its buttons another colour. |
 | `--button-on-accent` | unset, read as `var(--button-on-accent, var(--accent-on))` | same | The words on it. |
 
-`--accent` is not shadcn's hover grey: the composable sheet's `--color-accent` (`bg-accent`) reads `--fill-hover`, so set `--fill-hover`, not `--accent`, to change that hover (see Changes in 0.2).
+`--accent` is not shadcn's hover grey: the composable sheet's `--color-accent` (`bg-accent`) reads `--fill-hover`, so set `--fill-hover`, not `--accent`, to change that hover (see the 0.2 notes in [CHANGELOG.md](CHANGELOG.md)).
 
 ### Art
 
@@ -2542,6 +2518,8 @@ A scrim is one colour at many strengths, so it is three numbers, read as `oklch(
 
 No state (focus, hover, press, chosen, selected, active, open, current) changes `font-weight`, `font-size` or letter spacing. A chosen tab keeps `--weight-ui` like the rest; a current contents entry keeps 400; a field's label keeps 600 when focused. Colour, fill, ring or shadow carries the change, because a change of weight reflows the row. Counts are tabular numerals in reserved widths (`min-width: 2ch` on a tab's count) so a number changing moves nothing.
 
+`tests/state-size.test.mjs` enforces it. It draws every interactive root piece from the built package (Button in each look and size, IconButton, Checkbox, Switch, RadioGroup, Choice, Tabs, Select, TextField, SearchField, Combobox, SidebarMenuButton, Menu's trigger and rows, Pagination, Reaction) and measures each piece's box, and the boxes of its tabs, rows or page buttons, at rest, under the pointer, with the keyboard's focus, held down, chosen, checked or open where it has that state, and disabled, in light and in dark. A piece of several parts (tabs, a radio group's options, pages, a menu's rows) is hovered, focused and pressed at each part, not only at the chosen one. It fails on any change of width or height larger than a quarter of a CSS pixel, which only absorbs rounding between two layouts of fractional text. A piece that fails is fixed, or named with its reason in the test's `KNOWN` list, which runs that case as a todo; the tolerance is never widened.
+
 ### Disabled says why
 
 - Every interactive piece has an eased hover, a press state and a focus ring.
@@ -2556,6 +2534,8 @@ No state (focus, hover, press, chosen, selected, active, open, current) changes 
 ### Sentence case everywhere
 
 Every label, eyebrow, caption, table head, placeholder and button is written and drawn in sentence case, never in capitals. Hierarchy is carried by weight (600 for a label, 400 for its value) and by size on the working scale (a label at `text-ui` over a value at `text-lead`), never by `text-transform` or the letter spacing capitals need.
+
+Capitalisation is the author's, not the piece's: no piece forces a case on the words it is given. A badge draws its words as written, so a data word such as "script" or "file" stays as it is (`tests/badge-words.test.mjs`).
 
 ### Focus
 
@@ -2597,6 +2577,8 @@ The same test holds the accent button's words at 5.8:1 on every face stop (rest,
 
 The bevelled ink button (`Button look="ink"`, `DangerButton`, `CautionButton`) is only for a real committing action, and a page has at most one ink button. Navigation, sidebar items, filters and toggles use the flat `look="line"`, `quiet`, square icon buttons or `Tabs`. Only a page's primary action is filled, so the one action that matters is the one that reads solid.
 
+A development build warns once in the console when a second ink button mounts inside the same `main` landmark, naming both; `allowSecond` on a `Button` leaves it out of the count, for the rare page that needs two. Buttons in a dialog or a popover are their own surface and are not counted. `tests/one-ink.test.mjs` enforces the warning and its silence in a production build.
+
 ### Fields are filled, with no border
 
 A field is a filled surface a step off the ground (`--field-fill`) with no outline; hover deepens the fill (`--field-fill-hover`). Buttons and fields share the control heights and one corner (`--radius-button`, `--radius-field`). What is typed is `--field-text`, 16px wherever a touch keyboard opens. What is fixed at a field's end (the rest of a hostname) is inside the box, never a sentence under it.
@@ -2636,7 +2618,7 @@ Every correction the interface has had has been less: smaller, fewer, one screen
 
 ### Copy
 
-No em or en dashes as connective punctuation anywhere in source or interface. Declarative register. A refusal says what to do next, not what a validator wanted. State carries a word, never only a colour.
+Declarative register. A refusal says what to do next, not what a validator wanted. State carries a word, never only a colour. The house style for the library's own writing (no em or en dashes as punctuation, held by `npm run check:dashes`) is in `CONTRIBUTING.md`; it is not a rule of the system.
 
 ### Icons
 
@@ -2659,6 +2641,6 @@ The rest of the stacks: `--font-wordmark` to `ui-monospace, SFMono-Regular, Menl
 
 `body` sets `--font-sans` at `--text-body` with `-webkit-font-smoothing: antialiased` and `-moz-osx-font-smoothing: grayscale`. Selection is `light-dark(oklch(0.1448 0 0), oklch(0.9702 0 0))` behind `light-dark(oklch(0.9851 0 0), oklch(0.1448 0 0))`.
 
-The composable `vic-ui/ui` controls share the original component styles. Its Button renders the same rim, face, busy state and disabled explanation as `vic-ui`; Input, Textarea, Card and Switch use the existing field, surface and switch classes. Import `vic-ui/ui/styles.css` once for either API.
+The composable `vic-ui/ui` controls share the original component styles. Its Button renders the same rim, face, busy state and disabled explanation as `vic-ui`, and is the same button: `variant="default"` (its default) and `variant="destructive"` draw as `look="ink"`, are counted by the one-ink-button warning, and take `allowSecond` as `Button` does; Input, Textarea, Card and Switch use the existing field, surface and switch classes. Import `vic-ui/ui/styles.css` once for either API.
 
 Composable menus, selectors, popovers, tooltips, badges, tabs, checks, radios, tables, progress and dialog typography reuse the corresponding vic classes. Base UI owns their state and positioning; the existing stylesheet owns their appearance. Tabs use Base UI’s indicator measurements for vic’s moving ink mark.
