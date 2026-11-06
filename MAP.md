@@ -1738,12 +1738,12 @@ Holds the sidebar's state and draws the row it sits in with the page: a flex row
 | `collapsible` | `"icon" \| "offcanvas" \| "none"` | `"icon"` | Folds to its marks, goes away, or never folds. |
 | `mobileBreakpoint` | `number` | `768` | Below this width in pixels it is a sheet; `0` never. |
 | `contained` | `boolean` | `false` | The sheet and backdrop cover the container, not the window. |
-| `size` | `"sm" \| "md"` | `"md"` | The rail's density: `sm` sets `--sidebar-row-height` to 1.75rem and every heading without its own `size` a step smaller (`data-size="sm"` on the wrapper). It is the rail `data-density="compact"` draws, kept to the rail, so the page beside it keeps the density around it. Without it the rail follows the density. |
+| `size` | `"sm" \| "md"` | none: the density's | The rail's own density, which outranks the page's and sets `data-size` on the wrapper. `sm` sets `--sidebar-row-height` to 1.75rem and every heading without its own `size` a step smaller: the rail `data-density="compact"` draws, kept to the rail. `md` holds `--sidebar-row-height` at 2rem and headings at `--text-meta`, under any density. Without it the rail follows the density around it (2rem by default; compact 1.75rem, comfortable 2.25rem). A row's or a heading's own `size` outranks all three. |
 | `className` | `string` | none | On the wrapper. |
 | `style` | `CSSProperties` | none | On the wrapper. |
 | `children` | `ReactNode` | required | The `Sidebar` and the page. |
 
-The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: var(--motion-base)`, `--sidebar-easing: var(--ease-track)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). From the [density](#density): `--sidebar-row-height` (2rem; compact 1.75rem, comfortable 2.25rem), `--sidebar-label-text` (`--text-meta`; compact `--text-tag`) and `--sidebar-label-pad` (`0.25rem 0.375rem`; compact `0.125rem 0.1875rem`, comfortable `0.375rem 0.5rem`); `size="sm"` sets the compact three on the wrapper. Not contained, it is at least `100svh` tall.
+The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: var(--motion-base)`, `--sidebar-easing: var(--ease-track)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). From the [density](#density): `--sidebar-row-height` (2rem; compact 1.75rem, comfortable 2.25rem), `--sidebar-label-text` (`--text-meta`; compact `--text-tag`) and `--sidebar-label-pad` (`0.25rem 0.375rem`; compact `0.125rem 0.1875rem`, comfortable `0.375rem 0.5rem`); `size="sm"` sets the compact three on the wrapper and `size="md"` the default three. Not contained, it is at least `100svh` tall.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-wrapper`, `ui-sidebar-window`.
 
@@ -2371,7 +2371,7 @@ One setting moves every height a piece is drawn at together. Set `data-density` 
 | `--cell-pad-y` | `0.3125rem` | `0.5rem` | `0.75rem` | A `Table`'s cells above and below; its head takes 0.1rem less, and a roster's cells grow by twice the difference from 0.5rem. |
 | `--menu-item-h` | `1.75rem` | `2.125rem` | `2.5rem` | A `Menu`'s, a `Select`'s and a `Combobox`'s item at its least; its block padding moves by half the difference from 2.125rem. The inline `ComboboxItem` sits 2px under it, and a `PlacePicker`'s rows are drawn at it. |
 | `--field-pad-x` | `0.625rem` | `0.75rem` | `0.875rem` | The room either side of a field's words, its prefix, its suffix, a select's caret, a search's glass, a textarea and the native input and select. `size="sm"` takes 0.125rem less (0.625rem at the default). |
-| `--sidebar-row-height` | `1.75rem` | `2rem` | `2.25rem` | The sidebar's rows. `SidebarProvider size="sm"` sets 1.75rem on the rail alone; a row's own `size` outranks both. |
+| `--sidebar-row-height` | `1.75rem` | `2rem` | `2.25rem` | The sidebar's rows. `SidebarProvider size="sm"` sets 1.75rem and `size="md"` 2rem on the rail alone, whatever the density; a row's own `size` outranks either. |
 | `--sidebar-label-text` | `--text-tag` | `--text-meta` | `--text-meta` | A sidebar group's heading. |
 | `--sidebar-label-pad` | `0.125rem 0.1875rem` | `0.25rem 0.375rem` | `0.375rem 0.5rem` | Above and below a sidebar group's heading. |
 

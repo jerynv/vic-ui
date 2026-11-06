@@ -6,11 +6,19 @@
    * rail folded to 8 + 32 + 8 = 48px has every mark centred by construction. Folding eases the
    * width alone and the rail's own overflow clips the words, which never wrap.
    */
-  /* `size="sm"` on the provider: the rail `data-density="compact"` draws, on the rail alone. */
+  /* `size` on the provider sets the rail's own density and outranks the page's: `sm` is the rail
+     `data-density="compact"` draws, `md` the default one. Without it the rail follows the
+     density around it. */
   .ui-sidebar-wrapper[data-size="sm"] {
     --sidebar-row-height: 1.75rem;
     --sidebar-label-text: var(--text-tag);
     --sidebar-label-pad: 0.125rem 0.1875rem;
+  }
+
+  .ui-sidebar-wrapper[data-size="md"] {
+    --sidebar-row-height: 2rem;
+    --sidebar-label-text: var(--text-meta);
+    --sidebar-label-pad: 0.25rem 0.375rem;
   }
 
   .ui-sidebar-wrapper {

@@ -8,7 +8,8 @@ import { createServer } from "vite";
 // pointer, with the keyboard's focus, held down by the pointer, in its chosen, checked or open
 // state where it has one, and disabled (a twin with the same words), in light and in dark.
 // A piece of several parts (tabs, a radio group, pages) is hovered, focused and pressed at
-// each part, not only at the chosen one. Any change of width or height fails.
+// each part, not only at the chosen one. Any change of width or height fails, and so does any
+// change of an element's font weight, font size or letter spacing.
 //
 // The tolerance is a quarter of a CSS pixel. Chromium lays boxes out in sixty-fourths of a
 // pixel and a box whose size does not change measures the same to the last of them, so the
@@ -43,7 +44,20 @@ async function measure(page, id) {
       return { w: rect.width, h: rect.height };
     };
     const parts = box.dataset.parts ? [...box.querySelectorAll(box.dataset.parts)] : [];
-    return { root: size(box.firstElementChild), parts: parts.map(size) };
+    // The type of every element in the piece, under a number that stays with the element
+    // across states, so the same element is compared with itself at rest.
+    window.__typeIds ??= new WeakMap();
+    window.__typeNext ??= 0;
+    const type = {};
+    const order = [];
+    for (const element of [box.firstElementChild, ...box.firstElementChild.querySelectorAll("*")]) {
+      if (!window.__typeIds.has(element)) window.__typeIds.set(element, window.__typeNext++);
+      const key = window.__typeIds.get(element);
+      const style = getComputedStyle(element);
+      type[key] = { weight: style.fontWeight, size: style.fontSize, spacing: style.letterSpacing, what: element.tagName.toLowerCase() + (element.className && typeof element.className === "string" ? "." + element.className.split(" ")[0] : "") };
+      order.push(key);
+    }
+    return { root: size(box.firstElementChild), parts: parts.map(size), type, order };
   }, id);
 }
 
@@ -63,6 +77,34 @@ function compare(failures, label, before, after) {
     if (Math.abs(a.w - b.w) > TOLERANCE) failures.push(`${label}: ${name} width ${a.w} became ${b.w}`);
     if (Math.abs(a.h - b.h) > TOLERANCE) failures.push(`${label}: ${name} height ${a.h} became ${b.h}`);
   }
+  compareType(failures, label, before, after);
+}
+
+// The rule says a state changes no weight, size or letter spacing, so each element's type is
+// compared with its own at rest as well as its box. An element that comes or goes with a state
+// (a check mark, a popup's parts) has nothing at rest to compare with and is left to the boxes.
+function compareType(failures, label, before, after) {
+  if (!before.type || !after.type) return;
+  for (const [key, a] of Object.entries(before.type)) {
+    const b = after.type[key];
+    if (!b) continue;
+    for (const property of ["weight", "size", "spacing"]) {
+      if (a[property] !== b[property]) failures.push(`${label}: ${a.what} font ${property} ${a[property]} became ${b[property]}`);
+    }
+  }
+}
+
+// A twin that cannot be used is other elements with the same words, so its type is compared
+// element by element in document order, where the two have the same shape.
+function compareTwinType(failures, label, before, other) {
+  if (before.order.length !== other.order.length) return;
+  before.order.forEach((key, at) => {
+    const a = before.type[key], b = other.type[other.order[at]];
+    if (a.what !== b.what) return;
+    for (const property of ["weight", "size", "spacing"]) {
+      if (a[property] !== b[property]) failures.push(`${label}: ${a.what} font ${property} ${a[property]} became ${b[property]}`);
+    }
+  });
 }
 
 // Hover, the keyboard's focus and a press on one thing a person works, `target` (where the
@@ -159,6 +201,7 @@ async function walk(page, id) {
     if (await page.locator(`[data-case="${id}:${twin}"]`).count() === 0) continue;
     const other = await measure(page, `${id}:${twin}`);
     compare(failures, twin, { root: before.root, parts: [] }, { root: other.root, parts: [] });
+    compareTwinType(failures, twin, before, other);
   }
   return { failures, before };
 }

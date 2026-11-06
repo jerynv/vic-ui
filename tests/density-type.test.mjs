@@ -81,6 +81,12 @@ test("density and type tokens", { timeout: 60000 }, async (t) => {
       assert.equal(plain.size, "12px");
       assert.ok(plain.label > compact.label, "the dense heading has less room above and below");
       // The density sets the default; SidebarProvider size="sm" and a row's own size outrank it.
+      // An explicit size="md" holds the default rail under a compact page.
+      const held = await rail("compact-md-rail");
+      assert.equal(compact.row, 28, "under compact, a rail with no size takes the compact row");
+      assert.equal(held.row, 32, "under compact, size=md holds 2rem rows");
+      assert.equal(held.size, "12px", "under compact, size=md holds the heading at --text-meta");
+      assert.deepEqual(held, plain, "size=md under compact is the default rail");
       const comfortable = await rail("comfortable-rail");
       assert.equal(comfortable.row, 36, "a comfortable density draws 2.25rem rows");
       assert.equal(comfortable.kept, 32, "a row's own size outranks the density");

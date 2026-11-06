@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -170,5 +174,33 @@ test("the composable sheet keeps shadcn's hover grey apart from vic's accent", {
     await page.close();
   } finally {
     await browser.close();
+  }
+});
+
+test("in the composable sheet, Tailwind's bg-accent is the --fill-hover grey in both modes", { timeout: 120000 }, async () => {
+  // No composable piece draws bg-accent today, so the shipped sheet has no such rule to read.
+  // The source sheet is compiled again here with bg-accent asked for, as an app's own Tailwind
+  // build that imports it would, and the utility's colour is read back.
+  const dir = await mkdtemp(join(tmpdir(), "vic-ui-accent-"));
+  const sheet = fileURLToPath(new URL("../src/ui/styles.css", import.meta.url));
+  const cli = fileURLToPath(new URL("../node_modules/.bin/tailwindcss", import.meta.url));
+  const browser = await chromium.launch({ headless: true });
+  try {
+    await writeFile(join(dir, "in.css"), `@import ${JSON.stringify(sheet)};\n@source inline("bg-accent");\n`);
+    execFileSync(cli, ["-i", join(dir, "in.css"), "-o", join(dir, "out.css")], { stdio: "pipe" });
+    const css = await readFile(join(dir, "out.css"), "utf8");
+    assert.match(css, /\.bg-accent\s*\{/, "the compiled sheet has a bg-accent rule");
+    const page = await browser.newPage();
+    await page.setContent(`<html data-mode="light"><head><style>${css}</style></head><body><div id="accent" class="bg-accent">Hover</div><div id="fill" style="background-color: var(--fill-hover)">Fill</div><div id="brand" style="background-color: var(--accent)">Brand</div></body></html>`);
+    for (const mode of ["light", "dark"]) {
+      await page.evaluate(mode => { document.documentElement.dataset.mode = mode; }, mode);
+      const [accent, fill, brand] = await page.evaluate(() => ["#accent", "#fill", "#brand"].map(selector => getComputedStyle(document.querySelector(selector)).backgroundColor));
+      assert.equal(accent, fill, `${mode}: bg-accent is --fill-hover`);
+      assert.notEqual(accent, brand, `${mode}: bg-accent is not vic's brand --accent`);
+    }
+    await page.close();
+  } finally {
+    await browser.close();
+    await rm(dir, { recursive: true, force: true });
   }
 });

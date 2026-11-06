@@ -46,6 +46,7 @@ export function DensityTypeFixture() {
       h("div", { "data-mode": "dark" }, h(Pieces, { name: "compact-dark" })),
       h("div", { "data-density": "default" }, h(Pieces, { name: "reset" })),
       h(Rail, { testid: "compact-rail" }),
+      h(Rail, { size: "md", testid: "compact-md-rail" }),
     ),
     h("section", { "data-density": "comfortable" },
       h(Pieces, { name: "comfortable" }),
