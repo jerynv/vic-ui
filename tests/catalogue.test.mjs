@@ -32,11 +32,17 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
     await page.goto(server.resolvedUrls.local[0]);
     for (const mode of ["light", "dark"]) {
       await page.evaluate(async mode => {
-        document.documentElement.dataset.mode = mode;
         // Compare settled paints; an in-flight transition serializes the same
-        // neutral colour as oklab rather than its final oklch token.
+        // neutral colour as oklab rather than its final oklch token. A transition
+        // can start after any wait for the running ones, so none run while the
+        // two are compared: the mode lands at once, then the styles are read.
+        const settle = document.createElement("style");
+        settle.id = "settle";
+        settle.textContent = "*, *::before, *::after { transition: none !important; }";
+        document.head.append(settle);
+        document.documentElement.dataset.mode = mode;
+        getComputedStyle(document.documentElement).color;
         await new Promise(resolve => requestAnimationFrame(resolve));
-        await Promise.all(document.getAnimations().filter(animation => animation instanceof CSSTransition).map(animation => animation.finished.catch(() => {})));
       }, mode);
       for (const part of ["button", "line", "card", "field", "switch", "badge", "check"]) {
         const styles = await page.evaluate(part => {
@@ -51,6 +57,7 @@ test("packaged shadcn controls hydrate, respond to keyboard input, and render th
         assert.deepEqual(styles[1], styles[0], `${part} preserves vic's ${mode} appearance`);
       }
     }
+    await page.evaluate(() => document.querySelectorAll("#settle").forEach(settle => settle.remove()));
     for (const mode of ["light", "dark"]) {
       await page.evaluate(async mode => {
         document.documentElement.dataset.mode = mode;
