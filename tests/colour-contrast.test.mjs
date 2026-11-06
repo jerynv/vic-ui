@@ -137,6 +137,48 @@ test("tone and accent inks hold 5.8:1 in both modes, and the accent pieces read 
   }
 });
 
+// A brand sets `--accent` alone, as an app's theme does, and the ink, tint and edge follow it.
+// Ordinary brand colours (a fill dark enough for white words in light, light enough for dark words
+// in dark) keep the ink at 5.8:1 on the canvas, the panel and its own tint.
+test("a brand that sets only --accent gets an ink, tint and edge drawn from it that hold 5.8:1", { timeout: 60000 }, async t => {
+  const brands = {
+    royal: "oklch(0.45 0.2 265), oklch(0.72 0.14 265)",
+    violet: "oklch(0.5 0.22 300), oklch(0.75 0.13 300)",
+    green: "oklch(0.5 0.13 150), oklch(0.78 0.13 150)",
+    red: "oklch(0.52 0.2 25), oklch(0.75 0.13 25)",
+    teal: "oklch(0.5 0.09 200), oklch(0.78 0.1 200)",
+  };
+  const browser = await chromium.launch({ headless: true });
+  try {
+    for (const sheet of ["vic-ui.css", "ui/styles.css"]) {
+      const page = await open(browser, sheet);
+      for (const [brand, pair] of Object.entries(brands)) {
+        await page.evaluate(pair => {
+          let theme = document.querySelector("#theme");
+          if (!theme) { theme = document.createElement("style"); theme.id = "theme"; document.head.append(theme); }
+          theme.textContent = `:root, [data-mode] { --accent: light-dark(${pair}); }`;
+        }, pair);
+        for (const mode of ["light", "dark"]) {
+          await page.evaluate(mode => { document.documentElement.dataset.mode = mode; }, mode);
+          const read = expression => page.evaluate(expression => window.paint(expression), expression);
+          const [accent, ink, tint, edge, canvas, panel, strong] = await Promise.all(["--accent", "--accent-ink", "--accent-tint", "--accent-edge", "--bg-canvas", "--bg-base", "--fg-strong"].map(name => read(`var(${name})`)));
+          assert.deepEqual(accent, await read(`light-dark(${pair})`), `${sheet} ${brand} ${mode}: the theme's accent is in force`);
+          assert.deepEqual(ink, await read(`color-mix(in oklab, light-dark(${pair}), var(--fg-strong) 15%)`), `${sheet} ${brand} ${mode}: the ink follows the brand`);
+          assert.notDeepEqual(tint, canvas, `${sheet} ${brand} ${mode}: the tint is not the canvas`);
+          assert.equal(edge[3] > 100 && edge[3] < 130, true, `${sheet} ${brand} ${mode}: the edge is the ink at 45% (alpha ${edge[3]})`);
+          assert.ok(contrast(ink, strong) < contrast(accent, strong), `${sheet} ${brand} ${mode}: the ink sits nearer the strongest words than the fill`);
+          const ratios = { "ink on canvas": contrast(ink, canvas), "ink on panel": contrast(ink, panel), "ink on its tint": contrast(ink, tint) };
+          for (const [what, ratio] of Object.entries(ratios)) assert.ok(ratio >= MIN, `${sheet} ${brand} ${mode} ${what}: ${ratio.toFixed(2)}:1`);
+          t.diagnostic(`${sheet} ${brand} ${mode}: ${Object.entries(ratios).map(([what, ratio]) => `${what} ${ratio.toFixed(2)}`).join(", ")}`);
+        }
+      }
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
 test("the surface stack, the deprecated ground and the art tokens resolve in both modes", { timeout: 30000 }, async () => {
   const browser = await chromium.launch({ headless: true });
   try {

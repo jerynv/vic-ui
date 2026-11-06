@@ -79,15 +79,21 @@ Set `--bg-frame` to change the ground round an app's window without moving the c
 
 One brand colour, for a look and never a meaning: a "New" pill, a chosen mode, a send button, a switch that is on. It is not a fifth tone and says no state, so a piece in it still says what it is in words, and a state keeps its tone (danger, caution, settled, moving). `--accent` is the fill and `--accent-on` the words on it; `--accent-ink` is words and lines in the accent on the page, `--accent-tint` a pale ground and `--accent-edge` an outline. `--button-accent` and `--button-on-accent` are the filled button's, and fall back to `--accent` and `--accent-on` unless a part of the page sets them apart. Either pair works on any section: set `--accent` on a section and its buttons follow, or set `--button-accent` there to move only the buttons.
 
-`tone="accent"` draws Badge, Count, Switch, Progress, the Tabs indicator, Button and Announcement's tag in it. Set your brand as a `light-dark()` pair; the accent ink keeps 5.8:1 on the canvas, the panel and its own tint, and `--accent-on` on `--accent`, in both modes, as the tone inks do.
+`tone="accent"` draws Badge, Count, Switch, Progress, the Tabs indicator, Button and Announcement's tag in it. Set your brand as one `light-dark()` pair: the ink, tint and edge are drawn from it. The ink is `--accent` moved 15% of the way to the strongest words (darker in light, lighter in dark), the tint is `--accent` faint on the canvas, and the edge is the ink at 45%. Set `--accent-on` too if your fill needs dark words in light or light words in dark.
 
 ```css
 :root, [data-mode] {
-  --accent: light-dark(oklch(0.48 0.19 262), oklch(0.76 0.12 258));
-  --accent-on: light-dark(oklch(1 0 0), oklch(0.1448 0 0));
-  --accent-ink: light-dark(oklch(0.46 0.17 262), oklch(0.8 0.1 258));
-  --accent-tint: light-dark(oklch(0.935 0.03 262), oklch(0.275 0.065 262));
-  --accent-edge: light-dark(oklch(0.46 0.17 262 / 0.45), oklch(0.8 0.1 258 / 0.45));
+  --accent: light-dark(oklch(0.45 0.2 265), oklch(0.72 0.14 265));
+}
+```
+
+For an ordinary brand (dark enough for white words in light, light enough for dark words in dark) the drawn ink keeps 5.8:1 on the canvas, the panel and its own tint, as the tone inks do; the tests hold it for a blue, a violet, a green, a red and a teal. A brand pale in light or deep in dark can fall short, so give it an ink of its own, which outranks the drawn one:
+
+```css
+:root, [data-mode] {
+  --accent: light-dark(oklch(0.86 0.17 95), oklch(0.86 0.17 95));
+  --accent-on: light-dark(oklch(0.1448 0 0), oklch(0.1448 0 0));
+  --accent-ink: light-dark(oklch(0.45 0.1 85), oklch(0.86 0.17 95));
 }
 ```
 
