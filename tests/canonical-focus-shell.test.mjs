@@ -104,7 +104,7 @@ test("canonical form steps keep reached navigation controlled and animate positi
     await page.setViewportSize({ width: 320, height: 900 });
     await page.waitForFunction(() => document.documentElement.scrollWidth <= innerWidth);
     assert.equal(await nav.locator(".ui-form-step-mark").first().evaluate(el => getComputedStyle(el).width), "24px");
-    assert.equal(await nav.locator(".ui-form-step-mark").first().evaluate(el => getComputedStyle(el).transitionDuration), "0s");
+    assert.equal(await nav.locator(".ui-form-step-mark").first().evaluate(el => getComputedStyle(el).transitionDuration.split(", ").every(one => one === "0s")), true);
   } finally { await browser.close(); await server.close(); }
 });
 

@@ -28,7 +28,17 @@ interface Shown extends ToastOptions {
 }
 
 const MOST = 4;
-const LEAVE_MS = 160;
+/** How long a toast takes to leave: the stylesheet's `--motion-fast`, read from the root so a
+ * slower system is not cut short and a still one (reduced motion) drops it at once. 160 when
+ * there is no page or no token to read. */
+function leaveMs(): number {
+  if (typeof document === "undefined") return 160;
+  const value = getComputedStyle(document.documentElement).getPropertyValue("--motion-fast").trim();
+  const amount = parseFloat(value);
+  if (!Number.isFinite(amount)) return 160;
+  if (value.endsWith("ms")) return amount;
+  return value.endsWith("s") ? amount * 1000 : 160;
+}
 let shown: Shown[] = [];
 let made = 0;
 const listeners = new Set<() => void>();
@@ -49,7 +59,7 @@ export function toast(message: ReactNode, options: ToastOptions = {}): string {
 toast.dismiss = (id: string) => {
   if (!shown.some((one) => one.id === id && !one.leaving)) return;
   set(shown.map((one) => (one.id === id ? { ...one, leaving: true } : one)));
-  setTimeout(() => set(shown.filter((one) => one.id !== id || !one.leaving)), LEAVE_MS);
+  setTimeout(() => set(shown.filter((one) => one.id !== id || !one.leaving)), leaveMs());
 };
 
 const subscribe = (listen: () => void) => {

@@ -190,11 +190,10 @@
     margin: 0 0 0 auto;
     border-radius: var(--radius-panel) 0 0 var(--radius-panel);
   }
-  .ui-dialog-side-right[open] { animation-name: ui-side-in; animation-duration: 240ms; }
+  .ui-dialog-side-right[open] { animation-name: ui-side-in; animation-duration: var(--motion-base); }
   @keyframes ui-side-in { from { translate: 100% 0; } }
   @media (max-width: 639px) {
     .ui-dialog-side-right { width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border-radius: 0; }
     .ui-dialog-side-right[open] { animation-name: ui-side-in; }
   }
-  @media (prefers-reduced-motion: reduce) { .ui-dialog-side-right[open] { animation: none; } }
 }

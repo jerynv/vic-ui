@@ -1,4 +1,4 @@
-/* vic-ui tokens: the type scale, faces, easings, and every colour, corner, height and shadow,
+/* vic-ui tokens: the type scale, faces, motion, and every colour, corner, height and shadow,
    light and dark. Every colour is oklch, resolved per element by light-dark() against the
    element's color-scheme, which the rules at the end of this file declare. */
 
@@ -24,8 +24,30 @@
   --text-read--line-height: 1.55;
   --text-lead: 1rem;
   --text-lead--line-height: 1.4;
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Motion: three durations and two curves, read by every transition and animation in the
+     library. Fast is a colour, a fill or a fade answering a pointer; base is something arriving
+     or folding (a menu, a dialog, a panel); slow is something travelling far or easing a whole
+     face. `--ease-out` is for arriving and `--ease-track` for following a position. Longer moves
+     are multiples of `--motion-slow` and staggers fractions of `--motion-fast`, so these five
+     set the whole system. A loop's period (a spinner, a sweep, a cursor) is not one of them. */
+  --motion-fast: 150ms;
+  --motion-base: 220ms;
+  --motion-slow: 300ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-track: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Deprecated, removed in 1.0: the old name for an arrival curve, now `--ease-out`. */
+  --ease-out-expo: var(--ease-out);
+}
+
+/* Reduced motion, in one place: every duration is zero, so nothing slides, folds or fades and
+   every piece lands in its end state at once. A system that sets its own durations sets them
+   under `prefers-reduced-motion: no-preference`, or this rule loses to it. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0s;
+    --motion-base: 0s;
+    --motion-slow: 0s;
+  }
 }
 
 /* Unlayered, and on every [data-mode] element as well as :root, so a painted section set to

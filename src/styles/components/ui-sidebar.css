@@ -13,8 +13,8 @@
   .ui-sidebar-wrapper {
     --sidebar-width: 15.5rem;
     --sidebar-width-icon: 3rem;
-    --sidebar-animation-duration: 250ms;
-    --sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1);
+    --sidebar-animation-duration: var(--motion-base);
+    --sidebar-easing: var(--ease-track);
     --sidebar-bg: var(--bg-base);
     /* A row's height, which `size` on the provider or on a row sets. */
     --sidebar-row-height: 2rem;
@@ -184,7 +184,7 @@
     padding: 1px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 150ms;
+    transition: opacity var(--motion-fast) var(--ease-out);
   }
 
   .ui-sidebar-content:hover > .ui-sidebar-scrollbar,
@@ -258,7 +258,7 @@
     font-weight: var(--weight-quiet);
     line-height: calc(1 / 0.85);
     color: var(--fg-subtle);
-    transition: opacity 160ms ease;
+    transition: opacity var(--motion-fast) var(--ease-out);
   }
 
   /* Denser, by its own `size` or the provider's: a step smaller, with less room above and
@@ -317,8 +317,8 @@
     cursor: pointer;
     outline: none;
     transition:
-      background-color 140ms,
-      color 140ms;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-sidebar-button[data-size="sm"] {
@@ -426,16 +426,5 @@
 
   .ui-sidebar[data-state="collapsed"] .ui-sidebar-badge {
     display: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    aside.ui-sidebar,
-    .ui-sidebar-sheet,
-    .ui-sidebar-backdrop,
-    .ui-sidebar-group,
-    .ui-sidebar-group-label,
-    .ui-sidebar-group-words {
-      transition: none;
-    }
   }
 }

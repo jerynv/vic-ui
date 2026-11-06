@@ -22,8 +22,8 @@
     cursor: pointer;
     outline: none;
     transition:
-      background-color 140ms,
-      color 140ms;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-tree-row:hover {
@@ -59,7 +59,7 @@
   }
 
   .ui-tree-chevron svg {
-    transition: rotate 140ms;
+    transition: rotate var(--motion-fast) var(--ease-out);
   }
 
   .ui-tree-chevron[data-open] svg {
@@ -88,12 +88,6 @@
     flex: none;
     font-size: var(--text-meta);
     color: var(--fg-subtle);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ui-tree-chevron svg {
-      transition: none;
-    }
   }
 
   /* Each label over its value, side by side while they fit and wrapping when they do not. */

@@ -112,7 +112,8 @@ test("Grow measures changes, honors reduced motion, and disconnects its observer
     const grow = page.locator(".ui-grow");
     await page.waitForFunction(() => document.querySelector(".ui-grow").style.height === "60px");
     assert.equal(await grow.evaluate(el => getComputedStyle(el).transitionDuration), "0s");
-    assert.equal(await page.locator(".ui-grow-inner").evaluate(el => getComputedStyle(el).animationName), "none");
+    // Reduced motion zeroes the motion tokens, so the entrance has no duration rather than no name.
+    assert.equal(await page.locator(".ui-grow-inner").evaluate(el => getComputedStyle(el).animationDuration), "0s");
     await page.getByRole("button", { name: "Resize content" }).click();
     await page.waitForFunction(() => document.querySelector(".ui-grow").style.height === "180px");
     await page.getByRole("button", { name: "Replace content" }).click();
@@ -124,7 +125,7 @@ test("Grow measures changes, honors reduced motion, and disconnects its observer
     assert.deepEqual(await page.evaluate(() => window.growObservers), { created: 3, disconnected: 2 });
     await page.emulateMedia({ reducedMotion: "no-preference" });
     assert.equal(await grow.evaluate(el => getComputedStyle(el).transitionProperty), "height");
-    assert.equal(await grow.evaluate(el => getComputedStyle(el).transitionDuration), "0.32s");
+    assert.equal(await grow.evaluate(el => getComputedStyle(el).transitionDuration), "0.3s", "the height eases over --motion-slow");
   } finally { await browser.close(); await server.close(); }
 });
 

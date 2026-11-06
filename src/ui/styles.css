@@ -91,12 +91,27 @@
   --shadow-lg: var(--shadow-float);
   --shadow-xl: var(--shadow-float);
   --shadow-2xl: var(--shadow-float);
+  /* Motion: Tailwind's defaults and tw-animate-css's entrances read the library's motion
+     tokens, so setting those (or reduced motion zeroing them) moves the catalogue too. */
+  --default-transition-duration: var(--motion-fast);
+  --default-transition-timing-function: var(--ease-track);
+  --ease-in-out: var(--ease-track);
+  --animate-in: enter var(--tw-animation-duration, var(--tw-duration, var(--motion-fast))) var(--tw-ease, var(--ease-out)) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+  --animate-out: exit var(--tw-animation-duration, var(--tw-duration, var(--motion-fast))) var(--tw-ease, var(--ease-out)) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+  --animate-accordion-down: accordion-down var(--tw-animation-duration, var(--tw-duration, var(--motion-base))) var(--tw-ease, var(--ease-out)) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+  --animate-accordion-up: accordion-up var(--tw-animation-duration, var(--tw-duration, var(--motion-base))) var(--tw-ease, var(--ease-out)) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+  --animate-collapsible-down: collapsible-down var(--tw-animation-duration, var(--tw-duration, var(--motion-base))) var(--tw-ease, var(--ease-out)) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
+  --animate-collapsible-up: collapsible-up var(--tw-animation-duration, var(--tw-duration, var(--motion-base))) var(--tw-ease, var(--ease-out)) var(--tw-animation-delay, 0s) var(--tw-animation-iteration-count, 1) var(--tw-animation-direction, normal) var(--tw-animation-fill-mode, none);
 }
 
 @layer base {
   body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
   * { border-color: var(--border); }
+  /* Kept beside the zeroed tokens: a `duration-*` utility is a literal Tailwind writes into the
+     rule, which no token reaches. Animations are cut to zero, as the tokens cut them, so a
+     slide never paints its first frame and a loop stands still; transitions keep a hair of
+     time so anything waiting on `transitionend` still hears it. */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0.01ms !important; }
   }
 }

@@ -75,7 +75,7 @@
     line-height: 1.45;
     font-variant-numeric: tabular-nums;
     color: var(--fg-subtle);
-    transition: color 160ms;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-field-count[data-full] {
@@ -112,7 +112,7 @@
     flex: none;
     margin-left: 0.75rem;
     color: var(--fg-subtle);
-    transition: color 160ms;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-search-box:focus-within .ui-search-glass {
@@ -150,8 +150,8 @@
     color: var(--fg-subtle);
     cursor: pointer;
     transition:
-      background-color 140ms,
-      color 140ms;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-search-clear:hover {
@@ -282,8 +282,8 @@
     color: var(--fg-subtle);
     cursor: pointer;
     transition:
-      background-color 140ms,
-      color 140ms;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out);
   }
 
   .ui-combo-chip-x:hover {
@@ -321,7 +321,7 @@
   }
 
   .ui-menu-item {
-    transition: background-color 120ms;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-combo-menu .ui-menu-item:active:not([aria-disabled]) {

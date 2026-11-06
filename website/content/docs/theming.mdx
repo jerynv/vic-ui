@@ -1,6 +1,6 @@
 ---
 title: Theming
-description: Shared colors, typography, shape, and light or dark appearance.
+description: Shared colors, typography, shape, motion, and light or dark appearance.
 ---
 
 ## One set of tokens
@@ -54,6 +54,42 @@ One brand colour, for a look and never a meaning: a "New" pill, a chosen mode, a
 `--art-1` to `--art-4` are four hues for what is drawn rather than read: pale in light, deep in dark. `--art-grain` is the alpha of a dot overlay that keeps a gradient from reading as flat vector. They are used only inside thumbnails, banners and illustrations, and never by a control.
 
 <ComponentPreview name="art-swatches" />
+
+## Motion
+
+Five tokens on `:root` set every move in the library, so a snappier or a stiller system is five values, not forty rules. Every transition and animation reads them; longer moves are multiples of `--motion-slow` and staggers fractions of `--motion-fast`, so they follow.
+
+| Token | Default | Moves |
+| --- | --- | --- |
+| `--motion-fast` | `150ms` | A colour, fill or fade answering a pointer: hover grounds, carets, tooltips, menus. |
+| `--motion-base` | `220ms` | Something arriving or folding: dialogs, toasts, the accordion, the tab indicator, the switch, the sidebar. |
+| `--motion-slow` | `300ms` | Something travelling far or easing a whole face: progress, the button's gradient. |
+| `--ease-out` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | Arriving, and every fade. |
+| `--ease-track` | `cubic-bezier(0.4, 0, 0.2, 1)` | Following a position: the tab indicator, progress, the sidebar. |
+
+When the reader asks for reduced motion, vic-ui sets the three durations to `0s` in one place, and every piece lands in its end state at once. Set your own durations inside `prefers-reduced-motion: no-preference`, or they override that. A spinner and an unknown progress bar are loops, not durations; they stand still under reduced motion by themselves.
+
+<ComponentPreview name="motion" />
+
+```css
+/* Snappier, only where the reader has not asked for less motion */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --motion-fast: 100ms;
+    --motion-base: 150ms;
+    --motion-slow: 200ms;
+  }
+}
+
+/* Still, for everyone */
+:root {
+  --motion-fast: 0s;
+  --motion-base: 0s;
+  --motion-slow: 0s;
+}
+```
+
+The tokens inherit, so a section can set its own. In the shadcn catalogue, Tailwind's default transition and tw-animate-css's `animate-in`, `animate-out`, accordion and collapsible read the same tokens; a `duration-*` utility is a literal and does not.
 
 ## Flat and bordered surfaces
 

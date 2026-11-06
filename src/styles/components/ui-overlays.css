@@ -28,7 +28,7 @@
   .ui-dialog[open] {
     display: flex;
     flex-direction: column;
-    animation: ui-dialog-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+    animation: ui-dialog-in var(--motion-base) var(--ease-out) backwards;
   }
 
   .ui-dialog::backdrop,
@@ -42,7 +42,7 @@
   }
 
   .ui-dialog[open]::backdrop {
-    animation: ui-veil-in 200ms ease-out backwards;
+    animation: ui-veil-in var(--motion-base) var(--ease-out) backwards;
   }
 
   .ui-dialog:focus-visible {
@@ -138,7 +138,7 @@
 
     .ui-dialog[open] {
       animation-name: ui-sheet-in;
-      animation-duration: 260ms;
+      animation-duration: var(--motion-base);
     }
 
     .ui-dialog-still {
@@ -154,7 +154,7 @@
 
     .ui-palette[open] {
       animation-name: ui-dialog-in;
-      animation-duration: 200ms;
+      animation-duration: var(--motion-base);
     }
 
     .ui-dialog-still .ui-dialog-body {
@@ -259,7 +259,7 @@
     flex: none;
     color: var(--fg-subtle);
     opacity: 0;
-    transition: opacity 120ms;
+    transition: opacity var(--motion-fast) var(--ease-out);
   }
 
   .ui-palette-item[data-active] .ui-palette-go {
@@ -308,7 +308,7 @@
   }
 
   .ui-menu-actions .ui-menu-item {
-    transition: background-color 120ms;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-menu-actions .ui-menu-item:active:not([aria-disabled]) {
@@ -322,7 +322,7 @@
     width: 1rem;
     height: 1rem;
     color: var(--fg-subtle);
-    transition: color 120ms;
+    transition: color var(--motion-fast) var(--ease-out);
   }
 
   .ui-menu-item[data-active] .ui-menu-icon {
@@ -411,7 +411,7 @@
     background: var(--bg-contrast);
     box-shadow: var(--shadow-raise);
     pointer-events: none;
-    animation: ui-tip-in 120ms ease-out backwards;
+    animation: ui-tip-in var(--motion-fast) var(--ease-out) backwards;
   }
 
   /* Whatever says why it cannot be used is refused to the pointer in words, not in silence. */
@@ -442,14 +442,6 @@
 @keyframes ui-tip-in {
   from {
     opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ui-dialog[open],
-  .ui-dialog[open]::backdrop,
-  .ui-tooltip {
-    animation: none;
   }
 }
 
@@ -493,9 +485,9 @@
     color: var(--fg);
     cursor: pointer;
     transition:
-      background-color 140ms ease,
-      color 140ms ease,
-      box-shadow 140ms ease;
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out),
+      box-shadow var(--motion-fast) var(--ease-out);
   }
 
   .ui-date-step {
@@ -616,7 +608,7 @@
     font-size: 1.125rem;
     line-height: 1;
     cursor: pointer;
-    transition: background-color 120ms ease;
+    transition: background-color var(--motion-fast) var(--ease-out);
   }
 
   .ui-emoji:hover {

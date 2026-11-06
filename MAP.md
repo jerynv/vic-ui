@@ -187,8 +187,8 @@ States, as `ui.css` implements them:
 - `line` with `aria-pressed="true"` takes the ink rim and face (a held toggle).
 - Accent (`ui-button-accent` on `ink`): rim edge `--button-accent` mixed with black 22%, rim top with white 30%, rim bottom with black 12%; face top with white 4%, bottom with black 10%; hover white 6% / white 2%; press black 12% / black 4%; words `--button-on-accent`. The words hold 5.8:1 on every face stop in both modes with the default accent (`colour-contrast.test.mjs`). Set `--button-accent` and `--button-on-accent` on a part of the page to give its buttons another colour without moving `--accent`; set `--accent` on a part of the page and its buttons follow it. Neither button token is declared on the root, so either works at any depth.
 - Accent is local to the filled control; semantic danger/caution rules win. It adapts the existing semantic color-mix treatment but retains two distinct stops when pressed. The five-hue example and `accent-button.test.mjs` cover both APIs, both themes and higher-contrast lightness values.
-- `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (160ms).
-- Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over 300ms `ease-in-out`.
+- `link`: no rim, face or padding, `height: auto`; the sentence's own size, weight and line height, wrapping with it (`white-space: normal`); words `--fg-strong`, underlined (offset 0.2em) in `--fg-subtle`, the underline taking `currentColor` on hover (`--motion-fast`).
+- Every gradient stop (`--rim-top`, `--rim-bottom`, `--face-top`, `--face-bottom`) is a registered `@property` of syntax `<color>`, so hover and press ease over `--motion-slow` `--ease-track`.
 - Focus: `:focus-visible` outline 2px `--focus`, offset 2px (keyboard only).
 - Disabled (`:disabled` or `aria-disabled="true"`): opacity 0.55, `cursor: not-allowed`, no hover or press.
 - Busy (`aria-busy`): held as disabled is. With no icon, the face is `position: relative`, the words (`ui-button-busy-words`) are `opacity: 0` and the spinner (`ui-button-busy-mark`) is laid over them (`position: absolute; inset: 0; margin: auto`).
@@ -271,7 +271,7 @@ States:
 
 - Rest: 1.125rem square, radius `--radius-mark`, fill `--field-fill`, inset ring `1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14))`.
 - Hover (unchecked, enabled): `--field-fill-hover`.
-- Checked: fill and ring `--ink-face-bottom`; the tick (`CheckIcon` at 13px, stroke width 3, colour `--ink-words`) fades in (140ms) and scales from 0.6 to 1 (160ms `cubic-bezier(0.2, 0.8, 0.2, 1.4)`).
+- Checked: fill and ring `--ink-face-bottom`; the tick (`CheckIcon` at 13px, stroke width 3, colour `--ink-words`) fades in (`--motion-fast`) and scales from 0.6 to 1 (`--motion-fast`, on the library's one overshooting curve, `cubic-bezier(0.2, 0.8, 0.2, 1.4)`).
 - Focus: outline 2px `--focus`, offset 2px, keyboard only.
 - Disabled or `aria-disabled`: box opacity 0.55, `not-allowed`; the words go `--fg-subtle` and `not-allowed`.
 - Words: `--text-ui`, line height 1.45, `--fg`.
@@ -297,7 +297,7 @@ States:
 
 - Rest: rim edge transparent; rim and face `--field-fill`; words `--fg`; height `--control-h`; `--text-read`, weight 400; face padding `0 0.625rem`.
 - Hover (not chosen): rim and face `--field-fill-hover`.
-- Chosen (`aria-pressed="true"`): the ink rim and face and `--ink-words`. The change eases through the registered stops (300ms).
+- Chosen (`aria-pressed="true"`): the ink rim and face and `--ink-words`. The change eases through the registered stops (`--motion-slow`).
 - Focus and disabled: as `Button` (it carries `ui-button`).
 
 Tokens: `--field-fill`, `--field-fill-hover`, `--fg`, `--control-h`, `--text-read`, the `--ink-*` rim, face and words tokens, plus `Button`'s base tokens.
@@ -466,10 +466,10 @@ States:
 
 - Dot rest: 1.125rem circle, `--field-fill`, inset ring `1px light-dark(oklch(0 0 0 / 0.14), oklch(1 0 0 / 0.14))`.
 - Dot hover (unchecked): `--field-fill-hover`.
-- Checked: fill `--ink-words`, inset ring `0.3125rem` of `--ink-face-bottom`, eased (box-shadow 180ms `cubic-bezier(0.2, 0.8, 0.2, 1)`).
+- Checked: fill `--ink-words`, inset ring `0.3125rem` of `--ink-face-bottom`, eased (box-shadow `--motion-base` `--ease-out`).
 - Focus: outline 2px `--focus`, offset 2px.
 - Disabled: dot opacity 0.55, `not-allowed`; label `not-allowed`, words `--fg-subtle`. Without a `reason` the radio is natively disabled. With one (`useFieldReason`) it is `aria-disabled`, stays in the arrows' reach, choosing it does nothing, and the reason hangs from its row on pointer rest and when the keys reach it.
-- Card look: padding 0.75rem, radius `--radius-field`, `--field-fill`; hover `--field-fill-hover`; chosen ring `inset 0 0 0 1.5px var(--ink-face-bottom)`; transitions 150ms `--ease-track`, none under reduced motion.
+- Card look: padding 0.75rem, radius `--radius-field`, `--field-fill`; hover `--field-fill-hover`; chosen ring `inset 0 0 0 1.5px var(--ink-face-bottom)`; transitions `--motion-fast` `--ease-track`.
 - Words: `--text-read`, `--fg-strong`; hint `--text-ui`, `--fg-subtle`.
 
 Tokens: `--text-read`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--field-fill`, `--field-fill-hover`, `--ink-words`, `--ink-face-bottom`, `--focus`, `--radius-field`, `--ease-track`.
@@ -505,7 +505,7 @@ States:
 
 - Box: as `TextField` (fill `--field-fill`, hover `--field-fill-hover`, error ring `inset 0 0 0 1px var(--tone-danger-ink)`).
 - Empty (`data-empty`): words `--fg-subtle`.
-- Open (`data-open`): box `--field-fill-hover`; the caret (`ChevronDownIcon` 16px, `--fg-subtle`) rotates 180deg over 160ms.
+- Open (`data-open`): box `--field-fill-hover`; the caret (`ChevronDownIcon` 16px, `--fg-subtle`) rotates 180deg over `--motion-fast`.
 - Dense (`size="sm"`): the box keeps `padding-right: 2.25rem` (`.ui-field-sm .ui-select`), the room its caret stands in, so a long choice ends before the caret.
 - Disabled (`data-disabled`): box opacity 0.55, hover stays `--field-fill`; trigger `not-allowed`.
 - Focus: the trigger is a button, so the keyboard reaching it draws a ring on the box, `0 0 0 2px var(--focus)` (with the error ring kept inside it); a pointer press draws none. In the source it drew nothing, a defect fixed in vic-ui.
@@ -546,7 +546,7 @@ Something on or off, said at once: a native button with the switch role, a track
 States:
 
 - Off: 2.25rem by 1.375rem track, padding 0.1875rem, radius `--radius-round`, `--field-fill`, inset ring `1px light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1))`. Hover: `--field-fill-hover`.
-- On: track `--ink-face-bottom`; hover `--ink-face-top`. With `tone="accent"` those two are `--accent` and `--accent` mixed 14% toward `--bg-canvas`, so the track is the accent and moves toward the canvas under the pointer; off, it is the same as any switch. The knob (1rem circle, `--surface-lifted`, `--shadow-raise`) translates 0.875rem over 220ms `cubic-bezier(0.2, 0.8, 0.2, 1)`. Track colour eases 200ms.
+- On: track `--ink-face-bottom`; hover `--ink-face-top`. With `tone="accent"` those two are `--accent` and `--accent` mixed 14% toward `--bg-canvas`, so the track is the accent and moves toward the canvas under the pointer; off, it is the same as any switch. The knob (1rem circle, `--surface-lifted`, `--shadow-raise`) translates 0.875rem over `--motion-base` `--ease-out`. Track colour eases over `--motion-base`.
 - Focus: outline 2px `--focus`, offset 2px.
 - Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
 
@@ -576,7 +576,7 @@ A label, a native input, and what is fixed at its start or end (a currency sign,
 
 States:
 
-- Box: height `--control-h` (`sm`: `--control-h-sm`), radius `--radius-field`, fill `--field-fill`, no border; box-shadow and background ease 120ms.
+- Box: height `--control-h` (`sm`: `--control-h-sm`), radius `--radius-field`, fill `--field-fill`, no border; box-shadow and background ease over `--motion-fast`.
 - Hover (not focused, not disabled): `--field-fill-hover`.
 - Focus: nothing is drawn; the caret shows it (`outline: none` on the input).
 - Error (`data-invalid`): `inset 0 0 0 1px var(--tone-danger-ink)`; `aria-invalid`; the error takes the label's place (see `FieldHead`).
@@ -641,12 +641,12 @@ One section of an `Accordion`: `title` is its head (a button with `aria-expanded
 
 States:
 
-- Head: min height `--control-h-sm`, margin `0.125rem -0.5rem`, padding `0.375rem 0.5rem`, radius `--radius-row`, `--text-ui` weight `--weight-ui`, `--fg-strong`. Hover `--field-fill`; press `--field-fill-hover` (150ms ease-out). Focus outline 2px `--focus`, offset 2px. Disabled opacity 0.55, `not-allowed`.
-- Open (`data-open`): the chevron (`ChevronDownIcon` 15px, `--fg-subtle`) rotates 180deg; the panel's grid rows ease from `0fr` to `1fr` over 220ms `--ease-out-expo`. A closed panel is `inert`. No transitions under reduced motion.
+- Head: min height `--control-h-sm`, margin `0.125rem -0.5rem`, padding `0.375rem 0.5rem`, radius `--radius-row`, `--text-ui` weight `--weight-ui`, `--fg-strong`. Hover `--field-fill`; press `--field-fill-hover` (`--motion-fast` `--ease-out`). Focus outline 2px `--focus`, offset 2px. Disabled opacity 0.55, `not-allowed`.
+- Open (`data-open`): the chevron (`ChevronDownIcon` 15px, `--fg-subtle`) rotates 180deg; the panel's grid rows ease from `0fr` to `1fr` over `--motion-base` `--ease-out`. A closed panel is `inert`.
 - Items after the first have a top rule `1px solid var(--line)`.
 - Content: padding `0.125rem 0 0.75rem`, `--text-ui`, line height 1.5, `--fg`.
 
-Tokens: `--line`, `--control-h-sm`, `--radius-row`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`, `--focus`, `--ease-out-expo`.
+Tokens: `--line`, `--control-h-sm`, `--radius-row`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--fg`, `--field-fill`, `--field-fill-hover`, `--focus`, `--motion-fast`, `--motion-base`, `--ease-out`.
 
 CSS: `ui-display.css`. Classes `ui-accordion`, `ui-accordion-item`, `ui-accordion-head`, `ui-accordion-trigger`, `ui-accordion-title`, `ui-accordion-chevron`, `ui-accordion-panel`, `ui-accordion-clip`, `ui-accordion-content`.
 
@@ -669,7 +669,7 @@ The small pill a front page leads with: a tag, the words and an arrow, the whole
 States:
 
 - Rest: height 1.75rem, radius `--radius-round`, `--text-ui` weight `--weight-ui`, `--fg-strong` on `--surface-lifted`, `--edge`. Padding `0 0.625rem 0 0.1875rem` (`0.625rem` on the left without a tag).
-- Hover: the arrow (`ArrowRightIcon` 13px) goes from `--fg-subtle` to `--fg-strong` (200ms).
+- Hover: the arrow (`ArrowRightIcon` 13px) goes from `--fg-subtle` to `--fg-strong` (`--motion-base`).
 - Press: `--field-fill` with a `0 0 0 1px var(--line)` ring.
 - Focus: outline 2px `--focus`, offset 2px.
 - Tag: 1.375rem tall, `--text-tag` weight 600, `--fg-strong` on `--field-fill`; with `data-hue`, `--hue-ink` on `--hue`; with `data-tone="accent"`, `--accent-on` on `--accent`.
@@ -871,7 +871,7 @@ States:
 
 - Box: height auto, stretches; textarea padding `0.5rem 0.75rem` (`sm`: `0.375rem 0.625rem`), line height 1.5, `resize: vertical` (none with `grow`).
 - Hover, error and disabled: as `TextField`; disabled or held also sets `data-disabled` on the box (opacity 0.55, `not-allowed`, hover stays `--field-fill`). A held field that takes focus draws `0 0 0 2px var(--focus)` round the box.
-- Count: `--text-ui`, tabular, `--fg-subtle`; at the limit (`data-full`) `--tone-caution-ink` (160ms). The foot line keeps `calc(var(--text-ui) * 1.45)` height.
+- Count: `--text-ui`, tabular, `--fg-subtle`; at the limit (`data-full`) `--tone-caution-ink` (`--motion-fast`). The foot line keeps `calc(var(--text-ui) * 1.45)` height.
 
 Tokens: the field tokens, `--tone-caution-ink`, `--focus`.
 
@@ -953,7 +953,7 @@ A search: the field's box with a glass at its start and, once it has words, a cl
 
 States:
 
-- Glass: `MagnifyingGlassIcon` 16px (`sm` 14px), margin-left 0.75rem (`sm` 0.625rem), `--fg-subtle`; `--fg-strong` while the box has focus (160ms).
+- Glass: `MagnifyingGlassIcon` 16px (`sm` 14px), margin-left 0.75rem (`sm` 0.625rem), `--fg-subtle`; `--fg-strong` while the box has focus (`--motion-fast`).
 - Clear: shown while it has words and is not disabled or held; 1.5rem square (`sm` 1.375rem), radius `--radius-row`, `--fg-subtle`; hover `--fill-chosen` and `--fg-strong`; press `--fill-press`; focus outline 2px `--focus`, offset 2px. Icon `XIcon` 14px (`sm` 13px). A press empties it and puts the focus back.
 - The browser's own cancel button and decoration are hidden.
 - Box, error, disabled and held: as `Textarea`.
@@ -1016,13 +1016,13 @@ A dialog on the browser's own `<dialog>`, opened with `showModal`, so it sits in
 
 States:
 
-- Up: `--surface-lifted`, radius `--radius-panel`, `--shadow-float`, max height `calc(100dvh - 2rem)`, scrolls inside; enters with `ui-dialog-in` (opacity 0 and scale 0.98, 200ms `cubic-bezier(0.2, 0.8, 0.2, 1)`, `backwards`).
-- Veil: `light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62))` with `blur(3px)`, fading in 200ms.
+- Up: `--surface-lifted`, radius `--radius-panel`, `--shadow-float`, max height `calc(100dvh - 2rem)`, scrolls inside; enters with `ui-dialog-in` (opacity 0 and scale 0.98, `--motion-base` `--ease-out`, `backwards`).
+- Veil: `light-dark(oklch(0.209 0 0 / 0.28), oklch(0 0 0 / 0.62))` with `blur(3px)`, fading in over `--motion-base`.
 - Focus: the dialog itself draws no outline.
 - Head padding `1.25rem 1.25rem 0`; title `--font-display` 700 at 1.25rem, line height 1.15, letter spacing -0.02em, balanced, `--fg-strong`; description `--text-read`, line height 1.5, max 46ch, `--fg-subtle`.
 - Body: grid gap 1rem, padding `1rem 1.25rem 1.25rem`. Foot: flex end, gap 0.5rem, padding `0.75rem 1.25rem`, top rule `1px solid var(--line)`, ground `--fill-faint`; directly under the head it has 1.25rem above.
 - Problem: `--text-ui`, line height 1.4, `--tone-danger-ink`, `role="alert"`.
-- Below 640px: full width, max height 88dvh, at the bottom, top corners `--radius-panel`, entering with `ui-sheet-in` (from `translate: 0 100%`, 260ms).
+- Below 640px: full width, max height 88dvh, at the bottom, top corners `--radius-panel`, entering with `ui-sheet-in` (from `translate: 0 100%`, `--motion-base`).
 - Reduced motion: no entrance animation.
 
 Tokens: `--surface-lifted`, `--radius-panel`, `--shadow-float`, `--fg`, `--fg-strong`, `--fg-subtle`, `--font-display`, `--text-read`, `--text-ui`, `--line`, `--tone-danger-ink`.
@@ -1072,7 +1072,7 @@ A click from the keys (Enter or Space, `detail === 0`) opens on the first action
 States:
 
 - Surface: `ui-menu` (see below) plus min width 11rem, max width `min(20rem, calc(100vw - 1rem))`; no outline on the menu or its items.
-- Item: min height 2.125rem, padding `0.4rem 0.65rem`, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `--fill-hover`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `--fill-press`. Background eases 120ms.
+- Item: min height 2.125rem, padding `0.4rem 0.65rem`, radius `calc(var(--radius-float) - 0.3rem)`, `--text-read`, `--fg-strong`. Active (`data-active`, pointer or keys): `--fill-hover`; the icon (1rem slot, `--fg-subtle`) goes `--fg-strong`. Press: `--fill-press`. Background eases over `--motion-fast`.
 - Danger: words and icon `--tone-danger-ink`; active ground `--tone-danger-tint`.
 - Disabled with no reason: opacity 0.55, `not-allowed`, passed over by the keys.
 - Disabled with a reason: still reached by the keys; active ground `--fill-faint`; the reason shows in a tooltip to the right while it is active.
@@ -1152,7 +1152,7 @@ A word or two in ink beside a control: shown after the pointer rests or at once 
 | `placement` | `Placement` | `"top"` | Its side. |
 | `delay` | `number` | `TIP_DELAY_MS` (500) | Rest before it shows. |
 
-States: once one tooltip has shown, the next shows at once for 400ms after it hides ("warm"). Placed with gap 6 and no height cap. Surface: width `max-content`, max `min(18rem, calc(100vw - 16px))`, padding `0.3rem 0.6rem`, radius `--radius-float`, `--text-meta` weight `--weight-ui`, line height 1.35, `--fg-inverse` on `--bg-contrast`, `--shadow-raise`, `pointer-events: none`, fading in 120ms (none under reduced motion). The tooltip element is `aria-hidden`; a hidden span with the same words carries the `aria-describedby` id.
+States: once one tooltip has shown, the next shows at once for 400ms after it hides ("warm"). Placed with gap 6 and no height cap. Surface: width `max-content`, max `min(18rem, calc(100vw - 16px))`, padding `0.3rem 0.6rem`, radius `--radius-float`, `--text-meta` weight `--weight-ui`, line height 1.35, `--fg-inverse` on `--bg-contrast`, `--shadow-raise`, `pointer-events: none`, fading in over `--motion-fast`. The tooltip element is `aria-hidden`; a hidden span with the same words carries the `aria-describedby` id.
 
 Tokens: `--radius-float`, `--text-meta`, `--fg-inverse`, `--bg-contrast`, `--shadow-raise`.
 
@@ -1195,7 +1195,7 @@ States:
 
 - Track: inline flex, height `--control-h` (`sm`: `--control-h-sm`), padding 2px, radius `--radius-field`, `--field-fill`, scrolls sideways with no scrollbar.
 - Indicator, accent (`tone="accent"`): the track sets `--ink-face-top` to `--accent` mixed with white 4%, `--ink-face-bottom` with black 10%, `--ink-rim-edge` with black 22%, and `--ink-words` to `--accent-on`, which hold 5.8:1 in both modes.
-- Indicator: `linear-gradient(var(--ink-face-top), var(--ink-face-bottom))` with a `0 0 0 1px var(--ink-rim-edge)` ring, radius `calc(var(--radius-field) - 2px)`, measured onto the chosen tab (and again on any resize); the first placing is drawn where it lands, every move after eases `translate` and `width` over 240ms `--ease-track` (none under reduced motion).
+- Indicator: `linear-gradient(var(--ink-face-top), var(--ink-face-bottom))` with a `0 0 0 1px var(--ink-rim-edge)` ring, radius `calc(var(--radius-field) - 2px)`, measured onto the chosen tab (and again on any resize); the first placing is drawn where it lands, every move after eases `translate` and `width` over `--motion-base` `--ease-track`.
 - Tab: padding `0 0.75rem`, `--text-ui` weight `--weight-ui`, `--fg-subtle`. Hover (not chosen, not disabled): `--fg-strong` on `--field-fill-hover`. Press: `--bone`. Chosen: `--ink-words`. Focus: outline 2px `--focus`, offset 2px. Disabled or `aria-disabled`: opacity 0.55, `not-allowed`.
 - Rule: 1px by 1rem, `--line`, margin 0.25rem each side.
 - Count: min width 2ch, `--text-tag`, tabular, opacity 0.65.
@@ -1241,7 +1241,7 @@ States:
 - Cells: padding `0.5rem 0.75rem`, bottom rule `1px solid var(--line-soft)`, `--text-read`, `--fg`; `data-align` end and center.
 - Head: sticky at top, padding-block 0.4rem, `--text-ui` weight 600, `--fg-subtle` on `--ui-table-ground`, rule `--line`.
 - Sort button: radius `--radius-row`; hover `--fg-strong` on `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset 2px; sorted `--fg-strong`. Its arrow (`ArrowDownIcon` 12px) always holds its room: opacity 0, 0.4 on hover, 1 when sorted; ascending rotates 180deg.
-- Pressable row: `cursor: pointer`; hover `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset -2px. Current row `--field-fill-hover`. Background eases 160ms.
+- Pressable row: `cursor: pointer`; hover `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset -2px. Current row `--field-fill-hover`. Background eases over `--motion-fast`.
 - After: a row of its own (`ui-table-after`) with one cell spanning the columns, no top padding, and the row above it loses its rule, so the two read as one.
 - Empty: padding-block 2rem, centred, `--fg-subtle`.
 
@@ -1377,7 +1377,7 @@ How far something has got: its words, how far in words, and a bar under them. Le
 States:
 
 - Head: `--text-ui`; label weight 600 `--fg-strong`, clipped; value tabular `--fg-subtle`.
-- Track: radius `--radius-round`, `--field-fill`. Fill: `--progress-fill` (default `--ink-face-bottom`, the tone's ink, or `--accent`), width eases 300ms `--ease-track`.
+- Track: radius `--radius-round`, `--field-fill`. Fill: `--progress-fill` (default `--ink-face-bottom`, the tone's ink, or `--accent`), width eases over `--motion-slow` `--ease-track`.
 - Unknown (`data-unknown`): a 35% stretch sweeps with `ui-progress-sweep` (1.4s `--ease-track`, infinite, from `translate: -100% 0` to `300% 0`). Still under reduced motion.
 
 Tokens: `--ink-face-bottom`, `--tone-danger-ink`, `--tone-caution-ink`, `--tone-settled-ink`, `--tone-moving-ink`, `--accent`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--radius-round`, `--field-fill`, `--ease-track`.
@@ -1386,7 +1386,7 @@ CSS: `ui-feedback.css`. Classes `ui-progress`, `ui-progress-sm`, `ui-progress-he
 
 ### toast
 
-`toast(message, options?)` puts a toast up from anywhere and returns its id; `toast.dismiss(id)` takes it down (160ms leave). At most 4 stand; putting one up under an existing id replaces it and restarts its time.
+`toast(message, options?)` puts a toast up from anywhere and returns its id; `toast.dismiss(id)` takes it down (a `--motion-fast` leave, read from the token so a slower system is not cut short). At most 4 stand; putting one up under an existing id replaces it and restarts its time.
 
 `ToastOptions`:
 
@@ -1409,10 +1409,10 @@ Props: none.
 States:
 
 - Stack: fixed at the bottom right, inset `auto 1rem 1rem auto`, width `min(24rem, calc(100vw - 2rem))`, gap 0.5rem, passes the pointer; below 640px it spans `1rem` from each side. Shown only while open.
-- Toast, plain: `--ink-words` on `--ink-face-bottom`, radius `--radius-float`, `--shadow-float`, `--text-read`, padding `0.625rem 0.5rem 0.625rem 0.875rem`; enters with `ui-toast-in` (from opacity 0 and 8px down, 200ms).
+- Toast, plain: `--ink-words` on `--ink-face-bottom`, radius `--radius-float`, `--shadow-float`, `--text-read`, padding `0.625rem 0.5rem 0.625rem 0.875rem`; enters with `ui-toast-in` (from opacity 0 and 8px down, `--motion-base`).
 - Toast, toned: `--fg-strong` on the tone's tint, its icon in the tone's ink (danger and caution `FlagIcon`, settled `CheckCircleIcon`, moving `ClockIcon`, 16px).
 - Hover or focus inside holds its time (at least 1000ms remain when it runs again).
-- Leaving: opacity 0 and 4px down over 160ms.
+- Leaving: opacity 0 and 4px down over `--motion-fast`.
 - Action: underlined (offset 3px), `--text-ui` weight 600, 1.75rem tall, radius `--radius-row`. Close: 1.75rem square, `XIcon` 14px, quieter words. Hover `--toast-press`; press mixes 10% words into it; focus outline 2px `--focus`, offset 2px.
 - Reduced motion: no entrance and no leaving transition.
 
@@ -1436,7 +1436,7 @@ The line above every field: its label and, in the same grid cell, the short erro
 States:
 
 - Label: `--text-ui` weight 600, line height 1.45, `--fg-strong`.
-- Error arriving (`data-error`): the label fades (160ms) and slides down 45% (220ms `cubic-bezier(0.2, 0.7, 0.2, 1)`); the error slides in from 45% above with `ui-field-error-in` (220ms, `backwards`), weight 600, one line with an ellipsis, `--tone-danger-ink`, passing the pointer to the label. The last words are kept so they leave with `ui-field-error-out` (180ms) rather than vanish.
+- Error arriving (`data-error`): the label fades (`--motion-fast`) and slides down 45% (`--motion-base` `--ease-out`); the error slides in from 45% above with `ui-field-error-in` (`--motion-base`, `backwards`), weight 600, one line with an ellipsis, `--tone-danger-ink`, passing the pointer to the label. The last words are kept so they leave with `ui-field-error-out` (`--motion-base`) rather than vanish.
 - Reduced motion: no transition, animation or transform.
 
 Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
@@ -1485,10 +1485,10 @@ States:
 - Tile: 2.25rem, radius `--radius-row`, `var(--hue-ink, var(--fg-subtle))` on `var(--hue, var(--field-fill))`, icon 1.125rem.
 - Title `--text-read` weight 600 `--fg-strong`; line `--text-ui`, line height 1.5, `--fg-subtle`, always two lines tall; actions gap 0.5rem, 0.75rem above.
 - Preview: one height (7.125rem; `card` 5rem), masked to fade toward its foot; bars `--line` and `--line-hairline`, marks `--field-fill`, scaled to 0.88 at rest.
-- Hover or focus within: bars draw out to full length (600ms `--ease-out-expo`, staggered 60, 120, 180ms); the first item's mark takes `--hue` and its bar `--hue-ink`. Still under reduced motion.
+- Hover or focus within: bars draw out to full length (twice `--motion-slow`, `--ease-out`, staggered by 0.4, 0.8 and 1.2 times `--motion-fast`); the first item's mark takes `--hue` and its bar `--hue-ink`. Still under reduced motion.
 - Drop well: `1px dashed var(--line)`, radius `--radius-panel`; two sheets behind the tile at plus and minus 12deg. Dropping: border `var(--hue-ink, var(--fg-strong))`, ground `color-mix(in oklab, var(--hue, var(--field-fill)) 40%, transparent)`, the tile lifts 0.25rem and the sheets fan to 22deg.
 
-Tokens: `--head-h` (the page header's height, `calc(2.5rem - 1px)`, declared in vic-ui's `tokens.css`; in the source it was the app's `frame.css`), `--radius-row`, `--radius-round`, `--radius-mark`, `--radius-panel`, `--hue`, `--hue-ink`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--text-read`, `--text-ui`, `--line`, `--line-hairline`, `--ease-out-expo`, `--ease-track`.
+Tokens: `--head-h` (the page header's height, `calc(2.5rem - 1px)`, declared in vic-ui's `tokens.css`; in the source it was the app's `frame.css`), `--radius-row`, `--radius-round`, `--radius-mark`, `--radius-panel`, `--hue`, `--hue-ink`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--text-read`, `--text-ui`, `--line`, `--line-hairline`, `--motion-fast`, `--motion-base`, `--motion-slow`, `--ease-out`, `--ease-track`.
 
 CSS: `ui-display.css`. Classes `ui-empty`, `ui-empty-mark`, `ui-empty-title`, `ui-empty-line`, `ui-empty-actions` and the preview's `ui-empty-art`, `ui-empty-art-row`, `ui-empty-art-mark`, `ui-empty-art-words`, `ui-empty-art-pill`, `ui-empty-art-head`, `ui-empty-art-cells`, `ui-empty-art-card`, `ui-empty-art-lane`, `ui-empty-art-node`, `ui-empty-art-root`, `ui-empty-art-branch`, `ui-empty-art-level`, `ui-empty-art-turn`, `ui-empty-bar`, `ui-empty-bar-soft`. Needs the `[data-hue]` rules.
 
@@ -1625,7 +1625,7 @@ States:
 - Grid surface: `ui-menu` with padding 0.5rem, placed `bottom-start`, not height-capped, placed again as the month changes. Always six weeks, so it keeps one height.
 - Head: month and year `--text-ui` weight 600, tabular, `--fg-strong`, `aria-live`; steps 1.75rem (`ChevronRightIcon` 15px, the back one turned 180deg), held at the bounds (opacity 0.55, `not-allowed`).
 - Weekday heads: two letters, 1.5rem tall, `--text-tag` weight 400, `--fg-subtle`.
-- Day: 2rem square, radius `--radius-row`, `--text-ui`, tabular, `--fg`. Hover (not chosen) `--field-fill-hover`; press `--field-fill`; focus outline 2px `--focus`, offset 2px. Outside the month `--fg-subtle`. Today: ring `inset 0 0 0 1px var(--fg-subtle)`. Chosen: `--ink-words` on `--ink-face-bottom`. Out of bounds (`aria-disabled`): opacity 0.55, `not-allowed`, no hover. Transitions 140ms. No state changes the type.
+- Day: 2rem square, radius `--radius-row`, `--text-ui`, tabular, `--fg`. Hover (not chosen) `--field-fill-hover`; press `--field-fill`; focus outline 2px `--focus`, offset 2px. Outside the month `--fg-subtle`. Today: ring `inset 0 0 0 1px var(--fg-subtle)`. Chosen: `--ink-words` on `--ink-face-bottom`. Out of bounds (`aria-disabled`): opacity 0.55, `not-allowed`, no hover. Transitions `--motion-fast`. No state changes the type.
 
 Focus on the field: the trigger is a button and draws the keyboard's ring on its box, as `Select`'s does (fixed in vic-ui; the source drew none).
 
@@ -1670,8 +1670,8 @@ States:
 
 - Track: left border `2px solid var(--line-soft)`, gap 0.5rem.
 - Heading: `--text-ui` weight `--weight-ui`, line height 1.25rem, `--fg-subtle`, padding-left 1rem.
-- Entry: `--text-ui` weight 400, `--fg-subtle`, padding-left 1rem (1.75rem under a heading), one line with an ellipsis, right corners `--radius-row`. Hover `--fg` on `--field-fill`; press `--field-fill-hover`; current (`aria-current="page"`) `--fg-strong`; focus outline 2px `--focus`, offset 2px. Colour and ground ease 150ms `--ease-track`.
-- Bar: 2px, round, `--brand`, set by its top and bottom so each end eases on its own (180ms `--ease-track`) once it has been placed. Still under reduced motion.
+- Entry: `--text-ui` weight 400, `--fg-subtle`, padding-left 1rem (1.75rem under a heading), one line with an ellipsis, right corners `--radius-row`. Hover `--fg` on `--field-fill`; press `--field-fill-hover`; current (`aria-current="page"`) `--fg-strong`; focus outline 2px `--focus`, offset 2px. Colour and ground ease over `--motion-fast` `--ease-track`.
+- Bar: 2px, round, `--brand`, set by its top and bottom so each end eases on its own (`--motion-base` `--ease-track`) once it has been placed. Still under reduced motion.
 
 Tokens: `--line-soft`, `--text-ui`, `--fg-subtle`, `--fg`, `--fg-strong`, `--radius-row`, `--radius-round`, `--field-fill`, `--field-fill-hover`, `--focus`, `--brand`, `--ease-track`.
 
@@ -1693,7 +1693,7 @@ An icon alone that acts: a square `Button` whose words are its accessible name a
 | `disabledReason` | `string \| undefined` | none | Says the reason in place of its words. |
 | every other `Button` prop but `square`, `children`, `icon`, `aria-label` | | | `size`, `onClick`, `aria-pressed` and the rest. |
 
-States (`quiet`): height `--control-h-sm` (`lg`: `--control-h`), square, radius `--radius-button`, `--fg`. Hover `--fg-strong` on `--field-fill-hover`, no underline. Press, `aria-pressed="true"`, or an open popup trigger (`aria-haspopup` with `aria-expanded="true"`): `--fg-strong` on `--field-fill`. Background and colour ease 160ms. Focus and disabled as `Button`. `line` and `ink` looks as `Button`.
+States (`quiet`): height `--control-h-sm` (`lg`: `--control-h`), square, radius `--radius-button`, `--fg`. Hover `--fg-strong` on `--field-fill-hover`, no underline. Press, `aria-pressed="true"`, or an open popup trigger (`aria-haspopup` with `aria-expanded="true"`): `--fg-strong` on `--field-fill`. Background and colour ease over `--motion-fast`. Focus and disabled as `Button`. `line` and `ink` looks as `Button`.
 
 Tokens: `Button`'s, chiefly `--control-h-sm`, `--control-h`, `--radius-button`, `--fg`, `--fg-strong`, `--field-fill`, `--field-fill-hover`.
 
@@ -1729,7 +1729,7 @@ Two or more surfaces sharing one pane, the one named by `active` in view and the
 | `children` | `ReactNode` | required | `SlidingView`s. |
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 
-States: the track translates by `-100%` per view over 220ms `cubic-bezier(0.4, 0, 0.2, 1)`; in place under reduced motion. The pane is `overflow: clip`, never scrolled.
+States: the track translates by `-100%` per view over `--motion-base` `--ease-track`; in place under reduced motion. The pane is `overflow: clip`, never scrolled.
 
 CSS: `ui-display.css`. Classes `ui-sliding`, `ui-sliding-track`.
 
@@ -1766,7 +1766,7 @@ Holds the sidebar's state and draws the row it sits in with the page: a flex row
 | `style` | `CSSProperties` | none | On the wrapper. |
 | `children` | `ReactNode` | required | The `Sidebar` and the page. |
 
-The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: 250ms`, `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-row-height: 2rem` (1.75rem under `size="sm"`), `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). Not contained, it is at least `100svh` tall.
+The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: var(--motion-base)`, `--sidebar-easing: var(--ease-track)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-row-height: 2rem` (1.75rem under `size="sm"`), `--sidebar-group-gap: 0.75rem` (added above each group after the first while the rail is open). Not contained, it is at least `100svh` tall.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-wrapper`, `ui-sidebar-window`.
 
@@ -1812,7 +1812,7 @@ The middle of the rail, which scrolls: its edges fade only where there is more t
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 | `ref` | `Ref<HTMLDivElement>` | none | Forwarded. |
 
-States: the viewport hides the native scrollbar, pads 0.5rem inline, and masks its top and bottom with `min(24px, var(--scroll-area-overflow-y-start / -end, 24px))`, which the component writes as it scrolls. The bar is 6px, at least 24px tall, round, `--line`; its track fades in over 150ms.
+States: the viewport hides the native scrollbar, pads 0.5rem inline, and masks its top and bottom with `min(24px, var(--scroll-area-overflow-y-start / -end, 24px))`, which the component writes as it scrolls. The bar is 6px, at least 24px tall, round, `--line`; its track fades in over `--motion-fast`.
 
 Tokens: `--line`, `--radius-round`; local `--scroll-area-overflow-y-start`, `--scroll-area-overflow-y-end`.
 
@@ -1834,7 +1834,7 @@ A group's heading, which folds into a rule as the rail folds (none above the fir
 | `size` | `"sm" \| "md"` | the provider's | `sm` is denser: `--text-tag`, padding-block `0.125rem 0.1875rem`. `md` keeps the full size in a dense rail. Sets `data-size`. |
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 
-States: words `--text-meta` weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem` (`sm`, or under a dense provider without a `size` of its own: `--text-tag` and `0.125rem 0.5rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (160ms); the first group's label keeps no margin and no rule. In a sheet it does not transition.
+States: words `--text-meta` weight `--weight-quiet`, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem` (`sm`, or under a dense provider without a `size` of its own: `--text-tag` and `0.125rem 0.5rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (`--motion-fast`); the first group's label keeps no margin and no rule. In a sheet it does not transition.
 
 Tokens: `--text-meta`, `--fg-subtle`, `--line`, `--sidebar-animation-duration`, `--sidebar-easing`.
 
@@ -1878,7 +1878,7 @@ States:
 - Active: `--field-fill-hover`, `--fg-strong`, icon `--fg-strong`.
 - Focus: outline 2px `--focus`, offset -2px.
 - Dot: 0.3125rem, round, `--bg-contrast`, top right of the mark, shown only while folded.
-- Ground and colour ease 140ms. No weight change.
+- Ground and colour ease over `--motion-fast`. No weight change.
 
 Tokens: `--radius-row`, `--radius-round`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--focus`, `--bg-contrast`.
 
@@ -1973,7 +1973,7 @@ A file on its way somewhere, as a small card: a picture or icon, its name cut to
 | `removeLabel` | `string` | `` `Take ${name} off` `` | The remove button's name. |
 | `className` | `string` | none | Placement. |
 
-States: radius `--radius-row`, `--text-meta`, `--fg` on `--surface-lifted` with a `0 0 0 1px var(--line)` ring; thumb 1.375rem (card 2.25rem) on `--field-fill`; name `--fg-strong`; size tabular `--fg-subtle`. Remove: a quiet `IconButton` 1.375rem tall (`XIcon` 14px). Sending: a 2px bar of `--line` with an `--ink-face-bottom` fill easing its width (300ms `--ease-track`); unknown progress sweeps with `ui-progress-sweep`, and under reduced motion is a still bar at opacity 0.5.
+States: radius `--radius-row`, `--text-meta`, `--fg` on `--surface-lifted` with a `0 0 0 1px var(--line)` ring; thumb 1.375rem (card 2.25rem) on `--field-fill`; name `--fg-strong`; size tabular `--fg-subtle`. Remove: a quiet `IconButton` 1.375rem tall (`XIcon` 14px). Sending: a 2px bar of `--line` with an `--ink-face-bottom` fill easing its width (`--motion-slow` `--ease-track`); unknown progress sweeps with `ui-progress-sweep`, and under reduced motion is a still bar at opacity 0.5.
 
 Tokens: `--radius-row`, `--text-meta`, `--fg`, `--fg-strong`, `--fg-subtle`, `--surface-lifted`, `--line`, `--field-fill`, `--ink-face-bottom`, `--ease-track`.
 
@@ -1992,7 +1992,7 @@ Pictures and films sent beside words: one at its own shape within 28rem by 20rem
 
 `MediaItem` is `{ key; kind: "image" | "video"; src; alt; width: number | null; height: number | null; onOpen?: () => void }`. `MEDIA_WIDE` is 448 and `MEDIA_TALL` is 320 (pixels). A single box is its own shape scaled into those bounds (at least 64px wide); unknown shape is 16rem at 4:3 for a picture and 448px at 16:9 for a film. A film's address gets `#t=0.1` for a poster frame.
 
-States: tile radius `--radius-row` (inside a grid `--radius-mark`, the grid's outer corners `--radius-row`) on `--bg-recessed`, with an edge `inset 0 0 0 1px var(--line-soft)` laid over the picture. With `onOpen` the tile is a button (`zoom-in`); hover darkens the picture (`brightness(0.94)`, 150ms); focus outline 2px `--focus`, offset 2px. A picture or film that fails says so in words ("This picture could not be shown.", "This film could not be played here.") at `--text-meta` `--fg-subtle`. The `+n` cover is `--text-lead` weight 600 white on `oklch(0 0 0 / 0.45)`; a film's ground is `oklch(0 0 0)`.
+States: tile radius `--radius-row` (inside a grid `--radius-mark`, the grid's outer corners `--radius-row`) on `--bg-recessed`, with an edge `inset 0 0 0 1px var(--line-soft)` laid over the picture. With `onOpen` the tile is a button (`zoom-in`); hover darkens the picture (`brightness(0.94)`, `--motion-fast`); focus outline 2px `--focus`, offset 2px. A picture or film that fails says so in words ("This picture could not be shown.", "This film could not be played here.") at `--text-meta` `--fg-subtle`. The `+n` cover is `--text-lead` weight 600 white on `oklch(0 0 0 / 0.45)`; a film's ground is `oklch(0 0 0)`.
 
 Tokens: `--radius-row`, `--radius-mark`, `--bg-recessed`, `--line-soft`, `--focus`, `--text-meta`, `--text-lead`, `--fg-subtle`.
 
@@ -2013,7 +2013,7 @@ A file that is not drawn in place: its mark, its name, what it is and how large,
 | `pending` | `boolean` | `false` | Quieter (opacity 0.55) and inert. |
 | `className` | `string` | none | Placement. |
 
-States: width `min(100%, 20rem)`, radius `--radius-row`, `--field-fill`, hover `--field-fill-hover` (150ms). Focus on the open area: outline 2px `--focus`, offset 2px. Mark 2rem on `--surface-lifted` with a `--line-soft` ring; name `--text-ui` weight 600 `--fg-strong`; meta `--text-meta` tabular `--fg-subtle`. Preview ground `--bg-recessed`; a canvas in it is white with radius `--radius-mark`. Download: a quiet square `ButtonLink` (`DownloadSimpleIcon` 16px) with a "Download" tooltip.
+States: width `min(100%, 20rem)`, radius `--radius-row`, `--field-fill`, hover `--field-fill-hover` (`--motion-fast`). Focus on the open area: outline 2px `--focus`, offset 2px. Mark 2rem on `--surface-lifted` with a `--line-soft` ring; name `--text-ui` weight 600 `--fg-strong`; meta `--text-meta` tabular `--fg-subtle`. Preview ground `--bg-recessed`; a canvas in it is white with radius `--radius-mark`. Download: a quiet square `ButtonLink` (`DownloadSimpleIcon` 16px) with a "Download" tooltip.
 
 Tokens: `--radius-row`, `--radius-mark`, `--field-fill`, `--field-fill-hover`, `--focus`, `--surface-lifted`, `--line-soft`, `--text-ui`, `--text-meta`, `--fg-strong`, `--fg-subtle`, `--bg-recessed`, `--control-h-sm`.
 
@@ -2087,7 +2087,7 @@ Something said back to a message, as a small pill: its mark and how many. Its wo
 | `onPress` | `() => void` | required | Say it or take it back. |
 | `tip` | `ReactNode` | `label` | What the tooltip says ("Seen by Ana and you"). |
 
-States: 1.375rem tall, radius `--radius-round`, `--text-tag` weight `--weight-ui`, `--fg-subtle` on `--field-fill`. Hover `--fg` on `--field-fill-hover`. Press: ring `inset 0 0 0 1px var(--fg-subtle)`. Pressed: `--fg-strong` on `--surface-lifted`, ring `inset 0 0 0 1px var(--fg-strong)`. Focus outline 2px `--focus`, offset 2px. Count tabular. Eases 150ms.
+States: 1.375rem tall, radius `--radius-round`, `--text-tag` weight `--weight-ui`, `--fg-subtle` on `--field-fill`. Hover `--fg` on `--field-fill-hover`. Press: ring `inset 0 0 0 1px var(--fg-subtle)`. Pressed: `--fg-strong` on `--surface-lifted`, ring `inset 0 0 0 1px var(--fg-strong)`. Focus outline 2px `--focus`, offset 2px. Count tabular. Eases over `--motion-fast`.
 
 Tokens: `--radius-round`, `--text-tag`, `--fg-subtle`, `--fg`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--surface-lifted`, `--focus`.
 
@@ -2112,7 +2112,7 @@ A compact pill of dense icon buttons on the floating surface, laid over the corn
 | `role` | `"toolbar" \| "group"` | `"toolbar"` | Its role. |
 | `className` | `string` | none | Placement. |
 
-States: padding 0.125rem, radius `--radius-row`, `--surface-lifted`, `--shadow-raise`, fading in 120ms (none under reduced motion). Square buttons inside are 1.625rem with radius `calc(var(--radius-row) - 0.125rem)`, icons 15px, `--fg-subtle` (hover `--fg-strong`); a button with words is 1.625rem at `--text-meta`.
+States: padding 0.125rem, radius `--radius-row`, `--surface-lifted`, `--shadow-raise`, fading in over `--motion-fast`. Square buttons inside are 1.625rem with radius `calc(var(--radius-row) - 0.125rem)`, icons 15px, `--fg-subtle` (hover `--fg-strong`); a button with words is 1.625rem at `--text-meta`.
 
 Tokens: `--radius-row`, `--surface-lifted`, `--shadow-raise`, `--fg-subtle`, `--fg-strong`, `--text-meta`.
 
@@ -2423,13 +2423,32 @@ Font tokens:
 
 ### Motion
 
+Five tokens on `:root` set every move in the library: three durations and two curves. Every transition and animation in the stylesheets reads them, so a snappier or a stiller system is five values, not forty rules. Longer moves are multiples of `--motion-slow` and staggers are fractions of `--motion-fast`, so they follow too.
+
 | Token | Value | Use |
 | --- | --- | --- |
-| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Something arriving (accordion panels, empty-state bars). |
-| `--ease-track` | `cubic-bezier(0.4, 0, 0.2, 1)` | Something following a position (tab indicator, contents bar, progress). |
-| `--default-transition-duration` | `100ms` | Tailwind's default. |
+| `--motion-fast` | `150ms` | A colour, a fill or a fade answering a pointer: hover and press grounds, focus rings, carets, tooltips, menus, a toast leaving. |
+| `--motion-base` | `220ms` | Something arriving or folding: dialogs, sheets, toasts arriving, the accordion, the tab indicator, the switch knob, the sidebar. |
+| `--motion-slow` | `300ms` | Something travelling far or easing a whole face: the button's gradient stops, progress, the way-in's height. The empty state's bars take twice it and the focus page's art eleven thirds of it. |
+| `--ease-out` | `cubic-bezier(0.2, 0.8, 0.2, 1)` | Something arriving, and every fade. |
+| `--ease-track` | `cubic-bezier(0.4, 0, 0.2, 1)` | Something following a position (tab indicator, contents bar, progress, sliding views, the sidebar), and the button's face. |
+| `--ease-out-expo` | `var(--ease-out)` | Deprecated, removed in 1.0. The old name for an arrival curve; it was `cubic-bezier(0.16, 1, 0.3, 1)`. |
 
-Pieces also use fixed curves of their own: `cubic-bezier(0.2, 0.8, 0.2, 1)` for entrances (menus, dialogs, toasts, the switch knob, the radio dot), `cubic-bezier(0.2, 0.7, 0.2, 1)` for the field error, and the sidebar's `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`. Under `prefers-reduced-motion: reduce` every entrance, slide, sweep, spin and fold stops (each piece's section says which); short colour and fill eases stay.
+Under `prefers-reduced-motion: reduce` the three durations are `0s`, set once in `tokens.css`, so every piece lands in its end state at once: entrances, slides, folds and fades alike. Pieces carry no reduced-motion rules of their own except for loops, whose period is not a duration: the spinner and the unknown progress bar stand still, the file chip's unknown bar becomes a still stretch at half strength, and the code field's cursor stops blinking. A system that sets its own durations sets them inside `@media (prefers-reduced-motion: no-preference)`, or the zeroing loses to them; a section can set them for itself the same way.
+
+```css
+/* Snappier */
+@media (prefers-reduced-motion: no-preference) {
+  :root { --motion-fast: 100ms; --motion-base: 150ms; --motion-slow: 200ms; }
+}
+
+/* Stiller: nothing moves, for everyone */
+:root { --motion-fast: 0s; --motion-base: 0s; --motion-slow: 0s; }
+```
+
+Kept literal, because they are not motion: the loop periods (`ui-spin` 700ms, `ui-progress-sweep` 1.4s, the code cursor's 1.28s blink), the checkbox tick's overshooting curve `cubic-bezier(0.2, 0.8, 0.2, 1.4)` (its duration is `--motion-fast`), and the timers in script: the tooltip's `TIP_DELAY_MS` and 400ms warm window, the 700ms type-ahead window, the sidebar scrollbar's 600ms hold, and `FormSteps`, whose motion is drawn by the `motion` library (480ms, its own curve, none under reduced motion). One timer mirrors a duration: `toast.dismiss` waits `--motion-fast`, read from the root, before the toast leaves the list. A duration of zero fires no `transitionend`, and nothing in the library waits on one: the image preview's eased zoom clears itself when reduced motion is on.
+
+In the shadcn catalogue (`vic-ui/ui`), Tailwind's default transition duration and curve are `--motion-fast` and `--ease-track`, its `ease-in-out` is `--ease-track`, and its `ease-out` utility reads this `--ease-out` (they share the name). tw-animate-css's `animate-in` and `animate-out` default to `--motion-fast` and `--ease-out`, and its accordion and collapsible to `--motion-base`. A `duration-*` utility is a literal Tailwind writes, which no token reaches, so that stylesheet keeps its own rule under reduced motion: every animation is cut to `0s`, as the tokens cut them, and every transition to 0.01ms, so anything waiting on `transitionend` still hears it.
 
 ### Scrim
 
