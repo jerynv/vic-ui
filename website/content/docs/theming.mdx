@@ -46,7 +46,7 @@ To make your own step, set these tokens on `[data-density="your-name"]` in your 
 
 The working sizes are `--text-tag` (11px), `--text-meta` (12px), `--text-ui` (13px), `--text-read` (14px) and `--text-lead` (16px). Above them, `--text-title` (1.25rem, line height 1.2) is a headline in the product, such as a dialog's title, and `--text-statement` (2rem, line height 1.12) is the one sentence a screen on the way in is about. Each size has its line height as a token beside it, such as `--text-title--line-height`.
 
-Letter spacing is a token per size: `--track-tag`, `--track-meta`, `--track-ui`, `--track-read`, `--track-lead`, `--track-title` (-0.02em) and `--track-statement` (-0.01em). The working sizes default to the face's own spacing. Each piece reads the spacing that goes with its size, so a face that needs looser small text takes one line:
+Letter spacing is a token per size: `--track-tag`, `--track-meta`, `--track-ui`, `--track-read`, `--track-lead`, `--track-title` (-0.02em), `--track-statement` (-0.01em) and `--track-display` (-0.035em), for headlines above a statement such as this site's marketing headings. The working sizes default to the face's own spacing. Each piece reads the spacing that goes with its size, so a face that needs looser small text takes one line:
 
 ```css
 :root {

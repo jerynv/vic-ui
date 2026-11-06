@@ -7,11 +7,12 @@ import { createServer } from "vite";
 import { DensityTypeFixture } from "./density-type.fixture.mjs";
 
 // What each density step draws, in pixels: a field, a small field, a button (the dense height)
-// and a large one, a tab switcher, a list's row, a menu's item and a table's body row.
+// and a large one, a tab switcher, a list's row, a menu's item, a table's body row, an inline
+// combobox's row, a place picker's row, a roster's body row, and a small field's padding.
 const expected = {
-  default: { field: 36, small: 32, button: 32, large: 36, tabs: 36, row: 44, item: 34, cell: 33 },
-  compact: { field: 32, small: 28, button: 28, large: 32, tabs: 32, row: 36, item: 28, cell: 27 },
-  comfortable: { field: 40, small: 36, button: 36, large: 40, tabs: 40, row: 52, item: 40, cell: 41 },
+  default: { field: 36, small: 32, button: 32, large: 36, tabs: 36, row: 44, item: 34, cell: 33, option: 32, place: 34, roster: 40, smPad: 10 },
+  compact: { field: 32, small: 28, button: 28, large: 32, tabs: 32, row: 36, item: 28, cell: 27, option: 26, place: 28, roster: 34, smPad: 8 },
+  comfortable: { field: 40, small: 36, button: 36, large: 40, tabs: 40, row: 52, item: 40, cell: 41, option: 38, place: 40, roster: 48, smPad: 12 },
 };
 
 test("density and type tokens", { timeout: 60000 }, async (t) => {
@@ -48,6 +49,10 @@ test("density and type tokens", { timeout: 60000 }, async (t) => {
         row: height(".ui-list-row"),
         item: height(".ui-menu-item"),
         cell: height(".ui-table tbody tr"),
+        option: height(".ui-combobox-item"),
+        place: height(".ui-place-row"),
+        roster: height("[data-look='roster'] tbody tr"),
+        smPad: parseFloat(getComputedStyle(root.querySelector(".ui-field-sm .ui-field-input")).paddingLeft),
       };
     });
 
@@ -114,6 +119,22 @@ test("density and type tokens", { timeout: 60000 }, async (t) => {
       assert.ok(near(fallback.width, face.width, 0.015), `a line keeps its width: ${fallback.width} against ${face.width}`);
       assert.ok(Math.abs(fallback.line - face.line) <= 1, `a line keeps its height: ${fallback.line} against ${face.line}`);
       assert.ok(!near(plain.width, face.width, 0.05) && Math.abs(plain.line - face.line) > 1, `the unadjusted face would not: ${JSON.stringify(plain)} against ${JSON.stringify(face)}`);
+      // At 600 and 700 the fallback draws its bold face, scaled to Cal Sans UI's bold; the
+      // regular face thickened would run about 2% narrow at 600.
+      const bold = (family, weight) => page.getByTestId("sample").evaluate(async (el, [family, weight]) => {
+        await document.fonts.load(`${weight} 100px ${family}`);
+        const probe = el.cloneNode(true);
+        probe.style.cssText += `; font-family: ${family}; font-weight: ${weight}; white-space: nowrap; width: max-content; font-size: 100px`;
+        el.after(probe);
+        const width = probe.getBoundingClientRect().width;
+        probe.remove();
+        return width;
+      }, [family, weight]);
+      for (const weight of [600, 700]) {
+        const faceWidth = await bold('"Cal Sans UI"', weight);
+        const fallbackWidth = await bold('"Cal Sans UI Fallback"', weight);
+        assert.ok(near(fallbackWidth, faceWidth, 0.015), `a ${weight} line keeps its width: ${fallbackWidth} against ${faceWidth}`);
+      }
     });
 
     assert.deepEqual(errors, []);

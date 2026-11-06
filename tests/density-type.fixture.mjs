@@ -1,8 +1,9 @@
 import { createElement as h } from "react";
 import { Button, Row, Rows, Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarProvider, Table, Tabs, TextField } from "../dist/index.js";
 
-// One of each piece the density moves, drawn the same in every section. The menu's items are
-// drawn by their classes, since a menu only opens on a press.
+// One of each piece the density moves, drawn the same in every section. The menu's items, the
+// inline combobox's row and the place picker's row are drawn by their classes, since each only
+// shows inside its open list.
 function Pieces({ name }) {
   return h("div", { "data-testid": name, style: { display: "grid", gap: 8, width: 420 } },
     h(TextField, { "aria-label": `${name} field`, "data-testid": `${name}-field`, defaultValue: "Words" }),
@@ -15,6 +16,9 @@ function Pieces({ name }) {
       h("div", { className: "ui-menu-item", role: "menuitem" }, h("span", { className: "ui-menu-words" }, "An action")),
     ),
     h(Table, { "aria-label": `${name} table`, columns: [{ key: "name", label: "Name" }], rows: [{ name: "Ada" }], rowKey: (row) => row.name }),
+    h("div", { className: "ui-combobox-item", role: "option", "aria-selected": false }, "An option"),
+    h("button", { type: "button", className: "ui-place-row" }, h("span", { className: "ui-place-row-words" }, "A place")),
+    h("div", { "data-testid": `${name}-roster` }, h(Table, { look: "roster", "aria-label": `${name} roster`, columns: [{ key: "name", label: "Name" }], rows: [{ name: "Ada" }], rowKey: (row) => row.name })),
   );
 }
 

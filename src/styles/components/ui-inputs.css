@@ -23,8 +23,9 @@
     box-shadow: 0 0 0 2px var(--focus);
   }
 
+  /* A small field's padding is a step under the density's, as its height is. */
   .ui-field-sm .ui-field-input {
-    padding: 0 0.625rem;
+    padding: 0 calc(var(--field-pad-x) - 0.125rem);
     font-size: var(--text-ui);
     letter-spacing: var(--track-ui);
   }
@@ -50,11 +51,11 @@
   }
 
   .ui-field-sm .ui-field-prefix {
-    padding-left: 0.625rem;
+    padding-left: calc(var(--field-pad-x) - 0.125rem);
   }
 
   .ui-field-sm .ui-field-suffix {
-    padding-right: 0.625rem;
+    padding-right: calc(var(--field-pad-x) - 0.125rem);
   }
 
   /* The line under a field with a count: the hint or the error, then the count at its end,
@@ -107,7 +108,7 @@
   }
 
   .ui-field-sm .ui-textarea {
-    padding: 0.375rem 0.625rem;
+    padding: 0.375rem calc(var(--field-pad-x) - 0.125rem);
   }
 
   /* ---- a search ------------------------------------------------------------------- */
@@ -133,7 +134,7 @@
   }
 
   .ui-field-sm .ui-search-glass {
-    margin-left: 0.625rem;
+    margin-left: calc(var(--field-pad-x) - 0.125rem);
   }
 
   .ui-field-sm .ui-search {

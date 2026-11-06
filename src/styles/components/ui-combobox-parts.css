@@ -13,8 +13,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 32px;
-    padding: 4px 8px;
+    min-height: calc(var(--menu-item-h) - 2px);
+    padding: calc(4px + (var(--menu-item-h) - 2.125rem) / 2) 8px;
     border-radius: var(--radius-row);
     color: var(--fg);
     font-size: var(--text-ui);

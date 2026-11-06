@@ -44,6 +44,9 @@
   --track-lead: 0em;
   --track-title: -0.02em;
   --track-statement: -0.01em;
+  /* A display headline, above a statement: the marketing site's headings and its icon page's.
+     The hero draws 0.02em closer still. */
+  --track-display: -0.035em;
   /* Motion: three durations and two curves, read by every transition and animation in the
      library. Fast is a colour, a fill or a fade answering a pointer; base is something arriving
      or folding (a menu, a dialog, a panel); slow is something travelling far or easing a whole

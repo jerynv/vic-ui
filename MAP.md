@@ -37,7 +37,7 @@ Six additive root primitives (`ComboboxRoot`, `ComboboxSearch`, `ComboboxList`, 
 
 Arrow keys skip disabled rows and clamp at the ends; Home/End traverse the open list, Enter selects and Escape requests closing. Modified keys and IME composition remain native. Input focus uses stable, safely encoded active-descendant IDs; filtering, provider replacement and reorder cannot retain an absent option. Tab reaches the external rail/footer because the scrollable list is explicitly outside tab order. Scrolling reveals the active row inside its own list after reorder/refocus without moving the surrounding page. Root or search-level disabled states and read-only search prevent both keyboard and pointer selection. Controlled state can decline requests, and selection/closing preserve the query.
 
-The existing Combobox family contains live light/dark examples with a 44px provider rail, pinned search, 32px normal-weight rows and independent footer. T3 layout reference: `7f6f47b27b44456f1c8214d3b566b375c09f629e` (MIT). Application loaders and account logic were not copied. Installed Base UI was evaluated: its permanently expanded inline state and Home/End caret behavior cannot implement this controller contract through public APIs.
+The existing Combobox family contains live light/dark examples with a 44px provider rail, pinned search, normal-weight rows at least 2px under `--menu-item-h` (32px at the default density) and independent footer. T3 layout reference: `7f6f47b27b44456f1c8214d3b566b375c09f629e` (MIT). Application loaders and account logic were not copied. Installed Base UI was evaluated: its permanently expanded inline state and Home/End caret behavior cannot implement this controller contract through public APIs.
 
 Validation covers SSR hydration, both stylesheet entries/themes, keyboard/pointer/IME, dynamic item identity, disabled/read-only changes, controlled refusal, empty results, focus/scroll recovery, mobile overflow and the old Combobox. Strict packed Bundler/NodeNext declarations use `skipLibCheck:false`, check all 131 prior exports and compile the new API. All three stylesheet outputs contain the new styles. Library/package, seven website and local review checks pass, as do both typechecks, design/dash checks and reference build. Independent review found the leaf restriction mismatch; controller-level guards and regressions resolve it. No Phaethon edits or changes to released preview/control behavior.
 
@@ -581,10 +581,10 @@ States:
 - Focus: nothing is drawn; the caret shows it (`outline: none` on the input).
 - Error (`data-invalid`): `inset 0 0 0 1px var(--tone-danger-ink)`; `aria-invalid`; the error takes the label's place (see `FieldHead`).
 - Disabled (`:has(:disabled)`): box opacity 0.55, `not-allowed`, no hover.
-- Input: padding `0 var(--field-pad-x)` (0.75rem at the default density; `sm`: `0 0.625rem`, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
+- Input: padding `0 var(--field-pad-x)` (0.75rem at the default density; `sm`: `0 calc(var(--field-pad-x) - 0.125rem)`, 0.625rem at the default density, and its prefix and suffix the same, `--text-ui`), size `--field-text`, `--fg-strong`; placeholder `--fg-subtle`. Prefix and suffix `--field-text` (`sm`: `--text-ui`), `--fg-subtle`.
 - Disabled for a reason (`disabledReason`, `useFieldReason`): the input is `readOnly` and `aria-disabled` rather than disabled, the box carries `data-disabled`, and the reason hangs from the box on pointer rest and focus.
 
-Tokens: `--control-h`, `--control-h-sm`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
+Tokens: `--control-h`, `--control-h-sm`, `--field-pad-x`, `--radius-field`, `--field-fill`, `--field-fill-hover`, `--field-text`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--tone-danger-ink`.
 
 CSS: `ui.css` (`ui-field`, `ui-field-sm`, `ui-field-head`, `ui-field-label`, `ui-field-error`, `ui-field-box`, `ui-field-input`, `ui-field-suffix`, `ui-field-hint`) and `ui-inputs.css` (`ui-field-prefix`, and the `sm` sizes of the input, prefix and suffix).
 
@@ -869,7 +869,7 @@ Words over several lines, in the box `TextField` draws. Optionally grows with it
 
 States:
 
-- Box: height auto, stretches; textarea padding `0.5rem var(--field-pad-x)` (`sm`: `0.375rem 0.625rem`), line height 1.5, `resize: vertical` (none with `grow`).
+- Box: height auto, stretches; textarea padding `0.5rem var(--field-pad-x)` (`sm`: `0.375rem calc(var(--field-pad-x) - 0.125rem)`), line height 1.5, `resize: vertical` (none with `grow`).
 - Hover, error and disabled: as `TextField`; disabled or held also sets `data-disabled` on the box (opacity 0.55, `not-allowed`, hover stays `--field-fill`). A held field that takes focus draws `0 0 0 2px var(--focus)` round the box.
 - Count: `--text-ui`, tabular, `--fg-subtle`; at the limit (`data-full`) `--tone-caution-ink` (`--motion-fast`). The foot line keeps `calc(var(--text-ui) * 1.45)` height.
 
@@ -953,7 +953,7 @@ A search: the field's box with a glass at its start and, once it has words, a cl
 
 States:
 
-- Glass: `MagnifyingGlassIcon` 16px (`sm` 14px), margin-left 0.75rem (`sm` 0.625rem), `--fg-subtle`; `--fg-strong` while the box has focus (`--motion-fast`).
+- Glass: `MagnifyingGlassIcon` 16px (`sm` 14px), margin-left `--field-pad-x` (`sm` 0.125rem less), `--fg-subtle`; `--fg-strong` while the box has focus (`--motion-fast`).
 - Clear: shown while it has words and is not disabled or held; 1.5rem square (`sm` 1.375rem), radius `--radius-row`, `--fg-subtle`; hover `--fill-chosen` and `--fg-strong`; press `--fill-press`; focus outline 2px `--focus`, offset 2px. Icon `XIcon` 14px (`sm` 13px). A press empties it and puts the focus back.
 - The browser's own cancel button and decoration are hidden.
 - Box, error, disabled and held: as `Textarea`.
@@ -1082,7 +1082,7 @@ States:
 - Control row (`data-control`): `cursor: default`; the control sits at the end with `margin-block: -0.25rem`, so the row keeps its height.
 - Head: flex, gap 0.625rem, padding `0.4rem 0.65rem 0.5rem`, margin-bottom 0.3rem, a bottom rule `1px solid var(--line)`, `--fg-strong`.
 
-Tokens: `--radius-float`, `--surface-lifted`, `--shadow-float`, `--fg`, `--fg-strong`, `--fg-subtle`, `--text-read`, `--text-meta`, `--tone-danger-ink`, `--tone-danger-tint`, `--line`.
+Tokens: `--menu-item-h`, `--radius-float`, `--surface-lifted`, `--shadow-float`, `--fg`, `--fg-strong`, `--fg-subtle`, `--text-read`, `--text-meta`, `--tone-danger-ink`, `--tone-danger-tint`, `--line`.
 
 CSS: `ui.css` (`ui-menu`, `ui-menu-item`, `ui-menu-words`, `ui-menu-hint`, `ui-menu-end`, `ui-menu-control`, `ui-menu-head`, keyframes `ui-menu-in`) and `ui-overlays.css` (`ui-menu-actions`, `ui-menu-icon`, `ui-menu-rule`, `ui-menu-section`, `ui-menu-label`). Note that `.ui-menu-group` is also styled in `ui-inputs.css` as a combobox's heading (padding, `--text-meta`, weight 600, `--fg-subtle`), and in the source a menu's group wrapper carried that class too, so a grouped menu's rows were inset 0.65rem and inherited weight 600. That was a defect in the source at `e7221f50`, since fixed there too. A menu's section is `.ui-menu-section`, with the same `margin-top: 0.3rem` after a section or an item, and `.ui-menu-group` stays the list's heading alone.
 
@@ -1244,8 +1244,9 @@ States:
 - Pressable row: `cursor: pointer`; hover `--field-fill`; press `--field-fill-hover`; focus outline 2px `--focus`, offset -2px. Current row `--field-fill-hover`. Background eases over `--motion-fast`.
 - After: a row of its own (`ui-table-after`) with one cell spanning the columns, no top padding, and the row above it loses its rule, so the two read as one.
 - Empty: padding-block 2rem, centred, `--fg-subtle`.
+- Roster (`look="roster"`): `--text-ui`, ground `--bg-canvas`, body cells `--fg-subtle` at one height, `calc(2.5rem + (var(--cell-pad-y) - 0.5rem) * 2)` (2.5rem at the default density), padding-block 0.25rem.
 
-Tokens: `--bg-base`, `--line-soft`, `--line`, `--text-read`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
+Tokens: `--cell-pad-y`, `--bg-base`, `--bg-canvas`, `--line-soft`, `--line`, `--text-read`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
 
 CSS: `ui-data.css`. Classes `ui-table-scroll`, `ui-table`, `ui-table-sort`, `ui-table-sort-mark`, `ui-table-after`, `ui-table-empty`. There is no toolbar piece: filters above a table are the page's own row of fields.
 
@@ -1289,7 +1290,7 @@ States:
 - Row: minimum height `--row-h` (2.75rem at the default density), padding 0.625rem 0.5rem with the block padding moving by half of what the density adds or takes, gap 0.75rem, radius `--radius-row`, `--text-ui`; words `--fg-strong`. With a link: hover `--field-fill`, press `--field-fill-hover`, the link's focus ringing the row (outline 2px `--focus`, offset -2px). The end is at least 3.75rem.
 - Under 640px: a place that is not a link goes, and when goes from a row with an action.
 
-Tokens: `--text-ui`, `--fg-strong`, `--fg-subtle`, `--hue-ink`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
+Tokens: `--row-h`, `--text-ui`, `--fg-strong`, `--fg-subtle`, `--hue-ink`, `--radius-row`, `--field-fill`, `--field-fill-hover`, `--focus`.
 
 CSS: `ui-data.css`. Classes `ui-list`, `ui-list-head`, `ui-list-mark`, `ui-list-mark-room`, `ui-list-title`, `ui-list-count`, `ui-list-more`, `ui-list-more-link`, `ui-list-rows`, `ui-list-row`, `ui-list-row-mark`, `ui-list-row-words`, `ui-list-row-link`, `ui-list-row-place`, `ui-list-row-when`, `ui-list-row-end`, `ui-list-face`.
 
@@ -1880,7 +1881,7 @@ States:
 - Dot: 0.3125rem, round, `--bg-contrast`, top right of the mark, shown only while folded.
 - Ground and colour ease over `--motion-fast`. No weight change.
 
-Tokens: `--radius-row`, `--radius-round`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--focus`, `--bg-contrast`.
+Tokens: `--sidebar-row-height`, `--radius-row`, `--radius-round`, `--text-ui`, `--fg`, `--fg-subtle`, `--fg-strong`, `--field-fill`, `--field-fill-hover`, `--focus`, `--bg-contrast`.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-button`, `ui-sidebar-face`, `ui-sidebar-mark`, `ui-sidebar-words`, `ui-sidebar-word`, `ui-sidebar-dot`. Uses `sr-only`.
 
@@ -2391,9 +2392,9 @@ One setting moves every height a piece is drawn at together. Set `data-density` 
 | `--control-h` | `2rem` | `2.25rem` | `2.5rem` | Fields, tabs, choices, `Button size="lg"`, every piece of the control height. |
 | `--control-h-sm` | `1.75rem` | `2rem` | `2.25rem` | `Button`, `size="sm"` fields and tabs, icon buttons, pager buttons. |
 | `--row-h` | `2.25rem` | `2.75rem` | `3.25rem` | A list's `Row` at its least; its block padding moves by half the difference from 2.75rem. |
-| `--cell-pad-y` | `0.3125rem` | `0.5rem` | `0.75rem` | A `Table`'s cells above and below; its head takes 0.1rem less. |
-| `--menu-item-h` | `1.75rem` | `2.125rem` | `2.5rem` | A `Menu`'s, a `Select`'s and a `Combobox`'s item at its least; its block padding moves by half the difference from 2.125rem. |
-| `--field-pad-x` | `0.625rem` | `0.75rem` | `0.875rem` | The room either side of a field's words, its prefix, its suffix, a select's caret, a search's glass, a textarea and the native input and select. `size="sm"` keeps 0.625rem. |
+| `--cell-pad-y` | `0.3125rem` | `0.5rem` | `0.75rem` | A `Table`'s cells above and below; its head takes 0.1rem less, and a roster's cells grow by twice the difference from 0.5rem. |
+| `--menu-item-h` | `1.75rem` | `2.125rem` | `2.5rem` | A `Menu`'s, a `Select`'s and a `Combobox`'s item at its least; its block padding moves by half the difference from 2.125rem. The inline `ComboboxItem` sits 2px under it, and a `PlacePicker`'s rows are drawn at it. |
+| `--field-pad-x` | `0.625rem` | `0.75rem` | `0.875rem` | The room either side of a field's words, its prefix, its suffix, a select's caret, a search's glass, a textarea and the native input and select. `size="sm"` takes 0.125rem less (0.625rem at the default). |
 | `--sidebar-row-height` | `1.75rem` | `2rem` | `2.25rem` | The sidebar's rows. `SidebarProvider size="sm"` sets 1.75rem on the rail alone; a row's own `size` outranks both. |
 | `--sidebar-label-text` | `--text-tag` | `--text-meta` | `--text-meta` | A sidebar group's heading. |
 | `--sidebar-label-pad` | `0.125rem 0.1875rem` | `0.25rem 0.375rem` | `0.375rem 0.5rem` | Above and below a sidebar group's heading. |
@@ -2435,8 +2436,9 @@ Letter spacing is a token per size, on `:root`, read beside the size wherever a 
 | `--track-lead` | `0em` | `--text-lead` |
 | `--track-title` | `-0.02em` | `--text-title`, and the settings dialog's 0.9375rem title |
 | `--track-statement` | `-0.01em` | `--text-statement`, and the 1.5rem line under it (`ui-focus-when`) |
+| `--track-display` | `-0.035em` | The website's display headlines, above a statement: the marketing headings and the icon page's title; the marketing hero takes `calc(var(--track-display) - 0.02em)` |
 
-The one `letter-spacing` that is not a token is the one-time code's hidden input (`ui-code-field-input`, 2.5rem), which spreads its transparent digits one to a cell and is not type.
+The one `letter-spacing` in the library that is not a token is the one-time code's hidden input (`ui-code-field-input`, 2.5rem), which spreads its transparent digits one to a cell and is not type. On the website, the marketing page's monospace eyebrow and hero caption (`marketing.css`, 0.12em and 0.08em) are spaced labels set apart from the scale.
 
 Also declared in the same block, for older and longer-form text:
 
@@ -2651,7 +2653,7 @@ The library itself uses fifteen: `AlertCircleIcon` (tabler `alert-circle`), `Ale
 
 Both are declared in `base.css` with `font-display: swap`. Fallback stacks are the font tokens above: `--font-sans` and `--font-display` fall back to `--font-sans-fallback`, which is `"Cal Sans UI Fallback"` and then `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`.
 
-`"Cal Sans UI Fallback"` is a third `@font-face` in `fonts.css`, with no file of its own: `src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans")` (Liberation Sans is drawn to Arial's measure), `size-adjust: 108.9%`, `ascent-override: 82.64%`, `descent-override: 20.2%`, `line-gap-override: 0%`. It stands in while Cal Sans UI loads (`font-display: swap`), so the swap moves nothing: a line takes the same width within about 1.5% and the same height. The numbers are measured from `cal-sans-ui-wght-geom.woff2`: its `head`, `hhea` and `OS/2` tables give 1000 units to the em, ascender 900, descender -220 and no line gap (with `USE_TYPO_METRICS` set and the typo metrics equal); the width is Chromium's `measureText` over a paragraph of interface copy at `--weight-ui` (500), where Cal Sans UI runs 1.089 times as wide as Arial (1.070 at 400, 1.109 at 600). `size-adjust` scales the overrides too, so each is the face's metric over 1.089. Where neither Arial nor Liberation Sans is installed the face does not load and the device's own stack follows. Leaving `fonts.css` out leaves the name unresolved, and the stack goes straight to the device's faces as before. `tests/density-type.test.mjs` sets a paragraph in each face and holds the fallback to Cal Sans UI's lines, height and width.
+`"Cal Sans UI Fallback"` is two more `@font-face` rules in `fonts.css`, by weight, with no file of their own. Weights 300 to 500: `src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans")` (Liberation Sans is drawn to Arial's measure), `size-adjust: 108.9%`, `ascent-override: 82.64%`, `descent-override: 20.2%`, `line-gap-override: 0%`. Weights 600 and 700, so a heading draws in a real bold and not a thickened regular: `local("Arial Bold")`, `local("Arial-BoldMT")`, `local("Liberation Sans Bold")`, `local("LiberationSans-Bold")`, `local("Helvetica Bold")`, `local("Helvetica-Bold")`, `size-adjust: 104.5%`, `ascent-override: 86.12%`, `descent-override: 21.05%`, `line-gap-override: 0%`; Cal Sans UI runs 1.035 times as wide as Arial Bold at 600 and 1.056 at 700 (the same `measureText` over the same paragraph), and the face takes the middle. It stands in while Cal Sans UI loads (`font-display: swap`), so the swap moves nothing: a line takes the same width within about 1.5% and the same height. The numbers are measured from `cal-sans-ui-wght-geom.woff2`: its `head`, `hhea` and `OS/2` tables give 1000 units to the em, ascender 900, descender -220 and no line gap (with `USE_TYPO_METRICS` set and the typo metrics equal); the width is Chromium's `measureText` over a paragraph of interface copy at `--weight-ui` (500), where Cal Sans UI runs 1.089 times as wide as Arial (1.070 at 400, 1.109 at 600). `size-adjust` scales the overrides too, so each is the face's metric over 1.089. Where neither Arial nor Liberation Sans is installed the face does not load and the device's own stack follows. Leaving `fonts.css` out leaves the name unresolved, and the stack goes straight to the device's faces as before. `tests/density-type.test.mjs` sets a paragraph in each face and holds the fallback to Cal Sans UI's lines, height and width.
 
 The rest of the stacks: `--font-wordmark` to `ui-monospace, SFMono-Regular, Menlo, Consolas, monospace`. `--font-code` ships no font and is the device's own fixed-width face. The `GEOM` axis runs from the flowing, interface-tuned drawing (0) to a geometric one (100); never ask for a weight under 300, which clamps.
 

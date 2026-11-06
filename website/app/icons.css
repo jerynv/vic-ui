@@ -1,6 +1,6 @@
 .icon-page { width: min(100%, 86rem); margin-inline: auto; padding: 4rem 2rem; }
 .icon-intro { margin-bottom: 2.5rem; }
-.icon-intro h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; margin-bottom: 1rem; }
+.icon-intro h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 600; letter-spacing: var(--track-display); line-height: 1.1; margin-bottom: 1rem; }
 .icon-intro p { max-width: 42rem; font-size: 1.125rem; color: var(--fg-subtle); }
 .icon-workspace { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; gap: 1.5rem 2.5rem; align-items: start; }
 .icon-controls { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 11rem 10rem; align-items: end; gap: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
