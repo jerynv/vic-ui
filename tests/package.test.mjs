@@ -51,6 +51,9 @@ test("packed library preserves historical exports and types in Bundler and NodeN
         assert.ok((await stat(resolve(dirname(file), match[1]))).isFile(), `${sheet} resolves ${match[1]}`);
       }
     }
+    // A module per source file, so a consumer's bundler drops the pieces it does not import.
+    for (const file of ["dist/components/Button.js", "dist/components/TextField.js", "dist/components/Sidebar.js"]) assert.ok((await stat(join(temporary, "package", file))).isFile(), `${file} is its own module`);
+    assert.ok(!(await readFile(join(temporary, "package/dist/index.js"), "utf8")).includes("forwardRef("), "the root entry only re-exports");
     assert.equal(await readFile(join(temporary, "package/dist/assets/wrapping-row-chevron-right.svg"), "utf8"), await readFile(join(root, "src/styles/assets/wrapping-row-chevron-right.svg"), "utf8"));
     const runtime = `try { import.meta.resolve("docx-preview"); throw new Error("Optional dependency unexpectedly installed in fixture"); } catch (error) { if (error.code !== "ERR_MODULE_NOT_FOUND") throw error; }
       import * as Vic from "vic-ui";

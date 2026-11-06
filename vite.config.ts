@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
 import packageJson from "./package.json" with { type: "json" };
 
-/** The package: ESM only, React and Floating UI left to the consumer, the CSS built apart (`scripts/build-css.mjs`). */
+/** The package: ESM only, a module per source file, every dependency left to the consumer, the CSS built apart (`scripts/build-css.mjs`). */
 export default defineConfig({
   plugins: [react()],
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
@@ -18,7 +18,10 @@ export default defineConfig({
     },
     rollupOptions: {
       external: (id) => [...Object.keys(packageJson.peerDependencies), ...Object.keys(packageJson.dependencies)].some((name) => id === name || id.startsWith(`${name}/`)),
-      output: { preserveModules: false },
+      // One file per source module, so a consumer that imports one piece from the root drops the
+      // modules it does not reach (`sideEffects` marks only the CSS). As one bundle, every
+      // top-level forwardRef or createContext call in it was kept once anything else was used.
+      output: { preserveModules: true, preserveModulesRoot: "src", entryFileNames: "[name].js" },
     },
   },
 });
