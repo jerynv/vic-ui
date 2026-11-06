@@ -12,6 +12,9 @@
     --sidebar-animation-duration: 250ms;
     --sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1);
     --sidebar-bg: var(--bg-base);
+    /* Added above each group after the first while the rail is open; folded, the rule between
+       groups spaces them instead. */
+    --sidebar-group-gap: 0rem;
     position: relative;
     isolation: isolate;
     display: flex;
@@ -186,6 +189,15 @@
     flex-direction: column;
     row-gap: 1px;
     min-width: 0;
+    transition: margin var(--sidebar-animation-duration) var(--sidebar-easing);
+  }
+
+  .ui-sidebar-group + .ui-sidebar-group {
+    margin-block-start: var(--sidebar-group-gap);
+  }
+
+  .ui-sidebar[data-state="collapsed"]:not([data-mobile]) .ui-sidebar-group + .ui-sidebar-group {
+    margin-block-start: 0;
   }
 
   /* A heading folds by its grid row into a rule, and its words fade on the way. */
@@ -230,6 +242,11 @@
     line-height: calc(1 / 0.85);
     color: var(--fg-subtle);
     transition: opacity 160ms ease;
+  }
+
+  /* Denser: the same words with less room above and below them. */
+  .ui-sidebar-group-label[data-size="sm"] .ui-sidebar-group-words {
+    padding-block: 0.125rem 0.1875rem;
   }
 
   .ui-sidebar[data-state="collapsed"]:not([data-mobile]) .ui-sidebar-group-words {
@@ -282,6 +299,14 @@
     transition:
       background-color 140ms,
       color 140ms;
+  }
+
+  .ui-sidebar-button[data-size="sm"] {
+    height: 1.75rem;
+  }
+
+  .ui-sidebar-button[data-size="lg"] {
+    height: 2.5rem;
   }
 
   /* The row's reach covers the pixel between rows, so the pointer never falls through a gap. */
@@ -383,6 +408,7 @@
     aside.ui-sidebar,
     .ui-sidebar-sheet,
     .ui-sidebar-backdrop,
+    .ui-sidebar-group,
     .ui-sidebar-group-label,
     .ui-sidebar-group-words {
       transition: none;

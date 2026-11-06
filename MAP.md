@@ -723,13 +723,14 @@ How many are waiting somewhere, as a number on a filled ground (an unread count)
 | `label` | `string` | required | What a screen reader hears ("3 unread"). |
 | `max` | `number` | `99` | Past it, reads `max+`. |
 | `tone` | `Tone` | none | Fills in that tone's ink. |
+| `soft` | `boolean` | `false` | The tone's ink on its tint instead of a fill (`ui-count-soft`). |
 | `className` | `string` | none | Placement. |
 
-States: none. Min width and height 1.125rem, padding `0 0.3125rem`, radius `--radius-round`, `--text-tag` weight 600, tabular, words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`.
+States: none. Min width and height 1.125rem, padding `0 0.3125rem`, radius `--radius-round`, `--text-tag` weight 600, tabular, words `var(--tone-fill-on, var(--ink-words))` on `var(--tone-ink, var(--ink-face-bottom))`. Soft: words `var(--tone-ink, var(--fg-strong))` on `var(--tone-tint, var(--fill-chosen))`, the same box, so turning soft moves nothing; every tone ink holds 5.8:1 on its own tint.
 
-Tokens: `--tone-ink`, `--tone-fill-on`, `--ink-words`, `--ink-face-bottom`, `--radius-round`, `--text-tag`.
+Tokens: `--tone-ink`, `--tone-fill-on`, `--tone-tint`, `--ink-words`, `--ink-face-bottom`, `--fg-strong`, `--fill-chosen`, `--radius-round`, `--text-tag`.
 
-CSS: `ui-display.css` (`ui-count`), `tokens.css` (`tone-*`). Uses `sr-only`.
+CSS: `ui-display.css` (`ui-count`, `ui-count-soft`), `tokens.css` (`tone-*`). Uses `sr-only`.
 
 ### HeadCount
 
@@ -1744,7 +1745,7 @@ Holds the sidebar's state and draws the row it sits in with the page: a flex row
 | `style` | `CSSProperties` | none | On the wrapper. |
 | `children` | `ReactNode` | required | The `Sidebar` and the page. |
 
-The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: 250ms`, `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`, `--sidebar-bg: var(--bg-base)`. Not contained, it is at least `100svh` tall.
+The wrapper carries `data-sidebar-wrapper` and `data-state` (`expanded` or `collapsed`). Local tokens: `--sidebar-width: 15.5rem`, `--sidebar-width-icon: 3rem`, `--sidebar-animation-duration: 250ms`, `--sidebar-easing: cubic-bezier(0.77, 0, 0.175, 1)`, `--sidebar-bg: var(--bg-base)`, `--sidebar-group-gap: 0rem` (added above each group after the first while the rail is open). Not contained, it is at least `100svh` tall.
 
 CSS: `ui-sidebar.css`. Classes `ui-sidebar-wrapper`, `ui-sidebar-window`.
 
@@ -1765,7 +1766,7 @@ States:
 - Sheet: absolute (fixed when not contained), width `--sidebar-width`, `translate: -100% 0` closed and `0 0` open, eased; z-index 50.
 - Backdrop: `--bg-recessed` with `blur(2px)`, opacity 0 closed, 0.8 open; z-index 40.
 - Reduced motion: no transitions.
-- Parts carry `data-sidebar` (`sidebar`, `header`, `content`, `viewport`, `footer`, `group`, `group-label`, `menu`, `menu-item`, `menu-button`, `menu-badge`) and the rail `data-state`, `data-collapsible`, and `data-mobile` on the sheet.
+- Parts carry `data-sidebar` (`sidebar`, `header`, `content`, `viewport`, `footer`, `group`, `group-label`, `menu`, `menu-item`, `menu-button`, `menu-badge`, `trigger`) and the rail `data-state`, `data-collapsible`, and `data-mobile` on the sheet.
 
 Tokens: `--sidebar-width`, `--sidebar-width-icon`, `--sidebar-animation-duration`, `--sidebar-easing`, `--sidebar-bg`, `--bg-base`, `--bg-recessed`, `--fg`.
 
@@ -1798,7 +1799,7 @@ CSS: `ui-sidebar.css`. Classes `ui-sidebar-content`, `ui-sidebar-viewport`, `ui-
 
 ### SidebarGroup
 
-A run of places, with or without a heading. `HTMLAttributes<HTMLDivElement>`, forwarded ref. Column, row gap 1px.
+A run of places, with or without a heading. `HTMLAttributes<HTMLDivElement>`, forwarded ref. Column, row gap 1px. Each group after the first sits `--sidebar-group-gap` below the one before while the rail is open (or a sheet); folded, the gap is 0 and the label's rule spaces them. The margin eases with the fold.
 
 CSS: `ui-sidebar.css`. Class `ui-sidebar-group`.
 
@@ -1809,9 +1810,10 @@ A group's heading, which folds into a rule as the rail folds (none above the fir
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
 | `children` | `ReactNode` | | The heading. |
+| `size` | `"sm" \| "md"` | `"md"` | `sm` is denser: padding-block `0.125rem 0.1875rem` (`data-size="sm"`). |
 | native attributes | `HTMLAttributes<HTMLDivElement>` | | Passed through. |
 
-States: words `--text-meta` weight 500, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem`, one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (160ms); the first group's label keeps no margin and no rule. In a sheet it does not transition.
+States: words `--text-meta` weight 500, line height `calc(1 / 0.85)`, `--fg-subtle`, padding `0.25rem 0.5rem 0.375rem` (`sm`: `0.125rem 0.5rem 0.1875rem`), one line. Folded (not a sheet): grid rows to `0fr`, margin-block 0.75rem, bottom rule `--line`, words fade (160ms); the first group's label keeps no margin and no rule. In a sheet it does not transition.
 
 Tokens: `--text-meta`, `--fg-subtle`, `--line`, `--sidebar-animation-duration`, `--sidebar-easing`.
 
@@ -1839,6 +1841,7 @@ A place: a link by `href` (through `LinkProvider` for a path of the app beginnin
 | `active` | `boolean` | `false` | The place you are in (`data-active="true"`). |
 | `tooltip` | `ReactNode` | none | Said beside the mark (to the right) while the rail is folded. |
 | `dot` | `string \| undefined` | none | A dot on the mark while folded; the words are for a screen reader. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | The row's height: 1.75rem, 2rem or 2.5rem (`data-size` for `sm` and `lg`). |
 | `href` | `string` | none | Makes it a link. |
 | `children` | `ReactNode` | none | The words. |
 | native attributes | anchor or button attributes | | Passed through. |
@@ -1848,7 +1851,7 @@ A place: a link by `href` (through `LinkProvider` for a path of the app beginnin
 
 States:
 
-- Row: 2rem tall, padding `0 0.5rem`, gap 0.625rem, radius `--radius-row`, `--text-ui` weight 500, line height `calc(1 / 0.85)`, `--fg`; its icon `--fg-subtle`. Its reach covers the pixel between rows.
+- Row: 2rem tall (`sm` 1.75rem, `lg` 2.5rem; the mark stays 0.5rem in, so a folded rail centres it at any size), padding `0 0.5rem`, gap 0.625rem, radius `--radius-row`, `--text-ui` weight 500, line height `calc(1 / 0.85)`, `--fg`; its icon `--fg-subtle`. Its reach covers the pixel between rows.
 - Hover: `--field-fill`, `--fg-strong`, icon `--fg-strong`.
 - Active: `--field-fill-hover`, `--fg-strong`, icon `--fg-strong`.
 - Focus: outline 2px `--focus`, offset -2px.
@@ -1863,11 +1866,29 @@ Dependencies: `useSidebar`, `useTip`, the provider's link.
 
 ### SidebarMenuBadge
 
-A quiet count at a row's end, hidden while the rail is folded. `HTMLAttributes<HTMLSpanElement>`, forwarded ref.
+A quiet count at a row's end, hidden while the rail is folded. `HTMLAttributes<HTMLSpanElement>`, forwarded ref. For a pill, set a `Count` in it: filled for unread, `soft` for a count that asks less.
 
 States: `--text-meta` weight 500, tabular, `--fg-subtle`, pushed to the end. Not a pill.
 
 CSS: `ui-sidebar.css`. Class `ui-sidebar-badge`.
+
+### SidebarTrigger
+
+The press that folds or opens the rail, or on a phone opens the sheet: `Button` with `look="quiet"`, `square` and `SidebarIcon` at 16px, calling `toggleSidebar`. Put it in the page's header, beside the rail.
+
+| Prop | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `aria-label` | `string` | `"Navigation"` | Its name; it stays the same in either state. |
+| `look` | `ButtonLook` | `"quiet"` | As `Button`. |
+| `onClick` | `MouseEventHandler` | none | Runs first; `preventDefault()` keeps the rail as it is. |
+| other `Button` props | | | Passed through, except `children`, `square` and `icon`. |
+| `ref` | `Ref<HTMLButtonElement>` | none | Forwarded. |
+
+States: `aria-expanded` is `true` while the rail (or the sheet) is open. With `collapsible="none"` and not a phone it draws nothing. Carries `data-sidebar="trigger"`.
+
+CSS: `ui.css` through `Button`; class `ui-sidebar-trigger` for placement.
+
+Dependencies: `useSidebar`, `Button`, `SidebarIcon`.
 
 ### useSidebar
 

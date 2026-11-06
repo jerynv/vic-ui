@@ -4,7 +4,7 @@ import { createElement } from "react";
 import { renderToString } from "react-dom/server";
 import { chromium } from "playwright";
 import { createServer } from "vite";
-import { SidebarFixture } from "./sidebar.fixture.mjs";
+import { SidebarFixture, SidebarOptionsFixture } from "./sidebar.fixture.mjs";
 
 test("mobile sidebar traps focus, restores the opener, and respects contained layouts", { timeout: 60000 }, async (t) => {
   const server = await createServer({ configFile: false, cacheDir: "node_modules/.vite-sidebar-test", optimizeDeps: { entries: ["tests/sidebar-hydrate.fixture.mjs"] }, server: { host: "127.0.0.1", port: 0 }, plugins: [{
@@ -13,7 +13,7 @@ test("mobile sidebar traps focus, restores the opener, and respects contained la
       server.middlewares.use((request, response, next) => {
         const url = new URL(request.url, "http://localhost");
         if (url.pathname !== "/") return next();
-        const html = renderToString(createElement(SidebarFixture, { contained: url.searchParams.has("contained"), empty: url.searchParams.has("empty") }));
+        const html = renderToString(url.searchParams.has("options") ? createElement(SidebarOptionsFixture) : createElement(SidebarFixture, { contained: url.searchParams.has("contained"), empty: url.searchParams.has("empty") }));
         response.setHeader("Content-Type", "text/html");
         response.end(`<html><head><link rel="stylesheet" href="/dist/vic-ui.css"></head><body><div id="root">${html}</div><script type="module" src="/tests/sidebar-hydrate.fixture.mjs"></script></body></html>`);
       });
@@ -66,6 +66,34 @@ test("mobile sidebar traps focus, restores the opener, and respects contained la
       await page.close();
       });
     }
+    await t.test("row sizes, dense labels, group gap, soft count and trigger", async () => {
+      const page = await browser.newPage({ viewport: { width: 1100, height: 600 }, reducedMotion: "reduce" });
+      page.setDefaultTimeout(10000);
+      const errors = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      await page.goto(server.resolvedUrls.local[0] + "?options");
+      const height = (name) => page.getByRole("button", { name, exact: true }).evaluate((el) => el.getBoundingClientRect().height);
+      assert.equal(await height("Small"), 28);
+      assert.equal(await height("Middle 4 mentions"), 32);
+      assert.equal(await height("Large"), 40);
+      const box = (id) => page.getByTestId(id).evaluate((el) => el.getBoundingClientRect().height);
+      assert.ok(await box("dense") < await box("plain"), "a dense label is shorter than a plain one");
+      const gap = () => page.evaluate(() => document.querySelector('[data-testid="second"]').getBoundingClientRect().top - document.querySelector('[data-testid="first"]').getBoundingClientRect().bottom);
+      assert.equal(await gap(), 12);
+      const count = page.locator(".ui-count-soft");
+      assert.equal(await count.evaluate((el) => getComputedStyle(el).height), "18px");
+      assert.notEqual(await count.evaluate((el) => getComputedStyle(el).backgroundColor), await page.locator(".ui-sidebar").evaluate((el) => getComputedStyle(el.firstElementChild).backgroundColor));
+      const trigger = page.getByRole("button", { name: "Navigation", exact: true });
+      assert.equal(await trigger.getAttribute("aria-expanded"), "true");
+      await trigger.click();
+      assert.equal(await trigger.getAttribute("aria-expanded"), "false");
+      await page.waitForFunction(() => document.querySelector("aside.ui-sidebar").getBoundingClientRect().width === 48);
+      assert.equal(await gap(), 0, "folded, the rule spaces the groups rather than the gap");
+      await trigger.press("Enter");
+      assert.equal(await trigger.getAttribute("aria-expanded"), "true");
+      assert.deepEqual(errors, []);
+      await page.close();
+    });
   } finally {
     await browser?.close();
     await server.close();

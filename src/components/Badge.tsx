@@ -33,11 +33,13 @@ export function Badge(props: HTMLAttributes<HTMLSpanElement> & { tone?: Tone; so
  * How many are waiting somewhere, as a number on a filled ground: unread messages, in the rail,
  * a conversation's row, Home and the tour alike. `label` is the words a screen reader hears
  * ("3 unread messages"), since the number is all that is drawn; past `max` it reads `max+`.
+ * `soft` sets it in its tone's ink on the tone's tint, for a count to notice that asks less
+ * than a filled one (a backlog, mentions in a busy rail).
  */
-export function Count(props: { value: number; label: string; max?: number; tone?: Tone; className?: string }) {
+export function Count(props: { value: number; label: string; max?: number; tone?: Tone; soft?: boolean; className?: string }) {
   const max = props.max ?? 99;
   const shown = props.value > max ? `${max}+` : String(props.value);
-  const classes = ["ui-count", toneClass(props.tone), props.className ?? ""].filter(Boolean).join(" ");
+  const classes = ["ui-count", props.soft ? "ui-count-soft" : "", toneClass(props.tone), props.className ?? ""].filter(Boolean).join(" ");
   return (
     <span className={classes}>
       <span aria-hidden="true">{shown}</span>

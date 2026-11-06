@@ -1,6 +1,6 @@
-import { createContext, forwardRef, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref, type RefObject } from "react";
+import { createContext, forwardRef, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type AnchorHTMLAttributes, type ButtonHTMLAttributes, type ComponentProps, type CSSProperties, type HTMLAttributes, type ReactNode, type Ref, type RefObject } from "react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import { XIcon } from "../icons/icons";
+import { SidebarIcon, XIcon } from "../icons/icons";
 import { Button } from "./Button";
 import { Link } from "./Link";
 import { useTip } from "./Tooltip";
@@ -14,7 +14,7 @@ import { useTip } from "./Tooltip";
  * the words, which never wrap, so every mark stays where it was.
  *
  * The parts carry `data-sidebar` (`sidebar`, `header`, `content`, `viewport`, `footer`,
- * `group`, `group-label`, `menu`, `menu-item`, `menu-button`, `menu-badge`) and the wrapper
+ * `group`, `group-label`, `menu`, `menu-item`, `menu-button`, `menu-badge`, `trigger`) and the wrapper
  * `data-sidebar-wrapper` with `data-state` (`expanded` or `collapsed`), so a page styles a
  * state from its root. `useSidebar()` reads and changes it from anywhere under the provider.
  */
@@ -265,10 +265,13 @@ export const SidebarGroup = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEle
   return <div ref={ref} data-sidebar="group" className={join("ui-sidebar-group", className)} {...rest} />;
 });
 
-/** A group's heading, which fades into a rule as the rail folds (none above the first group). */
-export const SidebarGroupLabel = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function SidebarGroupLabel({ className, children, ...rest }, ref) {
+/**
+ * A group's heading, which fades into a rule as the rail folds (none above the first group).
+ * `size="sm"` sets it closer to the rows around it, for a rail with many short groups.
+ */
+export const SidebarGroupLabel = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement> & { size?: "sm" | "md" }>(function SidebarGroupLabel({ size, className, children, ...rest }, ref) {
   return (
-    <div ref={ref} data-sidebar="group-label" className={join("ui-sidebar-group-label", className)} {...rest}>
+    <div ref={ref} data-sidebar="group-label" data-size={size === "sm" ? "sm" : undefined} className={join("ui-sidebar-group-label", className)} {...rest}>
       <div className="ui-sidebar-group-fold">
         <div className="ui-sidebar-group-words">{children}</div>
       </div>
@@ -301,6 +304,8 @@ type Shared = {
   tooltip?: ReactNode;
   /** A dot on the mark while folded, for what a badge says open; the words are for a screen reader. */
   dot?: string | undefined;
+  /** The row's height: 1.75rem (`sm`), 2rem (`md`) or 2.5rem (`lg`, for a row with a second line or a face). */
+  size?: "sm" | "md" | "lg";
   children?: ReactNode;
 };
 
@@ -314,7 +319,7 @@ export type SidebarMenuButtonProps =
  * drawn as it is, so a row can carry a second word at its end.
  */
 export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>(function SidebarMenuButton(props, ref) {
-  const { icon, active, tooltip, dot, children, className, ...rest } = props;
+  const { icon, active, tooltip, dot, size, children, className, ...rest } = props;
   const { state, isMobile } = useSidebar();
   const inItem = useContext(InItem);
   const tip = useTip(state === "collapsed" && !isMobile ? tooltip : undefined, { placement: "right" });
@@ -336,6 +341,7 @@ export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>
     className: join("ui-sidebar-button", className),
     "data-sidebar": "menu-button",
     "data-active": active ? "true" : undefined,
+    "data-size": size && size !== "md" ? size : undefined,
     "aria-current": (own["aria-current"] as HTMLAttributes<HTMLElement>["aria-current"]) ?? (active ? "page" as const : undefined),
     "aria-describedby": tip.has ? join(own["aria-describedby"] as string | undefined, tip.id) : (own["aria-describedby"] as string | undefined),
   };
@@ -389,7 +395,35 @@ export const SidebarMenuButton = forwardRef<HTMLElement, SidebarMenuButtonProps>
   );
 });
 
-/** A count at a row's end, hidden while the rail is folded: a quiet number, or the filled `Count` set in it for unread. */
+/** A count at a row's end, hidden while the rail is folded: a quiet number, or a `Count` set in it, filled for unread or `soft`. */
 export const SidebarMenuBadge = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function SidebarMenuBadge({ className, ...rest }, ref) {
   return <span ref={ref} data-sidebar="menu-badge" className={join("ui-sidebar-badge", className)} {...rest} />;
+});
+
+/**
+ * The press that folds or opens the rail, or on a phone opens the sheet: a quiet square button
+ * with the rail's mark, named "Navigation" (`aria-label` renames it) and `aria-expanded` saying
+ * which state it is in. Put it in the page's header, beside the rail. A rail that never folds
+ * (`collapsible="none"`) has none beside it, so it draws nothing there.
+ */
+export const SidebarTrigger = forwardRef<HTMLButtonElement, Omit<ComponentProps<typeof Button>, "children" | "square" | "icon">>(function SidebarTrigger({ onClick, look = "quiet", className, ...rest }, ref) {
+  const { state, isMobile, collapsible, toggleSidebar } = useSidebar();
+  if (collapsible === "none" && !isMobile) return null;
+  return (
+    <Button
+      ref={ref}
+      look={look}
+      square
+      icon={<SidebarIcon size={16} />}
+      data-sidebar="trigger"
+      aria-label="Navigation"
+      aria-expanded={state === "expanded"}
+      className={join("ui-sidebar-trigger", className)}
+      {...rest}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) toggleSidebar();
+      }}
+    />
+  );
 });

@@ -78,3 +78,33 @@ The source regression in `tests/controls-layout.test.mjs` asserts one observer m
 ## Root Sidebar current location
 
 `SidebarMenuButton` from `vic-ui` emits `aria-current="page"` for its current item. An explicitly supplied `aria-current` takes precedence. Keep selection in the host and use the persistent-controller composition above for subscriptions.
+
+## Root Sidebar options
+
+These apply to the root API from **`vic-ui`**.
+
+- **Row sizes.** `SidebarMenuButton` takes `size="sm" | "md" | "lg"`: 1.75rem, 2rem (the default) or 2.5rem tall. The mark stays 0.5rem in, so a folded rail centres it at any size.
+- **Denser group labels.** `SidebarGroupLabel` takes `size="sm"`, which sets the heading closer to its rows.
+- **Spacing between groups.** Set `--sidebar-group-gap` on the provider (it is `0rem` by default). It is added above each group after the first while the rail is open; folded, the label's rule spaces the groups instead.
+- **A soft count.** `<Count soft />` draws the tone's ink on its tint instead of a fill, for a count that asks less than unread. Set it in `SidebarMenuBadge` at a row's end.
+- **A toggle.** `SidebarTrigger` is a quiet square button with the rail's mark that calls `toggleSidebar`. Its name is "Navigation" and `aria-expanded` says whether the rail, or a phone's sheet, is open.
+
+```tsx
+import { Count, SidebarGroupLabel, SidebarMenuBadge, SidebarMenuButton, SidebarProvider, SidebarTrigger } from "vic-ui"
+import { FileTextIcon } from "vic-ui/icons"
+
+<SidebarProvider style={{ "--sidebar-group-gap": "0.75rem" } as React.CSSProperties}>
+  {/* ... */}
+  <SidebarGroupLabel size="sm">Work</SidebarGroupLabel>
+  <SidebarMenuButton size="sm" icon={<FileTextIcon size={16} />}>
+    Documents
+    <SidebarMenuBadge>
+      <Count soft value={4} label="4 mentions" />
+    </SidebarMenuBadge>
+  </SidebarMenuButton>
+  {/* ... */}
+  <main>
+    <SidebarTrigger />
+  </main>
+</SidebarProvider>
+```

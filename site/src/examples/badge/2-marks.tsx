@@ -2,7 +2,7 @@ import { Badge, Count } from "vic-ui";
 import { CheckCircleIcon, ClockIcon, FlagIcon, LockIcon } from "vic-ui/icons";
 
 export const title = "Icons and counts";
-export const note = "Count is a number alone; label is what a screen reader hears.";
+export const note = "Count is a number alone; label is what a screen reader hears. soft sets it on its tone's tint, for a count that asks less.";
 
 export default function Example() {
   return (
@@ -33,6 +33,13 @@ export default function Example() {
         <Count value={7} tone="settled" label="7 paid" />
         <Count value={7} tone="caution" label="7 changed" />
         <Count value={7} tone="danger" label="7 past due" />
+      </div>
+      <div className="demo-row">
+        <Count soft value={3} label="3 mentions" />
+        <Count soft value={7} tone="moving" label="7 open" />
+        <Count soft value={7} tone="settled" label="7 paid" />
+        <Count soft value={7} tone="caution" label="7 changed" />
+        <Count soft value={7} tone="danger" label="7 past due" />
       </div>
     </div>
   );

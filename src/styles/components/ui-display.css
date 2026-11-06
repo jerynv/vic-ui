@@ -88,6 +88,14 @@
     background: var(--tone-ink, var(--ink-face-bottom));
   }
 
+  /* Soft: the tone's ink on its tint, held at 5.8:1 or more like every tone ink; with no tone,
+     the strong words on the chosen fill. Same box, so a count that turns soft moves nothing. */
+  .ui-count-soft {
+    --tone-tint: initial;
+    color: var(--tone-ink, var(--fg-strong));
+    background: var(--tone-tint, var(--fill-chosen));
+  }
+
   /* How many a heading holds: a quiet number after its words, in the heading's weight. */
   .ui-head-count {
     font-size: var(--text-tag);
