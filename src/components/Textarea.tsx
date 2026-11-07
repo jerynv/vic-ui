@@ -5,9 +5,9 @@ import { useFieldReason } from "./reason";
 /**
  * Words over several lines, in the box `TextField` draws. `rows` sets its height; with `grow`
  * it grows with what is typed up to `maxRows` and scrolls past that. `onValueChange` gives the
- * words, and native `onChange` still passes through. With `maxLength` a count sits at the end
- * of the line under it, beside the hint, and that line is always drawn, so the count arriving
- * or a hint changing moves nothing below. A short `error` takes the label's place
+ * words, and native `onChange` still passes through. With `maxLength` a count sits inside the box
+ * in its bottom-right corner, over room kept free under the last line so words never run
+ * beneath it; the hint stays under the box. A short `error` takes the label's place
  * (`FieldHead`). With `disabledReason` it is not natively disabled: it stays focusable, takes
  * no words and says why.
  */
@@ -63,7 +63,7 @@ export const Textarea = forwardRef<
   return (
     <div className={classes}>
       <FieldHead field={field} label={label} error={error} />
-      <div ref={why.anchor} className="ui-field-box ui-textarea-box" data-invalid={error ? "" : undefined} data-disabled={disabled || held ? "" : undefined} {...why.box}>
+      <div ref={why.anchor} className="ui-field-box ui-textarea-box" data-counted={counted ? "" : undefined} data-invalid={error ? "" : undefined} data-disabled={disabled || held ? "" : undefined} {...why.box}>
         <textarea
           {...rest}
           ref={join}
@@ -98,20 +98,16 @@ export const Textarea = forwardRef<
             if (value === undefined) fit();
           }}
         />
+        {counted ? (
+          <>
+            <span className="ui-field-count" data-full={length >= maxLength ? "" : undefined} aria-live="polite">
+              {length} of {maxLength}
+            </span>
+          </>
+        ) : null}
         {why.node}
       </div>
-      {counted ? (
-        <div className="ui-field-foot">
-          <p id={`${field}-hint`} className="ui-field-hint">
-            {hint}
-          </p>
-          <span className="ui-field-count" data-full={length >= maxLength ? "" : undefined} aria-live="polite">
-            {length} of {maxLength}
-          </span>
-        </div>
-      ) : (
-        <FieldHint field={field} hint={hint} />
-      )}
+      <FieldHint field={field} hint={hint} />
     </div>
   );
 });

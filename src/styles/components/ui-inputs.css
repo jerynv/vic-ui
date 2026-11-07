@@ -54,23 +54,13 @@
     padding-right: 0.625rem;
   }
 
-  /* The line under a field with a count: the hint or the error, then the count at its end,
-     always drawn at one line's height so nothing below moves. */
-  .ui-field-foot {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    min-height: calc(var(--text-ui) * 1.45);
-  }
-
-  .ui-field-foot > p {
-    flex: 1;
-    min-width: 0;
-  }
-
+  /* A textarea's count, in its box's bottom-right corner over the room the textarea keeps
+     free under its last line, so typing never runs beneath it. */
   .ui-field-count {
-    flex: none;
-    margin-left: auto;
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.375rem;
+    pointer-events: none;
     font-size: var(--text-ui);
     line-height: 1.45;
     font-variant-numeric: tabular-nums;
@@ -84,9 +74,20 @@
 
   /* ---- words over several lines ---------------------------------------------------- */
 
-  .ui-textarea-box {
+  .ui-textarea-box,
+  .ui-field-sm .ui-textarea-box {
+    position: relative;
     height: auto;
     align-items: stretch;
+  }
+
+  .ui-textarea-box[data-counted] .ui-textarea {
+    padding-bottom: 1.75rem;
+  }
+
+  /* Clear of the resize grip in the corner when the textarea can be dragged taller. */
+  .ui-textarea-box[data-counted]:has(.ui-textarea:not([data-grow])) .ui-field-count {
+    right: 1.5rem;
   }
 
   .ui-textarea {

@@ -736,7 +736,7 @@ Words over several lines, in the box `TextField` draws. Optionally grows with it
 | `grow` | `boolean` | `false` | Grows with what is typed between `rows` and `maxRows`, then scrolls. |
 | `rows` | `number` | `3` | Its height in lines (the least, with `grow`). |
 | `maxRows` | `number` | `8` | The most lines with `grow`. |
-| `maxLength` | `number` | none | Adds "n of max" at the end of the line under it, which is then always drawn. |
+| `maxLength` | `number` | none | Adds "n of max" inside the box, in its bottom-right corner; the textarea keeps room free under its last line for it. |
 | `size` | `"sm"` | none | The dense padding. |
 | `disabled` | `boolean` | `false` | Natively disabled. |
 | `disabledReason` | `string \| undefined` | none | Focusable, takes no words (`readOnly`, `aria-disabled`), says why. |
@@ -751,7 +751,7 @@ States:
 
 Tokens: the field tokens, `--tone-caution-ink`, `--focus`.
 
-CSS: `ui-inputs.css` (`ui-textarea-box`, `ui-textarea`, `ui-field-foot`, `ui-field-count`, `ui-field-box[data-disabled]`) plus the field classes in `ui.css`.
+CSS: `ui-inputs.css` (`ui-textarea-box`, `ui-textarea`, `ui-field-count`, `ui-field-box[data-disabled]`) plus the field classes in `ui.css`.
 
 Dependencies: `FieldHead`, `FieldHint`, `describedBy`, `useFieldReason`.
 
